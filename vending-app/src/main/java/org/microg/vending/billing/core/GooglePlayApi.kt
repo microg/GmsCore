@@ -12,6 +12,7 @@ class GooglePlayApi {
         const val URL_AUTH_PROOF_TOKENS = "https://www.googleapis.com/reauth/v1beta/users/me/reauthProofTokens"
         const val URL_DETAILS = "$URL_FDFE/details"
         const val URL_ITEM_DETAILS = "$URL_FDFE/getItems"
+        const val URL_UPLOAD_DEVICE_CONFIG = "$URL_FDFE/uploadDeviceConfig"
         const val URL_PURCHASE = "$URL_FDFE/purchase"
         const val URL_DELIVERY = "$URL_FDFE/delivery"
         const val URL_ENTERPRISE_CLIENT_POLICY = "$URL_FDFE/getEnterpriseClientPolicy"

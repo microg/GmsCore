@@ -179,15 +179,15 @@ class AuthSignInActivity : AppCompatActivity() {
     }
 
     private suspend fun signIn(account: Account) {
-        val (_, googleSignInAccount) = performSignIn(this, config?.packageName!!, config?.options, account, true, idNonce)
+        val (accessToken, googleSignInAccount) = performSignIn(this, config?.packageName!!, config?.options, account, true, idNonce)
         if (googleSignInAccount != null) {
-            finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount)
+            finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount, accessToken = accessToken)
         } else {
             finishResult(CommonStatusCodes.INTERNAL_ERROR, "Sign in failed")
         }
     }
 
-    private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null) {
+    private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null, accessToken: String? = null) {
         val data = Intent()
         if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra(AuthConstants.ERROR_CODE, statusCode)
         data.putExtra(AuthConstants.GOOGLE_SIGN_IN_STATUS, Status(statusCode, message))
@@ -196,7 +196,7 @@ class AuthSignInActivity : AppCompatActivity() {
         if (googleSignInAccount != null) {
             val authorizationResult = AuthorizationResult(
                 googleSignInAccount.serverAuthCode,
-                googleSignInAccount.idToken,
+                accessToken,
                 googleSignInAccount.idToken,
                 googleSignInAccount.grantedScopes.map { it.scopeUri },
                 googleSignInAccount,

@@ -21,6 +21,22 @@ fun encodeSupportedLanguageList(): ByteArray {
     }.toByteArray()
 }
 
+fun encodeRepeatedString(entries: List<String>): ByteArray {
+    val out = mutableListOf<Byte>()
+    for (entry in entries) {
+        val bytes = entry.toByteArray(Charsets.UTF_8)
+        out.add(0x0A.toByte())
+        var n = bytes.size
+        while (n >= 0x80) {
+            out.add(((n and 0x7F) or 0x80).toByte())
+            n = n ushr 7
+        }
+        out.add(n.toByte())
+        for (b in bytes) out.add(b)
+    }
+    return out.toByteArray()
+}
+
 fun configurationsResult(configurations: Array<Configuration> = emptyArray()) = Configurations().apply {
     serverToken = "unknown"
     snapshotToken = "unknown"

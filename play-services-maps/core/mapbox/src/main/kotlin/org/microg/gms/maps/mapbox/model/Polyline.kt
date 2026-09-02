@@ -12,6 +12,9 @@ import com.google.android.gms.maps.model.Cap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.internal.IPolylineDelegate
+import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
+import com.mapbox.mapboxsdk.plugins.annotation.Fill
+import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
 import com.mapbox.mapboxsdk.plugins.annotation.Line
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
@@ -167,6 +170,20 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
             lineOpacity = if (visible) 1f else 0f
         }
         map.lineManager?.let { update(it) }
+    }
+
+    override fun update(manager: AnnotationManager<*, Line, LineOptions, *, *, *>) {
+        synchronized(this) {
+            val id = annotation?.id
+            if (removed && id != null) {
+                map.lines.remove(id)
+            }
+            super.update(manager)
+            val annotation = annotation
+            if (annotation != null && id == null) {
+                map.lines[annotation.id] = this
+            }
+        }
     }
 
     companion object {

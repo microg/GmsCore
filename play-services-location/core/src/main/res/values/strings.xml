@@ -57,4 +57,9 @@
     <string name="location_data_import_title">Import location data from file</string>
     <string name="location_data_import_result_toast">Imported %1$d records.</string>
 
+    <string name="prefcat_location_timeline_title">Google Maps Timeline</string>
+    <string name="pref_location_timeline_title">Enable location history</string>
+    <string name="pref_location_timeline_summary">"Periodically record your location information and make it available to Google Maps Timeline."</string>
+    <string name="pref_location_timeline_upload_title">Synchronize to Google account</string>
+    <string name="pref_location_timeline_upload_summary">"Synchronize location history to Google servers, so it can be displayed on other devices."</string>
 </resources>

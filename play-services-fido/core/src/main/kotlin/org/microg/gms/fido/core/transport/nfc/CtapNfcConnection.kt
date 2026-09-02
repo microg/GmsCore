@@ -37,7 +37,7 @@ class CtapNfcConnection(
 
     override suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
         require(hasCtap2Support)
-        val request = encodeCommandApdu(0x80.toByte(), 0x10, 0x00, 0x00, byteArrayOf(command.request.commandByte) + command.request.payload, extended = true)
+        val request = encodeCommandApdu(0x80.toByte(), 0x10, 0x00, 0x00, byteArrayOf(command.request.commandByte) + command.request.encodeParameters(), extended = true)
         Log.d(TAG, "Send CTAP2 command: ${request.toBase64(Base64.NO_WRAP)} (${command.request.commandByte} - ${command.request.parameters})")
         var (statusCode, payload) = decodeResponseApdu(isoDep.transceive(request))
         Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
@@ -74,10 +74,10 @@ class CtapNfcConnection(
         val response = runCommand(AuthenticatorGetInfoCommand())
         Log.d(TAG, "Got info: $response")
         capabilities = capabilities or CAPABILITY_CTAP_2 or
-                (if (response.versions.contains("FIDO_2_1")) CAPABILITY_CTAP_2_1 else 0) or
-                (if (response.options.clientPin == true) CAPABILITY_CLIENT_PIN else 0) or
-                (if (response.options.userVerification == true) CAPABILITY_USER_VERIFICATION else 0) or
-                (if (response.options.residentKey == true) CAPABILITY_RESIDENT_KEY else 0)
+                (if (response.versions?.contains("FIDO_2_1") == true) CAPABILITY_CTAP_2_1 else 0) or
+                (if (response.options?.clientPin == true) CAPABILITY_CLIENT_PIN else 0) or
+                (if (response.options?.userVerification == true) CAPABILITY_USER_VERIFICATION else 0) or
+                (if (response.options?.residentKey == true) CAPABILITY_RESIDENT_KEY else 0)
         if (response.transports != null) transports = response.transports
     }
 

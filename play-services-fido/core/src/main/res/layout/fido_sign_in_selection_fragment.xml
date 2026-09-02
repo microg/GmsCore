@@ -55,7 +55,9 @@
             android:id="@+id/sign_in_key_recycler"
             android:layout_marginVertical="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/fido_sign_in_item_layout"
+            tools:itemCount="3"/>
 
     </LinearLayout>
 </layout>

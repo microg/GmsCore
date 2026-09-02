@@ -3,6 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
@@ -14,7 +15,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_fido_key" />
+        android:src="@drawable/ic_fido_passkey" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,14 +28,16 @@
             android:id="@+id/sign_in_key_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="User name" />
 
         <TextView
             android:id="@+id/sign_in_key_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingVertical="2dp"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="User id" />
 
         <TextView
             android:id="@+id/sign_in_key_description"

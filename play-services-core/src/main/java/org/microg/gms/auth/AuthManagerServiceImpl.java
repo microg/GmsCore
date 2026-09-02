@@ -42,6 +42,7 @@ import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.auth.capabilities.HasCapabilitiesHandler;
 import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
 
@@ -238,14 +239,9 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     @Override
     public int hasCapabilities(HasCapabilitiesRequest request) throws RemoteException {
         PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
-        List<String> services = Arrays.asList(AccountManager.get(context).getUserData(request.account, "services").split(","));
-        for (String capability : request.capabilities) {
-            if (capability.startsWith("service_") && !services.contains(capability.substring(8)) || !services.contains(capability)) {
-                return 6;
-            }
-        }
-        Log.w(TAG, "Not fully implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
-        return 1;
+        int result = new HasCapabilitiesHandler(context).handle(request);
+        Log.d(TAG, "hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ") = " + result);
+        return result;
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.app.PendingIntent.FLAG_CANCEL_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcel
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
@@ -23,6 +24,7 @@ import com.android.vending.billing.IInAppBillingDelegateToBackendCallback
 import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback
 import com.android.vending.billing.IInAppBillingGetBillingConfigCallback
 import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback
+import com.android.vending.billing.IInAppBillingInitializeCallback
 import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback
 import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback
 import com.android.vending.billing.IInAppBillingService
@@ -36,7 +38,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import org.microg.gms.utils.toHexString
+import org.microg.gms.utils.warnOnTransactionIssues
 import org.microg.vending.billing.core.*
+import org.microg.vending.billing.proto.SecurePayloadData
 import java.util.Locale
 
 private class BuyFlowCacheEntry(
@@ -84,7 +88,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             cacheKey: String,
             actionContexts: List<ByteArray> = emptyList(),
             authToken: String? = null,
-            firstRequest: Boolean = false
+            firstRequest: Boolean = false,
+            integratorCallbackData: String? = null,
+            securePayload: SecurePayloadData? = null
         ): BuyFlowResult {
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "acquireRequest(cacheKey=$cacheKey, actionContexts=${actionContexts.map { it.toHexString() }}, authToken=$authToken)")
             val buyFlowCacheEntry = buyFlowCacheMap[cacheKey] ?: return BuyFlowResult(
@@ -98,7 +104,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
                 actionContext = actionContexts,
                 authToken = authToken,
                 droidGuardResult = buyFlowCacheEntry.droidGuardResult.takeIf { !firstRequest },
-                lastAcquireResult = buyFlowCacheEntry.lastAcquireResult.takeIf { !firstRequest }
+                lastAcquireResult = buyFlowCacheEntry.lastAcquireResult.takeIf { !firstRequest },
+                integratorCallbackData = integratorCallbackData,
+                securePayload = securePayload
             )
 
             val coreResult = try {
@@ -189,7 +197,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "isBillingSupported: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
-        if (apiVersion < 3) {
+        if (apiVersion !in 3..28) {
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Client does not support the requesting billing API.")
         }
         if (extraParams != null && apiVersion < 7) {
@@ -342,7 +350,8 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             skuSerializedDockIdList = skuSerializedDocIdList,
             skuOfferIdTokenList = skuOfferIdTokenList,
             oldSkuPurchaseId = oldSkuPurchaseId,
-            oldSkuPurchaseToken = oldSkuPurchaseToken
+            oldSkuPurchaseToken = oldSkuPurchaseToken,
+            accountName = accountName
         )
         val cacheEntryKey = "${packageName}:${account.name}"
         buyFlowCacheMap[cacheEntryKey] =
@@ -707,4 +716,20 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     override fun delegateToBackend(bundle: Bundle?, callback: IInAppBillingDelegateToBackendCallback?) {
         Log.d(TAG, "delegateToBackend Not yet implemented")
     }
+
+    override fun initialize(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingInitializeCallback?
+    ) {
+        extraParams?.keySet()
+        Log.w(TAG, "initialize: apiVersion: $apiVersion packageName:$packageName params:$extraParams")
+        callback?.callback(resultBundle(BillingResponseCode.OK, "", bundleOf(
+            "BILLING_API_VERSION_KEY" to apiVersion
+        )))
+    }
+
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

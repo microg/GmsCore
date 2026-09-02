@@ -44,7 +44,7 @@
     <string name="exposure_confirm_keys_title">Chia sẻ ID của bạn với <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
     <string name="exposure_confirm_keys_summary">ID của bạn trong 14 ngày qua sẽ được sử dụng để giúp thông báo cho người khác rằng bạn đã ở gần những trường hợp phơi nhiễm tiềm tàng.\n\nDanh tính hoặc kết quả xét nghiệm của bạn sẽ không được chia sẻ với người khác.</string>
     <string name="exposure_confirm_keys_button">Chia sẻ</string>
-    <string name="exposure_confirm_permission_description"><xliff:g example="Dịch vụ microG">%1$s</xliff:g> cần thêm quyền.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> cần thêm quyền.</string>
     <string name="exposure_confirm_permission_button">Cấp quyền</string>
     <string name="exposure_confirm_bluetooth_description">Cần phải bật Bluetooth.</string>
     <string name="exposure_confirm_location_description">Cần phải có quyền truy cập vị trí.</string>

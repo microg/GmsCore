@@ -212,6 +212,7 @@ class SettingsProvider : ContentProvider() {
             Auth.INCLUDE_ANDROID_ID -> getSettingsBoolean(key, true)
             Auth.STRIP_DEVICE_NAME -> getSettingsBoolean(key, false)
             Auth.TWO_STEP_VERIFICATION -> getSettingsBoolean(key, false)
+            Auth.FIND_DEVICES -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -226,6 +227,7 @@ class SettingsProvider : ContentProvider() {
                 Auth.INCLUDE_ANDROID_ID -> editor.putBoolean(key, value as Boolean)
                 Auth.STRIP_DEVICE_NAME -> editor.putBoolean(key, value as Boolean)
                 Auth.TWO_STEP_VERIFICATION -> editor.putBoolean(key, value as Boolean)
+                Auth.FIND_DEVICES -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -332,6 +334,8 @@ class SettingsProvider : ContentProvider() {
             Location.ICHNAEA_ENDPOINT -> getSettingsString(key, null)
             Location.ONLINE_SOURCE -> getSettingsString(key, null)
             Location.ICHNAEA_CONTRIBUTE -> getSettingsBoolean(key, false)
+            Location.MAPS_TIMELINE -> getSettingsBoolean(key, false)
+            Location.MAPS_TIMELINE_UPLOAD -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -353,6 +357,8 @@ class SettingsProvider : ContentProvider() {
                 Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
                 Location.ONLINE_SOURCE -> (value as? String?).let { if (it.isNullOrBlank()) editor.remove(key) else editor.putString(key, it) }
                 Location.ICHNAEA_CONTRIBUTE -> editor.putBoolean(key, value as Boolean)
+                Location.MAPS_TIMELINE -> editor.putBoolean(key, value as Boolean)
+                Location.MAPS_TIMELINE_UPLOAD -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

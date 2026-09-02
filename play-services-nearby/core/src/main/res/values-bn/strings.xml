@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="exposure_notify_off_title">নোটিফিকেশন বন্ধ</string>
 </resources>

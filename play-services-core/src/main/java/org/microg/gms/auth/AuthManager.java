@@ -55,6 +55,7 @@ public class AuthManager {
     private String tokenRequestOptions;
     public String includeEmail;
     public String includeProfile;
+    public String includeGrantedScopes;
     public boolean isGmsApp;
     public boolean ignoreStoredPermission = false;
     public boolean forceRefreshToken = false;
@@ -342,6 +343,7 @@ public class AuthManager {
                 .oauth2Prompt(oauth2Prompt)
                 .oauth2IncludeProfile(includeProfile)
                 .oauth2IncludeEmail(includeEmail)
+                .includeGrantedScopes(includeGrantedScopes)
                 .itCaveatTypes(itCaveatTypes)
                 .tokenRequestOptions(tokenRequestOptions)
                 .systemPartition(isSystemApp())

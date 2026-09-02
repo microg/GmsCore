@@ -7,7 +7,7 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ứng dụng đăng ký</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">Dịch vụ microG chưa được cấp đủ quyền cần thiết để hoạt động đúng cách.</item>
+        <item quantity="other">microG Services chưa được cấp đủ quyền cần thiết để hoạt động đúng cách.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="other">Yêu cầu cấp các quyền còn thiếu</item>

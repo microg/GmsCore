@@ -78,11 +78,7 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
         lifecycleScope.launch {
             runCatching {
                 val retrieveBytes = blockStore.retrieveBytes()
-                if (retrieveBytes != null) {
-                    callback?.onBytesResult(Status.SUCCESS, retrieveBytes)
-                } else {
-                    callback?.onBytesResult(Status.INTERNAL_ERROR, null)
-                }
+                callback?.onBytesResult(Status.SUCCESS, retrieveBytes)
             }
         }
     }
@@ -142,11 +138,7 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
             runCatching {
                 val retrieveBytesResponse = blockStore.retrieveBytesWithRequest(request)
                 Log.d(TAG, "retrieveBytesWithRequest: retrieveBytesResponse: $retrieveBytesResponse")
-                if (retrieveBytesResponse != null) {
-                    callback?.onResponseResult(Status.SUCCESS, retrieveBytesResponse)
-                } else {
-                    callback?.onResponseResult(Status.INTERNAL_ERROR, RetrieveBytesResponse(Bundle.EMPTY, emptyList()))
-                }
+                callback?.onResponseResult(Status.SUCCESS, retrieveBytesResponse ?: RetrieveBytesResponse(Bundle.EMPTY, emptyList()))
             }
         }
     }

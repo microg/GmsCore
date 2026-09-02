@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="oss_license_title">Open source licenties</string>
-    <string name="license_is_loading">Licentie info wordt geladen.</string>
-    <string name="license_list_is_loading">Licentielijst wordt geladen.</string>
-    <string name="preferences_license_summary">Licentie details voor open source software</string>
+    <string name="oss_license_title">Open source-licenties</string>
+    <string name="license_is_loading">Licentie­gegevens worden geladen.</string>
+    <string name="license_list_is_loading">Licentie­lijst wordt geladen.</string>
+    <string name="preferences_license_summary">Licentiedetails voor open source-software</string>
+    <string name="license_content_error">Er is een fout opgetreden tijdens het ophalen van de licentie.</string>
+    <string name="no_licenses_available">Deze app heeft geen open source-licenties.</string>
 </resources>

@@ -64,7 +64,7 @@
     <string name="permission_service_talk_description">Mengizinkan aplikasi untuk mengakses Google Talk melalui akun Google yang terkait.</string>
     <string name="permission_service_wifi_label">Google Wi-Fi</string>
     <string name="permission_service_wifi_description">Mengizinkan aplikasi untuk mengakses Google Wi-Fi melalui akun Google yang terhubung.</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Google Spreadsheet</string>
     <string name="permission_service_wise_description">Mengizinkan aplikasi untuk mengakses Google Spreadsheets melalui akun Google yang terkait.</string>
     <string name="permission_service_writely_label">Dokumen Google</string>
     <string name="permission_service_writely_description">Mengizinkan aplikasi untuk mengakses Google Docs melalui akun Google yang terkait.</string>

@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="download_notification_tips">Lejupielādē</string>
+    <string name="vending_overview_row_action_uninstall">Noņemt</string>
+    <string name="vending_overview_row_action_update">Atjaunināt</string>
+    <string name="vending_overview_row_action_install">Uzstādīt</string>
+</resources>

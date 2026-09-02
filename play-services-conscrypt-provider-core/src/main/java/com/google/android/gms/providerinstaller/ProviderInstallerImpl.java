@@ -110,13 +110,13 @@ public class ProviderInstallerImpl {
         Log.d(TAG, "Initializing provider for " + packageName);
 
         try {
-            provider = Conscrypt.newProviderBuilder().setName(PROVIDER_NAME).defaultTlsProtocol("TLSv1.2").build();
+            provider = Conscrypt.newProviderBuilder().setName(PROVIDER_NAME).defaultTlsProtocol("TLSv1.3").build();
         } catch (UnsatisfiedLinkError e) {
             Log.w(TAG, "Could not link conscrypt via default loader, trying manual loading");
 
             try {
                 loadConscryptDirect(context, packageName);
-                provider = Conscrypt.newProviderBuilder().setName(PROVIDER_NAME).defaultTlsProtocol("TLSv1.2").build();
+                provider = Conscrypt.newProviderBuilder().setName(PROVIDER_NAME).defaultTlsProtocol("TLSv1.3").build();
             } catch (Exception e2) {
                 Log.w(TAG, e2);
             }

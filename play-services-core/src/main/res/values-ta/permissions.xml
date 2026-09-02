@@ -18,7 +18,7 @@
     <string name="permission_service_ig_label">கூகிள்</string>
     <string name="permission_service_ig_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் Igoogle ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_jotspot_label">சோட்ச்பாட்</string>
-    <string name="permission_service_jotspot_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் JOTSPOT ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="permission_service_jotspot_description">தொடர்புடைய எந்தவொரு கூகிள் கணக்கின் மூலமும் சோட்சுபாடை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_knol_label">கிழங்கு</string>
     <string name="permission_service_knol_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_lh2_label">பிகாசா வலை ஆல்பங்கள்</string>
@@ -32,7 +32,7 @@
     <string name="permission_service_notebook_label">கூகிள் நோட்புக்</string>
     <string name="permission_service_notebook_description">தொடர்புடைய கூகிள் கணக்கின் மூலம் Google நோட்புக்கை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_orkut_label">Orkut</string>
-    <string name="permission_service_orkut_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் ORKUT ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="permission_service_orkut_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் ஆர்குட்டை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_print_label">கூகிள் புத்தக தேடல்</string>
     <string name="permission_service_print_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் Google புத்தகத் தேடலை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_sierra_label">கூகிள் புதுப்பித்து கணக்குகள்</string>
@@ -90,7 +90,7 @@
     <string name="permission_scope_www.googleapis.com_auth_analytics">உங்கள் Google Analytics தரவைக் காணலாம் மற்றும் நிர்வகிக்கவும்</string>
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Google Play ஆண்ட்ராய்டு டெவலப்பருக்கான அணுகல்</string>
     <string name="permission_service_adsense_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் AdSense ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
-    <string name="permission_service_adwords_description">தொடர்புடைய எந்தவொரு Google கணக்கின் மூலமும் ADWORDS ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="permission_service_adwords_description">தொடர்புடைய எந்தவொரு கூகி்ள் கணக்கின் மூலமும் விளம்பரசொற்களை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_ah_label">கூகிள் ஆப் எஞ்சின்</string>
     <string name="permission_service_ah_description">எந்தவொரு தொடர்புடைய Google கணக்கின் மூலமும் Google Appinge ஐ அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
     <string name="permission_service_blogger_label">பதிவர்</string>
@@ -147,8 +147,8 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">உங்கள் நகர அளவிலான இருப்பிடம் மற்றும் இருப்பிட வரலாற்றை நிர்வகிக்கவும்</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">உங்கள் சிறந்த கிடைக்கக்கூடிய இடத்தை நிர்வகிக்கவும்</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">உங்கள் நகர அளவிலான இருப்பிடத்தை நிர்வகிக்கவும்</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine">உங்கள் Google MAPS இயந்திர தரவைக் காணலாம் மற்றும் நிர்வகிக்கவும்</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">உங்கள் Google MAPS இயந்திர தரவைக் காண்க</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">உங்கள் கூகிள் வரைபடங்கள் இயந்திர தரவைக் காணலாம் மற்றும் நிர்வகிக்கவும்</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">உங்கள் கூகிள் வரைபடங்கள் இயந்திர தரவைக் காண்க</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">மொபைல் அனுபவத்திற்காக உங்கள் Google வரைபடங்களைக் காணலாம் மற்றும் நிர்வகிக்கவும்</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut">உங்கள் ஓர்குட் செயல்பாட்டை நிர்வகிக்கவும்</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">உங்கள் ஓர்குட் தரவைக் காண்க</string>

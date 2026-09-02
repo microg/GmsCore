@@ -382,4 +382,8 @@
     <string name="location_sharing_turn_off_confirm">تاقا</string>
     <string name="location_sharing_confirm_dialog_title">ئورۇن ھەمبەھىرلەشنى قوزغىتىدۇ</string>
     <string name="location_sharing_confirm_dialog_text">سىز ئورۇن ئۇچۇرىڭىزنى ھەمبەھىرلىگەن كىشىنىڭ كۆرەلەيدىغىنى:\n· ئات ۋە سۈرىتىڭىز\n· ھەتتا سىز Google مۇلازىمىتىنى ئىشلەتمىگەن تەقدىردىمۇ ئۈسكۈنىڭىزنىڭ يېقىنقى ئورنى\n· ئەگەر توكلىنىۋاتقان بولسا ئۈسكۈنىڭىز توكدانىنىڭ توكى \n· ئەگەر ئۇلار ئورۇن ھەمبەھىرلەش ئۇقتۇرۇشىنى قوشقان بولسا سىز يېتىپ كەلگەن ۋە ئايرىلغان ۋاقىت</string>
+    <string name="service_name_device_attestation">ئۈسكۈنە دەلىللەش</string>
+    <string name="prefcat_device_attestation_apps_title">ئۈسكۈنە دەلىللەشنى ئىشلىتىدىغان ئەپ</string>
+    <string name="pref_device_attestation_app_allow_requests_title">ئىلتىماسقا يول قوي</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">ئەپنىڭ ئۈسكۈنە دەلىللەش ئىلتىماسىغا يول قويىدۇ</string>
 </resources>

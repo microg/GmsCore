@@ -22,6 +22,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN
 import com.google.android.gms.maps.GoogleMapOptions
@@ -60,6 +61,7 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
 class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions) : IGoogleMapDelegate.Stub() {
 
     internal val mapContext = MapContext(context)
+    private val compatAdapter = MapCompatAdapter(context)
 
     val view: FrameLayout
     var map: HuaweiMap? = null
@@ -588,10 +590,18 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) = afterInitialize {
-        Log.d(TAG, "snapshot")
-        val hmsBitmap = bitmap.unwrap<Bitmap>() ?: return@afterInitialize
-        val hmsCallback = HuaweiMap.SnapshotReadyCallback { p0 -> callback.onBitmapReady(p0) }
-        it.snapshot(hmsCallback, hmsBitmap)
+        Log.d(TAG, "taking snapshot now")
+        val hmsBitmap = bitmap.unwrap<Bitmap>()
+        Log.d(TAG, "provided bitmap. $hmsBitmap")
+        val hmsCallback = HuaweiMap.SnapshotReadyCallback { result ->
+                runOnMainLooper {
+                    Log.d(TAG, "take snapshot end. $result")
+                    if (CreatorImpl.VERSION < SNAPSHOT_OLD_VERSION_CODE) {
+                        callback.onBitmapReady(result)
+                    } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
+                }
+        }
+        if (hmsBitmap != null) it.snapshot(hmsCallback, hmsBitmap) else it.snapshot(hmsCallback)
     }
 
     override fun snapshotForTest(callback: ISnapshotReadyCallback) = afterInitialize {
@@ -621,7 +631,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 if (loaded) {
                     Log.d(TAG, "Invoking callback instantly, as map is loaded")
                     try {
-                        callback.onMapLoaded()
+                        scheduleExecute { callback.onMapLoaded() }
                     } catch (e: Exception) {
                         Log.w(TAG, e)
                     }
@@ -712,7 +722,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.w(TAG, "onCreate: init TextureMapView error ", it)
             }.getOrDefault(MapView(mapContext, options.toHms())).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
-            view.addView(mapView)
+            view.addView(compatAdapter.wrapMapView(mapContext, mapView))
+
             mapView.onCreate(savedInstanceState?.toHms())
             mapView.getMapAsync(this::initMap)
 
@@ -806,14 +817,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
         map.setOnMapClickListener { latlng ->
             try {
-                if (options.liteMode) {
-                    val parentView = view.parent?.parent
-                    // TODO hms not support disable click listener when liteMode, this just fix for teams
-                    if (parentView != null && parentView::class.qualifiedName.equals("com.microsoft.teams.location.ui.map.MapViewLite")) {
-                        val clickView = parentView as ViewGroup
-                        clickView.performClick()
-                        return@setOnMapClickListener
-                    }
+                if (options.liteMode && compatAdapter.interceptLiteModeClick(view)) {
+                    return@setOnMapClickListener
                 }
                 mapClickListener?.onMapClick(latlng.toGms())
             } catch (e: Exception) {
@@ -822,14 +827,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
         map.setOnMapLongClickListener { latlng ->
             try {
-                if (options.liteMode) {
-                    val parentView = view.parent?.parent
-                    // TODO hms not support disable click listener when liteMode, this just fix for teams
-                    if (parentView != null && parentView::class.qualifiedName.equals("com.microsoft.teams.location.ui.map.MapViewLite")) {
-                        val clickView = parentView as ViewGroup
-                        clickView.performLongClick()
-                        return@setOnMapLongClickListener
-                    }
+                if (options.liteMode && compatAdapter.interceptLiteModeLongClick(view)) {
+                    return@setOnMapLongClickListener
                 }
                 mapLongClickListener?.onMapLongClick(latlng.toGms())
             } catch (e: Exception) {
@@ -848,6 +847,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
             internalOnInitializedCallbackList.clear()
             fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
+            scheduleExecute { loadedCallback?.onMapLoaded() }
 
             mapView?.visibility = View.VISIBLE
         }
@@ -955,7 +955,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d("$TAG:$tag", "Invoking callback now, as map is initialized")
             val wasCallbackActive = isInvokingInitializedCallbacks.getAndSet(true)
             runOnMainLooper(forceQueue = wasCallbackActive) {
-                runCallbacks()
+                scheduleExecute { runCallbacks() }
             }
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else {
@@ -974,10 +974,18 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.w(TAG, "onTransact [unknown]: $code, $data, $flags"); false
             }
 
+
+    private fun scheduleExecute(block:() -> Unit) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            try { block.invoke() } catch (_: Exception) {}
+        }, ON_MAP_CALLBACK_DELAY)
+    }
+
     companion object {
         private const val TAG = "GmsGoogleMap"
+        private const val SNAPSHOT_OLD_VERSION_CODE = 4000000
 
         private const val TAG_LOGO = "fakeWatermark"
-        private const val MAX_TIMES = 300
+        private const val ON_MAP_CALLBACK_DELAY = 300L
     }
 }

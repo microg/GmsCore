@@ -22,8 +22,10 @@ class AuthenticatorActivityFragmentData(val arguments: Bundle = Bundle()) {
         get() = arguments.getStringArrayList(KEY_SUPPORTED_TRANSPORTS)?.map { Transport.valueOf(it) }?.toSet().orEmpty()
         set(value) = arguments.putStringArrayList(KEY_SUPPORTED_TRANSPORTS, ArrayList(value.map { it.name }))
 
-    val implementedTransports: Set<Transport>
-        get() = AuthenticatorActivity.IMPLEMENTED_TRANSPORTS
+    var implementedTransports: Set<Transport>
+        get() = arguments.getStringArrayList(KEY_IMPLEMENTED_TRANSPORTS)?.map { Transport.valueOf(it) }?.toSet()
+            ?: AuthenticatorActivity.IMPLEMENTED_TRANSPORTS
+        set(value) = arguments.putStringArrayList(KEY_IMPLEMENTED_TRANSPORTS, ArrayList(value.map { it.name }))
 
     var privilegedCallerName: String?
         get() = arguments.getString(KEY_PRIVILEGED_CALLER_NAME)
@@ -37,6 +39,7 @@ class AuthenticatorActivityFragmentData(val arguments: Bundle = Bundle()) {
         const val KEY_APP_NAME = "appName"
         const val KEY_IS_FIRST = "isFirst"
         const val KEY_SUPPORTED_TRANSPORTS = "supportedTransports"
+        const val KEY_IMPLEMENTED_TRANSPORTS = "implementedTransports"
         const val KEY_REQUIRES_PRIVILEGE = "requiresPrivilege"
         const val KEY_PRIVILEGED_CALLER_NAME = "privilegedCallerName"
     }
