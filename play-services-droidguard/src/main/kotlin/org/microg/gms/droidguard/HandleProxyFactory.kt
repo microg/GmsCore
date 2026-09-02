@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.os.Parcelable
 import androidx.annotation.GuardedBy
+import dalvik.system.DexClassLoader
 import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
@@ -88,7 +89,7 @@ open class HandleProxyFactory(private val context: Context) {
                 getCacheDir(vmKey).deleteRecursively()
                 throw ClassNotFoundException("APK signature verification failed")
             }
-            val loader = DgVmClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
+            val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
             val clazz = loader.loadClass(CLASS_NAME)
             CLASS_MAP[vmKey] = clazz
             return clazz
