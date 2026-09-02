@@ -19,12 +19,9 @@ class PhoneNumberVerificationPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_phone_number_verification)
-    }
-
-    override fun onBindPreferences() {
-        enabled = preferenceScreen.findPreference(PREF_ENABLED) ?: enabled
-        lastUseCategory = preferenceScreen.findPreference(PREF_LAST_USE_CATEGORY) ?: lastUseCategory
-        app = preferenceScreen.findPreference(PREF_LAST_USE) ?: app
+        enabled = requireNotNull(findPreference(PREF_ENABLED))
+        lastUseCategory = requireNotNull(findPreference(PREF_LAST_USE_CATEGORY))
+        app = requireNotNull(findPreference(PREF_LAST_USE))
         enabled.setOnPreferenceChangeListener { _, newValue ->
             ConstellationStateStore.setPhoneNumberVerificationEnabled(
                 requireContext(),

@@ -3,10 +3,14 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application>
-        <service android:name=".AsterismApiService">
+        <service
+            android:name=".AsterismApiService"
+            android:exported="true"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.android.gms.asterism.service.START" />
             </intent-filter>

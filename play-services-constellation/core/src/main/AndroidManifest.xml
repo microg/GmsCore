@@ -27,7 +27,10 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application>
-        <service android:name=".ConstellationApiService">
+        <service
+            android:name=".ConstellationApiService"
+            android:exported="true"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.android.gms.constellation.service.START" />
             </intent-filter>

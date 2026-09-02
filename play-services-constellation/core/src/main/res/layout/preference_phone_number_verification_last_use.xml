@@ -21,6 +21,7 @@
         android:gravity="start|center_vertical"
         android:minWidth="56dp"
         android:orientation="horizontal"
+        android:paddingStart="12dp"
         android:paddingTop="4dp"
         android:paddingEnd="12dp"
         android:paddingBottom="4dp">
@@ -29,6 +30,7 @@
             android:id="@android:id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             android:maxWidth="48dp"
             android:maxHeight="48dp" />
     </LinearLayout>
@@ -55,7 +57,7 @@
             android:layout_below="@android:id/title"
             android:layout_alignStart="@android:id/title"
             android:maxLines="2"
-            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondary" />
     </RelativeLayout>
 
@@ -66,6 +68,6 @@
         android:layout_marginStart="12dp"
         android:gravity="end|center_vertical"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
         android:textColor="?android:attr/textColorSecondary" />
 </LinearLayout>

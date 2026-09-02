@@ -1,5 +1,3 @@
-@file:RequiresApi(Build.VERSION_CODES.O)
-
 package org.microg.gms.constellation.core
 
 import android.annotation.SuppressLint
@@ -39,6 +37,7 @@ data class PhoneNumberVerificationRecord(
 )
 
 object ConstellationStateStore {
+    @RequiresApi(Build.VERSION_CODES.O)
     fun loadVerificationTokens(context: Context): List<VerificationToken> {
         val prefs = tokenPrefs(context)
         val serialized = prefs.getString(KEY_VERIFICATION_TOKENS, null) ?: return emptyList()
@@ -57,12 +56,14 @@ object ConstellationStateStore {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun storeSyncResponse(context: Context, response: SyncResponse) {
         storeVerificationTokens(context, response.verification_tokens)
         storeDroidGuardToken(context, response.droidguard_token)
         storeNextSyncTime(context, response.next_sync_time)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun storeProceedResponse(context: Context, response: ProceedResponse) {
         storeDroidGuardToken(context, response.droidguard_token)
         storeNextSyncTime(context, response.next_sync_time)
@@ -174,6 +175,7 @@ object ConstellationStateStore {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun storeVerificationTokens(context: Context, tokens: List<VerificationToken>) {
         if (tokens.isEmpty()) return
         val filtered = tokens.filter {
@@ -189,6 +191,7 @@ object ConstellationStateStore {
         tokenPrefs(context).edit { putString(KEY_VERIFICATION_TOKENS, serialized) }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun storeDroidGuardToken(context: Context, token: DroidguardToken?) {
         val tokenValue = token?.token?.takeIf { it.isNotEmpty() } ?: return
         val expiration = token.ttl?.toEpochMilli() ?: return
@@ -199,6 +202,7 @@ object ConstellationStateStore {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun storeNextSyncTime(context: Context, timestamp: ServerTimestamp?) {
         val serverMillis = timestamp?.timestamp?.toEpochMilli() ?: return
         val localMillis = timestamp.now?.toEpochMilli() ?: return
