@@ -15,9 +15,9 @@ public class GetAccountsRequest extends AutoSafeParcelable {
     @Field(1)
     public String accountType;
     @Field(2)
-    public List<String> accountNames;
+    public List<String> field2;
     @Field(3)
-    public List<String> features;
+    public List<String> field3;
     @Field(4)
     public boolean includeRestrictedAccounts;
 
