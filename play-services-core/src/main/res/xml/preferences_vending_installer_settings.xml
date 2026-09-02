@@ -11,17 +11,20 @@
         <org.microg.gms.ui.TextPreference
             android:key="pref_permissions_titles"
             android:selectable="false"
+            android:layout="@layout/preference_material_information"
             app:iconSpaceReserved="false"
-            android:summary="@string/pref_app_install_other_apps_note" />
+            android:title="@string/pref_app_install_other_apps_note" />
 
         <org.microg.gms.ui.TextPreference
             android:icon="@drawable/ic_circle_warn"
             android:selectable="false"
-            android:summary="@string/pref_app_install_permission_instruction" />
+            android:layout="@layout/preference_material_information"
+            android:title="@string/pref_app_install_permission_instruction" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="pref_permission_installer_settings"
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_app_install_list_title"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"
@@ -29,6 +32,7 @@
         <Preference
             android:enabled="false"
             android:key="pref_permission_installer_none"
+            android:layout="@layout/preference_material_single"
             app:iconSpaceReserved="true"
             android:title="@string/list_no_item_none" />
     </PreferenceCategory>

@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.RemoteException
 import android.util.Log
+import com.android.vending.BuildConfig
 import com.android.vending.VendingPreferences.isLicensingEnabled
 import com.android.vending.VendingPreferences.isLicensingPurchaseFreeAppsEnabled
 import kotlinx.coroutines.runBlocking
@@ -212,6 +213,6 @@ class LicensingService : Service() {
         private const val KEY_V2_RESULT_JWT = "LICENSE_DATA"
 
         private val CHECKIN_SETTINGS_PROVIDER: Uri =
-            Uri.parse("content://com.google.android.gms.microg.settings/check-in")
+            Uri.parse("content://${BuildConfig.BASE_PACKAGE_NAME}.settings/check-in")
     }
 }

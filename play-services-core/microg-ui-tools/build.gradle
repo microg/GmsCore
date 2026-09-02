@@ -26,11 +26,20 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        buildConfigField "String", "APP_VERSION_NAME", "\"${rootProject.version}\""
+        def gvc = rootProject.ext.appVersionCode.toString()
+        def baseVersion = gvc[0..1] + '.' + gvc[2..3] + '.' + gvc[4..5]
+        buildConfigField "String", "GMS_VERSION_NAME", "\"GMS: ${baseVersion}\""
     }
 
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     lintOptions {
@@ -42,5 +51,7 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 }
 

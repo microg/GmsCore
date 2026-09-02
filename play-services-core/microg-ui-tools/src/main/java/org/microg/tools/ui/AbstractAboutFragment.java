@@ -16,53 +16,68 @@
 
 package org.microg.tools.ui;
 
+import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.listitem.ListItemLayout;
+import com.google.android.material.transition.MaterialSharedAxis;
+
+import org.microg.tools.updater.UpdateChecker;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
+/**
+ * @noinspection unused
+ */
 public abstract class AbstractAboutFragment extends Fragment {
 
     protected abstract void collectLibraries(List<Library> libraries);
 
-    public static Drawable getIcon(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            return pm.getPackageInfo(context.getPackageName(), 0).applicationInfo.loadIcon(pm);
-        } catch (PackageManager.NameNotFoundException e) {
-            // Never happens, self package always exists!
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String getAppName(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            CharSequence label = pm.getPackageInfo(context.getPackageName(), 0).applicationInfo.loadLabel(pm);
-            if (TextUtils.isEmpty(label)) return context.getPackageName();
-            return label.toString().trim();
-        } catch (PackageManager.NameNotFoundException e) {
-            // Never happens, self package always exists!
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected String getAppName() {
-        return getAppName(getContext());
-    }
+//    public static Drawable getIcon(Context context) {
+//        try {
+//            PackageManager pm = context.getPackageManager();
+//            return Objects.requireNonNull(pm.getPackageInfo(context.getPackageName(), 0).applicationInfo).loadIcon(pm);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            // Never happens, self package always exists!
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    public static String getAppName(Context context) {
+//        try {
+//            PackageManager pm = context.getPackageManager();
+//            CharSequence label = Objects.requireNonNull(pm.getPackageInfo(context.getPackageName(), 0).applicationInfo).loadLabel(pm);
+//            if (TextUtils.isEmpty(label)) return context.getPackageName();
+//            return label.toString().trim();
+//        } catch (PackageManager.NameNotFoundException e) {
+//            // Never happens, self package always exists!
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    protected String getAppName() {
+//        return getAppName(requireContext());
+//    }
 
     public static String getLibVersion(String packageName) {
         try {
@@ -74,12 +89,33 @@ public abstract class AbstractAboutFragment extends Fragment {
         }
     }
 
-    public static String getSelfVersion(Context context) {
-        return getLibVersion(context.getPackageName());
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+        setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
     }
 
-    protected String getSelfVersion() {
-        return getSelfVersion(getContext());
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground));
+    }
+
+    public static String getAppVersion() {
+        return BuildConfig.APP_VERSION_NAME;
+    }
+
+    public static String getGmsVersion() {
+        return BuildConfig.GMS_VERSION_NAME;
+    }
+
+    public static String getAppVersion(Context context) {
+        return getAppVersion();
+    }
+
+    public static String getGmsVersion(Context context) {
+        return getGmsVersion();
     }
 
     protected String getSummary() {
@@ -88,34 +124,100 @@ public abstract class AbstractAboutFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE) // (UpdateChecker) Added in core module manifest, solved when an apk is generated
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View aboutRoot = inflater.inflate(R.layout.about_root, container, false);
-        ((ImageView) aboutRoot.findViewById(android.R.id.icon)).setImageDrawable(getIcon(getContext()));
-        ((TextView) aboutRoot.findViewById(android.R.id.title)).setText(getAppName());
-        ((TextView) aboutRoot.findViewById(R.id.about_version)).setText(getString(R.string.about_version_str, getSelfVersion()));
-        String summary = getSummary();
-        if (summary != null) {
-            ((TextView) aboutRoot.findViewById(android.R.id.summary)).setText(summary);
-            aboutRoot.findViewById(android.R.id.summary).setVisibility(View.VISIBLE);
+
+        ViewGroup appCardContainer = aboutRoot.findViewById(R.id.app_card_container);
+        if (appCardContainer != null) {
+            View appCard = inflater.inflate(R.layout.about_app, appCardContainer, true);
+//            ((ImageView) appCard.findViewById(R.id.app_icon)).setImageDrawable(getIcon(requireContext()));
+//            ((TextView) appCard.findViewById(R.id.app_title)).setText(getAppName());
+            ((TextView) appCard.findViewById(R.id.app_version)).setText(appCard.getContext().getString(R.string.about_version_str, getAppVersion()));
+
+            appCard.findViewById(R.id.app_check_updates).setOnClickListener(v -> {
+                new UpdateChecker(requireContext()).checkForUpdates(v, () -> {
+                });
+            });
+
+            View appInfo = appCard.findViewById(R.id.app_info);
+            if (appInfo != null) {
+                appInfo.setOnClickListener(v -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + requireContext().getPackageName()));
+                    try {
+                        startActivity(intent);
+                    } catch (Exception ignored) {
+                    }
+                });
+            }
         }
 
-        List<Library> libraries = new ArrayList<Library>();
+        ViewGroup morpheCardContainer = aboutRoot.findViewById(R.id.morphe_card_container);
+        if (morpheCardContainer != null) {
+            View morpheCard = inflater.inflate(R.layout.about_morphe, morpheCardContainer, true);
+
+            morpheCard.findViewById(R.id.morphe_github).setOnClickListener(v -> openUrl("https://github.com/MorpheApp"));
+            morpheCard.findViewById(R.id.morphe_reddit).setOnClickListener(v -> openUrl("https://www.reddit.com/r/MorpheApp"));
+            morpheCard.findViewById(R.id.morphe_website).setOnClickListener(v -> openUrl("https://morphe.software/"));
+        }
+
+        List<Library> libraries = new ArrayList<>();
         collectLibraries(libraries);
         Collections.sort(libraries);
-        ViewGroup list = aboutRoot.findViewById(android.R.id.list);
-        for (Library library : libraries) {
-            View v = inflater.inflate(android.R.layout.simple_list_item_2, list, false);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, library.name, getLibVersion(library.packageName)));
-            ((TextView) v.findViewById(android.R.id.text2)).setText(library.copyright != null ? library.copyright : getString(R.string.about_default_license));
-            list.addView(v);
+
+        ViewGroup libraryContainer = aboutRoot.findViewById(R.id.library_container);
+        if (libraryContainer != null) {
+            for (int i = 0; i < libraries.size(); i++) {
+                Library library = libraries.get(i);
+                View libraryView = inflater.inflate(R.layout.library_item, libraryContainer, false);
+
+                TextView title = libraryView.findViewById(android.R.id.text1);
+                TextView subtitle = libraryView.findViewById(android.R.id.text2);
+
+                title.setText(getString(R.string.about_name_version_str, library.name, getLibVersion(library.packageName)));
+                subtitle.setText(library.copyright != null ? library.copyright : getString(R.string.about_default_license));
+
+                ListItemLayout listItemLayout = libraryView.findViewById(R.id.list_item_library);
+                if (listItemLayout != null) {
+                    listItemLayout.updateAppearance(i, libraries.size());
+                }
+
+                libraryContainer.addView(libraryView);
+            }
         }
+
         return aboutRoot;
     }
 
+    private void openUrl(String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private class LibraryAdapter extends ArrayAdapter<Library> {
+        public LibraryAdapter(Context context, Library[] libraries) {
+            super(context, android.R.layout.simple_list_item_2, android.R.id.text1, libraries);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, Objects.requireNonNull(getItem(position)).name, getLibVersion(Objects.requireNonNull(getItem(position)).packageName)));
+            ((TextView) v.findViewById(android.R.id.text2)).setText(Objects.requireNonNull(getItem(position)).copyright != null ? Objects.requireNonNull(getItem(position)).copyright : getString(R.string.about_default_license));
+            return v;
+        }
+    }
+
+    @SuppressWarnings("ClassCanBeRecord")
     protected static class Library implements Comparable<Library> {
-        private final String packageName;
-        private final String name;
-        private final String copyright;
+        public final String packageName;
+        public final String name;
+        public final String copyright;
 
         public Library(String packageName, String name, String copyright) {
             this.packageName = packageName;
@@ -123,6 +225,7 @@ public abstract class AbstractAboutFragment extends Fragment {
             this.copyright = copyright;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return name + ", " + copyright;

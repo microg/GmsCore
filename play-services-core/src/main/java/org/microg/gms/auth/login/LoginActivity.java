@@ -20,9 +20,9 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,9 +42,12 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewClientCompat;
+import androidx.webkit.WebViewFeature;
 
 import com.google.android.gms.R;
 
@@ -78,11 +81,14 @@ import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.accountsettings.ui.ExtensionsKt.EXTRA_URL;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
+import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
+import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
 import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTER_ACCOUNT;
 import static org.microg.gms.gcm.ExtensionsKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
+import com.google.android.gms.BuildConfig;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -100,8 +106,8 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SIGNUP_URL = "https://accounts.google.com/signup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
-    private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
-    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final String ACTION_UPDATE_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
     private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
@@ -153,7 +159,7 @@ public class LoginActivity extends AssistantActivity {
                 // Begin login.
                 // Only required if client code does not invoke showView() via JSBridge
                 if ("identifier".equals(uri.getFragment()) || uri.getPath().endsWith("/identifier"))
-                    runOnUiThread(() -> webView.setVisibility(VISIBLE));
+                    runOnUiThread(() -> setWebViewVisible(true));
 
                 // Normal login.
                 if ("close".equals(uri.getFragment()))
@@ -194,8 +200,16 @@ public class LoginActivity extends AssistantActivity {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
-            setBackButtonText(android.R.string.cancel);
+            setSpoofButtonText(R.string.auth_huawei_button);
             setNextButtonText(R.string.auth_sign_in);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (webView != null) {
+            updateWebViewTheme(this, webView);
         }
     }
 
@@ -212,6 +226,11 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
+            //noinspection DataFlowIssue
+            if (isSpoofingEnabled(this)) {
+                LastCheckinInfo.clear(this);
+                setSpoofingEnabled(this, false);
+            }
             init();
         } else if (state == -1) {
             loginCanceled();
@@ -219,10 +238,17 @@ public class LoginActivity extends AssistantActivity {
     }
 
     @Override
-    protected void onBackButtonClicked() {
-        super.onBackButtonClicked();
-        state--;
-        if (state == -1) {
+    protected void onHuaweiButtonClicked() {
+        super.onHuaweiButtonClicked();
+        state++;
+        if (state == 1) {
+            //noinspection DataFlowIssue
+            if (!isSpoofingEnabled(this)) {
+                LastCheckinInfo.clear(this);
+                setSpoofingEnabled(this, true);
+            }
+            init();
+        } else if (state == -1) {
             loginCanceled();
         }
     }
@@ -244,7 +270,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void init() {
         setTitle(R.string.just_a_sec);
-        setBackButtonText(null);
+        setSpoofButtonText(null);
         setNextButtonText(null);
         View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
         authContent.removeAllViews();
@@ -260,6 +286,11 @@ public class LoginActivity extends AssistantActivity {
         }
     }
 
+    private static boolean isSystemDarkTheme(Context context) {
+        int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+    }
+
     private static WebView createWebView(Context context) {
         WebView webView = new WebView(context);
         if (SDK_INT < 21) {
@@ -270,14 +301,37 @@ public class LoginActivity extends AssistantActivity {
         webView.setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         webView.setBackgroundColor(Color.TRANSPARENT);
+        updateWebViewTheme(context, webView);
         prepareWebViewSettings(context, webView.getSettings());
         return webView;
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void updateWebViewTheme(Context context, WebView webView) {
+        // Apply dark theme to WebView based on system state
+        boolean systemIsDark = isSystemDarkTheme(context);
+        if (SDK_INT < 33) {
+            // Legacy algorithmic darkening (deprecated on Android 13+)
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(webView.getSettings(), systemIsDark ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
+            }
+        } else {
+            // Android 13+ replacement for setForceDark
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.getSettings(), systemIsDark);
+            }
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private static void prepareWebViewSettings(Context context, WebSettings settings) {
         ProfileManager.ensureInitialized(context);
-        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
+        // Advertise dark theme to Google's OcId sign-in pages so they serve the
+        // native dark variant instead of relying on algorithmic darkening.
+        String userAgent = Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT;
+        userAgent += " OcIdWebView ({\"os\":\"Android\",\"osVersion\":" + SDK_INT
+                + ",\"app\":\"" + GMS_PACKAGE_NAME + "\",\"callingAppId\":\"\",\"isDarkTheme\":" + isSystemDarkTheme(context) + "})";
+        settings.setUserAgentString(userAgent);
         settings.setJavaScriptEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setSaveFormData(false);
@@ -307,6 +361,14 @@ public class LoginActivity extends AssistantActivity {
         }
     }
 
+    private void setWebViewVisible(boolean visible) {
+        webView.setVisibility(visible ? VISIBLE : INVISIBLE);
+        View scrollView = findViewById(R.id.auth_scroll_view);
+        if (scrollView != null) {
+            scrollView.setVisibility(visible ? INVISIBLE : View.VISIBLE);
+        }
+    }
+
     private void showError(int errorRes) {
         setTitle(R.string.sorry);
         findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
@@ -324,6 +386,9 @@ public class LoginActivity extends AssistantActivity {
     private void loadLoginPage() {
         String tmpl = getIntent().hasExtra(EXTRA_TMPL) ? getIntent().getStringExtra(EXTRA_TMPL) : TMPL_NEW_ACCOUNT;
         webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
+        if (webView != null) {
+            updateWebViewTheme(this, webView);
+        }
     }
 
     protected void runScript(String js) {
@@ -332,7 +397,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void closeWeb(boolean programmaticAuth) {
         setMessage(R.string.auth_finalize);
-        runOnUiThread(() -> webView.setVisibility(INVISIBLE));
+        runOnUiThread(() -> setWebViewVisible(false));
         String cookies = CookieManager.getInstance().getCookie(programmaticAuth ? PROGRAMMATIC_AUTH_URL : EMBEDDED_SETUP_URL);
         String[] temp = cookies.split(";");
         for (String ar1 : temp) {
@@ -733,7 +798,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void showView() {
-            runOnUiThread(() -> webView.setVisibility(VISIBLE));
+            runOnUiThread(() -> setWebViewVisible(true));
         }
 
         @JavascriptInterface

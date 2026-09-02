@@ -1,7 +1,6 @@
 name: "Gradle build"
 permissions: {}
 on:
-  - push
   - pull_request
   - workflow_dispatch
 
@@ -25,15 +24,18 @@ jobs:
 
           # Log available space
           df -h
+
       - name: "Checkout sources"
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: "Setup Java"
         uses: actions/setup-java@v5.7.0
         with:
           distribution: "temurin"
           java-version: "17"
+
       - name: "Setup Gradle"
         uses: gradle/actions/setup-gradle@v6
         with:
@@ -41,6 +43,7 @@ jobs:
           build-scan-publish: true
           build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
           build-scan-terms-of-use-agree: "yes"
+
       - name: "Setup matchers"
         run: |
           # Setting up matchers...
@@ -58,7 +61,16 @@ jobs:
               echo "Matcher configured: ${NAME:?}"
             fi
           done
+
       - name: "Execute Gradle assemble"
         run: "./gradlew assemble${{ matrix.target }}"
+
       - name: "Execute Gradle lint"
         run: "./gradlew lint${{ matrix.target }}"
+
+#      - name: "Upload APK artifacts"
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: microg-apks-${{ matrix.target }}
+#          path: "play-services-core/build/outputs/apk/*/*/*.apk"
+#          if-no-files-found: error

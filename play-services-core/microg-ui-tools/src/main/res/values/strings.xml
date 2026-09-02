@@ -38,8 +38,24 @@
     <string name="about_root_version">Version v0.1.0</string>
     <string name="about_root_libraries">Included libraries</string>
 
-    <string name="about_android_support_v4">v4 Support Library</string>
-    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
-    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
-    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
+    <string name="about_android_support_v4" translatable="false">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat" translatable="false">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference" translatable="false">v7 preference Support Library</string>
+    <string name="about_android_support_license" translatable="false">Apache License 2.0, The Android Open Source Project</string>
+    <!--Updater-->
+
+    <string name="update_checker_button">Check updates</string>
+    <string name="update_checker_download_button">Download</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">No update available</string>
+    <string name="update_checker_update_available">New update available: %s</string>
+    <string name="update_checker_no_internet">No internet connection</string>
+    <string name="update_checker_generic_error">Something went wrong… Please try again later</string>
+
+    <!--Settings About-->
+
+    <string name="about_microg_re" translatable="false">MicroG RE</string>
+    <string name="about_morphe" translatable="false">Morphe</string>
+    <string name="about_morphe_description">Morphe is an open-source project designed to modify Android apps through patches</string>
+
 </resources>

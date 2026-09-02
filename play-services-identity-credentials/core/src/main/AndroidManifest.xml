@@ -6,9 +6,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="org.microg.gms.identitycredentials.IdentityCredentialApiService">
+        <service android:name="org.microg.gms.identitycredentials.IdentityCredentialApiService"
+                 android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.identitycredentials.service.START" />
+                <action android:name="${basePackageName}.android.gms.identitycredentials.service.START" />
             </intent-filter>
         </service>
     </application>

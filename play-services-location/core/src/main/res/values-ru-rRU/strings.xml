@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Местоположение</string>
+    <string name="prefcat_location_apps_title">Недавний доступ</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi местоположение</string>
+    <string name="prefcat_location_cell_title">Местоположение по мобильной сети</string>
+    <string name="prefcat_geocoder_title">Определитель адресов</string>
+    <string name="pref_location_wifi_online_enabled_title">Запрос из онлайн-сервиса</string>
+    <string name="pref_location_wifi_online_enabled_summary">Получить местоположение на основе Wi-Fi из онлайн-сервиса местоположения.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Запрос от точки доступа</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Получать Wi-Fi местоположение непосредственно от поддерживаемых точек доступа при подключении.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Запоминать от GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Сохранять Wi-Fi местоположения локально, когда используется GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">Запрос из онлайн-сервиса</string>
+    <string name="pref_location_cell_online_enabled_summary">Получать местоположения вышек мобильной сети из онлайн-сервиса местоположения.</string>
+    <string name="pref_location_cell_learning_enabled_title">Запоминать от GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Сохранять местоположения мобильной сети локально, когда используется GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Использовать Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Определять адреса с помощью OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Приложения с доступом к местоположению</string>
+    <string name="pref_location_app_force_coarse_title">Принудительно использовать грубое местоположение</string>
+    <string name="pref_location_app_force_coarse_summary">Всегда возвращать грубое местоположение этому приложению, игнорируя его уровень разрешений.</string>
+    <string name="prefcat_app_last_location">Последнее сообщённое местоположение</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Для лучшего опыта включите определение местоположения устройства, которое использует сервис местоположения microG.</string>
+    <string name="location_settings_dialog_message_title_to_continue">Чтобы продолжить, включите определение местоположения устройства, которое использует сервис местоположения microG.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Ваше устройство должно будет:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Использовать GPS, Wi-Fi, сотовые сети и датчики</string>
+    <string name="location_settings_dialog_message_grant_permissions">Предоставить разрешения на местоположение сервису microG</string>
+    <string name="location_settings_dialog_message_gls_consent">Использовать сервис местоположения microG; в рамках этого сервиса microG может периодически собирать данные о местоположении и использовать эти данные анонимно для улучшения точности определения местоположения и услуг на основе местоположения.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Подробнее см. в настройках местоположения.</string>
+    <string name="location_settings_dialog_btn_cancel">Нет, спасибо</string>
+    <string name="location_settings_dialog_btn_sure">ОК</string>
+    <string name="pref_location_custom_url_summary">Это позволяет задать собственный URL сервиса. Недопустимые значения могут привести к тому, что сервисы местоположения будут не отвечать или станут полностью недоступными.</string>
+    <string name="pref_location_custom_url_details">Путь /v1/geolocate добавляется автоматически. Если поставщику местоположения требуется ключ, его можно добавить в качестве параметра запроса к корневому URL.</string>
+    <string name="pref_location_custom_url_input_hint">Пользовательский URL сервиса</string>
+    <string name="pref_location_custom_source_title">Пользовательское</string>
+    <string name="pref_location_source_title">Выберите онлайн-сервис местоположения</string>
+    <string name="pref_location_source_terms">Условия / Конфиденциальность</string>
+    <string name="pref_location_source_suggested">Рекомендуемый</string>
+    <string name="pref_location_import_export_title">Импорт или экспорт данных о местоположении</string>
+    <string name="notification_config_required_title">Требуется конфигурация</string>
+    <string name="notification_config_required_text_online_sources">Чтобы продолжить использование онлайн-сервисов местоположения, вам необходимо выбрать службу данных о местоположении.</string>
+    <string name="location_data_export_wifi_title">Экспорт локальной базы местоположений Wi-Fi</string>
+    <string name="location_data_export_cell_title">Экспорт локальной базы местоположений сотовых вышек</string>
+    <string name="location_data_import_title">Импорт данных о местоположении из файла</string>
+    <string name="location_data_import_result_toast">Импортировано %1$d записей.</string>
+    <string name="prefcat_location_timeline_title">Хронология Google Maps</string>
+    <string name="pref_location_timeline_title">Включить историю местоположений</string>
+    <string name="pref_location_timeline_summary">"Периодически записывайте информацию о вашем местоположении и делайте её доступной в хронологии Google Maps."</string>
+    <string name="pref_location_timeline_upload_title">Синхронизировать с аккаунтом Google</string>
+    <string name="pref_location_timeline_upload_summary">"Синхронизируйте историю местоположений с серверами Google, чтобы её можно было отображать на других устройствах."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">Рендерер карт</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Выберите движок для отображения карт в приложениях. Рекомендуется Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">API-ключ Stadia Maps</string>
+    <string name="pref_stadia_key_summary">Необязательно. Добавляет опцию рендерера Stadia Maps; Stadia требует API-ключ.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">API-ключ HMS (Huawei Map Kit)</string>
+    <string name="pref_hms_key_summary">Необязательно. Добавляет опцию рендерера HMS; требует HMS Core на устройстве.</string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Lokasyon</string>
+    <string name="prefcat_location_apps_title">Kamakailang pag-access</string>
+    <string name="prefcat_location_wifi_title">Lokasyon ng Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Lokasyon ng mobile network</string>
+    <string name="prefcat_geocoder_title">Tagapagresolba ng address</string>
+    <string name="pref_location_wifi_online_enabled_title">Humiling mula sa online na serbisyo</string>
+    <string name="pref_location_wifi_online_enabled_summary">Kumuha ng lokasyon batay sa Wi-Fi mula sa online na serbisyo ng lokasyon.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Humiling mula sa Hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Kumuha ng lokasyon ng Wi-Fi nang direkta mula sa mga suportadong hotspot kapag konektado.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Tandaan mula sa GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Mag-imbak ng mga lokasyon ng Wi-Fi nang lokal kapag ginagamit ang GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">Humiling mula sa online na serbisyo</string>
+    <string name="pref_location_cell_online_enabled_summary">Kumuha ng mga lokasyon ng cell tower ng mobile network mula sa online na serbisyo ng lokasyon.</string>
+    <string name="pref_location_cell_learning_enabled_title">Tandaan mula sa GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Mag-imbak ng mga lokasyon ng mobile network nang lokal kapag ginagamit ang GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Gamitin ang Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Lutasin ang mga address gamit ang OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Mga app na may access sa lokasyon</string>
+    <string name="location_app_last_access_at">Huling pag-access: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Pilitin ang magaspang na lokasyon</string>
+    <string name="pref_location_app_force_coarse_summary">Laging magbalik ng magaspang na lokasyon sa app na ito, hindi pinapansin ang antas ng pahintulot nito.</string>
+    <string name="prefcat_app_last_location">Huling naiulat na lokasyon</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Para sa mas mahusay na karanasan, buksan ang lokasyon ng device, na gumagamit ng serbisyo ng lokasyon ng microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Upang magpatuloy, buksan ang lokasyon ng device, na gumagamit ng serbisyo ng lokasyon ng microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Ang iyong device ay kailangang:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Gamitin ang GPS, Wi-Fi, mga cell network, at mga sensor</string>
+    <string name="location_settings_dialog_message_grant_permissions">Ibigay ang mga pahintulot sa lokasyon sa microG Service</string>
+    <string name="location_settings_dialog_message_gls_consent">Gamitin ang serbisyo ng lokasyon ng microG; bilang bahagi ng serbisyong ito, maaaring mangolekta ang microG ng data ng lokasyon nang pana-panahon at gamitin ang data na ito sa isang hindi kilalang paraan upang mapabuti ang katumpakan ng lokasyon at mga serbisyong batay sa lokasyon.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Para sa mga detalye, pumunta sa mga setting ng lokasyon.</string>
+    <string name="location_settings_dialog_btn_cancel">Hindi salamat</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="pref_location_custom_url_summary">Ito ay nagpapahintulot sa pagtatakda ng custom na URL ng serbisyo. Ang mga hindi wastong halaga ay maaaring magresulta sa hindi pagtugon o ganap na hindi magamit ng mga serbisyo ng lokasyon.</string>
+    <string name="pref_location_custom_url_details">Ang /v1/geolocate na landas ay awtomatikong idinadagdag. Kung ang tagapagbigay ng lokasyon ay nangangailangan ng key, maaari itong idagdag bilang isang query parameter sa root URL.</string>
+    <string name="pref_location_custom_url_input_hint">Custom na URL ng serbisyo</string>
+    <string name="pref_location_custom_source_title">Pasadya</string>
+    <string name="pref_location_source_title">Pumili ng online na serbisyo ng lokasyon</string>
+    <string name="pref_location_source_terms">Mga Tuntunin / Pribasya</string>
+    <string name="pref_location_source_suggested">Mungkahi</string>
+    <string name="pref_location_import_export_title">Mag-import o mag-export ng data ng lokasyon</string>
+    <string name="notification_config_required_title">Kinakailangan ang pagsasaayos</string>
+    <string name="notification_config_required_text_online_sources">Upang magpatuloy sa paggamit ng mga online na serbisyo ng lokasyon, kailangan mong pumili ng serbisyo ng data ng lokasyon.</string>
+    <string name="location_data_export_wifi_title">I-export ang lokal na database ng lokasyon ng Wi-Fi</string>
+    <string name="location_data_export_cell_title">I-export ang lokal na database ng lokasyon ng cell tower</string>
+    <string name="location_data_import_title">Mag-import ng data ng lokasyon mula sa file</string>
+    <string name="location_data_import_result_toast">Na-import ang %1$d na tala.</string>
+    <string name="prefcat_location_timeline_title">Google Maps Timeline</string>
+    <string name="pref_location_timeline_title">Paganahin ang kasaysayan ng lokasyon</string>
+    <string name="pref_location_timeline_summary">"Regular na itala ang iyong impormasyon ng lokasyon at gawing magagamit ito sa Google Maps Timeline."</string>
+    <string name="pref_location_timeline_upload_title">I-synchronize sa Google account</string>
+    <string name="pref_location_timeline_upload_summary">"I-synchronize ang kasaysayan ng lokasyon sa mga server ng Google, upang maipakita ito sa ibang mga device."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">Tagapag-render ng mapa</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Piliin ang engine na ginagamit upang mag-render ng mga mapa sa mga app. Inirerekomenda ang Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API key</string>
+    <string name="pref_stadia_key_summary">Opsyonal. Nagdaragdag ng opsyon sa renderer ng Stadia Maps; ang Stadia ay nangangailangan ng API key.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API key</string>
+    <string name="pref_hms_key_summary">Opsyonal. Nagdaragdag ng opsyon sa HMS renderer; nangangailangan ng HMS Core sa device.</string>
+</resources>

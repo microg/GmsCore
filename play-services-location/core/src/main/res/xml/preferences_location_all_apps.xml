@@ -5,14 +5,17 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:title="@string/prefcat_location_apps_title">
     <Preference
         android:key="pref_location_apps_all_progress"
         android:layout="@layout/preference_progress_bar"
         app:allowDividerBelow="false" />
     <PreferenceCategory
         android:key="prefcat_location_apps"
-        android:layout="@layout/preference_category_no_label"
+        android:layout="@layout/preference_material_category_small"
+        android:title="@string/prefcat_location_apps_title"
+        app:allowDividerAbove="false"
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 

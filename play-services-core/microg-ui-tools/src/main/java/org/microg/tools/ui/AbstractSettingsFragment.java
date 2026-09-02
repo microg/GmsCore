@@ -16,9 +16,16 @@
 
 package org.microg.tools.ui;
 
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.transition.MaterialSharedAxis;
 
 public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat {
     private static final String TAG = AbstractSettingsFragment.class.getSimpleName();
@@ -26,11 +33,29 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
     private static final String DIALOG_FRAGMENT_TAG = "androidx.preference.PreferenceFragment.DIALOG";
 
     @Override
-    public void onDisplayPreferenceDialog(Preference preference) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+        setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground));
+        setDivider(null);
+        setDividerHeight(0);
+    }
+
+    /**
+     * @noinspection deprecation
+     */
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
         if (preference instanceof DialogPreference) {
             DialogFragment f = DialogPreference.DialogPreferenceCompatDialogFragment.newInstance(preference.getKey());
             f.setTargetFragment(this, 0);
-            f.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+            f.show(requireFragmentManager(), DIALOG_FRAGMENT_TAG);
         } else {
             super.onDisplayPreferenceDialog(preference);
         }

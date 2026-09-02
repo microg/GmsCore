@@ -81,16 +81,32 @@ class SafetyNetAllAppsFragment : PreferenceFragmentCompat() {
             this@SafetyNetAllAppsFragment.apps.removeAll()
             this@SafetyNetAllAppsFragment.apps.isVisible = true
 
-            var hadRegistered = false
-            var hadUnregistered = false
+            val appList = if (apps.isEmpty()) listOf(appsNone) else apps
 
-            for (app in apps) {
-                this@SafetyNetAllAppsFragment.apps.addPreference(app)
+            appList.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, appList.size)
+                this@SafetyNetAllAppsFragment.apps.addPreference(pref)
             }
 
             appsNone.isVisible = apps.isEmpty()
-            if (apps.isEmpty()) this@SafetyNetAllAppsFragment.apps.addPreference(appsNone)
             progress.isVisible = false
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) {
+                R.layout.preference_material_secondary_top
+            } else {
+                R.layout.preference_material_secondary_bottom
+            }
+
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
+            }
         }
     }
 }

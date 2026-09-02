@@ -16,9 +16,10 @@
 
 package org.microg.gms.ui;
 
+import android.content.Context;
+
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.BuildConfig;
 
 import org.microg.tools.ui.AbstractAboutFragment;
 import org.microg.tools.ui.AbstractSettingsActivity;
@@ -27,16 +28,16 @@ import java.util.List;
 
 public class AboutFragment extends AbstractAboutFragment {
 
+    public static String getSelfVersion(Context context) {
+        return getAppVersion(context);
+    }
+
     @Override
     protected void collectLibraries(List<AbstractAboutFragment.Library> libraries) {
-        if ("vtm".equalsIgnoreCase(BuildConfig.FLAVOR_maps)) {
-            libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));
-            libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
-        } else if ("mapbox".equalsIgnoreCase(BuildConfig.FLAVOR_maps) || "maplibre".equalsIgnoreCase(BuildConfig.FLAVOR_maps)){
-            libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "MapLibre Native for Android", "Two-Clause BSD, MapLibre contributors"));
-        } else if ("hms".equalsIgnoreCase(BuildConfig.FLAVOR_maps)) {
-            libraries.add(new AbstractAboutFragment.Library("com.huawei.hms.maps.api", "Huawei MapKit", "Proprietary, Huawei Technologies"));
-        }
+        // Both renderers ship in a single build and are selectable at runtime.
+        libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));
+        libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
+        libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "MapLibre Native for Android", "Two-Clause BSD, MapLibre contributors"));
         libraries.add(new AbstractAboutFragment.Library("androidx", "Android Jetpack", "Apache License 2.0, The Android Open Source Project"));
         libraries.add(new AbstractAboutFragment.Library("com.upokecenter.cbor", "CBOR", "Creative Commons Zero, Peter O"));
         libraries.add(new AbstractAboutFragment.Library("de.hdodenhof.circleimageview", "CircleImageView", "Apache License 2.0, Henning Dodenhof"));

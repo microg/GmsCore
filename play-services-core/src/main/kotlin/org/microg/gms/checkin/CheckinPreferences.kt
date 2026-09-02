@@ -17,9 +17,7 @@ object CheckinPreferences {
         return SettingsContract.getSettings(context, CheckIn.getContentUri(context), projection) { c ->
             c.getInt(0) != 0
         }
-    }
-
-    @JvmStatic
+    }    @JvmStatic
     fun setEnabled(context: Context, enabled: Boolean) {
         SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
             put(CheckIn.ENABLED, enabled)
@@ -29,4 +27,22 @@ object CheckinPreferences {
         }
     }
 
+    @JvmStatic
+    fun isSpoofingEnabled(context: Context): Boolean? {
+        val projection = arrayOf(CheckIn.BRAND_SPOOF)
+        return CheckIn.getContentUri(context)?.let {
+            SettingsContract.getSettings(context, it, projection) { c ->
+                c.getInt(0) != 0
+            }
+        }
+    }
+
+    @JvmStatic
+    fun setSpoofingEnabled(context: Context, enabled: Boolean) {
+        CheckIn.getContentUri(context)?.let {
+            SettingsContract.setSettings(context, it) {
+                put(CheckIn.BRAND_SPOOF, enabled)
+            }
+        }
+    }
 }

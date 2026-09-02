@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">מיקום</string>
+    <string name="prefcat_location_apps_title">גישה אחרונה</string>
+    <string name="prefcat_location_wifi_title">מיקום Wi-Fi</string>
+    <string name="prefcat_location_cell_title">מיקום רשת סלולרית</string>
+    <string name="prefcat_geocoder_title">פתרון כתובות</string>
+    <string name="pref_location_wifi_online_enabled_title">בקשה משירות מקוון</string>
+    <string name="pref_location_wifi_online_enabled_summary">אחזר מיקום מבוסס Wi-Fi משירות מיקום מקוון.</string>
+    <string name="pref_location_wifi_moving_enabled_title">בקשה מנקודה חמה</string>
+    <string name="pref_location_wifi_moving_enabled_summary">אחזר מיקום Wi-Fi ישירות מנקודות חמות נתמכות כשמחוברים.</string>
+    <string name="pref_location_wifi_learning_enabled_title">זכור מ-GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">שמור מיקומי Wi-Fi מקומית כשמשתמשים ב-GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">בקשה משירות מקוון</string>
+    <string name="pref_location_cell_online_enabled_summary">אחזר מיקומי אנטנות סלולריות משירות מיקום מקוון.</string>
+    <string name="pref_location_cell_learning_enabled_title">זכור מ-GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">שמור מיקומי רשת סלולרית מקומית כשמשתמשים ב-GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">השתמש ב-Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">פתור כתובות באמצעות Nominatim של OpenStreetMap.</string>
+    <string name="fragment_location_apps_title">אפליקציות עם גישה למיקום</string>
+    <string name="location_app_last_access_at">גישה אחרונה: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">כפה מיקום גס</string>
+    <string name="pref_location_app_force_coarse_summary">החזר תמיד מיקומים גסים לאפליקציה זו, תוך התעלמות מרמת ההרשאה שלה.</string>
+    <string name="prefcat_app_last_location">המיקום האחרון שדווח</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">לחוויה טובה יותר, הפעל את מיקום המכשיר, המשתמש בשירות המיקום של microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">כדי להמשיך, הפעל את מיקום המכשיר, המשתמש בשירות המיקום של microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">המכשיר שלך יצטרך:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">השתמש ב-GPS, Wi-Fi, רשתות סלולריות וחיישנים</string>
+    <string name="location_settings_dialog_message_grant_permissions">הענק הרשאות מיקום לשירות microG</string>
+    <string name="location_settings_dialog_message_gls_consent">השתמש בשירות המיקום של microG; כחלק משירות זה, microG עשוי לאסוף נתוני מיקום מעת לעת ולהשתמש בנתונים אלה בצורה אנונימית כדי לשפר את דיוק המיקום והשירותים המבוססים על מיקום.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">לפרטים, עבור להגדרות המיקום.</string>
+    <string name="location_settings_dialog_btn_cancel">לא תודה</string>
+    <string name="location_settings_dialog_btn_sure">אישור</string>
+    <string name="pref_location_custom_url_summary">פעולה זו מאפשרת הגדרת כתובת URL מותאמת אישית של השירות. ערכים לא תקינים עלולים לגרום לשירותי המיקום להיות לא מגיבים או בלתי זמינים לחלוטין.</string>
+    <string name="pref_location_custom_url_details">הנתיב /v1/geolocate מתווסף אוטומטית. אם ספק המיקום דורש מפתח, ניתן לצרף אותו כפרמטר שאילתה לכתובת ה-URL הראשית.</string>
+    <string name="pref_location_custom_url_input_hint">כתובת URL מותאמת אישית של השירות</string>
+    <string name="pref_location_custom_source_title">מותאם אישית</string>
+    <string name="pref_location_source_title">בחר שירות מיקום מקוון</string>
+    <string name="pref_location_source_terms">תנאים / פרטיות</string>
+    <string name="pref_location_source_suggested">מוצע</string>
+    <string name="pref_location_import_export_title">ייבא או ייצא נתוני מיקום</string>
+    <string name="notification_config_required_title">נדרשת תצורה</string>
+    <string name="notification_config_required_text_online_sources">כדי להמשיך להשתמש בשירותי מיקום מקוונים, עליך לבחור שירות נתוני מיקום.</string>
+    <string name="location_data_export_wifi_title">ייצא מסד נתונים מקומי של מיקומי Wi-Fi</string>
+    <string name="location_data_export_cell_title">ייצא מסד נתונים מקומי של מיקומי אנטנות סלולריות</string>
+    <string name="location_data_import_title">ייבא נתוני מיקום מקובץ</string>
+    <string name="location_data_import_result_toast">יובאו %1$d רשומות.</string>
+    <string name="prefcat_location_timeline_title">ציר הזמן של Google Maps</string>
+    <string name="pref_location_timeline_title">הפעל היסטוריית מיקום</string>
+    <string name="pref_location_timeline_summary">"רשום מעת לעת את פרטי המיקום שלך והפוך אותם לזמינים עבור ציר הזמן של Google Maps."</string>
+    <string name="pref_location_timeline_upload_title">סנכרן לחשבון Google</string>
+    <string name="pref_location_timeline_upload_summary">"סנכרן את היסטוריית המיקום לשרתי Google, כך שניתן יהיה להציג אותה במכשירים אחרים."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">מנוע עיבוד מפה</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">בחר את המנוע המשמש לעיבוד מפות באפליקציות. Mapbox (MapLibre) מומלץ.</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">מפתח API של Stadia Maps</string>
+    <string name="pref_stadia_key_summary">אופציונלי. מוסיף אפשרות עיבוד של Stadia Maps; Stadia דורש מפתח API.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">מפתח API של HMS (Huawei Map Kit)</string>
+    <string name="pref_hms_key_summary">אופציונלי. מוסיף אפשרות עיבוד של HMS; דורש HMS Core במכשיר.</string>
+</resources>

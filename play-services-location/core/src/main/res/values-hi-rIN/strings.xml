@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">स्थान</string>
+    <string name="prefcat_location_apps_title">हालिया एक्सेस</string>
+    <string name="prefcat_location_wifi_title">वाई-फाई स्थान</string>
+    <string name="prefcat_location_cell_title">मोबाइल नेटवर्क स्थान</string>
+    <string name="prefcat_geocoder_title">पता रिज़ॉल्वर</string>
+    <string name="pref_location_wifi_online_enabled_title">ऑनलाइन सेवा से अनुरोध</string>
+    <string name="pref_location_wifi_online_enabled_summary">ऑनलाइन लोकेशन सेवा से वाई-फाई आधारित स्थान प्राप्त करें।</string>
+    <string name="pref_location_wifi_moving_enabled_title">हॉटस्पॉट से अनुरोध</string>
+    <string name="pref_location_wifi_moving_enabled_summary">कनेक्ट होने पर समर्थित हॉटस्पॉट से सीधे वाई-फाई स्थान प्राप्त करें।</string>
+    <string name="pref_location_wifi_learning_enabled_title">जीपीएस से याद रखें</string>
+    <string name="pref_location_wifi_learning_enabled_summary">जब जीपीएस उपयोग होता है, तो वाई-फाई स्थानों को स्थानीय रूप से संग्रहीत करें।</string>
+    <string name="pref_location_cell_online_enabled_title">ऑनलाइन सेवा से अनुरोध</string>
+    <string name="pref_location_cell_online_enabled_summary">ऑनलाइन लोकेशन सेवा से मोबाइल नेटवर्क सेल टावर स्थान प्राप्त करें।</string>
+    <string name="pref_location_cell_learning_enabled_title">जीपीएस से याद रखें</string>
+    <string name="pref_location_cell_learning_enabled_summary">जब जीपीएस उपयोग होता है, तो मोबाइल नेटवर्क स्थानों को स्थानीय रूप से संग्रहीत करें।</string>
+    <string name="pref_geocoder_nominatim_enabled_title">नॉमिनेटिम का उपयोग करें</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim का उपयोग करके पते हल करें।</string>
+    <string name="fragment_location_apps_title">लोकेशन एक्सेस वाले ऐप्स</string>
+    <string name="location_app_last_access_at">पिछला एक्सेस: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">मोटा स्थान लागू करें</string>
+    <string name="pref_location_app_force_coarse_summary">इस ऐप को हमेशा मोटा स्थान लौटाएँ, उसके अनुमति स्तर को अनदेखा करते हुए।</string>
+    <string name="prefcat_app_last_location">अंतिम रिपोर्ट किया गया स्थान</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">बेहतर अनुभव के लिए, डिवाइस लोकेशन चालू करें, जो microG की लोकेशन सेवा का उपयोग करता है।</string>
+    <string name="location_settings_dialog_message_title_to_continue">जारी रखने के लिए, डिवाइस लोकेशन चालू करें, जो microG की लोकेशन सेवा का उपयोग करता है।</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">आपके डिवाइस को आवश्यकता होगी:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">जीपीएस, वाई-फाई, सेल नेटवर्क और सेंसर का उपयोग करें</string>
+    <string name="location_settings_dialog_message_grant_permissions">microG सेवा को लोकेशन अनुमतियाँ दें</string>
+    <string name="location_settings_dialog_message_gls_consent">microG लोकेशन सेवा का उपयोग करें; इस सेवा के भाग के रूप में, microG समय-समय पर लोकेशन डेटा एकत्र कर सकता है और इस डेटा का उपयोग अनाम तरीके से लोकेशन सटीकता और लोकेशन-आधारित सेवाओं को बेहतर बनाने के लिए कर सकता है।</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">विवरण के लिए, लोकेशन सेटिंग्स पर जाएँ।</string>
+    <string name="location_settings_dialog_btn_cancel">नहीं, धन्यवाद</string>
+    <string name="location_settings_dialog_btn_sure">ठीक है</string>
+    <string name="pref_location_custom_url_summary">यह कस्टम सेवा URL सेट करने की अनुमति देता है। अमान्य मानों के परिणामस्वरूप लोकेशन सेवाएँ अनुत्तरदायी या पूरी तरह अनुपलब्ध हो सकती हैं।</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate पथ स्वचालित रूप से जोड़ा जाता है। यदि लोकेशन प्रदाता को कुंजी की आवश्यकता होती है, तो इसे रूट URL के क्वेरी पैरामीटर के रूप में जोड़ा जा सकता है।</string>
+    <string name="pref_location_custom_url_input_hint">कस्टम सेवा URL</string>
+    <string name="pref_location_custom_source_title">कस्टम</string>
+    <string name="pref_location_source_title">ऑनलाइन लोकेशन सेवा चुनें</string>
+    <string name="pref_location_source_terms">नियम / गोपनीयता</string>
+    <string name="pref_location_source_suggested">सुझाया गया</string>
+    <string name="pref_location_import_export_title">लोकेशन डेटा आयात या निर्यात करें</string>
+    <string name="notification_config_required_title">कॉन्फ़िगरेशन आवश्यक</string>
+    <string name="notification_config_required_text_online_sources">ऑनलाइन लोकेशन सेवाओं का उपयोग जारी रखने के लिए, आपको एक लोकेशन डेटा सेवा चुननी होगी।</string>
+    <string name="location_data_export_wifi_title">स्थानीय वाई-फाई लोकेशन डेटाबेस निर्यात करें</string>
+    <string name="location_data_export_cell_title">स्थानीय सेल टावर लोकेशन डेटाबेस निर्यात करें</string>
+    <string name="location_data_import_title">फ़ाइल से लोकेशन डेटा आयात करें</string>
+    <string name="location_data_import_result_toast">%1$d रिकॉर्ड आयात किए गए।</string>
+    <string name="prefcat_location_timeline_title">Google Maps टाइमलाइन</string>
+    <string name="pref_location_timeline_title">लोकेशन इतिहास सक्षम करें</string>
+    <string name="pref_location_timeline_summary">"समय-समय पर अपनी लोकेशन जानकारी रिकॉर्ड करें और इसे Google Maps टाइमलाइन के लिए उपलब्ध कराएँ।"</string>
+    <string name="pref_location_timeline_upload_title">Google खाते से सिंक्रनाइज़ करें</string>
+    <string name="pref_location_timeline_upload_summary">"लोकेशन इतिहास को Google सर्वर पर सिंक्रनाइज़ करें, ताकि इसे अन्य उपकरणों पर प्रदर्शित किया जा सके।"</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">मैप रेंडरर</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">ऐप्स में नक्शे प्रस्तुत करने के लिए उपयोग होने वाले इंजन का चयन करें। Mapbox (MapLibre) अनुशंसित है।</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API कुंजी</string>
+    <string name="pref_stadia_key_summary">वैकल्पिक। Stadia Maps रेंडरर विकल्प जोड़ता है; Stadia को API कुंजी की आवश्यकता होती है।</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API कुंजी</string>
+    <string name="pref_hms_key_summary">वैकल्पिक। HMS रेंडरर विकल्प जोड़ता है; डिवाइस पर HMS Core की आवश्यकता होती है।</string>
+</resources>

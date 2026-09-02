@@ -9,7 +9,7 @@
             android:name="org.microg.gms.threadnetwork.ThreadNetworkService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.threadnetwork.service.START" />
+                <action android:name="${basePackageName}.android.gms.threadnetwork.service.START" />
             </intent-filter>
         </service>
     </application>

@@ -12,6 +12,7 @@ import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.checkin.CheckinPreferences
@@ -39,7 +42,16 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
         database = GcmDatabase(context)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -121,15 +133,42 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
                 database.close()
                 res
             }
-            pushAppsAll.isVisible = showAll
+
             pushApps.removeAll()
-            for (app in apps) {
-                pushApps.addPreference(app)
+
+            val totalDisplayed = when {
+                apps.isEmpty() -> 1
+                showAll -> apps.size + 1
+                else -> apps.size
             }
-            if (showAll) {
-                pushApps.addPreference(pushAppsAll)
-            } else if (apps.isEmpty()) {
+
+            apps.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, totalDisplayed)
+                pref.isIconSpaceReserved = true
+                pushApps.addPreference(pref)
+            }
+
+            if (apps.isEmpty()) {
+                pushAppsNone.layoutResource = chooseLayoutForPosition(0, totalDisplayed)
+                pushAppsNone.isIconSpaceReserved = false
                 pushApps.addPreference(pushAppsNone)
+            } else if (showAll) {
+                pushAppsAll.layoutResource = chooseLayoutForPosition(apps.size, totalDisplayed)
+                pushAppsAll.isIconSpaceReserved = false
+                pushApps.addPreference(pushAppsAll)
+            }
+            pushAppsAll.isVisible = showAll
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) R.layout.preference_material_secondary_top else R.layout.preference_material_secondary_bottom
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
             }
         }
     }
@@ -139,13 +178,13 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.add(0, MENU_ADVANCED, 0, org.microg.gms.base.core.R.string.menu_advanced)
+        inflater.inflate(R.menu.gcm_menu_item, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            MENU_ADVANCED -> {
+            R.id.menu_settings -> {
                 findNavController().navigate(requireContext(), R.id.openGcmAdvancedSettings)
                 true
             }
@@ -155,6 +194,5 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val UPDATE_INTERVAL = 1000L
-        private const val MENU_ADVANCED = Menu.FIRST
     }
 }

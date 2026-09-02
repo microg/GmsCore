@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Fonda aktivdir</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> fonda işləyir.</string>
+    <string name="foreground_service_notification_big_text">Bu bildirişi gizlətmək üçün <xliff:g example="microG Services">%1$s</xliff:g> tətbiqini batareya optimallaşmalarından çıxar və ya bildiriş tənzimləmələrini dəyiş</string>
+    <string name="foreground_action_battery_optimization">Batareya yaxşılaşdırma</string>
+    <string name="foreground_action_notification_settings">Tənzimləmələr</string>
+    <string name="menu_advanced">Qabaqcıl</string>
+    <string name="menu_settings">Tənzimləmələr</string>
+    <string name="menu_game_managed">İdarə Olunan Oyun Hesabları</string>
+    <string name="list_no_item_none">Heç biri</string>
+    <string name="list_item_see_all">Hamısına bax</string>
+    <string name="open_app">Aç</string>
+    <string name="service_status_disabled">Qapalıdı</string>
+    <string name="service_status_enabled">İşləkdi</string>
+    <string name="service_status_automatic">Birbaşa</string>
+    <string name="service_status_manual">Əl ilə</string>
+    <string name="service_status_enabled_short">Açıq</string>
+    <string name="service_status_disabled_short">Qapalı</string>
+</resources>

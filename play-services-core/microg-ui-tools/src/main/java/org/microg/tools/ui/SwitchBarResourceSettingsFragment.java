@@ -18,11 +18,11 @@ package org.microg.tools.ui;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public abstract class SwitchBarResourceSettingsFragment extends ResourceSettingsFragment implements SwitchBar.OnSwitchChangeListener {
     protected SwitchBar switchBar;
-    private SwitchCompat switchCompat;
+    private SwitchMaterial switchMaterial;
     private boolean listenerSetup = false;
 
     @Override
@@ -31,7 +31,7 @@ public abstract class SwitchBarResourceSettingsFragment extends ResourceSettings
 
 //        switchBar = activity.getSwitchBar();
 //        switchBar.show();
-//        switchCompat = switchBar.getSwitch();
+//        switchMaterial = switchBar.getSwitch();
     }
 
     @Override
@@ -59,8 +59,8 @@ public abstract class SwitchBarResourceSettingsFragment extends ResourceSettings
     }
 
     @Override
-    public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-        if (switchView == switchCompat) {
+    public void onSwitchChanged(SwitchMaterial switchView, boolean isChecked) {
+        if (switchView == switchMaterial) {
             onSwitchBarChanged(isChecked);
         }
     }

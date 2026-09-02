@@ -23,13 +23,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import com.google.android.gms.base.BuildConfig;
 
 /*
  * TODO: Writing to cache should be protected, tiles should be downloaded by service instead of client app.
  */
 public class SharedTileProvider extends ContentProvider {
     private static final String DB_NAME = "tilecache.db";
-    public static final String PROVIDER_NAME = "org.microg.gms.maps.vtm.tile";
+    // Must match the manifest authority (${basePackageName}.gms.maps.vtm.tile) for every flavor;
+    // the fork renamed the manifest placeholder but not this constant, which made tile cache
+    // lookups fail with "Failed to find provider info for org.microg.gms.maps.vtm.tile".
+    public static final String PROVIDER_NAME = BuildConfig.BASE_PACKAGE_NAME + ".gms.maps.vtm.tile";
     public static final Uri PROVIDER_URI = Uri.parse("content://" + PROVIDER_NAME);
 
     private SQLiteHelper sqLiteHelper;

@@ -32,11 +32,11 @@
             android:name="org.microg.gms.location.network.NetworkLocationService"
             android:exported="false">
             <intent-filter>
-                <action android:name="org.microg.gms.location.network.ACTION_NETWORK_LOCATION_SERVICE" />
+                <action android:name="${basePackageName}.gms.location.network.ACTION_NETWORK_LOCATION_SERVICE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.microg.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT" />
+                <action android:name="${basePackageName}.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -78,7 +78,7 @@
             android:permission="android.permission.WRITE_SECURE_SETTINGS">
             <intent-filter>
                 <action android:name="com.android.location.service.GeocodeProvider" />
-                <action android:name="com.google.android.location.GeocodeProvider" />
+                <action android:name="${basePackageName}.android.location.GeocodeProvider" />
             </intent-filter>
             <meta-data
                 android:name="serviceVersion"

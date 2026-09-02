@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <string name="lib_name">Amûrên UI yên microG</string>
+    <string name="lib_license">Apache License 2.0, Tîma microG</string>
+    <string name="about_default_license">Hemû maf parastî ne.</string>
+    <string name="prefcat_setup">Sazkirin</string>
+    <string name="self_check_desc">Kontrol bike ka sîstem bi rastî ji bo bikaranîna microG hatî sazkirin.</string>
+    <string name="self_check_cat_permissions">Destûr hatine dayîn</string>
+    <string name="self_check_name_permission_interact_across_profiles">Destûr ji bo têkilîdanîna bi profîla kar re:</string>
+    <string name="self_check_resolution_permission">Li vir bikirtînin ji bo dayîna destûrê. Nedayîna destûrê dikare bibe sedema tevgerên nerast ên sepanan.</string>
+    <string name="about_root_summary">Kurte</string>
+    <!--Updater-->
+    <!--updater: messages-->
+    <!--Settings About-->
+</resources>

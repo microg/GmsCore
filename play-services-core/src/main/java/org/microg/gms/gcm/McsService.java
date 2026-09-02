@@ -558,8 +558,18 @@ public class McsService extends Service implements Handler.Callback {
         database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         GcmDatabase.App app = database.getApp(packageName);
 
+        // Apps patched for the renamed base package listen on the package-scoped action;
+        // deliver with whichever action the app actually has a receiver registered for.
+        String deliveryAction = ACTION_C2DM_RECEIVE;
+        Intent probe = new Intent(ACTION_C2DM_RECEIVE_PACKAGE);
+        probe.setPackage(packageName);
+        List<ResolveInfo> packageReceivers = getPackageManager().queryBroadcastReceivers(probe, 0);
+        if (packageReceivers != null && !packageReceivers.isEmpty()) {
+            deliveryAction = ACTION_C2DM_RECEIVE_PACKAGE;
+        }
+
         Intent intent = new Intent();
-        intent.setAction(ACTION_C2DM_RECEIVE);
+        intent.setAction(deliveryAction);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
         if (msg.sent != null && msg.sent != 0) intent.putExtra(EXTRA_SENT_TIME, msg.sent);

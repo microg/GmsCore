@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Hoạt động trong nền</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> đang chạy trong nền.```output{</string>
+    <string name="foreground_service_notification_big_text">Loại trừ <xliff:g example="microG Services">%1$s</xliff:g> khỏi tối ưu hóa pin hoặc thay đổi cài đặt thông báo để ẩn thông báo này.</string>
+    <string name="foreground_action_battery_optimization">Tối ưu hóa pin</string>
+    <string name="foreground_action_notification_settings">Thiết lập</string>
+    <string name="menu_advanced">Nâng cao</string>
+    <string name="menu_settings">Thiết lập</string>
+    <string name="menu_game_managed">Quản lý tài khoản trò chơi</string>
+    <string name="list_no_item_none">Không có</string>
+    <string name="list_item_see_all">Xem tất cả</string>
+    <string name="open_app">Mở</string>
+    <string name="service_status_disabled">Tắt</string>
+    <string name="service_status_enabled">Bật</string>
+    <string name="service_status_automatic">Tự động</string>
+    <string name="service_status_manual">Thủ công</string>
+    <string name="service_status_enabled_short">Bật</string>
+    <string name="service_status_disabled_short">Tắt</string>
+</resources>

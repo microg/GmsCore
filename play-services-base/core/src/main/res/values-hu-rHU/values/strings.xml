@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktív a háttérben</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> a háttérben fut.</string>
+    <string name="foreground_service_notification_big_text">Zárja ki a(z) <xliff:g example="microG Services">%1$s</xliff:g> alkalmazást az akkumulátor-optimalizálásból, vagy módosítsa az értesítési beállításokat az értesítés elrejtéséhez.</string>
+    <string name="foreground_action_battery_optimization">Akkuoptimalizálás</string>
+    <string name="foreground_action_notification_settings">Beállítások</string>
+    <string name="menu_advanced">Haladó</string>
+    <string name="menu_settings">Beállítások</string>
+    <string name="menu_game_managed">Kezelt játékfiókok</string>
+    <string name="list_no_item_none">Egyik sem</string>
+    <string name="list_item_see_all">Összes megtekintése</string>
+    <string name="open_app">Megnyitás</string>
+    <string name="service_status_disabled">Letiltva</string>
+    <string name="service_status_enabled">Engedélyezve</string>
+    <string name="service_status_automatic">Automatikus</string>
+    <string name="service_status_manual">Manuális</string>
+    <string name="service_status_enabled_short">Be</string>
+    <string name="service_status_disabled_short">Ki</string>
+</resources>

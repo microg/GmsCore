@@ -1,0 +1,15 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:colorControlHighlight">
+    <item>
+        <inset
+            android:insetLeft="24dp"
+            android:insetTop="1dp"
+            android:insetRight="24dp"
+            android:insetBottom="1dp">
+            <shape android:shape="rectangle">
+                <solid android:color="@android:color/transparent" />
+                <corners android:radius="16dp" />
+            </shape>
+        </inset>
+    </item>
+</ripple>

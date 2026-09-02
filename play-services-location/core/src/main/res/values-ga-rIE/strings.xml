@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Suíomh</string>
+    <string name="prefcat_location_apps_title">Rochtain le déanaí</string>
+    <string name="prefcat_location_wifi_title">Suíomh Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Suíomh líonra soghluaiste</string>
+    <string name="prefcat_geocoder_title">Réiteoir seoltaí</string>
+    <string name="pref_location_wifi_online_enabled_title">Iarratas ón tseirbhís ar líne</string>
+    <string name="pref_location_wifi_online_enabled_summary">Faigh suíomh bunaithe ar Wi-Fi ó sheirbhís suímh ar líne.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Iarratas ó Hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Faigh suíomh Wi-Fi go díreach ó phointí te tacaithe nuair atá tú ceangailte.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Cuimhnigh ó GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Stóráil suíomhanna Wi-Fi go háitiúil nuair a úsáidtear GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">Iarratas ón tseirbhís ar líne</string>
+    <string name="pref_location_cell_online_enabled_summary">Faigh suíomhanna túir chealla líonra soghluaiste ó sheirbhís suímh ar líne.</string>
+    <string name="pref_location_cell_learning_enabled_title">Cuimhnigh ó GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Stóráil suíomhanna líonra soghluaiste go háitiúil nuair a úsáidtear GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Úsáid Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Réitigh seoltaí ag baint úsáide as OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Aipeanna le rochtain suímh</string>
+    <string name="location_app_last_access_at">An rochtain dheireanach: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Fórsaigh suíomh garbh</string>
+    <string name="pref_location_app_force_coarse_summary">Tabhair suíomhanna garbha ar ais chuig an aip seo i gcónaí, ag déanamh neamhaird ar a leibhéal ceadanna.</string>
+    <string name="prefcat_app_last_location">An suíomh deireanach a tuairiscíodh</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Chun eispéireas níos fearr a fháil, cuir suíomh gléis ar siúl, a úsáideann seirbhís suímh microG.</string>
+    <string name="location_settings_dialog_message_title_to_continue">Chun leanúint ar aghaidh, cuir suíomh gléis ar siúl, a úsáideann seirbhís suímh microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Beidh ar do ghléas:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Úsáid GPS, Wi-Fi, líonraí ceallacha agus braiteoirí</string>
+    <string name="location_settings_dialog_message_grant_permissions">Deonaigh ceadanna suímh do Sheirbhís microG</string>
+    <string name="location_settings_dialog_message_gls_consent">Bain úsáid as seirbhís suímh microG; mar chuid den tseirbhís seo, féadfaidh microG sonraí suímh a bhailiú go tréimhsiúil agus na sonraí seo a úsáid ar bhealach gan ainm chun cruinneas suímh agus seirbhísí bunaithe ar shuíomh a fheabhsú.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Le haghaidh sonraí, téigh chuig na socruithe suímh.</string>
+    <string name="location_settings_dialog_btn_cancel">Ní raibh maith agat</string>
+    <string name="location_settings_dialog_btn_sure">Ceart go leor</string>
+    <string name="pref_location_custom_url_summary">Ligeann sé seo URL seirbhíse saincheaptha a shocrú. Is féidir le luachanna neamhbhailí a bheith ina gcúis le seirbhísí suímh a bheith neamhfhreagrach nó ar fad neamh-infhaighte.</string>
+    <string name="pref_location_custom_url_details">Cuirtear an cosán /v1/geolocate leis go huathoibríoch. Más gá eochair don soláthraí suímh, is féidir í a chur leis mar pharaiméadar fiosrúcháin leis an URL fréimhe.</string>
+    <string name="pref_location_custom_url_input_hint">URL seirbhíse saincheaptha</string>
+    <string name="pref_location_custom_source_title">Saincheaptha</string>
+    <string name="pref_location_source_title">Roghnaigh seirbhís suímh ar líne</string>
+    <string name="pref_location_source_terms">Téarmaí / Príobháideacht</string>
+    <string name="pref_location_source_suggested">Molta</string>
+    <string name="pref_location_import_export_title">Sonraí suímh a allmhairiú nó a onnmhairiú</string>
+    <string name="notification_config_required_title">Cumraíocht riachtanach</string>
+    <string name="notification_config_required_text_online_sources">Chun leanúint ar aghaidh ag úsáid seirbhísí suímh ar líne, ní mór duit seirbhís sonraí suímh a roghnú.</string>
+    <string name="location_data_export_wifi_title">Easpórtáil bunachar sonraí suíomhanna Wi-Fi áitiúil</string>
+    <string name="location_data_export_cell_title">Easpórtáil bunachar sonraí suímh túr cealla áitiúil</string>
+    <string name="location_data_import_title">Iompórtáil sonraí suímh ó chomhad</string>
+    <string name="location_data_import_result_toast">Iompórtáladh %1$d taifead.</string>
+    <string name="prefcat_location_timeline_title">Google Maps Timeline</string>
+    <string name="pref_location_timeline_title">Cumasaigh stair suímh</string>
+    <string name="pref_location_timeline_summary">"Déan do chuid faisnéise suímh a thaifeadadh go tréimhsiúil agus cuir ar fáil í do Google Maps Timeline."</string>
+    <string name="pref_location_timeline_upload_title">Sioncrónaigh le cuntas Google</string>
+    <string name="pref_location_timeline_upload_summary">"Sioncrónaigh stair suímh le freastalaithe Google, ionas gur féidir í a thaispeáint ar ghléasanna eile."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">Rindreálaí léarscáile</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Roghnaigh an t-inneall a úsáidtear chun léarscáileanna a rindreáil in aipeanna. Moltar Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Eochair API Léarscáileanna Stadia</string>
+    <string name="pref_stadia_key_summary">Roghnach. Cuireann sé rogha rindreálaí Léarscáileanna Stadia leis; teastaíonn eochair API le haghaidh Stadia.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">Eochair API HMS (Tacar Léarscáileanna Huawei)</string>
+    <string name="pref_hms_key_summary">Roghnach. Cuireann sé rogha rindreálaí HMS leis; teastaíonn HMS Core ar an bhfeiste.</string>
+</resources>

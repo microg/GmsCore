@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Impostazioni di microG</string>
     <string name="gms_settings_summary">Configura i servizi microG.</string>
     <string name="just_a_sec">Solo un secondo…</string>
@@ -69,9 +68,9 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="self_check_resolution_perm_granted">Ciò indica che la ROM attuale supporta la falsificazione della firma, ma richiede azioni ulteriori per attivarla. Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
     <string name="self_check_name_system_spoofs">Il sistema falsifica la firma: </string>
     <string name="self_check_resolution_system_spoofs">Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
-    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_gms">MicroG RE</string>
     <string name="self_check_pkg_vending">microG Companion / Play Store</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">MicroG RE Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installato: </string>
     <string name="self_check_resolution_app_installed">Installa l\'applicazione <xliff:g example="F-Droid">%1$s</xliff:g> oppure un\'altra compatibile. Consulta la documentazione per conoscere quali applicazioni siano compatibili.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> ha la firma corretta: </string>
@@ -298,7 +297,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="camera_permission_dialog_button">OK</string>
     <string name="credentials_assisted_signin_add_account">Aggiungi account</string>
     <string name="camera_permission_dialog_title">Accesso alla fotocamera richiesto</string>
-    <string name="camera_permission_dialog_message">microG Services richiede l\'accesso alla fotocamera del dispositivo per poter scansionare un codice per %1$s.\n\nPer procedere, consenti l\'accesso alla fotocamera a microG Services nelle Impostazioni.</string>
+    <string name="camera_permission_dialog_message">MicroG RE richiede l\'accesso alla fotocamera del dispositivo per poter scansionare un codice per %1$s.\n\nPer procedere, consenti l\'accesso alla fotocamera a MicroG RE nelle Impostazioni.</string>
     <string name="barcode_scanner_brand">Scansionato da microG per conto di %1$s</string>
     <string name="pref_workprofile_create_account">Permetti la configurazione dell\'account di lavoro</string>
     <string name="pref_workprofile_disclaimer">È tua responsabilità assicurarti che l\'utilizzo di microG sia conforme alle politiche aziendali. microG è fornito nel miglior modo possibile e non può garantire di comportarsi esattamente come previsto.</string>

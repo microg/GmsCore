@@ -11,12 +11,14 @@ import androidx.annotation.Keep;
 
 import android.content.Context;
 
+import org.microg.gms.common.Constants;
+
 @Keep
 public class DynamiteModuleInitializer {
     private static final String TAG = "DynamiteModule";
 
     public static void initializeModuleV1(Context context) {
-        initializeModuleV2(context, "com.google.android.gms".equals(context.getPackageName()));
+        initializeModuleV2(context, Constants.GMS_PACKAGE_NAME.equals(context.getPackageName()));
     }
 
     public static void initializeModuleV2(Context context, boolean withGmsPackage) {

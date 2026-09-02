@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktivní na pozadí</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> běží na pozadí.</string>
+    <string name="foreground_service_notification_big_text">Vyloučte <xliff:g example="microG Services">%1$s</xliff:g> z optimalizace baterie nebo změňte nastavení oznámení, abyste toto oznámení skryli.</string>
+    <string name="foreground_action_battery_optimization">Optimalizace baterie</string>
+    <string name="foreground_action_notification_settings">Nastavení</string>
+    <string name="menu_advanced">Pokročilé</string>
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_game_managed">Spravované herní účty</string>
+    <string name="list_no_item_none">Žádné</string>
+    <string name="list_item_see_all">Zobrazit vše</string>
+    <string name="open_app">Otevřít</string>
+    <string name="service_status_disabled">Zakázáno</string>
+    <string name="service_status_enabled">Povoleno</string>
+    <string name="service_status_automatic">Automaticky</string>
+    <string name="service_status_manual">Ruční</string>
+    <string name="service_status_enabled_short">Zapnuto</string>
+    <string name="service_status_disabled_short">Vypnuto</string>
+</resources>

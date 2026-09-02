@@ -1,0 +1,85 @@
+<com.google.android.material.listitem.ListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp">
+
+    <com.google.android.material.listitem.ListItemCardView
+        android:id="@+id/account_list_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="?attr/listPreferredItemPaddingStart"
+        android:layout_marginEnd="?attr/listPreferredItemPaddingEnd"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="?attr/colorSecondaryContainer"
+        app:swipeEnabled="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/account_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                tools:src="@drawable/ic_account_avatar" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/account_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ellipsize="marquee"
+                android:maxLines="2"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:layout_constraintBottom_toTopOf="@id/account_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/account_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Username" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/account_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="marquee"
+                android:maxLines="10"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorSecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/account_name"
+                app:layout_constraintTop_toBottomOf="@id/account_name"
+                tools:text="email@example.com" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.listitem.ListItemCardView>
+
+    <com.google.android.material.listitem.ListItemRevealLayout
+        android:id="@+id/account_reveal_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/account_remove"
+            style="@style/Widget.Material3Expressive.Button.IconButton"
+            android:layout_width="76dp"
+            android:layout_height="match_parent"
+            app:backgroundTint="?attr/colorError"
+            app:icon="@drawable/ic_remove"
+            app:iconGravity="textStart"
+            app:iconTint="?attr/colorOnError" />
+    </com.google.android.material.listitem.ListItemRevealLayout>
+</com.google.android.material.listitem.ListItemLayout>

@@ -29,6 +29,8 @@ import org.microg.gms.common.Utils;
 import org.microg.gms.gservices.GServices;
 import org.microg.gms.settings.SettingsContract;
 
+import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,7 @@ public class CheckinManager {
         }
         CheckinRequest request = CheckinClient.makeRequest(context,
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
-                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
+                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts, isSpoofingEnabled(context));
         return handleResponse(context, CheckinClient.request(request));
     }
 

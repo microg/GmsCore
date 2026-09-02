@@ -8,8 +8,11 @@
     <string name="foreground_service_notification_title">Active in background</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> is running in background.</string>
     <string name="foreground_service_notification_big_text">Exclude <xliff:g example="microG Services">%1$s</xliff:g> from battery optimizations or change notification settings to hide this notification.</string>
+    <string name="foreground_action_battery_optimization">Battery optimization</string>
+    <string name="foreground_action_notification_settings">Settings</string>
 
     <string name="menu_advanced">Advanced</string>
+    <string name="menu_settings">Settings</string>
     <string name="menu_game_managed">Game Accounts Managed</string>
 
     <string name="list_no_item_none">None</string>
@@ -23,4 +26,12 @@
     <string name="service_status_manual">Manual</string>
     <string name="service_status_enabled_short">On</string>
     <string name="service_status_disabled_short">Off</string>
+    <string name="morphe" translatable="false">Morphe</string>
+    <string name="vanced" translatable="false">Vanced</string>
+    <string name="revanced" translatable="false">ReVanced</string>
+    <string name="youtube_advanced" translatable="false">YT Advanced</string>
+    <string name="revanced_extended" translatable="false">ReVanced Extended</string>
+    <string name="revanced_extended_anddea" translatable="false">ReVanced Extended (Anddea)</string>
+    <string name="revanced_extended_rufusin" translatable="false">ReVanced Extended (Rufusin)</string>
+
 </resources>

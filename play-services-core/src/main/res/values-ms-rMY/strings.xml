@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_confirm_button">Keluarkan</string>
+    <string name="gms_settings_name">Pengaturan microG</string>
+    <string name="just_a_sec">Tunggu sebentar… </string>
+    <string name="sorry">Maaf… </string>
+    <string name="auth_sign_in">Log Masuk</string>
+    <string name="signin_picker_title">Pilih akaun</string>
+    <string name="signin_picker_add_account_label">Tambah akaun lain</string>
+    <string name="signin_confirm_button_text">Benarkan dan kongsi</string>
+    <!-- Self check -->
+    <string name="self_check_cat_system">Sistem</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Mengenai</string>
+    <string name="prefcat_accounts_settings_title">Tetapan</string>
+    <string name="prefcat_advanced">Lebih mahir</string>
+    <string name="profile_name_native">Asli</string>
+    <string name="credentials_assisted_continue">Teruskan</string>
+    <string name="credentials_assisted_choose_account_subtitle">untuk teruskan ke %1$s</string>
+    <!-- Passkey management -->
+</resources>

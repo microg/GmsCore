@@ -1,5 +1,7 @@
 package org.microg.gms.accountaction
 
+import com.google.android.gms.common.BuildConfig
+
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.Canvas
@@ -34,8 +36,8 @@ import org.microg.gms.accountaction.Requirement.*
 import org.microg.gms.common.Constants
 import org.microg.gms.ui.AskPushPermission
 
-const val ACTION_CHECKIN = "org.microg.gms.settings.CHECKIN_SETTINGS"
-const val ACTION_GCM = "org.microg.gms.settings.GCM_SETTINGS"
+const val ACTION_CHECKIN = BuildConfig.BASE_PACKAGE_NAME + ".gms.settings.CHECKIN_SETTINGS"
+const val ACTION_GCM = BuildConfig.BASE_PACKAGE_NAME + ".gms.settings.GCM_SETTINGS"
 
 @Composable
 fun UserInterventionComponents(userActions: Map<Requirement, Boolean>) {

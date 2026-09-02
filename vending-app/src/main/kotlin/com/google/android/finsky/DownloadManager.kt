@@ -20,6 +20,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationManagerCompat
@@ -69,7 +70,7 @@ class DownloadManager(private val context: Context) {
     init {
         createNotificationChannel()
         val filter = IntentFilter(CANCEL_ACTION)
-        context.registerReceiver(cancelReceiver, filter)
+        ContextCompat.registerReceiver(context, cancelReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     private fun createNotificationChannel() {

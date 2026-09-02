@@ -13,6 +13,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.Status;
 import org.microg.gms.auth.api.phone.SmsRetrieverClientImpl;
+import com.google.android.gms.common.BuildConfig;
 
 /**
  * {@code SmsRetriever} provides access to Google services that help you retrieve SMS messages sent to your app without
@@ -47,7 +48,7 @@ public class SmsRetriever {
      * Permission that's used to register the receiver to detect that the broadcaster is the SMS Retriever.
      */
     @NonNull
-    public static final String SEND_PERMISSION = "com.google.android.gms.auth.api.phone.permission.SEND";
+    public static final String SEND_PERMISSION = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.api.phone.permission.SEND";
     /**
      * Intent action when SMS message is retrieved.
      */

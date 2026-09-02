@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
+import android.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -55,6 +56,22 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
         Handler(Looper.getMainLooper()).post {
             method()
         }
+    }
+}
+
+/**
+ * HMS API key entered in MicroG's Location settings, falling back to the build-time
+ * HMSMAP_KEY (-Phmsmap.key) for builds configured at compile time.
+ */
+fun effectiveHmsKey(): String {
+    return try {
+        val app = Class.forName("android.app.ActivityThread")
+            .getMethod("currentApplication").invoke(null) as? Context ?: return BuildConfig.HMSMAP_KEY
+        PreferenceManager.getDefaultSharedPreferences(app)
+            .getString("pref_hms_api_key", "").orEmpty().trim()
+            .ifEmpty { BuildConfig.HMSMAP_KEY }
+    } catch (t: Throwable) {
+        BuildConfig.HMSMAP_KEY
     }
 }
 
@@ -105,7 +122,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     init {
         BitmapDescriptorFactoryImpl.initialize(context.resources)
         runOnMainLooper {
-            MapsInitializer.setApiKey(BuildConfig.HMSMAP_KEY)
+            MapsInitializer.setApiKey(effectiveHmsKey())
         }
 
         this.view = object : FrameLayout(mapContext) {
@@ -596,7 +613,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         val hmsCallback = HuaweiMap.SnapshotReadyCallback { result ->
                 runOnMainLooper {
                     Log.d(TAG, "take snapshot end. $result")
-                    if (CreatorImpl.VERSION < SNAPSHOT_OLD_VERSION_CODE) {
+                    if (HmsCreator.VERSION < SNAPSHOT_OLD_VERSION_CODE) {
                         callback.onBitmapReady(result)
                     } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
                 }

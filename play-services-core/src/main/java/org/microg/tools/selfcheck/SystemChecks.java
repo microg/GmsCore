@@ -23,12 +23,19 @@ import android.net.Uri;
 import android.os.PowerManager;
 import android.provider.Settings;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.common.ForegroundServiceOemUtils;
+import org.microg.tools.ui.AbstractSelfCheckFragment.ChipInfo;
+
+import java.util.Collections;
+
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 @TargetApi(23)
 public class SystemChecks implements SelfCheckGroup, SelfCheckGroup.CheckResolver {
@@ -43,6 +50,7 @@ public class SystemChecks implements SelfCheckGroup, SelfCheckGroup.CheckResolve
     @Override
     public void doChecks(Context context, ResultCollector collector) {
         isBatterySavingDisabled(context, collector);
+        alertOemBackgroundRestrictionLink(context, collector);
     }
 
     private void isBatterySavingDisabled(final Context context, ResultCollector collector) {
@@ -50,6 +58,30 @@ public class SystemChecks implements SelfCheckGroup, SelfCheckGroup.CheckResolve
         collector.addResult(context.getString(R.string.self_check_name_battery_optimizations),
                 pm.isIgnoringBatteryOptimizations(context.getPackageName()) ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_battery_optimizations), this);
+    }
+
+    private void alertOemBackgroundRestrictionLink(Context context, ResultCollector collector) {
+        String slug = ForegroundServiceOemUtils.getDkmaSlug();
+        if (!slug.isEmpty()) {
+            ChipInfo dkmaChip = new ChipInfo(
+                    "dontkillmyapp.com",
+                    ContextCompat.getDrawable(context, R.drawable.ic_self_check_open),
+                    v -> {
+                        Intent intent = ForegroundServiceOemUtils.getDkmaIntent(slug);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+            );
+
+            collector.addResult(
+                    context.getString(R.string.self_check_name_oem_restriction),
+                    Unknown,
+                    context.getString(R.string.self_check_resolution_oem_restriction),
+                    false,
+                    Collections.singletonList(dkmaChip),
+                    null
+            );
+        }
     }
 
     @Override

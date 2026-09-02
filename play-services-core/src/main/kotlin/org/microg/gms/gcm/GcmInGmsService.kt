@@ -98,7 +98,8 @@ class GcmInGmsService : LifecycleService() {
         }
         Log.d(TAG, "handleIntent: action: $action")
         when (action) {
-            GcmConstants.ACTION_C2DM_RECEIVE -> {
+            GcmConstants.ACTION_C2DM_RECEIVE,
+            GcmConstants.ACTION_C2DM_RECEIVE_PACKAGE -> {
                 Log.d(TAG, "start handle gcm message")
                 val callerIntent = Intent(ACTION_GCM_MESSAGE_RECEIVE)
                 callerIntent.setPackage(Constants.GMS_PACKAGE_NAME)
@@ -133,7 +134,7 @@ class GcmInGmsService : LifecycleService() {
             putString(GcmConstants.EXTRA_MESSAGE_ID, "${System.currentTimeMillis() / 1000}-0")
         }
         Log.d(TAG, "updateGroupsWithAccount extras: $extras")
-        val intent = Intent(GcmConstants.ACTION_GCM_SEND).apply {
+        val intent = Intent(GcmConstants.ACTION_GCM_SEND_PACKAGE).apply {
             setPackage(Constants.GMS_PACKAGE_NAME)
             putExtras(extras)
             putExtra(GcmConstants.EXTRA_APP, Intent().apply { setPackage(Constants.GMS_PACKAGE_NAME) }.let { PendingIntentCompat.getBroadcast(this@GcmInGmsService, 0, it, 0, false) })
@@ -239,7 +240,7 @@ class GcmRegistrationReceiver : WakefulBroadcastReceiver() {
         Log.d(TAG, "GcmRegistrationReceiver onReceive: action: ${intent.action}")
         val callIntent = Intent(context, GcmInGmsService::class.java)
         callIntent.action = intent.action
-        if (ACTION_GCM_REGISTER_ACCOUNT == intent.action || GcmConstants.ACTION_C2DM_RECEIVE == intent.action) {
+        if (ACTION_GCM_REGISTER_ACCOUNT == intent.action || GcmConstants.ACTION_C2DM_RECEIVE == intent.action || GcmConstants.ACTION_C2DM_RECEIVE_PACKAGE == intent.action) {
             callIntent.putExtras(intent.extras!!)
         }
         ForegroundServiceContext(context).startService(callIntent)

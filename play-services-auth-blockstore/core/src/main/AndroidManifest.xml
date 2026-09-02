@@ -8,9 +8,10 @@
 
     <application>
 
-        <service android:name="org.microg.gms.auth.blockstore.BlockstoreApiService">
+        <service android:name="org.microg.gms.auth.blockstore.BlockstoreApiService"
+                 android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.blockstore.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.blockstore.service.START" />
             </intent-filter>
         </service>
 

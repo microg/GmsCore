@@ -5,9 +5,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
-        <service android:name="org.microg.gms.ads.AdRequestService">
+        <service android:name="org.microg.gms.ads.AdRequestService"
+                 android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.ads.service.START" />
+                <action android:name="${basePackageName}.android.gms.ads.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

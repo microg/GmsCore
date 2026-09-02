@@ -1,7 +1,9 @@
 package org.microg.gms.maps.mapbox
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -38,6 +40,30 @@ const val KEY_LAYER_PAINT = "paint"
 const val KEY_SOURCE_URL = "url"
 const val KEY_SOURCE_TILES = "tiles"
 
+/**
+ * Stadia Maps API key entered in MicroG's Location settings. Only honored while the "Mapbox
+ * (Stadia Maps)" renderer is selected, so the plain Mapbox option stays keyless.
+ */
+fun runtimeStadiaKey(): String {
+    return try {
+        val app = Class.forName("android.app.ActivityThread")
+            .getMethod("currentApplication").invoke(null) as? Context ?: return ""
+        val prefs = PreferenceManager.getDefaultSharedPreferences(app)
+        if (prefs.getString("pref_map_engine", "mapbox") == "stadia") {
+            prefs.getString("pref_stadia_api_key", "").orEmpty().trim()
+        } else {
+            ""
+        }
+    } catch (t: Throwable) {
+        ""
+    }
+}
+
+/** Runtime setting first, then the build-time STADIA_API_KEY (-Pstadia.key) as a fallback. */
+fun effectiveStadiaKey(): String {
+    val runtimeKey = runtimeStadiaKey()
+    return if (runtimeKey.isNotEmpty()) runtimeKey else BuildConfig.STADIA_KEY
+}
 
 fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
@@ -45,32 +71,39 @@ fun getStyle(
 
     val styleJson = JSONObject(
         context.assets.open(
-            if (BuildConfig.STADIA_KEY.isNotEmpty()) when (mapType) {
+            if (effectiveStadiaKey().isNotEmpty()) when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-stadia.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal-stadia.json"
-            } else when (mapType) {
+            } else if (BuildConfig.MAPBOX_KEY.isNotEmpty()) when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-mapbox.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal-mapbox.json"
+            } else when (mapType) {
+                // No tile provider key configured: fall back to keyless OpenFreeMap tiles
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-openfreemap.json"
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-microg-normal-openfreemap.json"
+                //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+                else -> "style-microg-normal-openfreemap.json"
             }
         ).bufferedReader().readText()
     )
 
     // Inject API key
-    if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+    val stadiaKey = effectiveStadiaKey()
+    if (stadiaKey.isNotEmpty()) {
         val sourceArray = styleJson.getJSONObject(KEY_SOURCES)
         for (key in sourceArray.keys()) {
             val sourceObject = sourceArray.getJSONObject(key)
             if (sourceObject.has(KEY_SOURCE_URL)) {
-                sourceObject.put(KEY_SOURCE_URL, "${sourceObject[KEY_SOURCE_URL]}?api_key=${BuildConfig.STADIA_KEY}")
+                sourceObject.put(KEY_SOURCE_URL, "${sourceObject[KEY_SOURCE_URL]}?api_key=$stadiaKey")
             }
             if (sourceObject.has(KEY_SOURCE_TILES)) {
                 val tilesArray = sourceObject.getJSONArray(KEY_SOURCE_TILES)
                 for (i in 0 until tilesArray.length()) {
-                    tilesArray.put(i, "${tilesArray.getString(i)}?api_key=${BuildConfig.STADIA_KEY}")
+                    tilesArray.put(i, "${tilesArray.getString(i)}?api_key=$stadiaKey")
                 }
             }
         }
@@ -102,11 +135,25 @@ fun getStyle(
 
 
 fun getFallbackStyleOnlineUri(mapType: Int) = when (mapType) {
-    GoogleMap.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
-    GoogleMap.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
-    GoogleMap.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID ->
+        if (effectiveStadiaKey().isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (effectiveStadiaKey().isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json"
+        else "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_TERRAIN ->
+        if (effectiveStadiaKey().isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (effectiveStadiaKey().isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/outdoors.json"
+        else "mapbox://styles/mapbox/outdoors-v12"
     //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-    else -> "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
+    else ->
+        if (effectiveStadiaKey().isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (effectiveStadiaKey().isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/alidade_smooth.json"
+        else "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
 }
 
 fun MapStyleOptions.apply(style: JSONObject) {

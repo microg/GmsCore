@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Gníomhach sa chúlra</string>
+    <string name="foreground_service_notification_text">Tá <xliff:g example="Exposure Notification">%1$s</xliff:g> ag rith sa chúlra.</string>
+    <string name="foreground_service_notification_big_text">Eisigh <xliff:g example="microG Services">%1$s</xliff:g> ó bharrfheabhsuithe ceallraí nó athraigh na socruithe fógraí chun an fógra seo a cheilt.</string>
+    <string name="foreground_action_battery_optimization">Uasmhéadú ceallraí</string>
+    <string name="foreground_action_notification_settings">Socruithe</string>
+    <string name="menu_advanced">Ardleibhéil</string>
+    <string name="menu_settings">Socruithe</string>
+    <string name="menu_game_managed">Cuntais Cluiche Bainistithe</string>
+    <string name="list_no_item_none">Dada</string>
+    <string name="list_item_see_all">Féach ar gach rud</string>
+    <string name="open_app">Oscail</string>
+    <string name="service_status_disabled">Díchumasaithe</string>
+    <string name="service_status_enabled">Cumasaithe</string>
+    <string name="service_status_automatic">Uathoibríoch</string>
+    <string name="service_status_manual">Láimhe</string>
+    <string name="service_status_enabled_short">Ar</string>
+    <string name="service_status_disabled_short">As</string>
+</resources>

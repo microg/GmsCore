@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicație înregistrată</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> aplicații înregistrate</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> de aplicații înregistrate</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Nu este acordată o permisiune necesară pentru funcționarea corectă a serviciilor microG.</item>
+        <item quantity="few">Nu sunt acordate permisiuni necesare pentru funcționarea corectă a serviciilor microG.</item>
+        <item quantity="other">Nu sunt acordate permisiuni necesare pentru funcționarea corectă a serviciilor microG.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Cerere permisiune lipsă</item>
+        <item quantity="few">Cerere permisiuni lipsă</item>
+        <item quantity="other">Cerere permisiuni lipsă</item>
+    </plurals>
+</resources>

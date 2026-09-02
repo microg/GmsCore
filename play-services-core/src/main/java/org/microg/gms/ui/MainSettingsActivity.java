@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -68,6 +69,15 @@ public class MainSettingsActivity extends AppCompatActivity {
 
         appBarConfiguration = new AppBarConfiguration.Builder(getNavController().getGraph()).build();
         NavigationUI.setupWithNavController(toolbarLayout, toolbar, getNavController(), appBarConfiguration);
+
+        // Fix navigating into a submenu does not show the menu from the top.
+        getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
+            NestedScrollView nestedScrollView = findViewById(R.id.nested_scroll_view);
+            if (nestedScrollView != null) {
+                nestedScrollView.scrollTo(0, 0);
+            }
+        });
+
         showDialogIfNeeded();
     }
 

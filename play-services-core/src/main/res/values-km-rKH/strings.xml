@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">ដកគណនីចេញ</string>
+    <string name="dialog_confirm_button">ដកចេញ</string>
+    <string name="dialog_cancel_button">បោះបង់</string>
+    <string name="snackbar_remove_account">គណនី %s ត្រូវបានដកចេញ</string>
+    <string name="snackbar_undo_button">អាន់ឌូ</string>
+    <string name="gms_settings_name">ការកំណត់ microG</string>
+    <string name="just_a_sec">ចាំមួយភ្លែត…</string>
+    <string name="sorry">អភ័យទោស…</string>
+    <string name="auth_sign_in">ចូលគណនី</string>
+    <string name="allow">អនុញ្ញាត</string>
+    <string name="deny">បដិសេដ</string>
+    <string name="signin_picker_title">ជ្រើសគណនី</string>
+    <string name="signin_picker_add_account_label">បន្ថែមគណនីផ្សេងទៀត</string>
+    <string name="signin_confirm_button_text">អនុញ្ញាត និងចែករំលែក</string>
+    <string name="perm_c2dm_receive_label">ស្ដាប់សារ C2DM</string>
+    <string name="perm_c2dm_send_label">ផ្ញើសារ C2DM ទៅកម្មវិធីដទៃ</string>
+    <string name="network_type_mobile">បណ្ដាញចល័ត</string>
+    <string name="network_type_wifi">វ៉ាយហ្វាយ</string>
+    <string name="network_type_roaming">រ៉ូមីង</string>
+    <string name="network_type_other">បណ្ដាញផ្សេង</string>
+    <!-- Self check -->
+    <string name="self_check_cat_gms_packages">កញ្ចប់ដែលបានដំឡើង</string>
+    <string name="self_check_cat_system">ប្រព័ន្ធ</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">អំពីកម្មវិធីនេះ</string>
+    <string name="prefcat_details">ព័ត៌មានលម្អិត</string>
+    <string name="pref_auth_visible_title">អនុញ្ញាតឱ្យកម្មវិធីស្វែងរកគណនី</string>
+    <string name="pref_device_registration_android_id">អាន់ដ្រយ ID</string>
+    <string name="checkin_not_registered">មិនទាន់បានចុះបញ្ជី</string>
+    <string name="checkin_enable_switch">ចុះបញ្ជីឧបករណ៍</string>
+    <string name="pref_info_status">ស្ថានភាព</string>
+    <string name="pref_accounts_title">គណនី</string>
+    <string name="pref_accounts_summary">បន្ថែម និងគ្រប់គ្រងគណនី Google</string>
+    <string name="prefcat_accounts_settings_title">ការកំណត់</string>
+    <string name="prefcat_accounts_login_accounts_title">បញ្ជាប់ចូល</string>
+    <string name="prefcat_accounts_options_title">ជម្រើស</string>
+    <string name="pref_accounts_manage_accounts_title">គ្រប់គ្រងគណនី</string>
+    <string name="pref_accounts_manage_accounts_summary">បើកកម្មវិធីគ្រប់គ្រងគណនីឧបករណ៍</string>
+    <string name="prefcat_youtube_activity">សកម្មភាព YouTube</string>
+    <string name="pref_manage_all_history">គ្រប់គ្រងប្រវត្តិទាំងអស់</string>
+    <string name="pref_data_in_youtube">ទិន្នន័យរបស់អ្នកនៅក្នុង YouTube</string>
+    <string name="pref_privacy_title">ឯកជនភាព</string>
+    <string name="pref_about_title">អំពី MicroG RE</string>
+    <string name="gcm_unregister_app">មិនបានចុះបញ្ជីទេ</string>
+    <string name="gcm_registered">បានចុះបញ្ជី</string>
+    <string name="gcm_network_state_disconnected">បានផ្តាច់</string>
+    <string name="prefcat_push_apps_registered_title">កម្មវិធីដែលបានចុះឈ្មោះ</string>
+    <string name="prefcat_push_apps_unregistered_title">កម្មវិធីដែលមិនបានចុះឈ្មោះ</string>
+    <string name="prefcat_gcm_registers">ចុះឈ្មោះ</string>
+    <string name="prefcat_advanced">កម្រិតខ្ពស់</string>
+    <string name="gcm_remove_registers_dialog_title">ដកការចុះបញ្ជីទាំងអស់ឬ?</string>
+    <string name="gcm_remove_registers_toast_message">កម្មវិធីទាំងអស់ត្រូវបានដកចេញពីការជូនដំណឹងជំរុញ</string>
+    <string name="profile_name_native">ដើម</string>
+    <string name="profile_name_real">ពិត</string>
+    <string name="profile_name_user">ផ្ទាល់ខ្លួន៖ %s</string>
+    <string name="profile_name_auto">ស្វ័យប្រវត្តិ៖ %s</string>
+    <string name="profile_name_system">ប្រព័ន្ធ៖ %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">នាំចូលប្រូហ្វាលឧបករណ៍</string>
+    <string name="pref_device_registration_serial_title">លេខស៊េរី</string>
+    <string name="pref_device_registration_import_custom_profile_summary">នាំចូលប្រូហ្វាលឧបករណ៍ពីឯកសារ</string>
+    <string name="pref_device_registration_select_profile_title">រើសឧបករណ៍</string>
+    <string name="pref_device_registration_device_profile_category">ប្រូហ្វាលឧបករណ៍</string>
+    <string name="push_notifications_summary_off">បិទ</string>
+    <string name="push_notifications_summary_automatic">បើក / ស្វ័យប្រវត្តិ៖ %s</string>
+    <string name="push_notifications_summary_manual">បើក / ជ្រើសដៃ៖ %s</string>
+    <string name="push_notifications_summary_values_seconds">%s វិនាទី</string>
+    <string name="push_notifications_summary_values_minutes">%s នាទី</string>
+    <string name="credentials_assisted_cancel">បោះបង់</string>
+    <string name="credentials_assisted_choose_account_subtitle">ដើម្បីបន្តទៅ %1$s</string>
+    <string name="games_delete_snapshot_dialog_cancel">បោះបង់</string>
+    <string name="family_management_delete_group_cancel">បោះបង់</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">កម្មវិធីដែលបានបំណះ</string>
+    <string name="self_check_source_morphe">Morphe បំណះ</string>
+    <string name="self_check_name_notifications">ការជូនដំណឹងត្រូវបានអនុញ្ញាត</string>
+    <string name="self_check_patched_app_installed">កំពុងប្រតិបត្តិជាមួយ %1$s</string>
+    <string name="self_check_action_download_morphe">ដោនឡូដ Morphe</string>
+</resources>

@@ -7,9 +7,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
+        <service android:name="org.microg.gms.safetynet.SafetyNetClientService"
+                 android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.safetynet.service.START" />
+                <action android:name="${basePackageName}.android.gms.safetynet.service.START" />
             </intent-filter>
         </service>
         <activity
@@ -20,7 +21,7 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.Dialog.NoActionBar">
             <intent-filter>
-                <action android:name="org.microg.gms.safetynet.RECAPTCHA_ACTIVITY" />
+                <action android:name="${basePackageName}.gms.safetynet.RECAPTCHA_ACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

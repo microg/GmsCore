@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Localização</string>
+    <string name="prefcat_location_apps_title">Acesso recente</string>
+    <string name="prefcat_location_wifi_title">Localização por Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Localização por rede móvel</string>
+    <string name="prefcat_geocoder_title">Resolvedor de endereços</string>
+    <string name="pref_location_wifi_online_enabled_title">Solicitar do serviço online</string>
+    <string name="pref_location_wifi_online_enabled_summary">Buscar localização baseada em Wi-Fi do serviço de localização online.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Solicitar de hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Buscar localização Wi-Fi diretamente de hotspots suportados quando conectado.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Lembrar do GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Armazenar localizações Wi-Fi localmente quando o GPS for usado.</string>
+    <string name="pref_location_cell_online_enabled_title">Solicitar do serviço online</string>
+    <string name="pref_location_cell_online_enabled_summary">Buscar localizações de torres de celular da rede móvel do serviço de localização online.</string>
+    <string name="pref_location_cell_learning_enabled_title">Lembrar do GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Armazenar localizações de rede móvel localmente quando o GPS for usado.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Resolver endereços usando OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Aplicativos com acesso à localização</string>
+    <string name="location_app_last_access_at">Último acesso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Forçar localização aproximada</string>
+    <string name="pref_location_app_force_coarse_summary">Sempre retornar localizações aproximadas para este aplicativo, ignorando seu nível de permissão.</string>
+    <string name="prefcat_app_last_location">Última localização reportada</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Para uma melhor experiência, ative a localização do dispositivo, que usa o serviço de localização do microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Para continuar, ative a localização do dispositivo, que usa o serviço de localização do microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Seu dispositivo precisará de:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Usar GPS, Wi‑Fi, redes de celular e sensores</string>
+    <string name="location_settings_dialog_message_grant_permissions">Conceder permissões de localização ao microG Service</string>
+    <string name="location_settings_dialog_message_gls_consent">Usar o serviço de localização do microG; como parte desse serviço, o microG pode coletar dados de localização periodicamente e usar esses dados de forma anônima para melhorar a precisão da localização e os serviços baseados em localização.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Para mais detalhes, acesse as configurações de localização.</string>
+    <string name="location_settings_dialog_btn_cancel">Não, obrigado</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="pref_location_custom_url_summary">Isso permite definir uma URL de serviço personalizada. Valores inválidos podem fazer com que os serviços de localização fiquem sem resposta ou totalmente indisponíveis.</string>
+    <string name="pref_location_custom_url_details">O caminho /v1/geolocate é anexado automaticamente. Se o provedor de localização exigir uma chave, ela pode ser anexada como um parâmetro de consulta à URL raiz.</string>
+    <string name="pref_location_custom_url_input_hint">URL de serviço personalizada</string>
+    <string name="pref_location_custom_source_title">Personalizado</string>
+    <string name="pref_location_source_title">Selecionar serviço de localização online</string>
+    <string name="pref_location_source_terms">Termos / Privacidade</string>
+    <string name="pref_location_source_suggested">Sugerido</string>
+    <string name="pref_location_import_export_title">Importar ou exportar dados de localização</string>
+    <string name="notification_config_required_title">Configuração necessária</string>
+    <string name="notification_config_required_text_online_sources">Para continuar usando os serviços de localização online, você precisa selecionar um serviço de dados de localização.</string>
+    <string name="location_data_export_wifi_title">Exportar banco de dados de localização Wi-Fi local</string>
+    <string name="location_data_export_cell_title">Exportar banco de dados de localização de torres de celular local</string>
+    <string name="location_data_import_title">Importar dados de localização de arquivo</string>
+    <string name="location_data_import_result_toast">%1$d registros importados.</string>
+    <string name="prefcat_location_timeline_title">Google Maps Timeline</string>
+    <string name="pref_location_timeline_title">Ativar histórico de localização</string>
+    <string name="pref_location_timeline_summary">"Registre periodicamente suas informações de localização e disponibilize-as para o Google Maps Timeline."</string>
+    <string name="pref_location_timeline_upload_title">Sincronizar com a conta do Google</string>
+    <string name="pref_location_timeline_upload_summary">"Sincronize o histórico de localização com os servidores do Google, para que possa ser exibido em outros dispositivos."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">Renderizador de mapa</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Escolha o mecanismo usado para renderizar mapas nos aplicativos. Mapbox (MapLibre) é recomendado.</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Chave da API do Stadia Maps</string>
+    <string name="pref_stadia_key_summary">Opcional. Adiciona uma opção de renderizador do Stadia Maps; o Stadia requer uma chave de API.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">Chave da API do HMS (Huawei Map Kit)</string>
+    <string name="pref_hms_key_summary">Opcional. Adiciona uma opção de renderizador do HMS; requer o HMS Core no dispositivo.</string>
+</resources>

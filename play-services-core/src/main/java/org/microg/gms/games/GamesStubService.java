@@ -33,10 +33,11 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.games.UpgradeActivity.ACTION_PLAY_GAMES_UPGRADE;
 import static org.microg.gms.games.UpgradeActivity.EXTRA_GAME_PACACKE_NAME;
+import com.google.android.gms.BuildConfig;
 
 public class GamesStubService extends BaseService {
 
-    public static final String PARAM_GAME_PACKAGE_NAME = "com.google.android.gms.games.key.gamePackageName";
+    public static String PARAM_GAME_PACKAGE_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.key.gamePackageName";
 
     public GamesStubService() {
         super("GmsGamesSvc", GmsService.GAMES);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Attivo in background</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> è in esecuzione in background.</string>
+    <string name="foreground_service_notification_big_text">Escludi <xliff:g example="microG Services">%1$s</xliff:g> dalle ottimizzazioni della batteria oppure modifica le impostazioni delle notifiche per nascondere questa notifica.</string>
+    <string name="foreground_action_battery_optimization">Ottimizzazione della batteria</string>
+    <string name="foreground_action_notification_settings">Impostazioni</string>
+    <string name="menu_advanced">Avanzate</string>
+    <string name="menu_settings">Impostazioni</string>
+    <string name="menu_game_managed">Account di gioco gestiti</string>
+    <string name="list_no_item_none">Nessuno</string>
+    <string name="list_item_see_all">Vedi tutto</string>
+    <string name="open_app">Apri</string>
+    <string name="service_status_disabled">Disattivato</string>
+    <string name="service_status_enabled">Abilitato</string>
+    <string name="service_status_automatic">Automatico</string>
+    <string name="service_status_manual">Manuale</string>
+    <string name="service_status_enabled_short">Acceso</string>
+    <string name="service_status_disabled_short">Spento</string>
+</resources>

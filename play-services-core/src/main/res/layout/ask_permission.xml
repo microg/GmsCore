@@ -76,7 +76,7 @@
             android:padding="10dp">
 
             <ImageView
-                tools:src="@mipmap/ic_app"
+                tools:src="@mipmap/ic_launcher"
                 android:id="@+id/app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

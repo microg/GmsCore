@@ -19,12 +19,14 @@ android {
 
     buildFeatures {
         aidl = true
+        buildConfig = true
     }
 
     defaultConfig {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
     }
 
     compileOptions {

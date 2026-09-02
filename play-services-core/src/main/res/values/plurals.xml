@@ -16,7 +16,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
+    <plurals name="pref_unifiednlp_summary" translatable="false">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configured</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configured</item>
     </plurals>

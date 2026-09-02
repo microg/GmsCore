@@ -62,7 +62,6 @@
     <string name="barcode_scanner_brand">پویش‌شده توسط میکروجی به نمایندگی از %1$s</string>
     <string name="camera_permission_dialog_button">پذیرش</string>
     <string name="auth_connecting">دستگاه شما در حال برقراری ارتباط با سرورهای گوگل برای ورود است.\n\nاین کار ممکن است چند ثانیه طول بکشد.</string>
-    <string name="gms_app_name">خدمات میکروجی</string>
     <string name="limited_services_app_name">خدمات محدود میکروجی</string>
     <string name="gms_settings_name">تنظیمات میکروجی</string>
     <string name="account_manager_title">مدیریت حساب گوگل</string>

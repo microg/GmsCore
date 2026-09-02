@@ -16,52 +16,61 @@
 
 package org.microg.gms.auth.login;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.R;
 
+import java.util.Objects;
+
 public abstract class AssistantActivity extends AppCompatActivity {
-    private static final int TITLE_MIN_HEIGHT = 64;
-    private static final double TITLE_WIDTH_FACTOR = (8.0 / 18.0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableEdgeToEdgeNoContrast();
         setContentView(R.layout.login_assistant);
-        formatTitle();
-        findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onNextButtonClicked();
-            }
-        });
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClicked();
-            }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //noinspection deprecation
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        findViewById(R.id.spoof_button).setOnClickListener(v -> onHuaweiButtonClicked());
+        findViewById(R.id.next_button).setOnClickListener(v -> onNextButtonClicked());
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.auth_root), (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
     }
 
-    @SuppressLint("WrongViewCast")
-    private void formatTitle() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            double widthPixels = (double) (getResources().getDisplayMetrics().widthPixels);
-            findViewById(R.id.title_container).getLayoutParams().height =
-                    (int) (dpToPx(TITLE_MIN_HEIGHT) + (TITLE_WIDTH_FACTOR * widthPixels));
+    public void setSpoofButtonText(@StringRes int res) {
+        setSpoofButtonText(getText(res));
+    }
+
+    public void setSpoofButtonText(CharSequence text) {
+        if (text == null) {
+            findViewById(R.id.spoof_button).setVisibility(View.GONE);
         } else {
-            findViewById(R.id.title_container).getLayoutParams().height = dpToPx(TITLE_MIN_HEIGHT);
+            findViewById(R.id.spoof_button).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.spoof_button)).setText(text);
         }
     }
 
@@ -78,31 +87,10 @@ public abstract class AssistantActivity extends AppCompatActivity {
         }
     }
 
-    public void setBackButtonText(@StringRes int res) {
-        setBackButtonText(getText(res));
-    }
-
-    public void setBackButtonText(CharSequence text) {
-        if (text == null) {
-            findViewById(R.id.back_button).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.back_button).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.back_button)).setText(text);
-        }
+    protected void onHuaweiButtonClicked() {
     }
 
     protected void onNextButtonClicked() {
-
-    }
-
-    protected void onBackButtonClicked() {
-
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        formatTitle();
     }
 
     @Override
@@ -111,8 +99,17 @@ public abstract class AssistantActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.title)).setText(title);
     }
 
+    /** @noinspection unused*/
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    private void enableEdgeToEdgeNoContrast() {
+        SystemBarStyle systemBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT);
+        EdgeToEdge.enable(this, systemBarStyle);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
     }
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">स्थान</string>
+    <string name="prefcat_location_apps_title">अलीकडील प्रवेश</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi स्थान</string>
+    <string name="prefcat_location_cell_title">मोबाइल नेटवर्क स्थान</string>
+    <string name="prefcat_geocoder_title">पत्ता शोधक</string>
+    <string name="pref_location_wifi_online_enabled_title">ऑनलाइन सेवेकडून विनंती</string>
+    <string name="pref_location_wifi_online_enabled_summary">ऑनलाइन स्थान सेवेकडून Wi-Fi-आधारित स्थान मिळवा.</string>
+    <string name="pref_location_wifi_moving_enabled_title">हॉटस्पॉटकडून विनंती</string>
+    <string name="pref_location_wifi_moving_enabled_summary">कनेक्ट असताना समर्थित हॉटस्पॉट्समधून थेट Wi-Fi स्थान मिळवा.</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPS वरून लक्षात ठेवा</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS वापरताना Wi-Fi स्थान स्थानिकरित्या संग्रहित करा.</string>
+    <string name="pref_location_cell_online_enabled_title">ऑनलाइन सेवेकडून विनंती</string>
+    <string name="pref_location_cell_online_enabled_summary">ऑनलाइन स्थान सेवेकडून मोबाइल नेटवर्क सेल टॉवर स्थान मिळवा.</string>
+    <string name="pref_location_cell_learning_enabled_title">GPS वरून लक्षात ठेवा</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS वापरताना मोबाइल नेटवर्क स्थान स्थानिकरित्या संग्रहित करा.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatim वापरा</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim वापरून पत्ते निराकरण करा.</string>
+    <string name="fragment_location_apps_title">स्थान प्रवेश असलेले अॅप्स</string>
+    <string name="location_app_last_access_at">शेवटचा प्रवेश: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">अंदाजित स्थान जबरदस्ती करा</string>
+    <string name="pref_location_app_force_coarse_summary">या अॅपला नेहमी अंदाजित स्थान परत करा, त्याची परवानगी पातळीकडे दुर्लक्ष करा.</string>
+    <string name="prefcat_app_last_location">शेवटचे नोंदवलेले स्थान</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">चांगल्या अनुभवासाठी, डिव्हाइस स्थान चालू करा, जे microG ची स्थान सेवा वापरते.</string>
+    <string name="location_settings_dialog_message_title_to_continue">सुरू ठेवण्यासाठी, डिव्हाइस स्थान चालू करा, जे microG ची स्थान सेवा वापरते.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">तुमच्या डिव्हाइसला आवश्यक असेल:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, Wi‑Fi, सेल नेटवर्क आणि सेन्सर वापरा</string>
+    <string name="location_settings_dialog_message_grant_permissions">microG सेवेला स्थान परवानग्या द्या</string>
+    <string name="location_settings_dialog_message_gls_consent">microG स्थान सेवा वापरा; या सेवेचा भाग म्हणून, microG स्थान डेटा नियमितपणे संग्रहित करू शकते आणि या डेटाचा अज्ञात रितीने वापर करून स्थान अचूकता आणि स्थान-आधारित सेवा सुधारू शकते.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">तपशीलांसाठी, स्थान सेटिंग्जवर जा.</string>
+    <string name="location_settings_dialog_btn_cancel">नको, धन्यवाद</string>
+    <string name="location_settings_dialog_btn_sure">ठीक आहे</string>
+    <string name="pref_location_custom_url_summary">हे कस्टम सेवा URL सेट करण्यास अनुमती देते. अवैध मूल्यांमुळे स्थान सेवा प्रतिसाद न देणाऱ्या किंवा पूर्णपणे अनुपलब्ध होऊ शकतात.</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate पथ आपोआप जोडला जातो. जर स्थान प्रदात्याला की आवश्यक असेल, तर ती रूट URL ला क्वेरी पॅरामीटर म्हणून जोडली जाऊ शकते.</string>
+    <string name="pref_location_custom_url_input_hint">कस्टम सेवा URL</string>
+    <string name="pref_location_custom_source_title">कस्टम</string>
+    <string name="pref_location_source_title">ऑनलाइन स्थान सेवा निवडा</string>
+    <string name="pref_location_source_terms">अटी / गोपनीयता</string>
+    <string name="pref_location_source_suggested">सुचवलेले</string>
+    <string name="pref_location_import_export_title">स्थान डेटा आयात किंवा निर्यात करा</string>
+    <string name="notification_config_required_title">कॉन्फिगरेशन आवश्यक</string>
+    <string name="notification_config_required_text_online_sources">ऑनलाइन स्थान सेवा वापरणे सुरू ठेवण्यासाठी, तुम्हाला स्थान डेटा सेवा निवडणे आवश्यक आहे.</string>
+    <string name="location_data_export_wifi_title">स्थानिक Wi-Fi स्थान डेटाबेस निर्यात करा</string>
+    <string name="location_data_export_cell_title">स्थानिक सेल टॉवर स्थान डेटाबेस निर्यात करा</string>
+    <string name="location_data_import_title">फाइलमधून स्थान डेटा आयात करा</string>
+    <string name="location_data_import_result_toast">आयात केलेले %1$d रेकॉर्ड.</string>
+    <string name="prefcat_location_timeline_title">Google Maps टाइमलाइन</string>
+    <string name="pref_location_timeline_title">स्थान इतिहास सक्षम करा</string>
+    <string name="pref_location_timeline_summary">"तुमची स्थान माहिती नियमितपणे रेकॉर्ड करा आणि ती Google Maps टाइमलाइनसाठी उपलब्ध करा."</string>
+    <string name="pref_location_timeline_upload_title">Google खात्याशी समक्रमित करा</string>
+    <string name="pref_location_timeline_upload_summary">"स्थान इतिहास Google सर्व्हरवर समक्रमित करा, जेणेकरून ते इतर डिव्हाइसवर प्रदर्शित केले जाऊ शकेल."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">नकाशा रेंडरर</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">अॅप्समध्ये नकाशे प्रस्तुत करण्यासाठी वापरलेले इंजिन निवडा. Mapbox (MapLibre) ची शिफारस केली जाते.</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API की</string>
+    <string name="pref_stadia_key_summary">ऐच्छिक. Stadia Maps रेंडरर पर्याय जोडते; Stadia ला API की आवश्यक आहे.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API की</string>
+    <string name="pref_hms_key_summary">ऐच्छिक. HMS रेंडरर पर्याय जोडते; डिव्हाइसवर HMS Core आवश्यक आहे.</string>
+</resources>

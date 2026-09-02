@@ -19,13 +19,14 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.location.LocationSettings
+import com.google.android.gms.BuildConfig;
 
 private const val TAG = "OdlhBackupService"
 
 class OdlhBackupService : LifecycleService() {
 
     companion object {
-        private const val ACTION_BACKUP = "com.google.android.gms.semanticlocationhistory.ACTION_PERIODIC_BACKUP"
+        private const val ACTION_BACKUP = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.semanticlocationhistory.ACTION_PERIODIC_BACKUP"
         private const val BACKUP_INTERVAL_MS = 8 * 60 * 60 * 1000L // 8h
 
         fun scheduleBackup(context: Context) {

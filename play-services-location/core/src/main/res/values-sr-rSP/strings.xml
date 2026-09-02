@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Локација</string>
+    <string name="prefcat_location_apps_title">Недавни приступ</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi локација</string>
+    <string name="prefcat_location_cell_title">Локација мобилне мреже</string>
+    <string name="prefcat_geocoder_title">Решавање адреса</string>
+    <string name="pref_location_wifi_online_enabled_title">Захтев од онлајн услуге</string>
+    <string name="pref_location_wifi_online_enabled_summary">Преузми Wi-Fi локацију са онлајн услуге за локацију.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Захтев од хотспота</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Преузми Wi-Fi локацију директно са подржаних хотспотова када су повезани.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Запамти са GPS-а</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Сачувај Wi-Fi локације локално када се користи GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">Захтев од онлајн услуге</string>
+    <string name="pref_location_cell_online_enabled_summary">Преузми локације базних станица мобилне мреже са онлајн услуге за локацију.</string>
+    <string name="pref_location_cell_learning_enabled_title">Запамти са GPS-а</string>
+    <string name="pref_location_cell_learning_enabled_summary">Сачувај локације мобилне мреже локално када се користи GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Користи Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Решавај адресе користећи OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Апликације са приступом локацији</string>
+    <string name="location_app_last_access_at">Последњи приступ: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Приморај грубу локацију</string>
+    <string name="pref_location_app_force_coarse_summary">Увек враћај грубе локације овој апликацији, игноришући ниво дозволе.</string>
+    <string name="prefcat_app_last_location">Последња пријављена локација</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">За боље искуство, укључи локацију уређаја, која користи microG-ову услугу локације</string>
+    <string name="location_settings_dialog_message_title_to_continue">Да бисте наставили, укључите локацију уређаја, која користи microG-ову услугу локације</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Ваш уређај ће морати да:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Користите GPS, Wi-Fi, мобилне мреже и сензоре</string>
+    <string name="location_settings_dialog_message_grant_permissions">Одобри дозволе за локацију microG услузи</string>
+    <string name="location_settings_dialog_message_gls_consent">Користи microG услугу локације; као део ове услуге, microG може повремено прикупљати податке о локацији и користити те податке на анониман начин за побољшање тачности локације и услуга заснованих на локацији.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">За детаље, идите у подешавања локације.</string>
+    <string name="location_settings_dialog_btn_cancel">Не, хвала</string>
+    <string name="location_settings_dialog_btn_sure">У реду</string>
+    <string name="pref_location_custom_url_summary">Ово омогућава постављање прилагођене URL адресе услуге. Невалидне вредности могу довести до тога да услуге локације не реагују или буду потпуно недоступне.</string>
+    <string name="pref_location_custom_url_details">Путања /v1/geolocate се аутоматски додаје. Ако провајдер локације захтева кључ, он се може додати као параметар упита на основну URL адресу.</string>
+    <string name="pref_location_custom_url_input_hint">Прилагођена URL адреса услуге</string>
+    <string name="pref_location_custom_source_title">Обичај</string>
+    <string name="pref_location_source_title">Изаберите онлајн услугу локације</string>
+    <string name="pref_location_source_terms">Услови / Приватност</string>
+    <string name="pref_location_source_suggested">Предложено</string>
+    <string name="pref_location_import_export_title">Увези или извези податке о локацији</string>
+    <string name="notification_config_required_title">Потребна је конфигурација</string>
+    <string name="notification_config_required_text_online_sources">Да бисте наставили да користите онлајн услуге локације, потребно је да изаберете услугу података о локацији.</string>
+    <string name="location_data_export_wifi_title">Извези локалну базу података Wi-Fi локација</string>
+    <string name="location_data_export_cell_title">Извези локалну базу података локација базних станица</string>
+    <string name="location_data_import_title">Увези податке о локацији из датотеке</string>
+    <string name="location_data_import_result_toast">Увезено %1$d записа.</string>
+    <string name="prefcat_location_timeline_title">Google Maps временска линија</string>
+    <string name="pref_location_timeline_title">Омогући историју локација</string>
+    <string name="pref_location_timeline_summary">"Периодично бележите информације о вашој локацији и учините их доступним за Google Maps временску линију."</string>
+    <string name="pref_location_timeline_upload_title">Синхронизуј са Google налогом</string>
+    <string name="pref_location_timeline_upload_summary">"Синхронизуј историју локација са Google серверима, како би могла да се прикаже на другим уређајима."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Maps</string>
+    <string name="pref_map_engine_title">Приказивач мапа</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Изаберите покретач који се користи за приказ мапа у апликацијама. Препоручује се Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API кључ</string>
+    <string name="pref_stadia_key_summary">Опционално. Додаје опцију приказивача Stadia Maps; Stadia захтева API кључ.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API кључ</string>
+    <string name="pref_hms_key_summary">Опционално. Додаје опцију приказивача HMS; захтева HMS Core на уређају.</string>
+</resources>

@@ -155,7 +155,7 @@ public class PeopleManager {
     }
 
     public static String getUserInfoAuthKey(Context context, Account account) {
-        AuthManager authManager = new AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, USERINFO_SCOPE);
+        AuthManager authManager = new AuthManager(context, account.name, Constants.GOOGLE_GMS_PACKAGE_NAME, USERINFO_SCOPE);
         authManager.setPermitted(true);
         String result = authManager.getAuthToken();
         if (result == null) {

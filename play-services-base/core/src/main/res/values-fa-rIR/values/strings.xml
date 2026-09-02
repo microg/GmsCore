@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">فعال در پس‌زمینه</string>
+    <string name="foreground_action_battery_optimization">بهینه‌سازی باتری</string>
+    <string name="foreground_action_notification_settings">تنظیمات</string>
+    <string name="menu_advanced">پیشرفته</string>
+    <string name="menu_settings">تنظیمات</string>
+    <string name="list_no_item_none">موردی وجود ندارد</string>
+    <string name="list_item_see_all">مشاهده همه</string>
+    <string name="service_status_disabled">غیرفعال</string>
+    <string name="service_status_enabled">فعال</string>
+    <string name="service_status_automatic">خودکار</string>
+    <string name="service_status_manual">دستی</string>
+    <string name="service_status_enabled_short">روشن</string>
+    <string name="service_status_disabled_short">خاموش</string>
+</resources>

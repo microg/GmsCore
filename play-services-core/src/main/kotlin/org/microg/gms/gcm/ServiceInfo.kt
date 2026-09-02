@@ -12,10 +12,12 @@ import android.content.IntentFilter
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.core.content.ContextCompat
 import java.io.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import com.google.android.gms.BuildConfig;
 
 private const val ACTION_SERVICE_INFO_REQUEST = "org.microg.gms.gcm.SERVICE_INFO_REQUEST"
 private const val ACTION_SERVICE_INFO_RESPONSE = "org.microg.gms.gcm.SERVICE_INFO_RESPONSE"
@@ -51,7 +53,7 @@ class ServiceInfoReceiver : BroadcastReceiver() {
 }
 
 private suspend fun sendToServiceInfoReceiver(intent: Intent, context: Context): ServiceInfo = suspendCoroutine {
-    context.registerReceiver(object : BroadcastReceiver() {
+    ContextCompat.registerReceiver(context, object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             context.unregisterReceiver(this)
             val serviceInfo = try {
@@ -66,7 +68,7 @@ private suspend fun sendToServiceInfoReceiver(intent: Intent, context: Context):
                 Log.w(TAG, e)
             }
         }
-    }, IntentFilter(ACTION_SERVICE_INFO_RESPONSE))
+    }, IntentFilter(ACTION_SERVICE_INFO_RESPONSE), ContextCompat.RECEIVER_NOT_EXPORTED)
     try {
         context.sendOrderedBroadcast(intent, null)
     } catch (e: Exception) {

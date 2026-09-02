@@ -1,0 +1,16 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="@color/m3_card_ripple_color"
+    tools:ignore="PrivateResource">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/colorSurfaceContainerHighest" />
+            <corners android:radius="48dp" />
+        </shape>
+    </item>
+</ripple>

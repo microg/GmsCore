@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">অবস্থান</string>
+    <string name="prefcat_location_apps_title">সাম্প্রতিক অ্যাক্সেস</string>
+    <string name="prefcat_location_wifi_title">ওয়াই-ফাই অবস্থান</string>
+    <string name="prefcat_location_cell_title">মোবাইল নেটওয়ার্ক অবস্থান</string>
+    <string name="prefcat_geocoder_title">ঠিকানা সমাধানকারী</string>
+    <string name="pref_location_wifi_online_enabled_title">অনলাইন পরিষেবা থেকে অনুরোধ</string>
+    <string name="pref_location_wifi_online_enabled_summary">অনলাইন অবস্থান পরিষেবা থেকে ওয়াই-ফাই-ভিত্তিক অবস্থান আনুন।</string>
+    <string name="pref_location_wifi_moving_enabled_title">হটস্পট থেকে অনুরোধ</string>
+    <string name="pref_location_wifi_moving_enabled_summary">সংযুক্ত হলে সমর্থিত হটস্পট থেকে সরাসরি ওয়াই-ফাই অবস্থান আনুন।</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPS থেকে মনে রাখুন</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS ব্যবহার করা হলে ওয়াই-ফাই অবস্থান স্থানীয়ভাবে সংরক্ষণ করুন।</string>
+    <string name="pref_location_cell_online_enabled_title">অনলাইন পরিষেবা থেকে অনুরোধ</string>
+    <string name="pref_location_cell_online_enabled_summary">অনলাইন অবস্থান পরিষেবা থেকে মোবাইল নেটওয়ার্ক সেল টাওয়ার অবস্থান আনুন।</string>
+    <string name="pref_location_cell_learning_enabled_title">GPS থেকে মনে রাখুন</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS ব্যবহার করা হলে মোবাইল নেটওয়ার্ক অবস্থান স্থানীয়ভাবে সংরক্ষণ করুন।</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatim ব্যবহার করুন</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim ব্যবহার করে ঠিকানা সমাধান করুন।</string>
+    <string name="fragment_location_apps_title">অবস্থান অ্যাক্সেস সহ অ্যাপ</string>
+    <string name="location_app_last_access_at">শেষ অ্যাক্সেস: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">মোটামুটি অবস্থান বাধ্য করুন</string>
+    <string name="pref_location_app_force_coarse_summary">এই অ্যাপে সর্বদা মোটামুটি অবস্থান ফেরত দিন, এর অনুমতি স্তর উপেক্ষা করে।</string>
+    <string name="prefcat_app_last_location">সর্বশেষ রিপোর্ট করা অবস্থান</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">উন্নত অভিজ্ঞতার জন্য, ডিভাইস অবস্থান চালু করুন, যা microG-এর অবস্থান পরিষেবা ব্যবহার করে</string>
+    <string name="location_settings_dialog_message_title_to_continue">চালিয়ে যেতে, ডিভাইস অবস্থান চালু করুন, যা microG-এর অবস্থান পরিষেবা ব্যবহার করে</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">আপনার ডিভাইসে নিম্নলিখিত কাজগুলো করতে হবে:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, ওয়াই-ফাই, সেল নেটওয়ার্ক এবং সেন্সর ব্যবহার করুন</string>
+    <string name="location_settings_dialog_message_grant_permissions">microG পরিষেবায় অবস্থান অনুমতি দিন</string>
+    <string name="location_settings_dialog_message_gls_consent">microG অবস্থান পরিষেবা ব্যবহার করুন; এই পরিষেবার অংশ হিসাবে, microG পর্যায়ক্রমে অবস্থান ডেটা সংগ্রহ করতে পারে এবং অবস্থান নির্ভুলতা এবং অবস্থান-ভিত্তিক পরিষেবাগুলি উন্নত করতে এই ডেটা বেনামী উপায়ে ব্যবহার করতে পারে।</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">বিস্তারিত জানতে, অবস্থান সেটিংসে যান।</string>
+    <string name="location_settings_dialog_btn_cancel">ধন্যবাদ নেই</string>
+    <string name="location_settings_dialog_btn_sure">ঠিক আছে</string>
+    <string name="pref_location_custom_url_summary">এটি একটি কাস্টম পরিষেবা URL সেট করার অনুমতি দেয়। অবৈধ মানের ফলে অবস্থান পরিষেবাগুলি সাড়া না দেওয়া বা সম্পূর্ণ অনুপলব্ধ হতে পারে।</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate পথটি স্বয়ংক্রিয়ভাবে যোগ করা হয়। অবস্থান প্রদানকারীর একটি কী প্রয়োজন হলে, এটি রুট URL-এ একটি কুয়েরি প্যারামিটার হিসাবে যোগ করা যেতে পারে।</string>
+    <string name="pref_location_custom_url_input_hint">কাস্টম পরিষেবা URL</string>
+    <string name="pref_location_custom_source_title">কাস্টম</string>
+    <string name="pref_location_source_title">অনলাইন অবস্থান পরিষেবা নির্বাচন করুন</string>
+    <string name="pref_location_source_terms">শর্তাবলী / গোপনীয়তা</string>
+    <string name="pref_location_source_suggested">প্রস্তাবিত</string>
+    <string name="pref_location_import_export_title">অবস্থান ডেটা আমদানি বা রপ্তানি করুন</string>
+    <string name="notification_config_required_title">কনফিগারেশন প্রয়োজন</string>
+    <string name="notification_config_required_text_online_sources">অনলাইন অবস্থান পরিষেবাগুলি ব্যবহার চালিয়ে যেতে, আপনাকে একটি অবস্থান ডেটা পরিষেবা নির্বাচন করতে হবে।</string>
+    <string name="location_data_export_wifi_title">স্থানীয় ওয়াই-ফাই অবস্থান ডেটাবেস রপ্তানি করুন</string>
+    <string name="location_data_export_cell_title">স্থানীয় সেল টাওয়ার অবস্থান ডেটাবেস রপ্তানি করুন</string>
+    <string name="location_data_import_title">ফাইল থেকে অবস্থান ডেটা আমদানি করুন</string>
+    <string name="location_data_import_result_toast">%1$dটি রেকর্ড আমদানি হয়েছে।</string>
+    <string name="prefcat_location_timeline_title">গুগল ম্যাপস টাইমলাইন</string>
+    <string name="pref_location_timeline_title">অবস্থান ইতিহাস সক্ষম করুন</string>
+    <string name="pref_location_timeline_summary">"পর্যায়ক্রমে আপনার অবস্থানের তথ্য রেকর্ড করুন এবং এটি গুগল ম্যাপস টাইমলাইনের জন্য উপলব্ধ করুন।"</string>
+    <string name="pref_location_timeline_upload_title">গুগল অ্যাকাউন্টে সিঙ্ক্রোনাইজ করুন</string>
+    <string name="pref_location_timeline_upload_summary">"অবস্থান ইতিহাস গুগল সার্ভারে সিঙ্ক্রোনাইজ করুন, যাতে এটি অন্যান্য ডিভাইসে প্রদর্শিত হতে পারে।"</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">গুগল ম্যাপস</string>
+    <string name="pref_map_engine_title">মানচিত্র রেন্ডারার</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">অ্যাপগুলিতে মানচিত্র রেন্ডার করতে ব্যবহৃত ইঞ্জিন চয়ন করুন। Mapbox (MapLibre) সুপারিশ করা হয়।</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API কী</string>
+    <string name="pref_stadia_key_summary">ঐচ্ছিক। একটি Stadia Maps রেন্ডারার বিকল্প যোগ করে; Stadia-এর জন্য একটি API কী প্রয়োজন।</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API কী</string>
+    <string name="pref_hms_key_summary">ঐচ্ছিক। একটি HMS রেন্ডারার বিকল্প যোগ করে; ডিভাইসে HMS Core প্রয়োজন।</string>
+</resources>

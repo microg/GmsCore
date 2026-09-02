@@ -16,6 +16,6 @@
   -->
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-              android:accountType="com.google"
+              android:accountType="@string/var_contact_syncadapter_account_type"
               android:contentAuthority="com.android.contacts"
               android:userVisible="false"/>

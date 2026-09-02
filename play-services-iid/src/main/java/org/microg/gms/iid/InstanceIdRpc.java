@@ -59,7 +59,9 @@ import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GSF_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_ID;
@@ -79,6 +81,7 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_SIGNATURE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_USE_GSF;
 import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE_PACKAGE;
 
 public class InstanceIdRpc {
     private static final String TAG = "InstanceID/Rpc";
@@ -107,6 +110,13 @@ public class InstanceIdRpc {
             return iidPackageName;
         }
         PackageManager packageManager = context.getPackageManager();
+        // Prefer the package-scoped action/permission so this build's GMS is discovered even
+        // when real Google Play Services is installed alongside it.
+        for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent(ACTION_C2DM_REGISTER_PACKAGE), 0)) {
+            if (packageManager.checkPermission(PERMISSION_RECEIVE_PACKAGE, resolveInfo.serviceInfo.packageName) == PERMISSION_GRANTED) {
+                return iidPackageName = resolveInfo.serviceInfo.packageName;
+            }
+        }
         for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent(ACTION_C2DM_REGISTER), 0)) {
             if (packageManager.checkPermission(PERMISSION_RECEIVE, resolveInfo.serviceInfo.packageName) == PERMISSION_GRANTED) {
                 return iidPackageName = resolveInfo.serviceInfo.packageName;
@@ -181,7 +191,7 @@ public class InstanceIdRpc {
 
     public void handleResponseInternal(Intent resultIntent) {
         if (resultIntent == null) return;
-        if (!ACTION_C2DM_REGISTRATION.equals(resultIntent.getAction()) && !ACTION_INSTANCE_ID.equals(resultIntent.getAction()))
+        if (!ACTION_C2DM_REGISTRATION.equals(resultIntent.getAction()) && !ACTION_C2DM_REGISTRATION_PACKAGE.equals(resultIntent.getAction()) && !ACTION_INSTANCE_ID.equals(resultIntent.getAction()))
             return;
         String result = resultIntent.getStringExtra(EXTRA_REGISTRATION_ID);
         if (result == null) result = resultIntent.getStringExtra(EXTRA_UNREGISTERED);
@@ -259,7 +269,9 @@ public class InstanceIdRpc {
         if (selfAuthToken == null) {
             Intent intent = new Intent();
             intent.setPackage("com.google.example.invalidpackage");
-            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, 0);
+            // RE: FLAG_IMMUTABLE may function but MUTABLE was chosen because
+            // the exact use is not known and maximum compatibility is desired.
+            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         }
         return selfAuthToken;
     }
@@ -278,7 +290,7 @@ public class InstanceIdRpc {
         if (iidPackageName == null) {
             throw new IOException(ERROR_MISSING_INSTANCEID_SERVICE);
         }
-        Intent intent = new Intent(ACTION_C2DM_REGISTER);
+        Intent intent = new Intent(ACTION_C2DM_REGISTER_PACKAGE);
         intent.setPackage(iidPackageName);
         data.putString(EXTRA_GMS_VERSION, Integer.toString(getGmsVersionCode(context)));
         data.putString(EXTRA_OS_VERSION, Integer.toString(SDK_INT));
