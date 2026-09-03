@@ -23,6 +23,8 @@ import static org.microg.gms.ui.UtilsKt.buildAlertDialog;
 import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
 
 public class MainSettingsActivity extends AppCompatActivity {
+    public static final String EXTRA_OPEN_DYNAMIC_MODULE_MANAGER = "org.microg.gms.ui.OPEN_DYNAMIC_MODULE_MANAGER";
+    private static final String ACTION_REQUEST_FEATURES_WITH_UI = "com.google.android.chimera.container.REQUEST_FEATURES_WITH_UI";
     private AppBarConfiguration appBarConfiguration;
 
     private static final String FIRST_RUN_MASTER = "org.microg.gms_firstRun";
@@ -30,6 +32,19 @@ public class MainSettingsActivity extends AppCompatActivity {
 
     private NavController getNavController() {
         return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
+    }
+
+    private void openDynamicModuleSettingsIfRequested(Intent intent) {
+        if (intent == null) return;
+        boolean openDynamicModuleSettings = intent.getBooleanExtra(EXTRA_OPEN_DYNAMIC_MODULE_MANAGER, false)
+                || ACTION_REQUEST_FEATURES_WITH_UI.equals(intent.getAction())
+                || (intent.getData() != null
+                && "x-gms-settings".equals(intent.getData().getScheme())
+                && "dynamicmodule".equals(intent.getData().getHost()));
+        if (openDynamicModuleSettings && getNavController().getCurrentDestination() != null
+                && getNavController().getCurrentDestination().getId() != R.id.dynamicModuleManagerFragment) {
+            getNavController().navigate(R.id.dynamicModuleManagerFragment);
+        }
     }
 
     private void showDialogIfNeeded() {
@@ -68,7 +83,15 @@ public class MainSettingsActivity extends AppCompatActivity {
 
         appBarConfiguration = new AppBarConfiguration.Builder(getNavController().getGraph()).build();
         NavigationUI.setupWithNavController(toolbarLayout, toolbar, getNavController(), appBarConfiguration);
+        openDynamicModuleSettingsIfRequested(intent);
         showDialogIfNeeded();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        openDynamicModuleSettingsIfRequested(intent);
     }
 
     @Override

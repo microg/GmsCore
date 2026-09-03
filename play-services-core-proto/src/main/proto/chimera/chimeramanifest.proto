@@ -1,0 +1,80 @@
+syntax = "proto2";
+
+package com.google.android.chimera.config;
+
+option java_multiple_files = true;
+option java_outer_classname = "ChimeraManifest";
+
+message ChimeraManifestStore {
+    repeated ChimeraModule chimeraModules = 1;
+    optional ChimeraModuleCollections collections = 2;
+    repeated FeatureDescriptor featureDescriptors = 3;
+}
+
+message ChimeraModule {
+    optional int32 type = 1;
+    optional string installedApkPath = 2;
+    optional int64 timestamp = 3;
+    optional string moduleApiClassname = 4;
+    optional string packageName = 5;
+    optional string versionName = 6;
+    optional int32 versionCode = 7;
+    optional int32 sourceType = 8;
+    repeated DependApkEntry dependencyModules = 9;
+    optional int32 required = 10;
+    optional int32 moduleType = 11;
+    optional string sourceUri = 12;
+    optional string moduleName = 13;
+    optional string moduleVersion = 14;
+    optional int32 moduleStatus = 16;
+    optional int32 splitDeliveryType = 17;
+    optional string moduleId = 20;
+    optional string apkSha256 = 21;
+}
+
+message DependApkEntry {
+    optional string packageName = 1;
+    optional string moduleName = 2;
+    optional string version = 3;
+}
+
+message ChimeraModuleCollections {
+    optional string chimeraClassNamePrefix = 4;
+    repeated ComponentRoute activeRoutes = 1;
+    repeated ComponentRoute boundServiceRoutes = 2;
+    repeated ComponentRoute serviceRoutes = 3;
+    repeated ComponentRoute providerRoutes = 5;
+    repeated ComponentRoute receiverRoutes = 6;
+}
+
+message ComponentRoute {
+    optional string containerName = 1;
+    optional string moduleChimeraName = 2;
+    optional string moduleId = 3;
+}
+
+message ChimeraManifest {
+    repeated ChimeraModuleManifest chimeraModuleManifests = 1;
+}
+
+message ChimeraModuleManifest {
+    optional string moduleId = 1;
+    optional int32 moduleVersion = 2;
+    optional string requiredApis = 3;
+    repeated ComponentBinding providerBindings = 8;
+    repeated ComponentBinding activityBindings = 10;
+    optional string chimeraClassNamePrefix = 12;
+    repeated ComponentBinding boundServiceBindings = 13;
+    repeated FeatureDescriptor featureDescriptors = 15;
+    repeated ComponentBinding sliceProviderBindings = 18;
+}
+
+message ComponentBinding {
+    optional string containerName = 1;
+    optional string moduleChimeraName = 2;
+}
+
+message FeatureDescriptor {
+    optional string featureName = 1;
+    optional int64 featureVersion = 2;
+}

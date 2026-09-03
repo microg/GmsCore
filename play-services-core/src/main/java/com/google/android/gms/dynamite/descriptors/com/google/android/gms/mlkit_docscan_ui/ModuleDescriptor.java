@@ -1,0 +1,15 @@
+/*
+ * SPDX-FileCopyrightText: 2026, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package com.google.android.gms.dynamite.descriptors.com.google.android.gms.mlkit_docscan_ui;
+
+import androidx.annotation.Keep;
+
+@Keep
+public class ModuleDescriptor {
+    public static final String MODULE_ID = "com.google.android.gms.mlkit_docscan_ui";
+    public static final int MODULE_VERSION = 1;
+    public static final String MODULE_NAME = "mlkit.docscan.ui";
+}

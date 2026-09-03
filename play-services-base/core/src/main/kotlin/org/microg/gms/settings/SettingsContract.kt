@@ -326,6 +326,17 @@ object SettingsContract {
         )
     }
 
+    object DynamicModule {
+        const val ID = "dynamicmodule"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+        const val DYNAMIC_MODULE_ENABLED = "dynamicmodule_enabled"
+
+        val PROJECTION = arrayOf(
+            DYNAMIC_MODULE_ENABLED
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {

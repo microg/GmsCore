@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chimera_module_required_title">需要模組</string>
+    <string name="chimera_module_required_message">此功能需要額外模組。點按下載後，將由外部應用程式下載模組。下載完成後，請使用 MG 服務開啟 .mods 檔案並完成驗證和匯入。\n\n要求的功能：%1$s</string>
+    <string name="chimera_module_download">下載</string>
+    <string name="chimera_module_choose_download_app">選擇下載應用程式</string>
+    <string name="chimera_module_cancel">取消</string>
+    <string name="chimera_module_document_scanner_name">文件掃描</string>
+    <string name="chimera_module_download_page_title">%1$s模組</string>
+    <string name="chimera_module_download_section_title">下載說明</string>
+    <string name="chimera_module_download_description">%1$s功能需要額外模組。MG 服務將開啟外部應用程式進行下載。下載完成後，請使用 MG 服務開啟 .mods 檔案並完成驗證和匯入。</string>
+    <string name="chimera_module_permission_section_title">所需權限</string>
+    <string name="chimera_module_permission_item">• %1$s — %2$s（%3$s）</string>
+    <string name="chimera_module_permission_granted">已授權</string>
+    <string name="chimera_module_permission_required">未授權</string>
+    <string name="chimera_module_no_permissions">不需要額外權限。</string>
+    <string name="chimera_module_permission_instruction">下載前必須授予全部所需權限。授權完成後，MG 服務將開啟外部下載應用程式。</string>
+    <string name="chimera_module_authorize_and_download">授權並下載</string>
+    <string name="chimera_module_open_permission_settings">開啟權限設定</string>
+    <string name="chimera_module_permission_denied">尚未授予所需權限，目前無法進入下載頁面。</string>
+    <string name="chimera_module_permission_settings_unavailable">無法開啟應用程式權限設定。</string>
+    <string name="chimera_module_download_app_unavailable">沒有可用於下載此模組的外部應用程式。</string>
+    <string name="chimera_permission_camera_label">相機</string>
+    <string name="chimera_permission_camera_description">允許 MG 服務拍攝要掃描的文件頁面。</string>
+    <string name="chimera_module_use_section_title">需要重新授權</string>
+    <string name="chimera_module_use_description">%1$s模組已安裝，但所需權限已被關閉。重新授權後才能繼續使用此功能。</string>
+    <string name="chimera_module_permission_continue_instruction">使用此模組前必須授予全部所需權限。授權完成後將自動重新開啟要求的功能。</string>
+    <string name="chimera_module_authorize_and_continue">授權並繼續</string>
+    <string name="chimera_module_continue">繼續</string>
+    <string name="chimera_module_permission_denied_continue">尚未授予所需權限，目前無法使用此模組。</string>
+    <string name="chimera_module_continue_unavailable">無法重新開啟要求的模組。</string>
+    <string name="chimera_module_waiting_for_import">正在等待模組下載並由 MG 服務開啟。匯入成功後，將自動繼續目前的要求。</string>
+    <string name="chimera_module_download_again">重新開啟下載</string>
+</resources>
