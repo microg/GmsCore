@@ -111,7 +111,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
         connection.requestMethod = "POST"
         connection.doInput = true
-        connection.doOutput = true
+        connection.doOutput = payload != null
         if (payload != null) {
             connection.outputStream.use { it.write(payload.encodeToByteArray()) }
         }
