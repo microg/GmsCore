@@ -5,6 +5,7 @@
 
 package org.microg.gms.droidguard.core
 
+import android.accounts.AccountManager
 import android.content.Context
 import com.android.volley.NetworkResponse
 import com.android.volley.VolleyError
@@ -21,6 +22,7 @@ import java.io.File
 import java.util.*
 import com.android.volley.Request as VolleyRequest
 import com.android.volley.Response as VolleyResponse
+
 
 class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFactory(context) {
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
@@ -93,7 +95,12 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 ),
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
-                hasAccount = false,
+                hasAccount = try {
+                    context.getSystemService(AccountManager::class.java)
+                        ?.getAccountsByType("com.google")?.isNotEmpty() ?: false
+                } catch (e: SecurityException) {
+                    false
+                },
                 isGoogleCn = false,
                 enableInlineVm = true,
                 cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
