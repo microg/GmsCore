@@ -24,6 +24,9 @@
             android:id="@+id/openSafetyNetSettings"
             app:destination="@id/safetyNetFragment" />
         <action
+            android:id="@+id/openPhoneNumberVerificationSettings"
+            app:destination="@id/phoneNumberVerificationFragment" />
+        <action
             android:id="@+id/openVendingSettings"
             app:destination="@id/vendingFragment" />
         <action
@@ -170,6 +173,11 @@
             android:name="package"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/phoneNumberVerificationFragment"
+        android:name="org.microg.gms.constellation.core.ui.PhoneNumberVerificationPreferencesFragment"
+        android:label="@string/phone_number_verification_title" />
 
     <!-- Play Store services -->
 
