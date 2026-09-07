@@ -209,6 +209,22 @@
 
         <library android:name="com.google.android.gms" />
 
+        <service
+            android:name="org.microg.gms.smartdevice.d2d.SourceDeviceApiService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.smartdevice.d2d.SourceDeviceService.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.fido.sourcedevice.SourceFidoDirectTransferApiService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fido.sourcedevice.service.START" />
+            </intent-filter>
+        </service>
+
         <!-- Provision -->
 
         <service
@@ -1392,7 +1408,6 @@
                 <action android:name="com.google.android.gms.backup.GMS_MODULE_RESTORE" />
                 <action android:name="com.google.android.gms.beacon.internal.IBleService.START" />
                 <action android:name="com.google.android.gms.carrierauth.service.START" />
-                <action android:name="com.google.android.gms.cast.firstparty.START" />
                 <action android:name="com.google.android.gms.cast_mirroring.service.START" />
                 <action android:name="com.google.android.gms.cast.remote_display.service.START" />
                 <action android:name="com.google.android.gms.chromesync.service.START" />
@@ -1405,7 +1420,6 @@
                 <action android:name="com.google.android.gms.fido.credentialstore.internal_service.START" />
                 <action android:name="com.google.android.gms.fido.fido2.regular.START" />
                 <action android:name="com.google.android.gms.fido.fido2.zeroparty.START" />
-                <action android:name="com.google.android.gms.fido.sourcedevice.service.START" />
                 <action android:name="com.google.android.gms.fido.targetdevice.internal_service.START" />
                 <action android:name="com.google.android.gms.fido.u2f.privileged.START" />
                 <action android:name="com.google.android.gms.fido.u2f.thirdparty.START" />
@@ -1460,7 +1474,6 @@
                 <action android:name="com.google.android.gms.testsupport.service.START" />
                 <action android:name="com.google.android.gms.scheduler.ACTION_PROXY_SCHEDULE" />
                 <action android:name="com.google.android.gms.setup.auth.SecondDeviceAuth.START" />
-                <action android:name="com.google.android.gms.smartdevice.d2d.SourceDeviceService.START" />
                 <action android:name="com.google.android.gms.smartdevice.d2d.TargetDeviceService.START" />
                 <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
                 <action android:name="com.google.android.gms.smartdevice.directtransfer.TargetDirectTransferService.START" />

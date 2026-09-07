@@ -33,12 +33,13 @@ private enum class Controls(val id: Int) {
 private val ALLOW_CONTROLS_PACKAGES = mapOf(
     Pair("com.google.android.googlequicksearchbox", setOf(Controls.STORAGE, Controls.MICROPHONE, Controls.SYSTEM_WINDOW_OVERLAY)),
     Pair("com.google.android.apps.maps", setOf(Controls.APP_USAGE_TIME, Controls.CALENDAR, Controls.CONTACT, Controls.LOCATION_HISTORY, Controls.SYSTEM_WINDOW_OVERLAY)),
+    Pair("com.google.android.apps.chromecast.app", setOf(Controls.APP_USAGE_TIME)),
 )
 
 fun getAllowControlsByPackage(packageName: String) : ByteArray? {
     val controls = ALLOW_CONTROLS_PACKAGES[packageName] ?: return null
     return ActivityControlsSettings.build {
-        items(controls.map { controls -> ActivityControlItem(controls.id, 1, 1, 1) })
-        global(GlobalSettings(1, 1))
+        items(controls.map { controls -> ActivityControlItem(controls.id, true, true, true) })
+        global(GlobalSettings(true, true))
     }.encode()
 }

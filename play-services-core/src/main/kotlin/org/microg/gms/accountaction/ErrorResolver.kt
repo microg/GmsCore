@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
+import cryptauthv2.ClientMetadata
 import kotlinx.coroutines.runBlocking
+import org.microg.gms.cryptauth.PUBLIC_KEY_NAME
+import org.microg.gms.cryptauth.RegisterForKeyPairOperation
+import org.microg.gms.cryptauth.isLockscreenConfigured
 import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants
-import org.microg.gms.cryptauth.isLockscreenConfigured
-import org.microg.gms.cryptauth.sendDeviceScreenlockState
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.settings.SettingsContract
@@ -114,13 +116,24 @@ fun Context.isMicrogAppGcmAllowed(): Boolean {
 
 }
 
+private suspend fun Context.sendDeviceScreenlockState(account: Account): Boolean {
+    return RegisterForKeyPairOperation(
+        context = this,
+        account = account,
+        invocationReason = ClientMetadata.InvocationReason.NEW_ACCOUNT,
+        keyNames = listOf(PUBLIC_KEY_NAME),
+        clientName = "ScreenlockSync",
+    ).execute()
+}
+
 fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
     when (this) {
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
-            runBlocking {
+            val registered = runBlocking {
                 context.sendDeviceScreenlockState(account)
             }
+            if (!registered) return null
             return retryFunction.run()
         }
         is NoResolution -> {
@@ -148,9 +161,10 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
     when (this) {
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
-            runBlocking {
+            val registered = runBlocking {
                 context.sendDeviceScreenlockState(account)
             }
+            if (!registered) return null
             return retryFunction.run()
         }
         is NoResolution -> {

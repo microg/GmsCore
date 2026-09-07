@@ -301,6 +301,8 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     }
 
     companion object {
+        fun getAaguid(): ByteArray = AAGUID.copyOf()
+
         private val AAGUID = byteArrayOf(
             0xb9.toByte(), 0x3f, 0xd9.toByte(), 0x61, 0xf2.toByte(), 0xe6.toByte(), 0x46, 0x2f,
             0xb1.toByte(), 0x22, 0x82.toByte(), 0x00, 0x22, 0x47, 0xde.toByte(), 0x78
