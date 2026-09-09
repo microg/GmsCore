@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.auth.loginservice;
@@ -38,44 +27,60 @@ import java.util.Arrays;
 import java.util.List;
 
 import static android.accounts.AccountManager.*;
+import static android.os.Build.VERSION.SDK_INT;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";
     public static final String KEY_OVERRIDE_PACKAGE = "overridePackage";
     public static final String KEY_OVERRIDE_CERTIFICATE = "overrideCertificate";
     private final Context context;
-    private final String accountType;
 
     public AccountAuthenticator(Context context) {
         super(context);
         this.context = context;
-        this.accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
     }
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
         Log.d(TAG, "editProperties: " + accountType);
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        if (accountType.equals(this.accountType)) {
+        final Bundle result = new Bundle();
+        if (accountType.equals(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
             final Intent i = new Intent(context, LoginActivity.class);
             i.putExtras(options);
             i.putExtra(LoginActivity.EXTRA_TMPL, LoginActivity.TMPL_NEW_ACCOUNT);
             i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-            final Bundle result = new Bundle();
             result.putParcelable(KEY_INTENT, i);
             return result;
+        } else if (accountType.equals(AuthConstants.WORK_ACCOUNT_TYPE)) {
+            result.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
+            result.putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(org.microg.gms.auth.workaccount.R.string.auth_work_authenticator_add_manual_error));
+        } else {
+            result.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
         }
-        return null;
+        return result;
     }
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
         Log.d(TAG, "confirmCredentials: " + account + ", " + options);
-        return null;
+        final Bundle result = new Bundle();
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+        return result;
+    }
+
+    @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+        if (account.type.equals(AuthConstants.WORK_ACCOUNT_TYPE)) {
+            final Bundle result = new Bundle();
+            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, SDK_INT < 22);
+            return result;
+        }
+        return super.getAccountRemovalAllowed(response, account);
     }
 
     public boolean isPackageOverrideAllowed(Account account, String requestingPackage, String overridePackage, CertData overrideCertificate) {
@@ -128,6 +133,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         } else {
             authManager = new AuthManager(context, account.name, app, authTokenType);
         }
+        authManager.setAccountType(account.type);
         try {
             AuthResponse res = authManager.requestAuthWithBackgroundResolution(true);
             if (res.auth != null) {
@@ -168,13 +174,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        Log.d(TAG, "updateCredentials: " + account + ", " + authTokenType + ", " + options);
-        return null;
-    }
-
-    @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+        Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
         AccountManager accountManager = AccountManager.get(context);
         String services = accountManager.getUserData(account, "services");
         boolean res = true;
@@ -195,5 +196,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         Bundle result = new Bundle();
         result.putBoolean(KEY_BOOLEAN_RESULT, res);
         return result;
+    }
+
+    @Override
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        Log.d(TAG, "updateCredentials: " + account + ", " + authTokenType + ", " + options);
+        return null;
     }
 }

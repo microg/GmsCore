@@ -469,12 +469,11 @@
 
         <!-- Auth -->
 
-        <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService">
+        <service
+            android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gsf.action.GET_GLS" />
             </intent-filter>
 
             <meta-data
@@ -483,6 +482,22 @@
             <meta-data
                 android:name="android.accounts.AccountAuthenticator.customTokens"
                 android:value="1" />
+        </service>
+
+        <service
+            android:name="org.microg.gms.auth.WorkAccountAuthenticatorService"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/auth_work_authenticator"/>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator.customTokens"
+                android:value="1"/>
         </service>
 
         <activity
