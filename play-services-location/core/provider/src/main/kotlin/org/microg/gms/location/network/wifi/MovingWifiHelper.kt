@@ -73,6 +73,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "agilis-Wifi",
     "freeWIFIahead!",
     "metronom free WLAN",
+    "Wings Connect",
     // Greece
     "AegeanWiFi",
     // Hong Kong
@@ -417,6 +418,7 @@ class MovingWifiHelper(private val context: Context) {
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE_2 = BoardConnectLocationSource("https://ww2.lufthansa-flynet.com")
         private val SOURCE_AUSTRIAN_FLYNET_EUROPE = BoardConnectLocationSource("https://www.austrian-flynet.com")
         private val SOURCE_SWISS_CONNECT_EUROPE = BoardConnectLocationSource("https://connect.swiss.com")
+        private val SOURCE_WINGS_CONNECT = BoardConnectLocationSource("https://wingsconnect.aero")
 
         class SncfLocationSource(base: String) : MovingWifiLocationSource("$base/router/api/train/gps") {
             override fun parse(location: Location, data: ByteArray): Location {
@@ -594,6 +596,7 @@ class MovingWifiHelper(private val context: Context) {
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
             "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI),
             "Shenzhen Airlines" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Wings Connect" to listOf(SOURCE_WINGS_CONNECT),
         )
     }
 }
