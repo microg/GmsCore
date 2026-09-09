@@ -473,6 +473,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        if (reply != null) {
+            reply.writeNoException();
+            return true;
+        }
         return false;
     }
 
