@@ -87,7 +87,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
     override fun startSmsCodeAutofill(callback: IStatusCallback) {
         Log.d(TAG, "startSmsCodeAutofill()")
         try {
-            callback.onResult(Status(SmsRetrieverStatusCodes.API_NOT_AVAILABLE))
+            callback.onResult(Status.SUCCESS)
         } catch (e: Exception) {
             Log.w(TAG, "Failed delivering result for startSmsCodeAutofill()", e)
         }
@@ -123,7 +123,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
     override fun startSmsCodeBrowser(callback: IStatusCallback) {
         Log.d(TAG, "startSmsCodeBrowser()")
         try {
-            callback.onResult(Status(SmsRetrieverStatusCodes.API_NOT_AVAILABLE))
+            callback.onResult(Status.SUCCESS)
         } catch (e: Exception) {
             Log.w(TAG, "Failed delivering result for startSmsCodeBrowser()", e)
         }
