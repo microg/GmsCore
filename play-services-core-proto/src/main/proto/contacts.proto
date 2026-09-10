@@ -1,0 +1,536 @@
+package google.internal.people.v2;
+
+option java_outer_classname = "ContactsProto";
+
+option java_package = "org.microg.gms.people";
+option java_multiple_files = true;
+
+service InternalPeopleService {
+  rpc SyncPeople(SyncPeopleRequest) returns (SyncPeopleResponse);
+  rpc BulkInsertContacts(InsertRequest) returns (InsertResponse);
+  rpc DeletePeople(DeleteRequest) returns (DeleteResponse);
+  rpc UpdatePerson(UpdateRequest) returns (UpdateResponse);
+
+  rpc UpdatePersonPhoto(UpdatePhotoRequest) returns (UpdatePhotoResponse);
+  rpc DeletePersonPhoto(DeletePhotoRequest) returns (EmptyResponse);
+
+  rpc ListContactGroups(ContactGroupRequest) returns (ContactGroupResponse);
+  rpc CreateContactGroups(CreateGroupRequest) returns (CreateGroupResponse);
+  rpc DeleteContactGroups(DeleteGroupRequest) returns (DeleteGroupResponse);
+  rpc UpdateContactGroups(UpdateGroupRequest) returns (CreateGroupResponse);
+}
+
+message EmptyResponse{}
+
+message DeletePhotoRequest {
+  optional string sourceId = 1;
+  optional GmsVersion gmsVersion = 2;
+}
+
+message UpdatePhotoRequest {
+  optional int32 type = 1;
+  optional string sourceId = 2;
+  optional int32 content = 3;
+  optional bytes photoBytes = 5;
+  optional GmsVersion gmsVersion = 6;
+}
+
+message UpdatePhotoResponse {
+  optional string syncToken = 1;
+  optional string url = 2;
+}
+
+message UpdateGroupRequest {
+  repeated UpdateGroupContent content = 1;
+  optional GmsVersion gmsVersion = 3;
+}
+
+message UpdateGroupContent {
+  optional GroupId groupId = 1;
+  optional GroupSource groupSource = 2;
+  optional string syncStr = 3;
+}
+
+message DeleteGroupRequest {
+  repeated string groupId = 1;
+  optional GmsVersion gmsVersion = 3;
+}
+
+message DeleteGroupResponse {
+  repeated DeleteGroup delete = 1;
+}
+
+message DeleteGroup {
+  optional string error = 2;
+  optional GroupId groupId = 4;
+}
+
+message CreateGroupResponse {
+  repeated ContactGroup content = 1;
+}
+
+message CreateGroupRequest {
+  repeated CreateGroupContent content = 1;
+  optional GmsVersion gmsVersion = 3;
+}
+
+message CreateGroupContent {
+  optional GroupId groupId = 1;
+  optional GroupSource groupSource = 2;
+  optional string syncStr = 3;
+}
+
+message ContactGroupResponse {
+  repeated ContactGroup contactGroup = 1;
+  optional string syncToken = 3;
+  optional int32 size = 4;
+}
+
+message ContactGroup {
+  optional GroupSource responseBody = 3;
+  optional GroupId groupId = 4;
+  optional string sync = 5;
+}
+
+message ContactGroupRequest {
+  optional string syncToken = 1;
+  repeated int32 type = 2 [packed = true];
+  optional GroupTypeList typeList = 3;
+  optional int32 syncSize = 4;
+  optional GmsVersion gmsVersion = 6;
+}
+
+message GroupTypeList {
+  repeated int32 type = 1 [packed = true];
+}
+
+message GroupSource {
+  optional GroupId groupId = 1;
+  optional GroupInfo groupInfo = 2;
+  optional GroupUpdateTime updateTime = 3;
+  optional GroupOperate groupOperate = 4;
+  optional GroupType groupType = 5;
+}
+
+message GroupOperate {
+  optional int32 operate = 1;
+}
+
+message GroupType {
+  optional int32 type = 1;
+}
+
+message GroupId {
+  optional string id = 1;
+}
+
+message GroupInfo {
+  optional string tag = 1;
+  optional string name = 2;
+}
+
+message GroupUpdateTime {
+  optional string date = 1;
+  optional int64 timeStamp = 2;
+}
+
+message UpdateRequest {
+  optional string eTag = 1;
+  optional Person person = 2;
+  optional PropertyList propertyList = 3;
+  optional int32 type = 4;
+  optional bool isPrimary = 8;
+  optional RequestData requestData = 13;
+}
+
+message UpdateResponse {
+  optional Content content = 1;
+}
+
+message DeleteRequest {
+  repeated string source = 2;
+  optional GmsVersion gmsVersion = 3;
+  optional DeviceMetadata deviceMetadata = 4;
+}
+
+message DeviceMetadata {
+  optional DeviceInfo deviceInfo = 1;
+}
+
+message DeviceInfo {
+  oneof model {
+    DeviceModel deviceModel = 3;
+  }
+  optional int32 type = 1;
+}
+
+message DeviceModel  {
+  optional string model = 1;
+}
+
+message DeleteResponse {
+}
+
+message InsertResponse {
+  repeated Contact contact = 1;
+}
+
+message Contact {
+  optional Content content = 1;
+}
+
+message Content {
+  optional Person person = 3;
+}
+
+message InsertRequest {
+  repeated PersonData personData = 1;
+  optional PropertyList propertyList = 2;
+  optional RequestData requestData = 4;
+}
+
+message RequestData {
+  optional Property property = 2;
+  optional GroupData gdata = 3;
+  optional GmsVersion gmsVersion = 4;
+  optional int32 type = 6;
+  optional RequestMetadata requestMetadata = 8;
+}
+
+message SyncPeopleResponse {
+  repeated Person person = 1;
+  optional string syncToken = 2;
+  optional string token = 3;
+}
+
+message PersonData{
+  optional Person person = 1;
+  optional uint64 sourceId = 2;
+}
+
+message GroupProfile {
+  optional string path = 1;
+}
+
+message GroupProfileMetadata {
+  optional int32 type = 2;
+  optional GroupProfile groupProfile = 4;
+}
+
+message FieldMetadata {
+  optional bool verified = 3;
+  optional string sourceId = 9;
+  optional bool primary = 12;
+  repeated GroupProfileMetadata groupProfileMetadata = 13;
+  optional int32 type = 15;
+}
+
+message ExternalId {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+  optional string type = 3;
+}
+
+message Extend {
+  optional FieldMetadata metadata = 1;
+  optional string system = 2;
+  optional string value = 3;
+  optional string type = 4;
+}
+
+message Profile {
+  optional string sourceId = 2;
+  optional int64 syncTime = 4;
+  optional string syncTag = 5;
+  optional int32 objectType = 6;
+}
+
+message ProfileMetadata{
+  repeated Profile profile = 3;
+}
+
+message PersonMetadata {
+  optional uint32 deleted = 1;
+  repeated int64 sourceId = 6;
+  optional uint32 createTime = 16;
+  optional ProfileMetadata profileMetadata = 22;
+  optional int32 objectType = 25;
+}
+
+message Membership {
+  optional FieldMetadata metadata = 1;
+  optional string groupSourceId = 2;
+  optional int32 type = 3;
+}
+
+message Name {
+  optional FieldMetadata metadata = 1;
+  optional string displayName = 2;
+  optional string displayNameLastFirst = 3;
+  optional string givenName = 4;
+  optional string familyName = 5;
+  optional string middleName = 6;
+  optional string prefix = 7;
+  optional string suffix = 8;
+  optional string phoneticGivenName = 9;
+  optional string phoneticFamilyName = 10;
+  optional string fullNameStyle = 13;
+  optional string phoneticMiddleName = 15;
+  optional string phoneticNameStyle = 16;
+}
+
+message Photo {
+  optional FieldMetadata metadata = 1;
+  optional string url = 2;
+  optional bool default = 3;
+  optional string image = 4;
+}
+
+message Gender {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+  optional string addressMeAs = 3;
+}
+
+message Email {
+  optional FieldMetadata metadata = 1;
+  optional string address = 2;
+  optional string type = 3;
+  optional string label = 4;
+  optional string displayName = 6;
+}
+
+message Phone {
+  optional FieldMetadata metadata = 1;
+  optional string number = 2;
+  optional string type = 3;
+  optional string label = 5;
+}
+
+message Note {
+  optional FieldMetadata metadata = 1;
+  optional string content = 2;
+}
+
+message WebSite {
+  optional FieldMetadata metadata = 1;
+  optional string url = 2;
+  optional string type = 3;
+  optional string label = 4;
+}
+
+message Date{
+  optional int32 year = 1;
+  optional int32 month = 2;
+  optional int32 day = 3;
+}
+
+message Birthday {
+  optional FieldMetadata metadata = 1;
+  optional int64 timestamp = 2;
+  optional string text = 4;
+  optional Date date = 5;
+}
+
+message NickName {
+  optional FieldMetadata metadata = 1;
+  optional string name = 2;
+  optional string type = 3;
+  optional string label = 4;
+}
+
+message ContactGroupMembership {
+  optional FieldMetadata metadata = 1;
+  oneof GroupMembership {
+    string contactGroupId = 2;
+    string contactGroupResourceName = 3;
+  }
+}
+
+message Organization {
+  optional FieldMetadata metadata = 1;
+  optional string company = 2;
+  optional string department = 3;
+  optional string title = 4;
+  optional string phoneticName = 5;
+  optional string location = 6;
+  optional string symbol = 7;
+  optional string jobDescription = 8;
+  optional string phoneticNameStyle = 9;
+  optional string type = 16;
+  optional string label = 17;
+}
+
+message Skill {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+}
+
+message Address {
+  optional FieldMetadata metadata = 1;
+  optional string type = 2;
+  optional string address = 3;
+  optional string poBox = 4;
+  optional string streetAddress = 5;
+  optional string city = 6;
+  optional string region = 7;
+  optional string postalCode = 8;
+  optional string country = 9;
+  optional string label = 11;
+  optional string neighborhood = 12;
+}
+
+message Relation {
+  optional FieldMetadata metadata = 1;
+  optional string type = 2;
+  optional string name = 3;
+  optional string label = 4;
+}
+
+message ImClient {
+  optional FieldMetadata metadata = 1;
+  optional string username = 2;
+  optional string type = 3;
+  optional string protocol = 4;
+  optional string label = 5;
+}
+
+message Event {
+  optional FieldMetadata metadata = 1;
+  optional int64 timestamp = 2;
+  optional int32 type = 3;
+  optional string label = 4;
+  optional Date date = 5;
+}
+
+message UserDefined {
+  optional FieldMetadata metadata = 1;
+  optional string label = 2;
+  optional string content = 3;
+}
+
+message FileAs {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+}
+
+message SipAddress {
+  optional FieldMetadata metadata = 1;
+  optional string address = 2;
+  optional string type = 3;
+  optional string label = 4;
+}
+
+message Hobby {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+}
+
+message MiscKeyword {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+  optional string type = 3;
+}
+
+message CalendarUrl {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+  optional string type = 3;
+}
+
+message Language {
+  optional FieldMetadata metadata = 1;
+  optional string value = 2;
+}
+
+message Person {
+  optional string eTag = 1;
+  optional PersonMetadata metadata = 2;
+  repeated Name name = 3;
+  repeated Photo photo = 4;
+  repeated Note note = 6;
+  repeated WebSite website = 7;
+  repeated Birthday birthday = 8;
+  repeated Gender gender = 9;
+  repeated Email email = 10;
+  repeated NickName nickName = 11;
+  repeated Phone phone = 12;
+  repeated Organization organization = 13;
+  repeated Address address = 15;
+  repeated Relation relation = 17;
+  repeated ImClient imClient = 18;
+  repeated Event event = 19;
+  repeated UserDefined userDefined = 20;
+  repeated Skill skill = 27;
+  repeated FileAs fileAs = 35;
+  repeated SipAddress sipAddress = 37;
+  repeated Hobby hobby = 39;
+  repeated MiscKeyword miscKeyword = 40;
+  repeated CalendarUrl calendarUrl = 41;
+  repeated Language language = 42;
+  repeated ExternalId externalId = 43;
+  repeated Extend extend = 44;
+  repeated Membership membership = 104;
+}
+
+message Token {
+  optional string token = 1;
+  optional int32 status = 2;
+}
+
+message PropertyList {
+  repeated string property = 1;
+}
+
+message PropertyStatus {
+  optional int32 status = 2;
+}
+
+message Property {
+  optional PropertyList propertyList = 1;
+  repeated int32 packs = 3;
+  optional PropertyStatus propertyStatus = 7;
+}
+
+message Model {
+  optional string model = 1;
+  optional string version = 2;
+}
+
+message VersionStatus {
+  optional bool isPrimary = 1;
+}
+
+message GmsVersion {
+  optional Model model = 4;
+  optional VersionStatus status = 5;
+}
+
+message RequestType {
+  optional int32 type = 1;
+}
+
+message RequestMetadata {
+  optional RequestType requestType = 6;
+  repeated int32 type = 9 [packed = true];
+}
+
+message GroupData {
+  repeated int32 compatibility = 1 [packed = true];
+}
+
+message SyncPeopleRequest {
+  optional int32 pageSize = 1;
+  optional string msg = 2;
+  optional Token token = 3;
+  optional Property property = 4;
+  optional GmsVersion gmsVersion = 5;
+  optional RequestMetadata requestMetadata = 6;
+  optional GroupData gdata = 8;
+  optional string aid = 9;
+}
+
+message AccountData {
+  optional string token = 1;
+  optional string msg = 2;
+}
