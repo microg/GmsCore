@@ -125,6 +125,13 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45668769", true, 0),
         Flag("45633067", true, 0),
     ),
+    "gmail_android.device#com.google.android.gm" to arrayOf(
+        Flag("45729659", true, 0),
+    ),
+    "com.google.android.libraries.subscriptions#com.google.android.gm" to arrayOf(
+        Flag("45651738", true, 0),
+        Flag("45667364", true, 0),
+    ),
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
         // Enable v3 movie editor; legacy MovieEditorActivity NPEs on a missing media extra

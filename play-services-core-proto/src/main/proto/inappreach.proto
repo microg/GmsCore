@@ -1,0 +1,71 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+option java_package = "org.microg.gms.inappreach.proto";
+option java_multiple_files = true;
+
+message AccountDataResponse {
+  map<string, AccountData> accounts = 1;
+}
+
+message AccountData {
+  optional string accountName = 1;
+  optional AccountDataPayload payload = 2;
+}
+
+message AccountDataPayload {
+  optional AccountDataMetadata metadata = 1;
+  repeated StorageCard cards = 2;
+}
+
+message AccountDataMetadata {
+  optional int32 type = 1;
+}
+
+message StorageCard {
+  optional string title = 1;
+  optional int32 type = 2;
+  optional StorageProgress progress = 3;
+  optional StorageActions actions = 5;
+  optional StoragePayloadType payloadType = 6;
+  optional int32 style = 7;
+  optional int32 layout = 11;
+  optional int32 emphasis = 15;
+  optional int32 size = 18;
+}
+
+message StorageProgress {
+  optional float fraction = 1;
+  optional string subtitle = 2;
+}
+
+message StorageActions {
+  optional CallToAction primary = 1;
+  optional CallToAction secondary = 2;
+  optional int32 alignment = 3;
+  optional int32 arrangement = 4;
+}
+
+message StoragePayloadType {
+  optional string typeUrl = 1;
+}
+
+message CallToAction {
+  optional string typeUrl = 1;
+  optional CallToActionDetails details = 2;
+}
+
+message CallToActionDetails {
+  optional CallToActionParameters parameters = 3;
+  optional string label = 4;
+  optional int32 enabled = 6;
+}
+
+message CallToActionParameters {
+  optional int32 action = 3;
+  optional int32 source = 4;
+}
