@@ -18,6 +18,7 @@ import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
+import org.microg.gms.settings.SettingsContract.Constellation
 import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.GameProfile
@@ -80,6 +81,7 @@ class SettingsProvider : ContentProvider() {
         Exposure.ID -> queryExposure(projection ?: Exposure.PROJECTION)
         SafetyNet.ID -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
         DroidGuard.ID -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
+        Constellation.ID -> queryConstellation(projection ?: Constellation.PROJECTION)
         Profile.ID -> queryProfile(projection ?: Profile.PROJECTION)
         Location.ID -> queryLocation(projection ?: Location.PROJECTION)
         Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
@@ -103,6 +105,7 @@ class SettingsProvider : ContentProvider() {
             Exposure.ID -> updateExposure(values)
             SafetyNet.ID -> updateSafetyNet(values)
             DroidGuard.ID -> updateDroidGuard(values)
+            Constellation.ID -> updateConstellation(values)
             Profile.ID -> updateProfile(values)
             Location.ID -> updateLocation(values)
             Vending.ID -> updateVending(values)
@@ -294,6 +297,31 @@ class SettingsProvider : ContentProvider() {
                 DroidGuard.MODE -> editor.putString(key, value as String)
                 DroidGuard.NETWORK_SERVER_URL -> editor.putString(key, value as String)
                 DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryConstellation(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            Constellation.PHONE_NUMBER_VERIFICATION_ENABLED -> getSettingsBoolean(key, false)
+            Constellation.PHONE_NUMBER_VERIFICATION_LAST_PACKAGE -> getSettingsString(key)
+            Constellation.PHONE_NUMBER_VERIFICATION_LAST_USED_AT_MS -> getSettingsLong(key, 0L)
+            Constellation.PHONE_NUMBER_VERIFICATION_LAST_SUCCESSFUL -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateConstellation(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                Constellation.PHONE_NUMBER_VERIFICATION_ENABLED -> editor.putBoolean(key, value as Boolean)
+                Constellation.PHONE_NUMBER_VERIFICATION_LAST_PACKAGE -> editor.putString(key, value as String?)
+                Constellation.PHONE_NUMBER_VERIFICATION_LAST_USED_AT_MS -> editor.putLong(key, value as Long)
+                Constellation.PHONE_NUMBER_VERIFICATION_LAST_SUCCESSFUL -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
