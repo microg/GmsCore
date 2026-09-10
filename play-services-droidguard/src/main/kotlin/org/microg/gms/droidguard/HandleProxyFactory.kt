@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.os.Parcelable
 import androidx.annotation.GuardedBy
-import dalvik.system.DexClassLoader
 import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
@@ -49,7 +48,7 @@ open class HandleProxyFactory(private val context: Context) {
     }
 
     fun getTheApkFile(vmKey: String) = File(getCacheDir(vmKey), "the.apk")
-    protected fun getCacheDir() = context.getDir(CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
+    protected fun getCacheDir() = context.getDir(DG_CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
     protected fun getCacheDir(vmKey: String) = File(getCacheDir(), vmKey)
     protected fun getOptDir(vmKey: String) = File(getCacheDir(vmKey), "opt")
     protected fun isValidCache(vmKey: String) = getTheApkFile(vmKey).isFile && getOptDir(vmKey).isDirectory
@@ -89,7 +88,7 @@ open class HandleProxyFactory(private val context: Context) {
                 getCacheDir(vmKey).deleteRecursively()
                 throw ClassNotFoundException("APK signature verification failed")
             }
-            val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
+            val loader = DgVmClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
             val clazz = loader.loadClass(CLASS_NAME)
             CLASS_MAP[vmKey] = clazz
             return clazz
@@ -98,7 +97,8 @@ open class HandleProxyFactory(private val context: Context) {
 
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
-        const val CACHE_FOLDER_NAME = "cache_dg"
+        @Deprecated("Use DG_CACHE_FOLDER_NAME", ReplaceWith("DG_CACHE_FOLDER_NAME"))
+        const val CACHE_FOLDER_NAME = DG_CACHE_FOLDER_NAME
         private val CLASS_MAP = hashMapOf<String, Class<*>>()
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }
