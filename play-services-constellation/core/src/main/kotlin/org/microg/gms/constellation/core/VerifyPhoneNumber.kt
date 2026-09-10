@@ -30,6 +30,7 @@ import org.microg.gms.constellation.core.proto.GetConsentResponse
 import org.microg.gms.constellation.core.proto.Param
 import org.microg.gms.constellation.core.proto.RcsConsent
 import org.microg.gms.constellation.core.proto.RequestHeader
+import org.microg.gms.constellation.core.proto.RequestTrigger
 import org.microg.gms.constellation.core.proto.SetConsentRequest
 import org.microg.gms.constellation.core.proto.SyncRequest
 import org.microg.gms.constellation.core.proto.Verification
@@ -49,6 +50,20 @@ private enum class ReadCallbackMode {
     LEGACY,
     TYPED
 }
+
+internal data class RcsAutoConsentRequestSemantics(
+    val rcsConsentVersion: ConsentVersion,
+    val requestConsentVersion: ConsentVersion,
+    val triggerType: RequestTrigger.Type
+)
+
+internal fun resolveRcsAutoConsentRequestSemantics(
+    consentType: ConsentVersion
+): RcsAutoConsentRequestSemantics = RcsAutoConsentRequestSemantics(
+    rcsConsentVersion = ConsentVersion.RCS_CONSENT,
+    requestConsentVersion = consentType,
+    triggerType = RequestTrigger.Type.CONSENT_API_TRIGGER
+)
 
 @Suppress("DEPRECATION")
 suspend fun handleVerifyPhoneNumberV1(
@@ -301,14 +316,21 @@ private suspend fun runVerificationFlow(
         if (!consented) {
             Log.e(TAG, "Consent has not been set. Auto-setting consent.")
             val consentType = parseConsentVersion(request.extras)
+            val semantics = resolveRcsAutoConsentRequestSemantics(consentType)
             val setRequest = SetConsentRequest(
-                header_ = RequestHeader(context, sessionId, buildContext, "setConsent"),
+                header_ = RequestHeader(
+                    context,
+                    sessionId,
+                    buildContext,
+                    "setConsent",
+                    semantics.triggerType
+                ),
                 asterism_client = asterismClient,
                 rcs_consent = RcsConsent(
                     consent = Consent.CONSENTED,
-                    consent_version = consentType
+                    consent_version = semantics.rcsConsentVersion
                 ),
-                consent_version = consentType,
+                consent_version = semantics.requestConsentVersion,
                 api_params = Param.getList(request.extras)
             )
             try {
