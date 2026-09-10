@@ -77,7 +77,7 @@ class LastLocationCapsule(private val context: Context) {
                         LocationCompat.setSpeedAccuracyMetersPerSecond(location, speed)
                     }
                 }
-                if (!location.hasBearing() && location.speed > 0.5f) {
+                if (!location.hasBearing() && location.hasSpeed() && location.speed > 0.5f) {
                     location.bearing = previousLocation.bearingTo(location)
                     LocationCompat.setBearingAccuracyDegrees(location, 180.0f)
                 }
