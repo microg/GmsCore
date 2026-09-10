@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="phone_number_verification_title">Phone Number Verification</string>
+    <string name="phone_number_verification_enable">Enable phone number verification</string>
+    <string name="phone_number_verification_last_use_title">Last use</string>
+    <string name="phone_number_verification_result_success">Successful</string>
+    <string name="phone_number_verification_result_failure">Failed</string>
+    <string name="phone_number_verification_carrier_notice">Your carrier may charge you for texts and calls used for verification.</string>
+</resources>
