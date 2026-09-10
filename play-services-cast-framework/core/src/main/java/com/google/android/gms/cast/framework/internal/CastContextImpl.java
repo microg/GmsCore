@@ -71,6 +71,9 @@ public class CastContextImpl extends ICastContext.Stub {
             .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
             .addControlCategory(defaultCategory)
             .build();
+
+        router.registerMediaRouterCallbackImpl(getMergedSelectorAsBundle(), new MediaRouterCallbackImpl(this));
+        router.addCallback(getMergedSelectorAsBundle(), 0);
     }
 
     @Override
@@ -128,7 +131,29 @@ public class CastContextImpl extends ICastContext.Stub {
 
     @Override
     public void setReceiverApplicationId(String receiverApplicationId, Map sessionProvidersByCategory) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: setReceiverApplicationId");
+        Log.d(TAG, "unimplemented Method: setReceiverApplicationId " + receiverApplicationId);
+
+        for (Map.Entry<String, IBinder> entry : ((Map<String, IBinder>)sessionProvidersByCategory).entrySet()) {
+            ISessionProvider sessionProvider = ISessionProvider.Stub.asInterface(entry.getValue());
+            Log.i(TAG, sessionProvider.toString());
+            this.sessionProviders.put(entry.getKey(), sessionProvider);
+        }
+
+        String defaultCategory = CastMediaControlIntent.categoryForCast(receiverApplicationId);
+
+        Log.i(TAG, "Creating cast context for applicationId " + receiverApplicationId + " " + defaultCategory);
+
+        this.defaultSessionProvider = this.sessionProviders.get(defaultCategory);
+
+        // TODO: This should incorporate passed options
+        this.mergedSelector = new MediaRouteSelector.Builder()
+                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .addControlCategory(defaultCategory)
+                .build();
+
+        router.registerMediaRouterCallbackImpl(getMergedSelectorAsBundle(), new MediaRouterCallbackImpl(this));
+        router.addCallback(getMergedSelectorAsBundle(), 0);
     }
 
     public Context getContext() {

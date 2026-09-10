@@ -18,4 +18,5 @@ interface ICastDeviceControllerListener {
   void onSendMessageSuccess(String response, long requestId) = 10;
   void onApplicationStatusChanged(in ApplicationStatus applicationStatus) = 11;
   void onDeviceStatusChanged(in CastDeviceStatus deviceStatus) = 12;
+  void onConnected(int param) = 13;
 }
