@@ -355,7 +355,7 @@ public enum GmsService {
     APP_ERROR(334, "com.google.android.gms.apperrors.service.START_APP_ERROR"),
     ADID(335),
 
-    HOME(336),
+    HOME(336, "com.google.android.gms.home.interaction.START"),
 
     MLBENCHMARK(339),
     MLBENCHMARK_INSTALLER(340),
