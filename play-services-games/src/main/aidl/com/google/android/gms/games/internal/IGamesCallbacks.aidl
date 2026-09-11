@@ -46,8 +46,9 @@ interface IGamesCallbacks {
   /* @deprecated */ void onGameMuteStatusLoaded(in DataHolder data) = 5037;
   /* @deprecated */ void onContactSettingsLoaded(in DataHolder data) = 5038;
   /* @deprecated */ void onContactSettingsUpdated(int statusCode) = 5039;
-  void onResolveSnapshotHead(in DataHolder data, in Contents contents) = 12003;
-  void commitSnapshotResult(in DataHolder data) = 12004;
+  void onSnapshotsLoaded(in DataHolder data) = 12001;
+  void onResolveSnapshotHead(in DataHolder data, in Contents contents) = 12004;
+  void commitSnapshotResult(in DataHolder data) = 12005;
   void onServerAuthCode(in Status status, String serverAuthCode) = 25002;
   void onServerAuthCodeWithScopes(in Status status, String serverAuthCode, in List<String> grantedScopes) = 25006;
 }
