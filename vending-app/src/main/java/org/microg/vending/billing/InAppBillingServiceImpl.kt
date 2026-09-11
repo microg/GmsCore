@@ -157,7 +157,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             return runBlocking { deferred.await() }
         }
 
-        private fun createIAPCore(context: Context, account: Account, pkgName: String): IAPCore {
+        internal fun createIAPCore(context: Context, account: Account, pkgName: String): IAPCore {
             val key = "$pkgName:${account.name}"
             val cacheEntry = iapCoreCacheMap[key]
             if (cacheEntry != null) {
