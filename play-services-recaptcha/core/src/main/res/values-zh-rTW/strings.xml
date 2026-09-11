@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="recaptcha_qr_confirm_title">確認驗證</string>
+    <string name="recaptcha_qr_confirm_description">有一個網站要求使用您的裝置進行驗證</string>
+    <string name="recaptcha_qr_confirm_button">確認驗證</string>
+    <string name="recaptcha_qr_confirm_cancel_button">取消</string>
+
+    <string name="recaptcha_qr_progress_title">正在裝置上進行驗證</string>
+    <string name="recaptcha_qr_progress_description">reCAPTCHA 正在此裝置上驗證這項要求，請稍候</string>
+    <string name="recaptcha_qr_progress_button">取消</string>
+
+    <string name="recaptcha_qr_failed_title">驗證失敗</string>
+    <string name="recaptcha_qr_failed_description">無法完成驗證，請返回網站並再試一次</string>
+    <string name="recaptcha_qr_failed_button">關閉</string>
+
+    <string name="recaptcha_qr_success_title">驗證完成</string>
+    <string name="recaptcha_qr_success_description">您現在可以關閉此畫面，然後返回網站或應用程式</string>
+    <string name="recaptcha_qr_success_button">完成</string>
+</resources>
