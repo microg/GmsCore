@@ -15,7 +15,7 @@ import com.google.android.gms.semanticlocationhistory.LocationHistorySettings;
 import com.google.android.gms.semanticlocationhistory.OdlhBackupSummary;
 import com.google.android.gms.semanticlocationhistory.UserLocationProfile;
 
-interface ISemanticLocationHistoryCallbacks {
+oneway interface ISemanticLocationHistoryCallbacks {
     void onSegmentListResponse(in Status status, in List<LocationHistorySegment> segments, in ApiMetadata apiMetadata) = 0;
     void onGetInferredHomeResponse(in Status status, in InferredPlace inferredPlace, in ApiMetadata apiMetadata) = 1;
     void onGetInferredWorkResponse(in Status status, in InferredPlace inferredPlace, in ApiMetadata apiMetadata) = 2;
