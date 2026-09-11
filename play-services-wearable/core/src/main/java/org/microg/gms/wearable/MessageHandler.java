@@ -26,6 +26,8 @@ import com.google.android.gms.wearable.internal.MessageEventParcelable;
 
 import org.microg.gms.profile.Build;
 import org.microg.gms.settings.SettingsContract;
+import org.microg.gms.wearable.bridge.MediaControlCommand;
+import org.microg.gms.wearable.bridge.WearableMediaSessionBridge;
 import org.microg.wearable.ServerMessageListener;
 import org.microg.wearable.proto.AckAsset;
 import org.microg.wearable.proto.Connect;
@@ -143,13 +145,18 @@ public class MessageHandler extends ServerMessageListener {
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
-            MessageEventParcelable messageEvent = new MessageEventParcelable();
-            messageEvent.data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
-            messageEvent.path = rpcRequest.path;
-            messageEvent.requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
-            messageEvent.sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
+            byte[] data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
+            if (MediaControlCommand.isControlPath(rpcRequest.path)) {
+                WearableMediaSessionBridge.getInstance(wearable.getContext()).handleMessage(rpcRequest.path, data);
+            } else {
+                MessageEventParcelable messageEvent = new MessageEventParcelable();
+                messageEvent.data = data;
+                messageEvent.path = rpcRequest.path;
+                messageEvent.requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
+                messageEvent.sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
 
-            wearable.sendMessageReceived(rpcRequest.packageName, messageEvent);
+                wearable.sendMessageReceived(rpcRequest.packageName, messageEvent);
+            }
         } else if (rpcRequest.targetNodeId.equals(peerNodeId)) {
             // Drop it
         } else {
