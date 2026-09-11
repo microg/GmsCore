@@ -25,6 +25,7 @@ import org.microg.gms.settings.SettingsContract.Gcm
 import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
+import org.microg.gms.settings.SettingsContract.DynamicModule
 import org.microg.gms.settings.SettingsContract.Vending
 import org.microg.gms.settings.SettingsContract.WorkProfile
 import org.microg.gms.settings.SettingsContract.getAuthority
@@ -85,6 +86,7 @@ class SettingsProvider : ContentProvider() {
         Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
         WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
         GameProfile.ID -> queryGameProfile(projection ?: GameProfile.PROJECTION)
+        DynamicModule.ID -> queryDynamicModule(projection ?: DynamicModule.PROJECTION)
         else -> null
     }
 
@@ -108,6 +110,7 @@ class SettingsProvider : ContentProvider() {
             Vending.ID -> updateVending(values)
             WorkProfile.ID -> updateWorkProfile(values)
             GameProfile.ID -> updateGameProfile(values)
+            DynamicModule.ID -> updateDynamicModule(values)
             else -> return 0
         }
         return 1
@@ -434,6 +437,25 @@ class SettingsProvider : ContentProvider() {
             when (key) {
                 GameProfile.ALLOW_CREATE_PLAYER -> editor.putBoolean(key, value as Boolean)
                 GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryDynamicModule(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            DynamicModule.DYNAMIC_MODULE_ENABLED -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateDynamicModule(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                DynamicModule.DYNAMIC_MODULE_ENABLED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

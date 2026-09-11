@@ -45,6 +45,14 @@ private val KNOWN_GOOGLE_APP_CERT_HASHES = listOf(
     "3d7a1223019aa39d9ea0e3436ab7c0896bfb4fb679f4de5fe7c23f326c8f994a"
 )
 
+/**
+ * All known Google signing-certificate SHA-256 hashes (the privileged platform certs + the official-apps
+ * cert), for callers that only need to decide whether a certificate is one of Google's, independent of the
+ * per-package permission model below. Stays in sync automatically as the lists above grow.
+ */
+val KNOWN_GOOGLE_CERT_SHA256: Set<String> =
+    (KNOWN_GOOGLE_PRIVILEGED_CERT_HASHES + KNOWN_GOOGLE_APP_CERT_HASHES).toSet()
+
 // This is a subset of permissions that we grant to apps signed with an official
 // Google apps certificate. Note that this has lower priority than the
 // KNOWN_GOOGLE_PACKAGES list, so if any app needs more permissions than this,
