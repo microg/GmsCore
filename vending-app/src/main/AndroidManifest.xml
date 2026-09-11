@@ -194,6 +194,14 @@
         </service>
 
         <service
+            android:name="com.google.android.finsky.ageverification.service.AgeSignalsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.finsky.ageverification.BIND" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name="com.google.android.finsky.appcontentservice.engage.AppEngageServiceV2"
             android:exported="true"
             android:process=":background">
