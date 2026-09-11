@@ -73,6 +73,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "agilis-Wifi",
     "freeWIFIahead!",
     "metronom free WLAN",
+    "Wings Connect",
     // Greece
     "AegeanWiFi",
     // Hong Kong
@@ -149,7 +150,7 @@ class MovingWifiHelper(private val context: Context) {
         (if (SDK_INT >= 23) network?.openConnection(url, proxy) else null) ?: url.openConnection()
 
     @SuppressLint("CustomX509TrustManager")
-    private fun disableCertificateRevocationCheck(originalTrustManager: TrustManager): TrustManager {
+    private fun disableCertificateRevocationAndExpirationCheck(originalTrustManager: TrustManager): TrustManager {
         if (originalTrustManager is X509TrustManager) {
             return object : X509TrustManager {
                 override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
@@ -159,7 +160,19 @@ class MovingWifiHelper(private val context: Context) {
 
                 override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
                     Log.d(TAG, "checkServerTrusted: $chain, $authType")
-                    originalTrustManager.checkServerTrusted(chain, authType)
+                    try {
+                        originalTrustManager.checkServerTrusted(chain, authType)
+                    } catch (e: CertificateException) {
+                        var cause: Throwable? = e
+                        while (cause != null) {
+                            if (cause is CertificateExpiredException) {
+                                Log.d(TAG, "Ignoring expiry", cause)
+                                return
+                            }
+                            cause = cause.cause
+                        }
+                        throw e
+                    }
                 }
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
@@ -171,14 +184,14 @@ class MovingWifiHelper(private val context: Context) {
         }
     }
 
-    private fun disableRevocationChecks(connection: HttpsURLConnection) {
+    private fun disableRevocationAndExpirationChecks(connection: HttpsURLConnection) {
         try {
             val ctx = SSLContext.getInstance("TLS")
             val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
             val ks = KeyStore.getInstance("AndroidCAStore")
             ks.load(null, null)
             tmf.init(ks)
-            ctx.init(null, tmf.trustManagers.map(::disableCertificateRevocationCheck).toTypedArray(), null)
+            ctx.init(null, tmf.trustManagers.map(::disableCertificateRevocationAndExpirationCheck).toTypedArray(), null)
             connection.sslSocketFactory = ctx.socketFactory
         } catch (e: Exception) {
             Log.w(TAG, "Failed to disable revocation", e)
@@ -197,7 +210,7 @@ class MovingWifiHelper(private val context: Context) {
             try {
                 try {
                     connection.doInput = true
-                    if (connection is HttpsURLConnection && SDK_INT >= 24) disableRevocationChecks(connection)
+                    if (connection is HttpsURLConnection && SDK_INT >= 24) disableRevocationAndExpirationChecks(connection)
                     if (connection.responseCode != 200) throw RuntimeException("Got error")
                 } catch (e: Exception) {
                     exceptions.add(e)
@@ -405,6 +418,7 @@ class MovingWifiHelper(private val context: Context) {
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE_2 = BoardConnectLocationSource("https://ww2.lufthansa-flynet.com")
         private val SOURCE_AUSTRIAN_FLYNET_EUROPE = BoardConnectLocationSource("https://www.austrian-flynet.com")
         private val SOURCE_SWISS_CONNECT_EUROPE = BoardConnectLocationSource("https://connect.swiss.com")
+        private val SOURCE_WINGS_CONNECT = BoardConnectLocationSource("https://wingsconnect.aero")
 
         class SncfLocationSource(base: String) : MovingWifiLocationSource("$base/router/api/train/gps") {
             override fun parse(location: Location, data: ByteArray): Location {
@@ -582,6 +596,7 @@ class MovingWifiHelper(private val context: Context) {
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
             "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI),
             "Shenzhen Airlines" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Wings Connect" to listOf(SOURCE_WINGS_CONNECT),
         )
     }
 }
