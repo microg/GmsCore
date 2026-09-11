@@ -234,7 +234,7 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
         if (this::smsBroadcastReceiver.isInitialized) context.unregisterReceiver(smsBroadcastReceiver)
         if (this::timeoutBroadcastReceiver.isInitialized) context.unregisterReceiver(timeoutBroadcastReceiver)
 
-        for (request in requests.values) {
+        for (request in requests.values.toList()) {
             sendReply(request, Status(CommonStatusCodes.TIMEOUT))
         }
 
