@@ -8,23 +8,28 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+
     <queries>
         <package android:name="com.google.android.gms.policy_cast_dynamite"/>
     </queries>
 
     <application>
         <receiver
-                android:name="com.google.android.gms.cast.framework.media.MediaIntentReceiver"
-                android:exported="false"/>
+            android:name="com.google.android.gms.cast.framework.media.MediaIntentReceiver"
+            android:exported="false"/>
 
         <service
-                android:name="com.google.android.gms.cast.framework.media.MediaNotificationService"
-                android:exported="false"
-                android:foregroundServiceType="mediaPlayback"/>
+            android:name="com.google.android.gms.cast.framework.media.MediaNotificationService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
 
         <service
-                android:name="com.google.android.gms.cast.framework.ReconnectionService"
-                android:exported="false"/>
+            android:name="com.google.android.gms.cast.framework.ReconnectionService"
+            android:exported="false"/>
     </application>
 
 </manifest>
