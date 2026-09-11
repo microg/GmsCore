@@ -99,4 +99,12 @@ class LocationSettings(private val context: Context) {
     var ichnaeaContribute: Boolean
         get() = getSettings(SettingsContract.Location.ICHNAEA_CONTRIBUTE) { c -> c.getInt(0) != 0 }
         set(value) = setSettings { put(SettingsContract.Location.ICHNAEA_CONTRIBUTE, value) }
+
+    var mapsTimeline: Boolean
+        get() = getSettings(SettingsContract.Location.MAPS_TIMELINE) { c -> c.getInt(0) != 0 }
+        set(value) = setSettings { put(SettingsContract.Location.MAPS_TIMELINE, value) }
+
+    var mapsTimelineUpload: Boolean
+        get() = getSettings(SettingsContract.Location.MAPS_TIMELINE_UPLOAD) { c -> c.getInt(0) != 0 }
+        set(value) = setSettings { put(SettingsContract.Location.MAPS_TIMELINE_UPLOAD, value) }
 }

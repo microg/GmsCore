@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
-    namespace "com.google.android.gms.ads"
+    namespace "com.google.android.gms.ads_lite"
 
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -34,9 +34,6 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-ads-lite'
 
 dependencies {
-    api 'androidx.work:work-runtime:2.7.0'
-    api project(':play-services-ads-base')
-    api project(':play-services-basement')
-//    api project(':play-services-measurement-sdk-api')
-//    api project(':user-messaging-platform')
+    // Dependencies from play-services-ads-lite:25.0.0
+    api project(':play-services-ads-api')
 }

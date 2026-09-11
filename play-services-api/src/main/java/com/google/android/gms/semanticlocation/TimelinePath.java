@@ -40,6 +40,7 @@ public class TimelinePath extends AbstractSafeParcelable {
 
     public static final SafeParcelableCreatorAndWriter<TimelinePath> CREATOR = findCreator(TimelinePath.class);
 
+    @SafeParcelable.Class
     public static class SegmentPath extends AbstractSafeParcelable {
         @Field(1)
         String s1;

@@ -1,0 +1,163 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package google.internal.identity.securitydomain.v1;
+
+option java_outer_classname = "SecurityDomainProto";
+option java_package = "org.microg.gms.auth.folsom";
+option java_multiple_files = true;
+
+message FilterOptions {
+  optional bool includeDeleted = 1;
+}
+
+message GetSecurityDomainRequest {
+  optional string name = 1;
+  optional int32 view = 2;
+  optional string requestId = 3;
+}
+
+message GetSecurityDomainResponse {
+  optional string name = 1;
+  optional int32 currentEpoch = 2;
+  optional SecurityDomainState state = 3;
+}
+
+message SecurityDomainState {
+  oneof stateType {
+    DegradedState degraded = 1;
+  }
+  optional int32 stateEnum = 3;
+}
+
+message DegradedState {
+  optional bool isDegraded = 1;
+}
+
+message GetSecurityDomainMemberRequest {
+  optional string name = 1;
+  optional int32 view = 2;
+  optional FilterOptions filterOptions = 3;
+  optional string requestId = 4;
+}
+
+message ListSecurityDomainMembersRequest {
+  optional string parent = 1;
+  repeated int32 view = 2 [packed = true];
+  repeated string filter = 3;
+  optional int32 pageSize = 4;
+  optional string pageToken = 6;
+  optional FilterOptions filterOptions = 7;
+  optional string requestId = 8;
+}
+
+message ListSecurityDomainMembersResponse {
+  repeated SecurityDomainMemberResponse members = 1;
+  optional string nextPageToken = 2;
+}
+
+message SecurityDomainMemberResponse {
+  optional string name = 1;
+  optional bytes createTime = 2;
+  repeated MemberSecurityDomain securityDomains = 3;
+  optional int32 memberType = 4;
+  optional MemberMetadata memberMetadata = 6;
+}
+
+message MemberSecurityDomain {
+  optional string name = 1;
+  repeated MemberKey memberKeys = 3;
+  repeated TrustedVaultKey trustedVaultKeys = 4;
+  optional CurrentKeyMetadata currentKeyMetadata = 5;
+}
+
+message MemberKey {
+  optional int32 keyType = 1;
+  optional bytes publicKey = 2;
+  optional bytes wrappedKey = 3;
+}
+
+message TrustedVaultKey {
+  optional int32 epoch = 1;
+  optional bytes wrappedKey = 2;
+}
+
+message CurrentKeyMetadata {
+  oneof metadata {
+    KeyRotationInfo keyRotationInfo = 1;
+  }
+}
+
+message KeyRotationInfo {
+  optional bool needsRotation = 1;
+  optional bool isRotating = 2;
+}
+
+message MemberMetadata {
+  optional bool verified = 1;
+
+  oneof deviceMetadata {
+    ChromeBrowserMetadata chromeBrowser = 2;
+    IOSMetadata ios = 3;
+    AndroidMetadata android = 4;
+    LSKFMetadata lskf = 5;
+    ICloudKeychainMetadata icloudKeychain = 6;
+    GooglePasswordManagerMetadata googlePasswordManager = 7;
+  }
+}
+
+message ChromeBrowserMetadata {
+  optional bool isPrimary = 1;
+}
+
+message IOSMetadata {
+  optional int32 deviceType = 1;
+}
+
+message AndroidMetadata {
+  optional bool isPrimary = 2;
+}
+
+message LSKFMetadata {
+  optional bytes encryptedData = 2;
+  optional int32 algorithm = 3;
+}
+
+message ICloudKeychainMetadata {
+  optional bytes publicKey = 1;
+  optional bytes keyData = 2;
+}
+
+message GooglePasswordManagerMetadata {
+  optional bytes vaultHandle = 1;
+  optional VaultKey vaultKey = 2;
+  optional bytes encryptedSecurityDomainSecret = 3;
+  optional string accountName = 4;
+  repeated RecoveryKeyInfo recoveryKeys = 5;
+}
+
+message VaultKey {
+  optional bytes keyData = 1;
+}
+
+message RecoveryKeyInfo {
+  optional string hint = 1;
+  optional bytes publicKey = 2;
+  optional bytes encryptedKey = 3;
+  optional KeyVersion keyVersion = 4;
+}
+
+message KeyVersion {
+  optional bytes versionBytes = 1;
+  optional int32 versionType = 2;
+}
+
+service SecurityDomainService {
+  rpc GetSecurityDomain(GetSecurityDomainRequest) returns (GetSecurityDomainResponse);
+  rpc GetSecurityDomainMember(GetSecurityDomainMemberRequest) returns (SecurityDomainMemberResponse);
+  rpc ListSecurityDomainMembers(ListSecurityDomainMembersRequest) returns (ListSecurityDomainMembersResponse);
+}

@@ -68,7 +68,8 @@
     <fragment
         android:id="@+id/hybridFragment"
         android:name="org.microg.gms.fido.core.ui.QrCodeFragment"
-        tools:layout="@layout/fido_qr_code_fragment">
+        tools:layout="@layout/fido_qr_code_fragment"
+        tools:targetApi="24">
         <argument
             android:name="appName"
             app:argType="string" />

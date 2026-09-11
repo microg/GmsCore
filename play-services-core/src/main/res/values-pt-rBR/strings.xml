@@ -410,4 +410,17 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_auth_allow_find_devices_summary">Ao ativar, o dispositivo poderá responder notificações do localizador do Google (O Cloud Messaging é necessário).</string>
     <string name="credentials_service_sign_in_with_google_label">Conectar-se com o Google</string>
     <string name="credentials_service_remote_custom_subtitle">Chave de segurança, celular ou tablet</string>
+    <string name="pref_passkey_manager_title">Gerenciar chaves de acesso</string>
+    <string name="pref_passkey_manager_empty_title">Não há chaves de acesso</string>
+    <string name="pref_passkey_manager_description">Quando apps de terceiros cadastram chaves de acesso, o microG mantém um registro local. Se um app apagar uma chave de acesso sem avisar o microG, o registro pode permanecer preso. Você pode remover esses itens residuais aqui.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Apagar chave de acesso</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Apagar chave de acesso de \"%2$s\" em \"%1$s\". Isso não pode ser desfeito; você precisará cadastrar uma nova chave de acesso para se conectar de novo.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Apagar</string>
+    <string name="pref_passkey_manager_unknown_user">Usuário desconhecido</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Bloqueio da tela</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Híbrido</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

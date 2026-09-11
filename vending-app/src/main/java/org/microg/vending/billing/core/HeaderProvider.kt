@@ -1,5 +1,7 @@
 package org.microg.vending.billing.core
 
+import org.microg.gms.deviceinfo.DeviceEnvInfo
+
 object HeaderProvider {
     fun getBaseHeaders(authData: AuthData, deviceInfo: DeviceEnvInfo): MutableMap<String, String> {
         val headers: MutableMap<String, String> = HashMap()

@@ -54,7 +54,7 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
         Log.e(TAG, "Unable to auto-purchase $packageName because the app is not being offered at the store")
     }
 
-    val freeApp = detailsResult.item.offer?.micros == 0L
+    val freeApp = item.offer?.micros == 0L
     if (!freeApp) {
         Log.e(TAG, "Unable to auto-purchase $packageName because it is not a free app")
         return false

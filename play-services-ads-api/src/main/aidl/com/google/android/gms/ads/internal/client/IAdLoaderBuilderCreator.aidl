@@ -1,0 +1,9 @@
+package com.google.android.gms.ads.internal.client;
+
+import com.google.android.gms.ads.internal.client.IAdLoaderBuilder;
+import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator;
+import com.google.android.gms.dynamic.IObjectWrapper;
+
+interface IAdLoaderBuilderCreator {
+    IAdLoaderBuilder newAdLoaderBuilder(IObjectWrapper context, String adUnitId, IAdapterCreator adapterCreator, int clientVersion);
+}

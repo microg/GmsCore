@@ -96,7 +96,9 @@ class SignInConfigurationService : Service() {
     }
 
     private fun getAuthOptions(packageName: String): Set<String>? {
-        val data = preferences.getStringSet(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName), null)
+        val key = DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName)
+        val data = runCatching { preferences.getStringSet(key, null) }.getOrNull()
+            ?: runCatching { preferences.getString(key, null) }.getOrNull()?.let { setOf(it) }
         if (data.isNullOrEmpty()) return null
         return data
     }

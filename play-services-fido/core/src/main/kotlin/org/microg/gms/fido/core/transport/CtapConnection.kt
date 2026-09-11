@@ -5,8 +5,6 @@
 
 package org.microg.gms.fido.core.transport
 
-import com.google.android.gms.fido.fido2.api.common.ErrorCode
-import org.microg.gms.fido.core.RequestHandlingException
 import org.microg.gms.fido.core.protocol.msgs.*
 
 const val CAPABILITY_CTAP_1 = 1 shl 0
@@ -43,4 +41,5 @@ interface CtapConnection {
     suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S
 }
 
-class Ctap2StatusException(val status: Byte) : Exception("Received status ${(status.toInt() and 0xff).toString(16)}")
+class Ctap2StatusException(val status: Byte) :
+    Exception("Received ${CtapStatus.description(status)}")

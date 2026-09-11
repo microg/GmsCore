@@ -40,6 +40,7 @@ import org.json.JSONObject
 import org.microg.gms.utils.toHexString
 import org.microg.gms.utils.warnOnTransactionIssues
 import org.microg.vending.billing.core.*
+import org.microg.vending.billing.proto.SecurePayloadData
 import java.util.Locale
 
 private class BuyFlowCacheEntry(
@@ -87,7 +88,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             cacheKey: String,
             actionContexts: List<ByteArray> = emptyList(),
             authToken: String? = null,
-            firstRequest: Boolean = false
+            firstRequest: Boolean = false,
+            integratorCallbackData: String? = null,
+            securePayload: SecurePayloadData? = null
         ): BuyFlowResult {
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "acquireRequest(cacheKey=$cacheKey, actionContexts=${actionContexts.map { it.toHexString() }}, authToken=$authToken)")
             val buyFlowCacheEntry = buyFlowCacheMap[cacheKey] ?: return BuyFlowResult(
@@ -101,7 +104,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
                 actionContext = actionContexts,
                 authToken = authToken,
                 droidGuardResult = buyFlowCacheEntry.droidGuardResult.takeIf { !firstRequest },
-                lastAcquireResult = buyFlowCacheEntry.lastAcquireResult.takeIf { !firstRequest }
+                lastAcquireResult = buyFlowCacheEntry.lastAcquireResult.takeIf { !firstRequest },
+                integratorCallbackData = integratorCallbackData,
+                securePayload = securePayload
             )
 
             val coreResult = try {
@@ -192,7 +197,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "isBillingSupported: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
-        if (apiVersion < 3) {
+        if (apiVersion !in 3..28) {
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Client does not support the requesting billing API.")
         }
         if (extraParams != null && apiVersion < 7) {
@@ -345,7 +350,8 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             skuSerializedDockIdList = skuSerializedDocIdList,
             skuOfferIdTokenList = skuOfferIdTokenList,
             oldSkuPurchaseId = oldSkuPurchaseId,
-            oldSkuPurchaseToken = oldSkuPurchaseToken
+            oldSkuPurchaseToken = oldSkuPurchaseToken,
+            accountName = accountName
         )
         val cacheEntryKey = "${packageName}:${account.name}"
         buyFlowCacheMap[cacheEntryKey] =

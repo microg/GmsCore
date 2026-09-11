@@ -403,4 +403,17 @@
     <string name="pref_auth_allow_find_devices_summary">Pokud je tato možnost povolena, zařízení může odpovědět na oznámení ze služby Najít moje zařízení od společnosti Google (jsou vyžadovány cloudové zprávy).</string>
     <string name="credentials_service_sign_in_with_google_label">Přihlášení přes Google</string>
     <string name="credentials_service_remote_custom_subtitle">Bezpečnostní klíč, mobilní telefon nebo tablet</string>
+    <string name="pref_passkey_manager_title">Spravovat přístupové klíče</string>
+    <string name="pref_passkey_manager_empty_title">Žádné uložené přístupové klíče</string>
+    <string name="pref_passkey_manager_description">Když si aplikace třetích stran zaregistrují přístupové klíče, microG si ponechá lokální záznam. Pokud aplikace smaže přístupový klíč bez upozornění služby microG, může záznam zůstat nepřiřazený. Zde můžete tyto záznamy odstranit.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Odstranit přístupový klíč</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Odstranit přístupový klíč pro „%2$s“ na „%1$s“. Tato akce je nevratná; pro opětovné přihlášení si budete muset zaregistrovat nový přístupový klíč.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Odstranit</string>
+    <string name="pref_passkey_manager_unknown_user">Neznámý uživatel</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Zámek obrazovky</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybridní</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

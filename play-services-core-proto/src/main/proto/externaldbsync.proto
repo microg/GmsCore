@@ -1,0 +1,86 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package geller.externaldb;
+
+option java_outer_classname = "ExternalDbSyncProto";
+option java_package = "com.google.android.gms.geller.externaldb";
+option java_multiple_files = true;
+
+message ExternalDbSync {
+  optional int32 syncType = 1;
+  optional string gmsVersion = 2;
+  optional ExternalDbSnapshot snapshot = 3;
+}
+
+message ExternalDbSnapshot {
+  optional string tableName = 1;
+  optional int64 startId = 2;
+  optional int64 endId = 3;
+  repeated string columnNames = 4;
+  repeated SnapshotRow rows = 5;
+  optional int64 databaseId = 6;
+  optional string deviceModel = 7;
+  optional TimestampMicros timestamp = 8;
+  optional string deviceIdentifier = 9;
+}
+
+message SnapshotRow {
+  repeated SnapshotValue values = 1;
+}
+
+message SnapshotValue {
+  oneof value {
+    int64 intValue = 1;
+    double doubleValue = 2;
+    string stringValue = 3;
+    bytes bytesValue = 4;
+    bool boolValue = 5;
+  }
+}
+
+message TimestampMicros {
+  optional int64 timestampMicros = 1;
+  optional int32 timezoneOffsetMinutes = 2;
+}
+
+message ExternalDbDescriptor {
+  optional int32 version = 2;
+  repeated ExternalDbTable tables = 3;
+}
+
+message ExternalDbTable {
+  optional string tableName = 1;
+  optional bool isPrimary = 2;
+  repeated ColumnDef columns = 3;
+  repeated FilterDef filters = 4;
+}
+
+message ColumnDef {
+  optional string name = 1;
+  optional int32 type = 2;
+  optional bool isKey = 3;
+  optional bool isIndexed = 4;
+  optional ColumnDefaultValue defaultValue = 5;
+}
+
+message ColumnDefaultValue {
+  oneof value {
+    int64 intValue = 1;
+    double doubleValue = 2;
+    string stringValue = 3;
+    bytes bytesValue = 4;
+    bool boolValue = 5;
+  }
+}
+
+message FilterDef {
+  optional string columnName = 1;
+  optional bool enabled = 2;
+  repeated string values = 3;
+  repeated int32 ops = 4;
+}

@@ -68,6 +68,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     205 to "https://myaccount.google.com/birthday",
     206 to "https://myaccount.google.com/gender",
     210 to "https://myaccount.google.com/locationsharing",
+    212 to "https://myactivity.google.com/activitycontrols",
     214 to "https://myaccount.google.com/dashboard",
     215 to "https://takeout.google.com",
     216 to "https://myaccount.google.com/inactive",

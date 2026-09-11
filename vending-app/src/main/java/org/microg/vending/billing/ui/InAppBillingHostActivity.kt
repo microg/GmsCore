@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -23,15 +24,23 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingClient
+import com.google.android.gms.wallet.firstparty.WalletCustomTheme
+import com.google.android.gms.wallet.firstparty.pm.SecurePaymentsPayload
+import com.google.android.gms.wallet.shared.ApplicationParameters
+import com.google.android.gms.wallet.shared.BuyFlowConfig
 import org.microg.vending.billing.ui.logic.NotificationEventId
 import org.microg.vending.billing.ui.logic.InAppBillingViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.microg.gms.common.Constants
 import org.microg.vending.billing.ADD_PAYMENT_METHOD_URL
 import org.microg.vending.billing.TAG
+import org.microg.vending.billing.proto.SessionRestoreOption
+import java.util.UUID
 
 private const val ADD_PAYMENT_REQUEST_CODE = 30002
+private const val PURCHASE_MANAGER_REQUEST_CODE = 68
 
 @RequiresApi(21)
 class InAppBillingHostActivity : ComponentActivity() {
@@ -79,6 +88,19 @@ class InAppBillingHostActivity : ComponentActivity() {
                     val src = it.params.getString("src")
                     openPaymentMethodActivity(src, account)
                 }
+                NotificationEventId.OPEN_WALLET_PURCHASE_MANAGER -> {
+                    val account = it.params.getParcelable<Account>("account")
+                    val securePaymentsPayload = it.params.getParcelable<SecurePaymentsPayload>("securePaymentsPayload")
+                    if (account == null) {
+                        Log.d(TAG, "initEventHandler account is null")
+                        return@collect
+                    }
+                    if (securePaymentsPayload == null) {
+                        Log.d(TAG, "initEventHandler securePaymentsPayload is null")
+                        return@collect
+                    }
+                    openWalletPurchaseManager(account, securePaymentsPayload)
+                }
             }
         }
     }
@@ -102,6 +124,31 @@ class InAppBillingHostActivity : ComponentActivity() {
             intent.putExtra(KEY_WEB_VIEW_ACCOUNT, account)
         }
         startActivityForResult(intent, ADD_PAYMENT_REQUEST_CODE)
+    }
+
+    private fun openWalletPurchaseManager(account: Account, securePaymentsPayload: SecurePaymentsPayload) {
+        val intent = Intent("com.google.android.gms.wallet.firstparty.ACTION_PURCHASE_MANAGER")
+        intent.`package` = Constants.GMS_PACKAGE_NAME
+
+        val applicationParameters = ApplicationParameters()
+        applicationParameters.extraParams = Bundle()
+        applicationParameters.walletCustomTheme = WalletCustomTheme()
+
+        val buyFlowConfig = BuyFlowConfig()
+        buyFlowConfig.apply {
+            buyFlowName = "flow_pm"
+            googleTransactionId = UUID.randomUUID().toString()
+            callerPackage = packageName
+            this.applicationParameters = applicationParameters
+            sessionRestoreOption = SessionRestoreOption.SESSION_RESTORE_OPTION_REQUIRE.value
+        }
+
+        intent.putExtra("com.google.android.gms.wallet.buyFlowConfig", buyFlowConfig)
+        intent.putExtra("com.google.android.gms.wallet.account", account)
+        intent.putExtra("com.google.android.gms.wallet.firstparty.SECURE_PAYMENTS_PAYLOAD", securePaymentsPayload)
+        intent.putExtra("com.google.android.gms.wallet.firstparty.SUPPORTS_SECURE_PAYMENTS_PAYLOAD_PROTO", false)
+        intent.putExtra("com.google.android.gms.wallet.intentBuildTimeMs", SystemClock.elapsedRealtime())
+        startActivityForResult(intent, PURCHASE_MANAGER_REQUEST_CODE)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -134,6 +181,25 @@ class InAppBillingHostActivity : ComponentActivity() {
             ADD_PAYMENT_REQUEST_CODE -> {
                 if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "add payment method resultCode: $resultCode, data: $data")
                 loadView(false)
+            }
+
+            PURCHASE_MANAGER_REQUEST_CODE -> {
+                Log.d(TAG, "PurchaseManager result: resultCode=$resultCode, data=$data, extras=${data?.extras?.keySet()}")
+                when (resultCode) {
+                    RESULT_OK -> {
+                        // 3DS2 verification successful — notify ViewModel to proceed with completing the purchase
+                        Log.d(TAG, "3DS2 verification succeeded, resuming purchase flow")
+                        inAppBillingViewModel.onSecureVerificationComplete(true, data)
+                    }
+                    RESULT_CANCELED -> {
+                        Log.d(TAG, "3DS2 verification cancelled by user")
+                        inAppBillingViewModel.onSecureVerificationComplete(false, null)
+                    }
+                    else -> {
+                        Log.d(TAG, "3DS2 verification error, resultCode=$resultCode")
+                        inAppBillingViewModel.onSecureVerificationComplete(false, null)
+                    }
+                }
             }
 
             else -> {

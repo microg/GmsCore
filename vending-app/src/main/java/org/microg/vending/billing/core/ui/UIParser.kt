@@ -36,7 +36,7 @@ private fun typeToDpSize(type: Int): Float {
 
 private fun parseUIInfo(uiInfo: UIInfo): BUIInfo {
     if (uiInfo.classType == 1) return BUIInfo(UIType.UNKNOWN)
-    return BUIInfo(UIType.fromValue(uiInfo.uiType))
+    return BUIInfo(UIType.fromValue(uiInfo.uiType ?: 0))
 }
 
 private fun parseScreen(screen: Screen): BScreen {
@@ -53,7 +53,7 @@ private fun parseScreen(screen: Screen): BScreen {
         action = BAction(ActionType.UNKNOWN)
         parseAction(it, action!!)
     }
-    return BScreen(uiInfo, action, uiComponents)
+    return BScreen(uiInfo, action, uiComponents, screen)
 }
 
 private fun parseScreenMap(screenMap: Map<String, Screen>): Map<String, BScreen> {
@@ -74,47 +74,40 @@ fun parseAcquireResponse(acquireResponse: AcquireResponse): BAcquireResult {
 
 private fun parseAction(action: Action?, result: BAction): Boolean {
     if (action == null) return false
-    if (action.actionContext != ByteString.EMPTY) {
-        result.actionContext.add(action.actionContext.toByteArray())
+    action.actionContext?.let { ctx ->
+        if (ctx != ByteString.EMPTY) {
+            result.actionContext.add(ctx.toByteArray())
+        }
     }
-    if (action.timerAction != null) {
-        result.delay = action.timerAction.delay
+    action.timerAction?.let { timerAction ->
+        result.delay = timerAction.delay ?: 0
         result.type = ActionType.DELAY
-        result.result = responseBundleToMap(action.timerAction.responseBundle)
+        result.result = responseBundleToMap(timerAction.responseBundle)
         return true
     }
-    if (action.actionExt?.extAction != null) {
-        val extAction = action.actionExt.extAction
-        if (extAction.droidGuardMap != null) {
-            result.droidGuardMap = extAction.droidGuardMap.map
-        }
-        if (extAction.action != null) {
-            return parseAction(extAction.action, result)
-        }
+    action.actionExt?.extAction?.let { extAction ->
+        extAction.droidGuardMap?.let { result.droidGuardMap = it.map }
+        extAction.action?.let { return parseAction(it, result) }
     }
-    if (action.showAction != null) {
+    action.showAction?.let { showAction ->
         result.type = ActionType.SHOW
-        result.screenId = action.showAction.screenId
-        if (action.showAction.action1 != null) {
-            parseAction(action.showAction.action1, result)
-        }
-        if (action.showAction.action != null) {
-            parseAction(action.showAction.action, result)
-        }
+        result.screenId = showAction.screenId
+        showAction.action1?.let { parseAction(it, result) }
+        showAction.action?.let { parseAction(it, result) }
         return true
     }
-    if (action.viewClickAction != null) {
-        if (action.viewClickAction.uiInfo != null && result.uiInfo == null) {
-            result.uiInfo = parseUIInfo(action.viewClickAction.uiInfo)
+    action.viewClickAction?.let { viewClickAction ->
+        if (viewClickAction.uiInfo != null) {
+            result.uiInfo = parseUIInfo(viewClickAction.uiInfo!!)
         }
-        return parseAction(action.viewClickAction.action, result)
+        return parseAction(viewClickAction.action, result)
     }
-    if (action.optionalAction != null) {
-        return parseAction(action.optionalAction.action1, result)
+    action.optionalAction?.let { optionalAction ->
+        return parseAction(optionalAction.action1, result)
     }
-    if (action.navigateToPage != null) {
-        result.srcScreenId = action.navigateToPage.from
-        return parseAction(action.navigateToPage.action, result)
+    action.navigateToPage?.let { navigateToPage ->
+        result.srcScreenId = navigateToPage.from
+        return parseAction(navigateToPage.action, result)
     }
     return false
 }
@@ -137,7 +130,7 @@ private fun parseIconView(iconView: IconView): BIconView {
     if (iconView.type != 0) {
         type = iconView.type
     }
-    if (iconView.text.isNotBlank()) {
+    if (iconView.text?.isNotBlank() == true) {
         text = iconView.text
     }
     return BIconView(type, text)
@@ -151,23 +144,23 @@ private fun parseInstrumentItemView(instrumentItemView: InstrumentItemView): BIn
     var state: BImageView? = null
     var action: BAction? = null
     if (instrumentItemView.icon != null) {
-        icon = parseImageView(instrumentItemView.icon)
+        icon = parseImageView(instrumentItemView.icon!!)
     }
     if (instrumentItemView.text != null) {
-        text = parsePlayTextView(instrumentItemView.text)
+        text = parsePlayTextView(instrumentItemView.text!!)
     }
     if (instrumentItemView.tips != null) {
-        tips = parsePlayTextView(instrumentItemView.tips)
+        tips = parsePlayTextView(instrumentItemView.tips!!)
     }
     if (instrumentItemView.state != null) {
-        state = parseImageView(instrumentItemView.state)
+        state = parseImageView(instrumentItemView.state!!)
     }
     if (instrumentItemView.action != null) {
         action = BAction(ActionType.UNKNOWN)
         parseAction(instrumentItemView.action, action)
     }
     if (instrumentItemView.extraInfo != null) {
-        extraInfo = parsePlayTextView(instrumentItemView.extraInfo)
+        extraInfo = parsePlayTextView(instrumentItemView.extraInfo!!)
     }
     return BInstrumentItemView(icon, text, tips, extraInfo, state, action)
 }
@@ -177,7 +170,7 @@ private fun parseImageGroup(imageGroup: ImageGroup): BImageGroup {
     var viewInfo: BViewInfo? = null
 
     if (imageGroup.viewInfo != null) {
-        viewInfo = parseViewInfo(imageGroup.viewInfo)
+        viewInfo = parseViewInfo(imageGroup.viewInfo!!)
     }
     imageGroup.imageView.forEach {
         imageViews.add(parseImageView(it))
@@ -192,24 +185,14 @@ private fun parseImageView(imageView: ImageView): BImageView {
     var imageInfo: BImageInfo? = null
     var iconView: BIconView? = null
     var animation: BAnimation? = null
-    if (imageView.thumbnailImageView != null) {
-        if (imageView.thumbnailImageView.darkUrl.isNotBlank())
-            darkUrl = imageView.thumbnailImageView.darkUrl
-        if (imageView.thumbnailImageView.lightUrl.isNotBlank())
-            lightUrl = imageView.thumbnailImageView.lightUrl
+    imageView.thumbnailImageView?.let { thumb ->
+        if (thumb.darkUrl?.isNotBlank() == true) darkUrl = thumb.darkUrl
+        if (thumb.lightUrl?.isNotBlank() == true) lightUrl = thumb.lightUrl
     }
-    if (imageView.viewInfo != null) {
-        viewInfo = parseViewInfo(imageView.viewInfo)
-    }
-    if (imageView.imageInfo != null) {
-        imageInfo = parseImageInfo(imageView.imageInfo)
-    }
-    if (imageView.iconView != null) {
-        iconView = parseIconView(imageView.iconView)
-    }
-    if (imageView.animation != null) {
-        animation = parseAnimation(imageView.animation)
-    }
+    imageView.viewInfo?.let { viewInfo = parseViewInfo(it) }
+    imageView.imageInfo?.let { imageInfo = parseImageInfo(it) }
+    imageView.iconView?.let { iconView = parseIconView(it) }
+    imageView.animation?.let { animation = parseAnimation(it) }
     return BImageView(viewInfo, imageInfo, lightUrl, darkUrl, animation, iconView)
 }
 
@@ -225,11 +208,9 @@ private fun parseTextInfo(textInfo: TextInfo): BTextInfo {
     if (textInfo.gravity.isNotEmpty()) {
         gravityList = textInfo.gravity.map { BGravity.values()[it] }
     }
-    if (textInfo.textColorType != null) {
-        colorType = ColorType.values()[textInfo.textColorType]
-    }
-    if (textInfo.textAlignmentType != 0) {
-        textAlignmentType = TextAlignmentType.values()[textInfo.textAlignmentType]
+    textInfo.textColorType?.let { colorType = ColorType.values()[it] }
+    if ((textInfo.textAlignmentType ?: 0) != 0) {
+        textAlignmentType = TextAlignmentType.values()[textInfo.textAlignmentType ?: 0]
     }
     if (textInfo.styleType != 0) {
         styleType = textInfo.styleType
@@ -245,7 +226,7 @@ private fun parseTextSpan(textSpan: TextSpan): BTextSpan {
     return if (textSpan.bulletSpan != null) {
         BTextSpan(
             TextSpanType.BULLETSPAN,
-            parseBulletSpan(textSpan.bulletSpan)
+            parseBulletSpan(textSpan.bulletSpan!!)
         )
     } else {
         BTextSpan(TextSpanType.UNKNOWNSPAN)
@@ -257,10 +238,10 @@ private fun parsePlayTextView(playTextView: PlayTextView): BPlayTextView {
     var viewInfo: BViewInfo? = null
     var textSpanList: MutableList<BTextSpan> = mutableListOf()
     if (playTextView.textInfo != null) {
-        textInfo = parseTextInfo(playTextView.textInfo)
+        textInfo = parseTextInfo(playTextView.textInfo!!)
     }
     if (playTextView.viewInfo != null) {
-        viewInfo = parseViewInfo(playTextView.viewInfo)
+        viewInfo = parseViewInfo(playTextView.viewInfo!!)
     }
     if (playTextView.textSpan.isNotEmpty()) {
         playTextView.textSpan.forEach {
@@ -269,7 +250,7 @@ private fun parsePlayTextView(playTextView: PlayTextView): BPlayTextView {
     }
     return BPlayTextView(
         playTextView.text ?: "",
-        playTextView.isHtml,
+        playTextView.isHtml ?: false,
         textInfo,
         viewInfo,
         textSpanList
@@ -281,9 +262,9 @@ private fun parseSingleLineTextView(singleLineTextView: SingleLineTextView): BSi
     var playTextView2: BPlayTextView? = null
 
     if (singleLineTextView.playTextView1 != null)
-        playTextView1 = parsePlayTextView(singleLineTextView.playTextView1)
+        playTextView1 = parsePlayTextView(singleLineTextView.playTextView1!!)
     if (singleLineTextView.playTextView2 != null)
-        playTextView2 = parsePlayTextView(singleLineTextView.playTextView2)
+        playTextView2 = parsePlayTextView(singleLineTextView.playTextView2!!)
 
     return BSingleLineTextView(playTextView1, playTextView2)
 }
@@ -297,23 +278,23 @@ private fun parseIconTextCombinationView(iconTextCombinationView: IconTextCombin
     var footerImageGroup: BImageGroup? = null
 
     if (iconTextCombinationView.headerImageView != null) {
-        headerImageView = parseImageView(iconTextCombinationView.headerImageView)
+        headerImageView = parseImageView(iconTextCombinationView.headerImageView!!)
     }
     if (iconTextCombinationView.playTextView != null) {
-        playTextView = parsePlayTextView(iconTextCombinationView.playTextView)
+        playTextView = parsePlayTextView(iconTextCombinationView.playTextView!!)
     }
     if (iconTextCombinationView.badgeTextView != null) {
-        badgeTextView = parsePlayTextView(iconTextCombinationView.badgeTextView)
+        badgeTextView = parsePlayTextView(iconTextCombinationView.badgeTextView!!)
     }
     if (iconTextCombinationView.singleLineTextView.isNotEmpty()) {
         middleTextViewList =
             iconTextCombinationView.singleLineTextView.map { parseSingleLineTextView(it) }
     }
     if (iconTextCombinationView.footerImageGroup != null) {
-        footerImageGroup = parseImageGroup(iconTextCombinationView.footerImageGroup)
+        footerImageGroup = parseImageGroup(iconTextCombinationView.footerImageGroup!!)
     }
     if (iconTextCombinationView.viewInfo != null) {
-        viewInfo = parseViewInfo(iconTextCombinationView.viewInfo)
+        viewInfo = parseViewInfo(iconTextCombinationView.viewInfo!!)
     }
 
     return BIconTextCombinationView(
@@ -329,7 +310,7 @@ private fun parseIconTextCombinationView(iconTextCombinationView: IconTextCombin
 private fun parseClickableTextView(clickableTextView: ClickableTextView): BClickableTextView {
     var playTextView: BPlayTextView? = null
     if (clickableTextView.playTextView != null)
-        playTextView = parsePlayTextView(clickableTextView.playTextView)
+        playTextView = parsePlayTextView(clickableTextView.playTextView!!)
     return BClickableTextView(playTextView)
 }
 
@@ -340,19 +321,19 @@ private fun parseViewGroup(viewGroup: ViewGroup): BViewGroup {
     var imageView4: BImageView? = null
     var playTextView: BPlayTextView? = null
     if (viewGroup.imageView1 != null) {
-        imageView1 = parseImageView(viewGroup.imageView1)
+        imageView1 = parseImageView(viewGroup.imageView1!!)
     }
     if (viewGroup.imageView2 != null) {
-        imageView2 = parseImageView(viewGroup.imageView2)
+        imageView2 = parseImageView(viewGroup.imageView2!!)
     }
     if (viewGroup.imageView3 != null) {
-        imageView3 = parseImageView(viewGroup.imageView3)
+        imageView3 = parseImageView(viewGroup.imageView3!!)
     }
     if (viewGroup.imageView4 != null) {
-        imageView4 = parseImageView(viewGroup.imageView4)
+        imageView4 = parseImageView(viewGroup.imageView4!!)
     }
     if (viewGroup.playTextView != null) {
-        playTextView = parsePlayTextView(viewGroup.playTextView)
+        playTextView = parsePlayTextView(viewGroup.playTextView!!)
     }
     return BViewGroup(imageView1, imageView2, imageView3, imageView4, playTextView)
 }
@@ -360,7 +341,7 @@ private fun parseViewGroup(viewGroup: ViewGroup): BViewGroup {
 private fun parseModuloImageView(moduloImageView: ModuloImageView): BModuloImageView {
     var imageView: BImageView? = null
     if (moduloImageView.imageView != null) {
-        imageView = parseImageView(moduloImageView.imageView)
+        imageView = parseImageView(moduloImageView.imageView!!)
     }
     return BModuloImageView(imageView)
 }
@@ -407,7 +388,7 @@ private fun parseViewInfo(viewInfo: ViewInfo): BViewInfo {
     var action: BAction? = null
     var visibilityType: Int? = null
 
-    if (viewInfo.tag.isNotBlank()) {
+    if (viewInfo.tag?.isNotBlank() == true) {
         tag = viewInfo.tag
     }
     if (viewInfo.widthValue != 0f) {
@@ -441,40 +422,40 @@ private fun parseViewInfo(viewInfo: ViewInfo): BViewInfo {
         bottomPadding = viewInfo.bottomPadding
     }
     if (viewInfo.startMarginType != 0) {
-        startMargin = typeToDpSize(viewInfo.startMarginType)
+        startMargin = typeToDpSize(viewInfo.startMarginType ?: 0)
     }
     if (viewInfo.topMarginType != 0) {
-        topMargin = typeToDpSize(viewInfo.topMarginType)
+        topMargin = typeToDpSize(viewInfo.topMarginType ?: 0)
     }
     if (viewInfo.endMarginType != 0) {
-        endMargin = typeToDpSize(viewInfo.endMarginType)
+        endMargin = typeToDpSize(viewInfo.endMarginType ?: 0)
     }
     if (viewInfo.bottomMarginType != 0) {
-        bottomMargin = typeToDpSize(viewInfo.bottomMarginType)
+        bottomMargin = typeToDpSize(viewInfo.bottomMarginType ?: 0)
     }
     if (viewInfo.startPaddingType != 0) {
-        startPadding = typeToDpSize(viewInfo.startPaddingType)
+        startPadding = typeToDpSize(viewInfo.startPaddingType ?: 0)
     }
     if (viewInfo.topPaddingType != 0) {
-        topPadding = typeToDpSize(viewInfo.topPaddingType)
+        topPadding = typeToDpSize(viewInfo.topPaddingType ?: 0)
     }
     if (viewInfo.endPaddingType != 0) {
-        endPadding = typeToDpSize(viewInfo.endPaddingType)
+        endPadding = typeToDpSize(viewInfo.endPaddingType ?: 0)
     }
     if (viewInfo.bottomPaddingType != 0) {
-        bottomPadding = typeToDpSize(viewInfo.bottomPaddingType)
+        bottomPadding = typeToDpSize(viewInfo.bottomPaddingType ?: 0)
     }
-    if (viewInfo.contentDescription.isNotBlank()) {
+    if (viewInfo.contentDescription?.isNotBlank() == true) {
         contentDescription = viewInfo.contentDescription
     }
     if (viewInfo.gravity.isNotEmpty()) {
         gravityList = viewInfo.gravity.map { BGravity.values()[it] }
     }
     if (viewInfo.backgroundColorType != 0) {
-        backgroundColorType = ColorType.values()[viewInfo.backgroundColorType]
+        backgroundColorType = ColorType.values()[viewInfo.backgroundColorType ?: 0]
     }
     if (viewInfo.borderColorType != 0) {
-        borderColorType = ColorType.values()[viewInfo.borderColorType]
+        borderColorType = ColorType.values()[viewInfo.borderColorType ?: 0]
     }
     if (viewInfo.action != null) {
         action = BAction(ActionType.UNKNOWN)
@@ -506,72 +487,18 @@ private fun parseViewInfo(viewInfo: ViewInfo): BViewInfo {
 
 private fun parseContentComponent(contentComponent: ContentComponent): BComponent {
     val tag = contentComponent.tag
-    var viewInfo: BViewInfo? = null
-    var uiInfo: BUIInfo? = null
-    if (contentComponent.viewInfo != null) {
-        viewInfo = parseViewInfo(contentComponent.viewInfo)
-    }
-    if (contentComponent.uiInfo != null) {
-        uiInfo = parseUIInfo(contentComponent.uiInfo)
-    }
-    return if (contentComponent.iconTextCombinationView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.ICONTEXTCOMBINATIONVIEW,
-            iconTextCombinationView = parseIconTextCombinationView(contentComponent.iconTextCombinationView)
-        )
-    } else if (contentComponent.clickableTextView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.CLICKABLETEXTVIEW,
-            clickableTextView = parseClickableTextView(contentComponent.clickableTextView)
-        )
-    } else if (contentComponent.viewGroup != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.VIEWGROUP,
-            viewGroup = parseViewGroup(contentComponent.viewGroup)
-        )
-    } else if (contentComponent.dividerView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.DIVIDERVIEW,
-            dividerView = parseDividerView(contentComponent.dividerView)
-        )
-    } else if (contentComponent.moduloImageView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.MODULOIMAGEVIEW,
-            moduloImageView = parseModuloImageView(contentComponent.moduloImageView)
-        )
-    } else if (contentComponent.buttonGroupView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.BUTTONGROUPVIEW,
-            buttonGroupView = parseButtonGroupView(contentComponent.buttonGroupView)
-        )
-    } else if (contentComponent.instrumentItemView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.INSTRUMENTITEMVIEW,
-            instrumentItemView = parseInstrumentItemView(contentComponent.instrumentItemView)
-        )
-    } else {
-        BComponent(viewType = ViewType.UNKNOWNVIEW)
+    val viewInfo = contentComponent.viewInfo?.let { parseViewInfo(it) }
+    val uiInfo = contentComponent.uiInfo?.let { parseUIInfo(it) }
+    val cc = contentComponent
+    return when {
+        cc.iconTextCombinationView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.ICONTEXTCOMBINATIONVIEW, iconTextCombinationView = parseIconTextCombinationView(cc.iconTextCombinationView!!))
+        cc.clickableTextView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.CLICKABLETEXTVIEW, clickableTextView = parseClickableTextView(cc.clickableTextView!!))
+        cc.viewGroup != null -> BComponent(tag, uiInfo, viewInfo, ViewType.VIEWGROUP, viewGroup = parseViewGroup(cc.viewGroup!!))
+        cc.dividerView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.DIVIDERVIEW, dividerView = parseDividerView(cc.dividerView!!))
+        cc.moduloImageView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.MODULOIMAGEVIEW, moduloImageView = parseModuloImageView(cc.moduloImageView!!))
+        cc.buttonGroupView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.BUTTONGROUPVIEW, buttonGroupView = parseButtonGroupView(cc.buttonGroupView!!))
+        cc.instrumentItemView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.INSTRUMENTITEMVIEW, instrumentItemView = parseInstrumentItemView(cc.instrumentItemView!!))
+        else -> BComponent(viewType = ViewType.UNKNOWNVIEW)
     }
 }
 
@@ -581,7 +508,7 @@ private fun parseButtonView(buttonView: ButtonView): BButtonView {
     val action = BAction(ActionType.UNKNOWN)
     text = buttonView.text ?: ""
     if (buttonView.viewInfo != null) {
-        viewInfo = parseViewInfo(buttonView.viewInfo)
+        viewInfo = parseViewInfo(buttonView.viewInfo!!)
     }
     if (buttonView.action != null) {
         parseAction(buttonView.action, action)
@@ -590,47 +517,23 @@ private fun parseButtonView(buttonView: ButtonView): BButtonView {
 }
 
 private fun parseButtonGroupView(buttonGroupView: ButtonGroupView): BButtonGroupView {
-    var buttonViewList = mutableListOf<BButtonView>()
-
-    if (buttonGroupView.newButtonView != null) {
-        if (buttonGroupView.newButtonView.buttonView != null) {
-            buttonViewList.add(parseButtonView(buttonGroupView.newButtonView.buttonView))
-        }
-        if (buttonGroupView.newButtonView.buttonView2 != null) {
-            buttonViewList.add(parseButtonView(buttonGroupView.newButtonView.buttonView2))
-        }
+    val buttonViewList = mutableListOf<BButtonView>()
+    buttonGroupView.newButtonView?.let { nbv ->
+        nbv.buttonView?.let { buttonViewList.add(parseButtonView(it)) }
+        nbv.buttonView2?.let { buttonViewList.add(parseButtonView(it)) }
     }
     return BButtonGroupView(buttonViewList)
 }
 
 private fun parseFooterComponent(footerComponent: FooterComponent): BComponent {
     val tag = footerComponent.tag
-    var viewInfo: BViewInfo? = null
-    var uiInfo: BUIInfo? = null
-    if (footerComponent.viewInfo != null) {
-        viewInfo = parseViewInfo(footerComponent.viewInfo)
-    }
-    if (footerComponent.uiInfo != null) {
-        uiInfo = parseUIInfo(footerComponent.uiInfo)
-    }
-    return if (footerComponent.buttonGroupView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.BUTTONGROUPVIEW,
-            buttonGroupView = parseButtonGroupView(footerComponent.buttonGroupView)
-        )
-    } else if (footerComponent.dividerView != null) {
-        BComponent(
-            tag,
-            uiInfo,
-            viewInfo,
-            ViewType.DIVIDERVIEW,
-            dividerView = parseDividerView(footerComponent.dividerView)
-        )
-    } else {
-        BComponent(viewType = ViewType.UNKNOWNVIEW)
+    val viewInfo = footerComponent.viewInfo?.let { parseViewInfo(it) }
+    val uiInfo = footerComponent.uiInfo?.let { parseUIInfo(it) }
+    val fc = footerComponent
+    return when {
+        fc.buttonGroupView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.BUTTONGROUPVIEW, buttonGroupView = parseButtonGroupView(fc.buttonGroupView!!))
+        fc.dividerView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.DIVIDERVIEW, dividerView = parseDividerView(fc.dividerView!!))
+        else -> BComponent(viewType = ViewType.UNKNOWNVIEW)
     }
 }
 
@@ -690,16 +593,87 @@ fun parseAcquireResponse(
     val action = BAction(ActionType.UNKNOWN)
     parseAction(acquireResponse.action, action)
     val screenMap = parseScreenMap(acquireResponse.screen)
-    val (result, purchaseItem) = parsePurchaseResponse(
+    val (primaryResult, primaryPurchaseItem) = parsePurchaseResponse(
         acquireParams,
         acquireResponse.acquireResult?.purchaseResponse
     )
+
+    val (result, purchaseItem) = if (primaryPurchaseItem == null) {
+        val (screenResult, screenItem) = extractPurchaseItemFromScreens(
+            acquireParams,
+            acquireResponse.screen
+        )
+        if (screenItem != null) {
+            screenResult to screenItem
+        } else {
+            primaryResult to null
+        }
+    } else {
+        primaryResult to primaryPurchaseItem
+    }
+
     val purchaseItems = mutableSetOf<PurchaseItem>()
-    if (acquireResponse.acquireResult?.ownedPurchase != null) {
-        acquireResponse.acquireResult.ownedPurchase.purchaseItem.forEach {
+    acquireResponse.acquireResult?.ownedPurchase?.let { owned ->
+        owned.purchaseItem.forEach {
             purchaseItems.addAll(parsePurchaseItem(it))
         }
     }
     if (purchaseItem != null) purchaseItems.add(purchaseItem)
     return AcquireParsedResult(action, result, purchaseItems.toList(), screenMap)
+}
+private fun extractPurchaseItemFromScreens(
+    acquireParams: AcquireParams,
+    screens: Map<String, Screen>
+): Pair<Map<String, Any>, PurchaseItem?> {
+    for ((screenId, screen) in screens) {
+        val items = screen.actionState?.action?.finish?.purchaseResult?.items ?: continue
+        if (items.isEmpty()) continue
+
+        val kv = mutableMapOf<String, Any>()
+        for (item in items) {
+            val k = item.key ?: continue
+            when {
+                item.stringValue != null -> kv[k] = item.stringValue!!
+                item.boolValue != null -> kv[k] = item.boolValue!!
+                item.intValue != null -> kv[k] = item.intValue!!
+            }
+        }
+
+        val purchaseData = (kv["INAPP_PURCHASE_DATA"] as? String)
+            ?: (kv["FIRST_PARTY_PURCHASE_DATA"] as? String)
+            ?: continue
+        val signature = (kv["INAPP_DATA_SIGNATURE"] as? String) ?: ""
+        val responseCode = when (val rc = kv["RESPONSE_CODE"]) {
+            is Long -> rc.toInt()
+            is Int -> rc
+            null -> 0
+            else -> 0
+        }
+        if (responseCode != 0) continue
+
+        val pdj = try {
+            JSONObject(purchaseData)
+        } catch (e: Exception) {
+            continue
+        }
+        val packageName = pdj.optString("packageName").takeIf { it.isNotBlank() } ?: continue
+        val purchaseToken = pdj.optString("purchaseToken").takeIf { it.isNotBlank() } ?: continue
+        val purchaseState = pdj.optInt("purchaseState", -1).takeIf { it != -1 } ?: continue
+
+        val normalized = mapOf<String, Any>(
+            "RESPONSE_CODE" to responseCode,
+            "INAPP_PURCHASE_DATA" to purchaseData,
+            "INAPP_DATA_SIGNATURE" to signature
+        )
+        return normalized to PurchaseItem(
+            acquireParams.buyFlowParams.skuType,
+            acquireParams.buyFlowParams.sku,
+            packageName,
+            purchaseToken,
+            purchaseState,
+            purchaseData,
+            signature
+        )
+    }
+    return mapOf<String, Any>("RESPONSE_CODE" to 0, "DEBUG_MESSAGE" to "") to null
 }

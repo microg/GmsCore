@@ -26,6 +26,8 @@ import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.utils.toBase64
 import java.security.Signature
+import java.security.cert.Certificate
+import java.security.cert.X509Certificate
 import java.security.interfaces.ECPublicKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -122,13 +124,18 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             }
         }
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
-        val aaguid = if (options.registerOptions.skipAttestation) ByteArray(16) else AAGUID
         val keyId = store.createKey(options.rpId, clientDataHash)
         val publicKey =
             store.getPublicKey(options.rpId, keyId) ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
 
         // We're ignoring the signature object as we don't need it for registration
         val signature = getActiveSignature(options, callerPackage, keyId)
+
+        val skipAttestation = options.registerOptions.skipAttestation
+        val useAndroidKey = !skipAttestation && SDK_INT >= 24 &&
+            runCatching { store.getCertificateChain(options.rpId, keyId).hasValidLeafCertificate() }.getOrDefault(false)
+        val useSafetyNet = !skipAttestation && SDK_INT < 24
+        val aaguid = if (useAndroidKey || useSafetyNet) AAGUID else ByteArray(16)
 
         val (x, y) = (publicKey as ECPublicKey).w.let { it.affineX to it.affineY }
         val coseKey = CoseKey(EC2Algorithm.ES256, x, y, 1, 32)
@@ -137,19 +144,20 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val credentialData = getCredentialData(aaguid, credentialId, coseKey)
         val authenticatorData = getAuthenticatorData(options.rpId, credentialData)
 
-        val attestationObject = if (options.registerOptions.skipAttestation) {
-            NoneAttestationObject(authenticatorData)
-        } else {
-            try {
-                if (SDK_INT >= 24) {
-                    createAndroidKeyAttestation(signature, authenticatorData, clientDataHash, options.rpId, keyId)
-                } else {
-                    createSafetyNetAttestation(authenticatorData, clientDataHash)
-                }
+        val attestationObject = when {
+            useAndroidKey -> try {
+                createAndroidKeyAttestation(signature, authenticatorData, clientDataHash, options.rpId, keyId)
             } catch (e: Exception) {
                 Log.w("FidoScreenLockTransport", e)
                 NoneAttestationObject(authenticatorData)
             }
+            useSafetyNet -> try {
+                createSafetyNetAttestation(authenticatorData, clientDataHash)
+            } catch (e: Exception) {
+                Log.w("FidoScreenLockTransport", e)
+                NoneAttestationObject(authenticatorData)
+            }
+            else -> NoneAttestationObject(authenticatorData)
         }
 
         return AuthenticatorResponseWithUser(
@@ -178,6 +186,11 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             EC2Algorithm.ES256,
             sig,
             store.getCertificateChain(rpId, keyId).map { it.encoded })
+    }
+
+    private fun Array<Certificate>.hasValidLeafCertificate(): Boolean {
+        val leaf = firstOrNull() as? X509Certificate ?: return false
+        return runCatching { leaf.checkValidity() }.isSuccess
     }
 
     private suspend fun createSafetyNetAttestation(

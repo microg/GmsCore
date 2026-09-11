@@ -121,12 +121,14 @@ class HybridAuthenticateActivity : AppCompatActivity() {
             hybridAuthenticatorController = hybridAuthenticatorController ?: HybridAuthenticatorController(this@HybridAuthenticateActivity)
             try {
                 hybridAuthenticatorController?.startAuth(qrCodeData!!, handleAuthenticator = {
-                    when (it) {
-                        is AuthenticatorMakeCredentialRequest -> handleMakeCredential(it)
-                        is AuthenticatorGetAssertionRequest -> handleGetAssertion(it)
-                        is AuthenticatorGetInfoRequest -> handleGetInfo(it)
-                        else -> null
-                    }
+                    runCatching {
+                        when (it) {
+                            is AuthenticatorMakeCredentialRequest -> handleMakeCredential(it)
+                            is AuthenticatorGetAssertionRequest -> handleGetAssertion(it)
+                            is AuthenticatorGetInfoRequest -> handleGetInfo(it)
+                            else -> null
+                        }
+                    }.getOrNull()
                 }, completed = {
                     if (it) finishWithSuccess() else finishWithError("auth error")
                 })

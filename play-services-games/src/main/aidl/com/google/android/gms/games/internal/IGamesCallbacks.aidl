@@ -49,4 +49,5 @@ interface IGamesCallbacks {
   void onResolveSnapshotHead(in DataHolder data, in Contents contents) = 12003;
   void commitSnapshotResult(in DataHolder data) = 12004;
   void onServerAuthCode(in Status status, String serverAuthCode) = 25002;
+  void onServerAuthCodeWithScopes(in Status status, String serverAuthCode, in List<String> grantedScopes) = 25006;
 }

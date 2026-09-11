@@ -6,6 +6,7 @@ package com.google.android.gms.semanticlocation.internal;
 
 import android.app.PendingIntent;
 import android.os.IInterface;
+import com.google.android.gms.common.api.ApiMetadata;
 import com.google.android.gms.semanticlocation.SemanticLocationEventRequest;
 import com.google.android.gms.semanticlocation.internal.SemanticLocationParameters;
 import com.google.android.gms.common.api.internal.IStatusCallback;
@@ -15,4 +16,6 @@ interface ISemanticLocationService {
     void unregisterSemanticLocationEvents(in SemanticLocationParameters params, IStatusCallback callback, in PendingIntent pendingIntent) = 1;
 
     void setIncognitoMode(in SemanticLocationParameters params, IStatusCallback callback, boolean mode) = 4;
+
+    void setIncognitoModeWithMetadata(in SemanticLocationParameters params, IStatusCallback callback, boolean mode, in ApiMetadata metadata) = 5;
 }

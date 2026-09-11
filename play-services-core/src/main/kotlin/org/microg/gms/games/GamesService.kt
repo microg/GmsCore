@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -22,6 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -51,6 +52,7 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.auth.signin.checkAccountAuthStatus
+import org.microg.gms.auth.signin.getServerAuthTokenManager
 import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
@@ -115,8 +117,13 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                     return@launchWhenStarted sendSignInRequired(account)
                 }
 
-                if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
-                    Log.d(TAG, "performGamesSignIn fail, sign in required")
+                try {
+                    if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
+                        Log.d(TAG, "performGamesSignIn fail, sign in required")
+                        return@launchWhenStarted sendSignInRequired(account)
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "performGamesSignIn exception, sign in required", e)
                     return@launchWhenStarted sendSignInRequired(account)
                 }
 
@@ -769,24 +776,38 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun requestServerSideAccess(callbacks: IGamesCallbacks, serverClientId: String, forceRefreshToken: Boolean) {
+        Log.d(TAG, "requestServerSideAccess: $serverClientId $forceRefreshToken")
+        requestServerAuthCode(serverClientId, forceRefreshToken, emptyList()) { status, auth, _ ->
+            callbacks.onServerAuthCode(status, auth)
+        }
+    }
+
+    override fun requestServerSideAccessForScopes(callbacks: IGamesCallbacks, serverClientId: String, forceRefreshToken: Boolean, scopes: List<String>?) {
+        val requestedScopes = scopes.orEmpty()
+        Log.d(TAG, "requestServerSideAccessForScopes: $serverClientId $forceRefreshToken ${requestedScopes.joinToString(" ")}")
+        requestServerAuthCode(serverClientId, forceRefreshToken, requestedScopes) { status, auth, grantedScopes ->
+            callbacks.onServerAuthCodeWithScopes(status, auth, grantedScopes)
+        }
+    }
+
+    private fun requestServerAuthCode(serverClientId: String, forceRefreshToken: Boolean, scopes: List<String>, onResult: (Status, String?, List<String>) -> Unit) {
         lifecycleScope.launchWhenStarted {
             try {
-                val serverAuthTokenResponse = withContext(Dispatchers.IO) {
-                    val serverAuthTokenManager = AuthManager(context, account.name, packageName, "oauth2:server:client_id:${serverClientId}:api_scope:${Scopes.GAMES_LITE}")
-                    serverAuthTokenManager.setOauth2Prompt(if (forceRefreshToken) "consent" else "auto")
-                    serverAuthTokenManager.setItCaveatTypes("2")
-                    serverAuthTokenManager.isPermitted = true
-                    serverAuthTokenManager.invalidateAuthToken()
-                    serverAuthTokenManager.requestAuthWithBackgroundResolution(true)
+                val options = GoogleSignInOptions.Builder().apply {
+                    requestScopes(Scope(Scopes.GAMES_LITE))
+                    scopes.forEach { requestScopes(Scope(it)) }
+                    requestServerAuthCode(serverClientId, forceRefreshToken)
+                }.build()
+                val response = getServerAuthTokenManager(context, packageName, options, account)?.let {
+                    it.isPermitted = true
+                    withContext(Dispatchers.IO) { it.requestAuthWithBackgroundResolution(true) }
                 }
-                if (serverAuthTokenResponse.auth != null) {
-                    callbacks.onServerAuthCode(Status(CommonStatusCodes.SUCCESS), serverAuthTokenResponse.auth)
-                } else {
-                    callbacks.onServerAuthCode(Status(CommonStatusCodes.SIGN_IN_REQUIRED), null)
-                }
+                val auth = response?.auth
+                Log.d(TAG, "requestServerAuthCode result: auth=${auth != null} grantedScopes=${response?.grantedScopes} issueAdvice=${response?.issueAdvice}")
+                onResult(Status(if (auth != null) CommonStatusCodes.SUCCESS else CommonStatusCodes.SIGN_IN_REQUIRED), auth, if (auth != null) scopes else emptyList())
             } catch (e: Exception) {
                 Log.w(TAG, e)
-                runCatching { callbacks.onServerAuthCode(Status(CommonStatusCodes.INTERNAL_ERROR), null) }
+                runCatching { onResult(Status(CommonStatusCodes.INTERNAL_ERROR), null, emptyList()) }
             }
         }
     }

@@ -13,6 +13,72 @@ option java_multiple_files = true;
 service PlayersFirstParty {
   rpc DeleteApplicationDataFirstParty (DeleteApplicationDataRequest) returns (DeleteApplicationDataResponse);
   rpc DeletePlayerFirstParty (DeletePlayerRequest) returns (DeletePlayerResponse);
+  rpc GetPlayerFirstParty (GetPlayerFirstPartyRequest) returns (GetPlayerFirstPartyResponse);
+  rpc GetUiSignInDataFirstParty (GetUiSignInDataFirstPartyRequest) returns (GetUiSignInDataFirstPartyResponse);
+  rpc CheckGamerTagFirstParty (CheckGamerTagFirstPartyRequest) returns (CheckGamerTagFirstPartyResponse);
+  rpc UpdateProfileSettingsFirstParty (UpdateProfileSettingsFirstPartyRequest) returns (UpdateProfileSettingsFirstPartyResponse);
+}
+
+message GetUiSignInDataFirstPartyRequest {}
+
+message GetUiSignInDataFirstPartyResponse {
+  optional int32 status = 1;
+  optional UiSignInProfileSettings profile_settings = 2;
+  optional string token = 3;
+}
+
+message UiSignInProfileSettings {
+  optional string kind = 1;
+  optional bool settings_changes_prohibited = 2;
+  optional bool profile_visible = 3;
+  optional string gamer_tag = 4;
+  optional bool profile_discoverable_via_google_account = 7;
+  optional string stock_gamer_avatar_url = 8;
+}
+
+message CheckGamerTagFirstPartyRequest {
+  optional string gamer_tag = 1;
+  optional string region = 2;
+}
+
+message CheckGamerTagFirstPartyResponse {
+  optional int32 status = 1;
+}
+
+message GetPlayerFirstPartyRequest {
+  optional string locale = 1;
+  optional string player_id = 2;
+}
+
+message GetPlayerFirstPartyResponse {
+  optional string kind = 1;
+  optional bytes player_data = 2;
+}
+
+message UpdateProfileSettingsFirstPartyRequest {
+  optional string locale = 2;
+  optional ProfileSettings profile_settings = 3;
+}
+
+message ProfileSettings {
+  optional bool profile_visible = 3;
+  optional string gamer_tag = 4;
+  optional bool profile_visibility_was_chosen_by_player = 5;
+  optional bool profile_discoverable_via_google_account = 6;
+  optional bool gamer_tag_is_explicitly_set = 7;
+  optional string stock_gamer_avatar_url = 8;
+  optional bool always_auto_sign_in = 11;
+  optional bool auto_sign_in = 13;
+  optional bool games_lite_player_stats_enabled = 19;
+  optional int32 friends_list_visibility = 22;
+  optional int32 play_together_status = 23;
+  optional int32 gamer_tag_source = 24;
+}
+
+message UpdateProfileSettingsFirstPartyResponse {
+  optional string kind = 1;
+  optional int32 status = 2;
+  optional string player_id = 4;
 }
 
 service ApplicationsFirstParty {

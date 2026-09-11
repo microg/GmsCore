@@ -84,28 +84,33 @@ class GameDeletePlayAccountFragment : Fragment() {
 
     private fun loadIndividualGames() {
         lifecycleScope.launchWhenStarted {
-            val response = withContext(Dispatchers.IO) {
-                val scopes = arrayListOf(Scope(Scopes.GAMES_LITE), Scope(Scopes.GAMES_FIRSTPARTY))
-                val authToken = requestGameToken(requireContext(), lastChoosePlayer!!.first, scopes) ?: throw RuntimeException("authToken is null")
-                getApplicationsFirstPartyClient(requireContext(), authToken).ListApplicationsWithUserDataFirstParty().execute(ListApplicationsWithUserDataRequest.build {
-                    locale = Locale.getDefault().language
-                    androidSdk = "android:${SDK_INT}"
-                })
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    val scopes = arrayListOf(Scope(Scopes.GAMES_LITE), Scope(Scopes.GAMES_FIRSTPARTY))
+                    val authToken = requestGameToken(requireContext(), lastChoosePlayer!!.first, scopes) ?: throw RuntimeException("authToken is null")
+                    getApplicationsFirstPartyClient(requireContext(), authToken).ListApplicationsWithUserDataFirstParty().execute(ListApplicationsWithUserDataRequest.build {
+                        locale = Locale.getDefault().language
+                        androidSdk = "android:${SDK_INT}"
+                    })
+                }
+                val dataList = response.firstPartyApplication.map {
+                    GameDataDeleteItem(
+                        iconUrl = it.application?.gameIcon?.url,
+                        gameName = it.application?.gameName,
+                        gameId = it.application?.gameId,
+                        tips = "${it.unlockAchievementsNum} / ${it.application?.achievementsNum} ${requireContext().getString(R.string.games_achievement_list_title)}"
+                    )
+                }
+                individualGameRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                individualGameRecyclerView.adapter = GameDataDeleteAdapter(dataList) { item ->
+                    showDeleteConfirmationDialog(item)
+                }
+                individualGameRecyclerView.visibility = View.VISIBLE
+                loadingBar.visibility = View.GONE
+            } catch (e: Exception) {
+                Log.w(TAG, "loadIndividualGames: ", e)
+                loadingBar.visibility = View.GONE
             }
-            val dataList = response.firstPartyApplication.map {
-                GameDataDeleteItem(
-                    iconUrl = it.application?.gameIcon?.url,
-                    gameName = it.application?.gameName,
-                    gameId = it.application?.gameId,
-                    tips = "${it.unlockAchievementsNum} / ${it.application?.achievementsNum} ${requireContext().getString(R.string.games_achievement_list_title)}"
-                )
-            }
-            individualGameRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            individualGameRecyclerView.adapter = GameDataDeleteAdapter(dataList) { item ->
-                showDeleteConfirmationDialog(item)
-            }
-            individualGameRecyclerView.visibility = View.VISIBLE
-            loadingBar.visibility = View.GONE
         }
     }
 

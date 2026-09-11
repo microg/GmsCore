@@ -411,4 +411,15 @@ Dies kann etwas dauern."</string>
     <string name="pref_auth_allow_find_devices_summary">Wenn aktiviert, kann das Gerät auf Mein-Gerät-finden-Benachrichtigungen von Google reagieren (Cloud Messaging ist erforderlich).</string>
     <string name="credentials_service_sign_in_with_google_label">Über Google anmelden</string>
     <string name="credentials_service_remote_custom_subtitle">Sicherheitsschlüssel, Smartphone oder Tablet</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">Kennung: %1$s</string>
+    <string name="pref_passkey_manager_title">Passkeys verwalten</string>
+    <string name="pref_passkey_manager_empty_title">Keine gespeicherten Passkeys</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Passkey löschen</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Löschen</string>
+    <string name="pref_passkey_manager_unknown_user">Unbekannter Benutzer</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Bildschirmsperre</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
 </resources>

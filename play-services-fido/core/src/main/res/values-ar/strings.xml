@@ -28,4 +28,8 @@
     <string name="fido_sign_in_selection_title">اختر حسابًا</string>
     <string name="fido_sign_in_selection_continue">لمواصلة استخدام %1$s</string>
     <string name="fido_sign_in_selection_description">مفتاح مرور</string>
+    <string name="fido_transport_selection_hybrid">استخدام جهاز مختلف</string>
+    <string name="fido_qr_code_body">استخدم هاتفك أو جهازك اللوحي لِقراءة رمز (كِيو آر) وإكمال التسجيل</string>
+    <string name="fido_ble_connecting">جارٍ الإتصال بجهاز…</string>
+    <string name="fido_ble_generating">في انتظار اتصال…</string>
 </resources>

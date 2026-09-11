@@ -56,6 +56,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var cellLearning: TwoStatePreference
     private lateinit var nominatim: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
+    private lateinit var timelineEnabled: TwoStatePreference
+    private lateinit var timelineUpload: TwoStatePreference
 
     init {
         setHasOptionsMenu(true)
@@ -271,6 +273,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         cellIchnaea = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellIchnaea
         cellLearning = preferenceScreen.findPreference("pref_location_cell_learning_enabled") ?: cellLearning
         nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
+        timelineEnabled = preferenceScreen.findPreference("pref_location_timeline") ?: timelineEnabled
+        timelineUpload = preferenceScreen.findPreference("pref_location_timeline_upload") ?: timelineUpload
 
         locationAppsAll.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
@@ -314,6 +318,17 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         }
         configureChangeListener(cellLearning) { LocationSettings(requireContext()).cellLearning = it }
         configureChangeListener(nominatim) { LocationSettings(requireContext()).geocoderNominatim = it }
+        configureChangeListener(timelineEnabled) {
+            LocationSettings(requireContext()).mapsTimeline = it
+            if (!it) {
+                LocationSettings(requireContext()).mapsTimelineUpload = false
+                timelineUpload.isChecked = false
+                timelineUpload.isEnabled = false
+            } else {
+                timelineUpload.isEnabled = true
+            }
+        }
+        configureChangeListener(timelineUpload) { LocationSettings(requireContext()).mapsTimelineUpload = it }
 
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
         wifiLearning.isVisible =
@@ -349,6 +364,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             cellIchnaea.isChecked = LocationSettings(context).cellIchnaea
             cellLearning.isChecked = LocationSettings(context).cellLearning
             nominatim.isChecked = LocationSettings(context).geocoderNominatim
+            timelineEnabled.isChecked = LocationSettings(context).mapsTimeline
+            timelineUpload.isEnabled = LocationSettings(context).mapsTimeline
+            timelineUpload.isChecked = LocationSettings(context).mapsTimelineUpload
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.listAppsByAccessTime()
                 val res = apps.map { app ->

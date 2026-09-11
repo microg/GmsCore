@@ -12,9 +12,13 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -62,6 +66,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     val source: String?
         get() = intent.getStringExtra(KEY_SOURCE)
 
+    enum class AllowedInstantLevel {
+        NONE, PRESELECT, INSTANT
+    }
+
     private val service: GmsService
         get() = GmsService.byServiceId(intent.getIntExtra(KEY_SERVICE, GmsService.UNKNOWN.SERVICE_ID))
     private val database by lazy { Database(this) }
@@ -79,6 +87,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     lateinit var callerSignature: String
     private lateinit var navHostFragment: NavHostFragment
     private var preselectedCredentialId: String? = null
+    private var preselectedTransport: Transport? = null
 
     private inline fun <reified T : TransportHandler> getTransportHandler(): T? =
         transportHandlers.filterIsInstance<T>().firstOrNull { it.isSupported }
@@ -106,14 +115,23 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             this.callerSignature = packageManager.getFirstSignatureDigest(callerPackage, "SHA-256")?.toBase64()
                 ?: return finishWithError(UNKNOWN_ERR, "Could not determine signature of app")
             this.preselectedCredentialId = intent.getStringExtra(KEY_CREDENTIAL_ID)
+            this.preselectedTransport = intent.getStringExtra(KEY_PRESELECTED_TRANSPORT)?.let {
+                runCatching { Transport.valueOf(it) }.getOrNull()
+            }
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options preselectedCredentialId=$preselectedCredentialId")
+
+            // By default, we allow instants. This extra may be used by app using fido-core library
+            // To avoid instant.
+            val allowInstant = AllowedInstantLevel.entries.getOrNull(
+                intent.getIntExtra(KEY_ALLOW_INSTANT, AllowedInstantLevel.INSTANT.ordinal)
+            ) ?: AllowedInstantLevel.INSTANT
 
             val requiresPrivilege =
                 source == SOURCE_BROWSER && !database.isPrivileged(callerPackage, callerSignature)
 
             // Check if we can directly open screen lock handling
-            if (!requiresPrivilege) {
+            if (allowInstant == AllowedInstantLevel.INSTANT && !requiresPrivilege) {
                 val instantTransport = transportHandlers.firstOrNull {
                     it.isSupported && it.shouldBeUsedInstantly(options, preselectedCredentialId)
                 }
@@ -128,7 +146,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             setContentView(R.layout.fido_authenticator_activity)
 
             lifecycleScope.launchWhenCreated {
-                handleRequest(options)
+                handleRequest(options, allowInstant)
             }
         } catch (e: RequestHandlingException) {
             finishWithError(e.errorCode, e.message ?: e.errorCode.name)
@@ -139,7 +157,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    suspend fun handleRequest(options: RequestOptions, allowInstant: Boolean = true) {
+    suspend fun handleRequest(options: RequestOptions, allowInstantLevel: AllowedInstantLevel = AllowedInstantLevel.INSTANT) {
         try {
             val origin = getOrigin(this, options, callerPackage)
             options.checkIsValid(this, origin, callerPackage)
@@ -154,7 +172,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val noLocalUserForSignInstantBlock = options.type == RequestOptionsType.SIGN && database.getKnownRegistrationInfo(options.rpId).isEmpty()
 
             // Check if we can directly open screen lock handling
-            if (!requiresPrivilege && allowInstant && !noLocalUserForSignInstantBlock) {
+            if (!requiresPrivilege && allowInstantLevel == AllowedInstantLevel.INSTANT && !noLocalUserForSignInstantBlock) {
                 val instantTransport = transportHandlers.firstOrNull {
                     it.isSupported && it.shouldBeUsedInstantly(options, preselectedCredentialId)
                 }
@@ -164,14 +182,24 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
+            runCatching { setAuthenticatorUiBackgroundOpaque() }
+
             val arguments = AuthenticatorActivityFragmentData().apply {
                 this.appName = appName
                 this.isFirst = true
                 this.privilegedCallerName = callerName.takeIf { options is BrowserRequestOptions }
                 this.requiresPrivilege = requiresPrivilege
                 this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                // To sign-in with screen-lock, there must be a local user.
+                if (options.type == RequestOptionsType.SIGN && noLocalUserForSignInstantBlock) {
+                    this.implementedTransports = this.implementedTransports.filter { it != SCREEN_LOCK }.toSet()
+                }
             }.arguments
-            val next = if (!requiresPrivilege) {
+            val next = if (requiresPrivilege) {
+                null
+            } else if (allowInstantLevel == AllowedInstantLevel.NONE) {
+                R.id.transportSelectionFragment
+            } else {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
                 if (options.type == RequestOptionsType.SIGN) {
@@ -203,7 +231,12 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                         }
                     }
                 }
-                val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
+                // We do not control if preselectedTransport is in allowedTransports, or if
+                // allowedTransports is empty, as allowedTransports is a *hint*.
+                // This is particularly useful if the application sends a credential with
+                // transport=internal, but we login with another device (via hybrid connection)
+                val preselectedTransport = preselectedTransport
+                    ?: knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
                     when (preselectedTransport) {
                         USB -> R.id.usbFragment
@@ -215,8 +248,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 } else {
                     null
                 }
-            } else {
-                null
             }
             navHostFragment = NavHostFragment()
             supportFragmentManager.commit {
@@ -311,6 +342,21 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         return shouldStartTransportInstantly(SCREEN_LOCK)
     }
 
+    @RequiresApi(21)
+    private fun setAuthenticatorUiBackgroundOpaque() {
+        // FIXME: When we migrate to bottom sheet, revisit all the theming matters
+        val value = TypedValue()
+        val backgroundColor = if (theme.resolveAttribute(android.R.attr.colorBackground, value, true)) {
+            if (value.resourceId != 0) ContextCompat.getColor(this, value.resourceId) else value.data
+        } else {
+            Color.WHITE
+        }
+        window.setBackgroundDrawable(backgroundColor.toDrawable())
+        window.statusBarColor = backgroundColor
+        window.navigationBarColor = backgroundColor
+        findViewById<View>(R.id.fragment_container)?.setBackgroundColor(backgroundColor)
+    }
+
     @RequiresApi(24)
     fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null, credentialIdString: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
@@ -321,7 +367,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         } catch (e: SecurityException) {
             Log.w(TAG, e)
             if (instant) {
-                handleRequest(options, false)
+                handleRequest(options, AllowedInstantLevel.PRESELECT)
             } else {
                 finishWithError(SECURITY_ERR, e.message ?: e.javaClass.simpleName)
             }
@@ -381,9 +427,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val KEY_SERVICE = "service"
         const val KEY_SOURCE = "source"
         const val KEY_TYPE = "type"
+        const val KEY_ALLOW_INSTANT = "allowInstant"
         const val KEY_OPTIONS = "options"
         const val KEY_USER_JSON = "userInfo"
         const val KEY_CREDENTIAL_ID = "credential"
+        const val KEY_PRESELECTED_TRANSPORT = "transport"
         val REQUIRED_EXTRAS = setOf(KEY_SOURCE, KEY_TYPE, KEY_OPTIONS)
 
         const val SOURCE_BROWSER = "browser"

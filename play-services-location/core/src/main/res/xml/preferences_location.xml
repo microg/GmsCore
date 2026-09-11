@@ -82,4 +82,20 @@
                 app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/prefcat_location_timeline_title"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:key="pref_location_timeline"
+            android:persistent="false"
+            android:title="@string/pref_location_timeline_title"
+            android:summary="@string/pref_location_timeline_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:key="pref_location_timeline_upload"
+            android:persistent="false"
+            android:summary="@string/pref_location_timeline_upload_summary"
+            android:title="@string/pref_location_timeline_upload_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

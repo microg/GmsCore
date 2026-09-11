@@ -34,7 +34,7 @@ object ProfileManager {
 
     private fun getUserProfileFile(context: Context): File = File(context.filesDir, "device_profile.xml")
     private fun getSystemProfileFile(context: Context): File = File("/system/etc/microg_device_profile.xml")
-    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null)
+    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".lowercase(Locale.US), null, null)
 
     fun getConfiguredProfile(context: Context): String = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.PROFILE)) { it.getString(0) } ?: PROFILE_AUTO
 

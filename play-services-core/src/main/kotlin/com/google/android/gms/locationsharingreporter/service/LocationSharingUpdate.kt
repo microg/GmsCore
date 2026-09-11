@@ -42,7 +42,12 @@ class LocationSharingUpdate {
                             .setMaxUpdateAgeMillis(5_000)
                             .build()
                     val identity = Binder.clearCallingIdentity()
-                    LocationServices.getFusedLocationProviderClient(context.applicationContext).requestLocationUpdates(locationRequest, it, Looper.getMainLooper())
+                    try {
+                        LocationServices.getFusedLocationProviderClient(context.applicationContext)
+                            .requestLocationUpdates(locationRequest, it, Looper.getMainLooper())
+                    } catch (e: SecurityException) {
+                        locationCallback = null
+                    }
                     Binder.restoreCallingIdentity(identity)
                 }
             } else {

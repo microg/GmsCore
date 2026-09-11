@@ -6,9 +6,11 @@ import com.android.billingclient.api.BillingClient.ProductType
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import org.json.JSONObject
+import org.microg.gms.deviceinfo.DeviceEnvInfo
 import org.microg.vending.billing.TAG
 import org.microg.vending.billing.proto.*
 import org.microg.vending.billing.proto.PurchaseItem
+import org.microg.vending.billing.proto.ClientToken
 import java.security.InvalidParameterException
 import java.security.SecureRandom
 import java.util.*
@@ -81,7 +83,7 @@ fun createClientToken(deviceInfo: DeviceEnvInfo, authData: AuthData): String {
             this.unknown8 = 2
             this.gpVersionCode = deviceInfo.gpVersionCode
             this.deviceInfo = ClientToken.DeviceInfo.Builder().apply {
-                this.unknown3 = "33"
+                this.sdkVersion = "33"
                 this.device = deviceInfo.device
                 deviceInfo.displayMetrics?.let {
                     this.widthPixels = it.widthPixels
@@ -113,7 +115,7 @@ fun createClientToken(deviceInfo: DeviceEnvInfo, authData: AuthData): String {
                         this.isEmulator = false
                     }.build()
                     this.otherInfo = ClientToken.OtherInfo.Builder().apply {
-                        this.gpInfo = mutableListOf((
+                        this.packageInfoList = mutableListOf((
                             ClientToken.GPInfo.Builder().apply {
                                 this.package_ = deviceInfo.gpPkgName
                                 this.versionCode = deviceInfo.gpVersionCode.toString()
@@ -150,10 +152,10 @@ fun createClientToken(deviceInfo: DeviceEnvInfo, authData: AuthData): String {
                         this.googleAccountCount = deviceInfo.googleAccounts.size
                     }.build()
                 }.build()
-                this.marketClientId = "am-google"
+                this.marketClientId = "am-android-att-us"
                 this.unknown15 = 1
-                this.unknown16 = 2
-                this.unknown22 = 2
+                this.grantedPhonePermissionState = 2
+                this.cameraPermissionState = 2
                 deviceInfo.networkData?.let {
                     this.linkDownstreamBandwidth = it.linkDownstreamBandwidth
                     this.linkUpstreamBandwidth = it.linkUpstreamBandwidth
@@ -162,9 +164,9 @@ fun createClientToken(deviceInfo: DeviceEnvInfo, authData: AuthData): String {
                 this.unknown34 = 2
                 this.uptimeMillis = deviceInfo.uptimeMillis
                 this.timeZoneDisplayName = deviceInfo.timeZoneDisplayName
-                this.unknown40 = 1
+                this.secureElementState = SecureElementState.SECURE_ELEMENT_STATE_NOT_SUPPORTED
             }.build()
-            this.unknown11 = "-5228872483831680725"
+            this.leastSignificantBits = UUID.randomUUID().leastSignificantBits
             this.googleAccounts = deviceInfo.googleAccounts
         }.build()
         this.info2 = ClientToken.Info2.Builder().apply {
@@ -205,6 +207,7 @@ fun getAcquireCacheKey(
     for (item in extras) {
         stringBuilder.append("#${item.key}=${item.value}")
     }
+    stringBuilder.append("#accountName=$accountName")
     return stringBuilder.toString()
 }
 
@@ -220,17 +223,23 @@ fun responseBundleToMap(responseBundle: ResponseBundle?): Map<String, Any> {
     val result = mutableMapOf<String, Any>()
     if (responseBundle != null) {
         for (bundleItem in responseBundle.bundleItem) {
-            if (bundleItem.bv != null) {
-                result[bundleItem.key] = bundleItem.bv
-            } else if (bundleItem.i32v != null) {
-                result[bundleItem.key] = bundleItem.i32v
-            } else if (bundleItem.i64v != null) {
-                result[bundleItem.key] = bundleItem.i64v
-            } else if (bundleItem.sv != null) {
-                result[bundleItem.key] = bundleItem.sv
-            } else if (bundleItem.sList != null) {
-                result[bundleItem.key] =
-                    ArrayList(bundleItem.sList.value_)
+            val key = bundleItem.key ?: continue
+            val bv = bundleItem.bv
+            val i32v = bundleItem.i32v
+            val i64v = bundleItem.i64v
+            val sv = bundleItem.sv
+            val sList = bundleItem.sList
+            if (bv != null) {
+                result[key] = bv
+            } else if (i32v != null) {
+                result[key] = i32v
+            } else if (i64v != null) {
+                result[key] = i64v
+            } else if (sv != null) {
+                result[key] = sv
+            } else if (sList != null) {
+                result[key] =
+                    ArrayList(sList.value_)
             } else {
 
             }
@@ -249,7 +258,7 @@ fun getSkuType(skuType: String): Int {
 }
 
 fun splitDocId(docId: DocId): List<String> {
-    return docId.backendDocId.split(":")
+    return docId.backendDocId?.split(":") ?: emptyList()
 }
 
 fun parsePurchaseItem(purchaseItem: PurchaseItem): List<org.microg.vending.billing.core.PurchaseItem> {
@@ -257,8 +266,9 @@ fun parsePurchaseItem(purchaseItem: PurchaseItem): List<org.microg.vending.billi
     for (it in purchaseItem.purchaseItemData) {
         if (it == null)
             continue
-        val spr = if (it.docId != null) {
-            splitDocId(it.docId)
+        val docId = it.docId
+        val spr = if (docId != null) {
+            splitDocId(docId)
         } else {
             emptyList()
         }
@@ -269,17 +279,15 @@ fun parsePurchaseItem(purchaseItem: PurchaseItem): List<org.microg.vending.billi
         var expireAt = 0L
         val (jsonData, signature) = when (type) {
             ProductType.INAPP -> {
-                if (it.inAppPurchase == null)
-                    continue
-                it.inAppPurchase.jsonData to it.inAppPurchase.signature
+                val inApp = it.inAppPurchase ?: continue
+                (inApp.jsonData ?: continue) to (inApp.signature ?: continue)
             }
 
             ProductType.SUBS -> {
-                if (it.subsPurchase == null)
-                    continue
-                startAt = it.subsPurchase.startAt
-                expireAt = it.subsPurchase.expireAt
-                it.subsPurchase.jsonData to it.subsPurchase.signature
+                val subs = it.subsPurchase ?: continue
+                startAt = subs.startAt ?: 0L
+                expireAt = subs.expireAt ?: 0L
+                (subs.jsonData ?: continue) to (subs.signature ?: continue)
             }
 
             else -> {

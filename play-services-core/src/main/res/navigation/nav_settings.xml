@@ -56,12 +56,20 @@
         <action
             android:id="@+id/openGameManagerSettings"
             app:destination="@id/gameManagerFragment" />
+        <action
+            android:id="@+id/openPasskeyManagerSettings"
+            app:destination="@id/passkeyManagerFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/gameManagerFragment"
         android:name="org.microg.gms.ui.GameProfileFragment"
         android:label="@string/pref_game_accounts_title"/>
+
+    <fragment
+        android:id="@+id/passkeyManagerFragment"
+        android:name="org.microg.gms.ui.PasskeyManagerFragment"
+        android:label="@string/pref_passkey_manager_title" />
 
     <!-- Device registration -->
 
