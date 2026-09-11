@@ -27,8 +27,11 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.wearable.bridge.WearableMediaSessionBridge;
 
 public class WearableService extends BaseService {
+
+    private static WearableService instance;
 
     public static final Feature[] FEATURES = new Feature[]{
             new Feature("app_client", 4L),
@@ -72,17 +75,34 @@ public class WearableService extends BaseService {
         super("GmsWearSvc", GmsService.WEAR);
     }
 
+    /**
+     * @return the running service instance, or {@code null} if the service is not started.
+     */
+    public static WearableService getInstance() {
+        return instance;
+    }
+
+    public WearableImpl getWearableImpl() {
+        return wearable;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        WearableMediaSessionBridge.getInstance(getApplicationContext()).start();
     }
 
     @Override
     public void onDestroy() {
+        WearableMediaSessionBridge.getInstance(getApplicationContext()).stop();
         super.onDestroy();
+        if (instance == this) {
+            instance = null;
+        }
         wearable.stop();
     }
 
