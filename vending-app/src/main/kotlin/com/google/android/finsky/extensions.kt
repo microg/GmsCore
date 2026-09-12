@@ -151,33 +151,10 @@ suspend fun syncDeviceInfo(context: Context, account: Account, authToken: String
     }
 }
 
-private val sessionIdMap: MutableMap<String, Int> = mutableMapOf()
-
-private val lock = Any()
-private fun Context.generateSessionId(): Int {
-    synchronized(lock) {
-        val sharedPreferences = getSharedPreferences("AssetModuleSessionIdGenerator", 0)
-        val latest = sharedPreferences.getInt("Latest", 0) + 1
-        val edit = sharedPreferences.edit()
-        edit.putInt("Latest", latest)
-        edit.commit()
-        return latest
-    }
-}
-
-private fun getSessionIdForPackage(packageName: String): Int {
-    synchronized(lock) {
-        return sessionIdMap.getOrPut(packageName) { 10 }
-    }
-}
-
-private fun updateSessionIdForPackage(packageName: String, increment: Int) {
-    synchronized(lock) {
-        val currentSessionId = sessionIdMap[packageName] ?: 10
-        sessionIdMap[packageName] = currentSessionId + increment
-    }
-}
-
+/**
+ * Metadata-only init: does not allocate a download session id.
+ * [bindModulesToSession] assigns one shared id on startDownload.
+ */
 private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
     if (deliveryInfo == null || deliveryInfo.status != null) {
         return null
@@ -187,7 +164,6 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
     var packVersionCode = 0L
     val sessionIds = arrayMapOf<String, Int>()
     val moduleDataMap = arrayMapOf<String, ModuleData>()
-    val baseSessionId = getSessionIdForPackage(packageName)
     for (moduleIndex in deliveryInfo.modules.indices) {
         val moduleInfo: ModuleInfo = deliveryInfo.modules[moduleIndex]
         packVersionCode = moduleInfo.packVersion ?: 0
@@ -195,7 +171,8 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
         val moduleName: String = moduleInfo.moduleName ?: continue
         var moduleBytesToDownload = 0L
         moduleNames.add(moduleName)
-        sessionIds[moduleName] = baseSessionId + moduleIndex
+        // Placeholder until bindModulesToSession; requestDownloadInfo must not mint ids.
+        sessionIds[moduleName] = 0
         var totalSumOfSubcontractedModules = 0
         val sliceIds: ArrayList<String> = ArrayList()
         val chunkDatas: ArrayList<ChunkData> = arrayListOf()
@@ -215,7 +192,7 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
                 sliceBytesToDownload += dResource.bytesToDownload!!
                 totalSumOfSubcontractedModules += 1
                 chunkDatas.add(ChunkData(
-                    sessionId = sessionIds[moduleName]!!,
+                    sessionId = 0,
                     moduleName = moduleName,
                     sliceId = sliceId,
                     chunkSourceUri = dResource.sourceUri,
@@ -242,16 +219,52 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
         totalBytesToDownload += moduleBytesToDownload
         moduleDataMap[moduleName] = moduleData
     }
-    updateSessionIdForPackage(packageName, deliveryInfo.modules.size)
     return DownloadData(
         packageName = packageName,
         errorCode = AssetPackErrorCode.NO_ERROR,
+        sessionId = 0,
         sessionIds = sessionIds,
         status = AssetPackStatus.NOT_INSTALLED,
         moduleNames = moduleNames,
         appVersionCode = appVersionCode ?: packVersionCode,
-        moduleDataMap
+        moduleDataMap = moduleDataMap
     )
+}
+
+/**
+ * Bind [moduleNames] to one shared [sessionId], rewriting chunk metadata and renaming
+ * existing on-disk module dirs into the new session path when possible.
+ */
+fun DownloadData.bindModulesToSession(context: Context, sessionId: Int, moduleNames: Collection<String>) {
+    this.sessionId = sessionId
+    val updatedSessionIds = sessionIds.toMutableMap()
+    for (moduleName in moduleNames) {
+        val previousSessionId = updatedSessionIds[moduleName] ?: 0
+        if (previousSessionId != 0 && previousSessionId != sessionId) {
+            val moved = context.rebindModuleDirToSession(previousSessionId, sessionId, moduleName)
+            if (!moved) {
+                Log.d(TAG, "bindModulesToSession: no existing dir for $moduleName under session $previousSessionId; will re-download")
+            }
+        }
+        updatedSessionIds[moduleName] = sessionId
+        val moduleData = moduleDataMap[moduleName] ?: continue
+        moduleData.chunks = moduleData.chunks.map { it.copy(sessionId = sessionId) }
+    }
+    sessionIds = updatedSessionIds
+}
+
+fun Context.rebindModuleDirToSession(oldSessionId: Int, newSessionId: Int, moduleName: String): Boolean {
+    if (oldSessionId == newSessionId) return true
+    val oldDir = getModuleDir(oldSessionId, moduleName)
+    val newDir = getModuleDir(newSessionId, moduleName)
+    if (newDir.exists()) return true
+    if (!oldDir.exists()) return false
+    newDir.parentFile?.mkdirs()
+    val renamed = oldDir.renameTo(newDir)
+    if (!renamed) {
+        Log.w(TAG, "rebindModuleDirToSession: failed to rename $oldDir -> $newDir")
+    }
+    return renamed
 }
 
 fun buildDownloadBundle(downloadData: DownloadData, list: List<String>? = null): Bundle {
@@ -259,13 +272,20 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<String>? = null):
     val arrayList = arrayListOf<String>()
     var totalBytesToDownload = 0L
     var bytesDownloaded = 0L
+    val sharedSessionId = downloadData.sessionId.takeIf { it != 0 }
+        ?: list?.firstNotNullOfOrNull { downloadData.sessionIds[it]?.takeIf { id -> id != 0 } }
+        ?: 0
+
+    if (sharedSessionId != 0) {
+        bundleData.put(BundleKeys.SESSION_ID, sharedSessionId)
+    }
 
     list?.forEach { moduleName ->
         val packData = downloadData.getModuleData(moduleName)
+        val moduleSessionId = downloadData.sessionIds[moduleName]?.takeIf { it != 0 } ?: sharedSessionId
         bundleData.put(BundleKeys.STATUS, packData.status)
-        downloadData.sessionIds[moduleName]?.let { sessionId ->
-            bundleData.put(BundleKeys.SESSION_ID, sessionId)
-            bundleData.put(BundleKeys.SESSION_ID, moduleName, packData.status)
+        if (moduleSessionId != 0) {
+            bundleData.put(BundleKeys.SESSION_ID, moduleName, moduleSessionId)
         }
         bundleData.put(BundleKeys.PACK_VERSION_TAG, moduleName, null)
         bundleData.put(BundleKeys.STATUS, moduleName, packData.status)
@@ -291,7 +311,8 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
         val downloadBundle = Bundle()
         downloadBundle.put(BundleKeys.APP_VERSION_CODE, downloadData.appVersionCode.toInt())
         downloadBundle.put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NO_ERROR)
-        downloadBundle.put(BundleKeys.SESSION_ID, downloadData.sessionIds[moduleName] ?: downloadData.status)
+        val sessionId = downloadData.sessionIds[moduleName]?.takeIf { it != 0 } ?: downloadData.sessionId
+        downloadBundle.put(BundleKeys.SESSION_ID, sessionId)
         downloadBundle.put(BundleKeys.STATUS, packData.status)
         downloadBundle.put(BundleKeys.PACK_NAMES, arrayListOf(moduleName))
         downloadBundle.put(BundleKeys.BYTES_DOWNLOADED, packData.bytesDownloaded)
