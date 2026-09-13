@@ -40,11 +40,13 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
         Log.d(TAG, "deleteBytesWithRequest: callerPackage: $callerPackage")
         val localData = initSpByPackage()
         if (request == null || localData.isNullOrEmpty()) return@withContext false
+        val editor = blockStoreSp.edit()
         if (request.deleteAll) {
-            localData.keys.forEach { blockStoreSp.edit()?.remove(it)?.commit() }
+            localData.keys.forEach { editor?.remove(it) }
         } else {
-            request.keys.forEach { blockStoreSp.edit()?.remove("$callerPackage:$it")?.commit() }
+            request.keys.forEach { editor?.remove("$callerPackage:$it") }
         }
+        editor?.apply()
         true
     }
 
@@ -83,7 +85,7 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
         }
         val savedKey = "$callerPackage:${data.key ?: BlockstoreClient.DEFAULT_BYTES_DATA_KEY}"
         val base64 = bytes.toBase64(Base64.URL_SAFE)
-        val bool = blockStoreSp.edit()?.putString(savedKey, base64)?.commit()
-        if (bool == true) bytes.size else 0
+        blockStoreSp.edit()?.putString(savedKey, base64)?.apply()
+        bytes.size
     }
 }

@@ -16,29 +16,91 @@
 
 package org.microg.gms.wearable;
 
+import android.os.RemoteException;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
+import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+
+import org.microg.gms.common.GmsConnector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NodeApiImpl implements NodeApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                resultProvider.onResultAvailable(Status.SUCCESS);
+            }
+        });
     }
 
     @Override
     public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetConnectedNodesResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<GetConnectedNodesResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().getConnectedNodes(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetConnectedNodesResponse(final GetConnectedNodesResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new GetConnectedNodesResult() {
+                            @Override
+                            public List<Node> getNodes() {
+                                if (response.nodes == null) return new ArrayList<Node>();
+                                return new ArrayList<Node>(response.nodes);
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return new Status(response.statusCode);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetLocalNodeResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<GetLocalNodeResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().getLocalNode(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetLocalNodeResponse(final GetLocalNodeResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new GetLocalNodeResult() {
+                            @Override
+                            public Node getNode() {
+                                return response.node;
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return new Status(response.statusCode);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                resultProvider.onResultAvailable(Status.SUCCESS);
+            }
+        });
     }
 }

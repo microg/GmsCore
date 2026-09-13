@@ -37,9 +37,9 @@
     @org.microg.gms.common.HttpFormClient$* *;
 }
 
-# Keep our stuff
--keep class org.microg.** { *; }
--keep class com.google.android.gms.** { *; }
+# Keep our public/protected API boundary, Binder interfaces, and parcelables while enabling R8 dead-code shrinking
+-keep class org.microg.** { public protected *; }
+-keep class com.google.android.gms.** { public protected *; }
 
 # Keep asInterface method cause it's accessed from SafeParcel
 -keepattributes InnerClasses

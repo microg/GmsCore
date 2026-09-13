@@ -91,16 +91,12 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
         runCatching {
             var account = request?.previousStepResolutionResult?.resultData?.getParcelableExtra<Account>(EXTRA_ACCOUNT)
                     ?: GamesConfigurationService.getDefaultAccount(context, packageName)
-            if (account == null && GamesConfigurationService.loadPlayedGames(context)?.any { it == packageName } == true) {
-                Log.d(TAG, "autoSelectLogin account is null but game is played")
-                return false
-            }
-            Log.d(TAG, "autoSelectLogin signInType: ${request?.signInType} account: $account")
-            if (account == null && request?.signInType == 1) {
+            if (account == null) {
                 account = GamesConfigurationService.getDefaultAccount(context, GAMES_PACKAGE_NAME)
                     ?: AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).find { targetAccount ->
                         checkAccountAuthStatus(context, packageName, arrayListOf(Scope(Scopes.GAMES_LITE)), targetAccount)
                     }
+                    ?: AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).firstOrNull()
             }
             if (account == null) {
                 Log.d(TAG, "autoSelectLogin Accounts is Empty")
@@ -108,9 +104,9 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
             }
             Log.d(TAG, "autoSelectLogin: account: ${account.name}")
             val authManager = AuthManager(context, account.name, packageName, "oauth2:${Scopes.GAMES_LITE}")
-            if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(context)) return false
             val performGamesSignInStatus = performGamesSignIn(context, packageName, account)
             if (performGamesSignInStatus) {
+                authManager.isPermitted = true
                 GamesConfigurationService.setDefaultAccount(context, packageName, account)
             }
             return performGamesSignInStatus
