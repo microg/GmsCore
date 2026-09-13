@@ -69,10 +69,28 @@ open class HandleProxyFactory(private val context: Context) {
     }
 
     private fun verifyApkSignature(apk: File): Boolean {
-        return true
-        val certificates: Array<Certificate> = TODO()
-        if (certificates.size != 1) return false
-        return Arrays.equals(MessageDigest.getInstance("SHA-256").digest(certificates[0].encoded), PROD_CERT_HASH)
+        return try {
+            val pm = context.packageManager
+            val flags = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
+            } else {
+                @Suppress("DEPRECATION")
+                android.content.pm.PackageManager.GET_SIGNATURES
+            }
+            val pi = pm.getPackageArchiveInfo(apk.absolutePath, flags) ?: return false
+            val signatures = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                pi.signingInfo?.apkContentsSigners
+            } else {
+                @Suppress("DEPRECATION")
+                pi.signatures
+            }
+            if (signatures == null || signatures.size != 1) return false
+            val digest = MessageDigest.getInstance("SHA-256").digest(signatures[0].toByteArray())
+            Arrays.equals(digest, PROD_CERT_HASH)
+        } catch (e: Exception) {
+            android.util.Log.w("HandleProxyFactory", "Failed to verify APK signature: $apk", e)
+            false
+        }
     }
 
     protected fun loadClass(vmKey: String, bytes: ByteArray = ByteArray(0)): Class<*> {
@@ -98,7 +116,7 @@ open class HandleProxyFactory(private val context: Context) {
 
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
-        const val CACHE_FOLDER_NAME = "cache_dg"
+        const val CACHE_FOLDER_NAME = "dg_cache"
         private val CLASS_MAP = hashMapOf<String, Class<*>>()
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }

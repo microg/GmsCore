@@ -36,19 +36,19 @@ public class FusedLocationProviderClientImpl extends FusedLocationProviderClient
     @NonNull
     @Override
     public Task<Location> getCurrentLocation(int priority, CancellationToken cancellationToken) {
-        return null;
+        return scheduleTask((ReturningGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
     }
 
     @NonNull
     @Override
     public Task<Location> getCurrentLocation(@NonNull CurrentLocationRequest request, CancellationToken cancellationToken) {
-        return null;
+        return scheduleTask((ReturningGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
     }
 
     @NonNull
     @Override
     public Task<Location> getLastLocation(@NonNull LastLocationRequest request) {
-        return null;
+        return getLastLocation();
     }
 
     @NonNull

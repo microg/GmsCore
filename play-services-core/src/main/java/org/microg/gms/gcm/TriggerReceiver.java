@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.util.Log;
 
@@ -40,13 +41,43 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static boolean registered = false;
 
     /**
-     * "Project Svelte" is just there to f**k things up...
+     * Modern network callback handling for API 24+
      */
-    public synchronized static void register(Context context) {
+    public synchronized static void register(final Context context) {
         if (SDK_INT >= 24 && !registered) {
-            IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-            context.getApplicationContext().registerReceiver(new TriggerReceiver(), intentFilter);
-            registered = true;
+            try {
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (cm != null) {
+                    cm.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                        @Override
+                        public void onAvailable(Network network) {
+                            Log.d(TAG, "Default network available, triggering GCM connection check");
+                            McsService.resetCurrentDelay();
+                            Intent intent = new Intent(ACTION_CONNECT, null, context, McsService.class);
+                            intent.putExtra(EXTRA_REASON, "network_available");
+                            try {
+                                new ForegroundServiceContext(context).startService(intent);
+                            } catch (Exception e) {
+                                Log.w(TAG, "Error starting McsService on network available: " + e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onLost(Network network) {
+                            Log.d(TAG, "Default network lost, closing active GCM socket");
+                            McsService.closeAll();
+                        }
+                    });
+                    registered = true;
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to register default network callback: " + e.getMessage());
+            }
+            if (!registered) {
+                IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+                context.getApplicationContext().registerReceiver(new TriggerReceiver(), intentFilter);
+                registered = true;
+            }
         }
     }
 

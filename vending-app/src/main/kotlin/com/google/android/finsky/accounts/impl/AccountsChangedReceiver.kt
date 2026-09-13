@@ -14,9 +14,7 @@ import com.android.vending.VendingPreferences
 import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.getAuthToken
 import com.google.android.finsky.syncDeviceInfo
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager
@@ -26,7 +24,6 @@ private const val TAG = "AccountsChangedReceiver"
 
 class AccountsChangedReceiver : BroadcastReceiver() {
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d(TAG, "onReceive: intent-> $intent")
         val deviceSyncEnabled = VendingPreferences.isDeviceSyncEnabled(context)
@@ -39,16 +36,23 @@ class AccountsChangedReceiver : BroadcastReceiver() {
             Log.d(TAG, "onReceive: accountName is empty")
             return
         }
-        GlobalScope.launch(Dispatchers.IO) {
-            val account = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).firstOrNull {
-                it.name == accountName
-            } ?: throw RuntimeException("account is null")
-            ProfileManager.ensureInitialized(context)
-            val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-            val authToken = account.let {
-                getAuthToken(AccountManager.get(context), it, AUTH_TOKEN_SCOPE).getString(AccountManager.KEY_AUTHTOKEN)
-            } ?: throw RuntimeException("oauthToken is null")
-            syncDeviceInfo(context, account, authToken, androidId)
+        val pendingResult = goAsync()
+        kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val account = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).firstOrNull {
+                    it.name == accountName
+                } ?: return@launch
+                ProfileManager.ensureInitialized(context)
+                val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
+                val authToken = account.let {
+                    getAuthToken(AccountManager.get(context), it, AUTH_TOKEN_SCOPE).getString(AccountManager.KEY_AUTHTOKEN)
+                } ?: return@launch
+                syncDeviceInfo(context, account, authToken, androidId)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to sync device info on account change", e)
+            } finally {
+                pendingResult.finish()
+            }
         }
     }
 

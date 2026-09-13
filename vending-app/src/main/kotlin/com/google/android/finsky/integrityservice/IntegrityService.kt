@@ -108,11 +108,11 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 }
                 integrityData = callerAppToIntegrityData(context, packageName)
                 if (integrityData?.allowed != true) {
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Not allowed to request integrity token.")
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed to request integrity token.")
                 }
                 val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
                 if (!playIntegrityEnabled) {
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "API is disabled.")
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled.")
                 }
                 val nonceArr = request.getByteArray(KEY_NONCE)
                 if (nonceArr == null) {
@@ -214,7 +214,8 @@ private class IntegrityServiceImpl(private val context: Context, override val li
             }.onFailure {
                 Log.w(TAG, "requestIntegrityToken has exception: ", it)
                 integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Integrity check failed: ${it.message}")
-                callback.onError(integrityData?.packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
+                val errorCode = (it as? StandardIntegrityException)?.errorCode ?: IntegrityErrorCode.INTERNAL_ERROR
+                callback.onError(integrityData?.packageName, errorCode, it.message ?: "Exception")
             }
         }
     }

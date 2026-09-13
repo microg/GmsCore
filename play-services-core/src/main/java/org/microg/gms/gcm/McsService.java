@@ -302,7 +302,8 @@ public class McsService extends Service implements Handler.Callback {
         long delay = currentDelay == 0 ? 5000 : currentDelay;
         if (currentDelay < 60000) currentDelay += 10000;
         if (currentDelay >= 60000 && currentDelay < 600000) currentDelay += 60000;
-        return delay;
+        long jitter = (long) (Math.random() * 3000);
+        return delay + jitter;
     }
 
     public synchronized static void resetCurrentDelay() {
@@ -797,7 +798,7 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private static void closeAll() {
+    static void closeAll() {
         logd(null, "Closing all sockets...");
         tryClose(inputStream);
         tryClose(outputStream);

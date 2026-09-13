@@ -47,8 +47,13 @@ public class GServicesProvider extends ContentProvider {
     private static final String TAG = "GmsServicesProvider";
 
     private DatabaseHelper databaseHelper;
-    private Map<String, String> cache = new HashMap<String, String>();
-    private Set<String> cachedPrefixes = new HashSet<String>();
+    private final Map<String, String> cache = java.util.Collections.synchronizedMap(new java.util.LinkedHashMap<String, String>(128, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+            return size() > 500;
+        }
+    });
+    private final Set<String> cachedPrefixes = java.util.Collections.synchronizedSet(new HashSet<String>());
 
     @Override
     public boolean onCreate() {
@@ -68,32 +73,43 @@ public class GServicesProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         MatrixCursor cursor = new MatrixCursor(new String[]{"name", "value"});
         if (PREFIX_URI.equals(uri)) {
-            for (String prefix : selectionArgs) {
-                if (!cachedPrefixes.contains(prefix)) {
-                    cache.putAll(databaseHelper.search(prefix + "%"));
-                    cachedPrefixes.add(prefix);
-                }
+            if (selectionArgs != null) {
+                for (String prefix : selectionArgs) {
+                    if (!cachedPrefixes.contains(prefix)) {
+                        Map<String, String> searched = databaseHelper.search(prefix + "%");
+                        if (searched != null) {
+                            cache.putAll(searched);
+                        }
+                        cachedPrefixes.add(prefix);
+                    }
 
-                for (String name : cache.keySet()) {
-                    if (name.startsWith(prefix)) {
-                        String value = cache.get(name);
-                        if (value != null) {
-                            cursor.addRow(new String[]{name, value});
+                    synchronized (cache) {
+                        for (String name : cache.keySet()) {
+                            if (name.startsWith(prefix)) {
+                                String value = cache.get(name);
+                                if (value != null) {
+                                    cursor.addRow(new String[]{name, value});
+                                }
+                            }
                         }
                     }
                 }
             }
         } else {
-            for (String name : selectionArgs) {
-                String value;
-                if (cache.containsKey(name)) {
-                    value = cache.get(name);
-                } else {
-                    value = databaseHelper.get(name);
-                    cache.put(name, value);
-                }
-                if (value != null) {
-                    cursor.addRow(new String[]{name, value});
+            if (selectionArgs != null) {
+                for (String name : selectionArgs) {
+                    String value;
+                    if (cache.containsKey(name)) {
+                        value = cache.get(name);
+                    } else {
+                        value = databaseHelper.get(name);
+                        if (value != null) {
+                            cache.put(name, value);
+                        }
+                    }
+                    if (value != null) {
+                        cursor.addRow(new String[]{name, value});
+                    }
                 }
             }
         }
@@ -118,17 +134,34 @@ public class GServicesProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        int callingUid = android.os.Binder.getCallingUid();
+        int myUid = android.os.Process.myUid();
+        if (callingUid != myUid && callingUid != 1000 && callingUid != 0) {
+            if (!org.microg.gms.common.PackageUtils.callerHasGooglePackagePermission(getContext(), org.microg.gms.common.GooglePackagePermission.EXTENDED_ACCESS)) {
+                Log.w(TAG, "Unauthorized update attempt on GServicesProvider from UID: " + callingUid);
+                throw new SecurityException("Permission denied: writing to GServices requires system privileges or Google authorization");
+            }
+        }
+
         Log.d(TAG, "update caller=" + getCallingPackageName() + " table=" + uri.getLastPathSegment()
-                + " name=" + values.getAsString("name") + " value=" + values.getAsString("value"));
+                + " name=" + (values != null ? values.getAsString("name") : null)
+                + " value=" + (values != null ? values.getAsString("value") : null));
+        if (values == null) return 0;
         if (uri.equals(MAIN_URI)) {
             databaseHelper.put("main", values);
         } else if (uri.equals(OVERRIDE_URI)) {
             databaseHelper.put("override", values);
         }
         String name = values.getAsString("name");
-        cache.remove(name);
-        Iterator<String> iterator = cachedPrefixes.iterator();
-        while (iterator.hasNext()) if (name.startsWith(iterator.next())) iterator.remove();
+        if (name != null) {
+            cache.remove(name);
+            synchronized (cachedPrefixes) {
+                Iterator<String> iterator = cachedPrefixes.iterator();
+                while (iterator.hasNext()) {
+                    if (name.startsWith(iterator.next())) iterator.remove();
+                }
+            }
+        }
         return 1;
     }
 }
