@@ -20,14 +20,20 @@ import static android.os.Build.VERSION.SDK_INT;
 public class ForegroundServiceContext extends ContextWrapper {
     private static final String TAG = "ForegroundService";
     public static final String EXTRA_FOREGROUND = "foreground";
+    private final boolean forceForeground;
 
     public ForegroundServiceContext(Context base) {
+        this(base, false);
+    }
+
+    public ForegroundServiceContext(Context base, boolean forceForeground) {
         super(base);
+        this.forceForeground = forceForeground;
     }
 
     @Override
     public ComponentName startService(Intent service) {
-        if (SDK_INT >= 26 && !isIgnoringBatteryOptimizations()) {
+        if (SDK_INT >= 26 && (forceForeground || !isIgnoringBatteryOptimizations())) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             return super.startForegroundService(service);
