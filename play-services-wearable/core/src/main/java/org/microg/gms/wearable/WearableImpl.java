@@ -17,6 +17,7 @@
 package org.microg.gms.wearable;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,6 +38,7 @@ import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.ConnectionRestrictions;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.Node;
@@ -52,6 +54,7 @@ import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
 import org.microg.gms.wearable.bluetooth.BleManager;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
+import org.microg.gms.wearable.bluetooth.BluetoothServer;
 import org.microg.gms.wearable.network.NetworkConnectionManager;
 import org.microg.gms.wearable.channel.ChannelAssetApiEnum;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
@@ -113,6 +116,7 @@ public class WearableImpl {
     private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
     private final AssetManager assetManager = new AssetManager(this);
     private final Map<String, PendingRpcRequest> pendingRpcRequests = new ConcurrentHashMap<>();
+    private final Map<String, WearableWriter> peerWriters = new ConcurrentHashMap<>();
     public Handler networkHandler;
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
@@ -122,6 +126,7 @@ public class WearableImpl {
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     private HandlerThread networkHandlerThread;
     private BluetoothClient bluetoothClient;
+    private BluetoothServer bluetoothServer;
     private BleManager bleManager;
     private volatile ChannelManager channelManager;
     private NodeMigrationController migrationController;
@@ -129,6 +134,8 @@ public class WearableImpl {
     private volatile long lastAssetFetchTime = 0;
     private AssetFetcher assetFetcher;
     private NetworkConnectionManager networkManager;
+
+    private final Map<String, ConnectionRestrictions> nodeRestrictions = new ConcurrentHashMap<>();
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -269,6 +276,7 @@ public class WearableImpl {
         transport.onConnected(writer);
         Log.d(TAG, "registerPeerWriter for " + peerNodeId);
 
+        peerWriters.put(peerNodeId, writer);
         assetManager.addWriter(peerNodeId, writer);
     }
 
@@ -646,6 +654,18 @@ public class WearableImpl {
             return true;
         }
 
+        ConnectionRestrictions restrictions = nodeRestrictions.get(nodeId);
+        if (restrictions != null && !ConnectionRestrictionFilter.isDataItemAllowed(
+                    restrictions, record.packageName,
+                    record.dataItem != null ? record.dataItem.uri : null)) {
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "syncRecordToPeer: filtered out " + record.packageName + " "
+                        + (record.dataItem != null ? record.dataItem.uri : null)
+                        + " for restricted node " + nodeId);
+            }
+            return true;
+        }
+
         WearableConnection connection = activeConnections.get(nodeId);
         if (connection == null) {
             Log.w(TAG, "Cannot sync to " + nodeId + " - connection not found");
@@ -671,6 +691,25 @@ public class WearableImpl {
             return false;
         }
         return true;
+    }
+
+    public void setConnectionRestrictions(String nodeId, ConnectionRestrictions restrictions) {
+        if (nodeId == null) return;
+        if (restrictions == null) {
+            nodeRestrictions.remove(nodeId);
+            return;
+        }
+        if (!ConnectionRestrictionFilter.isValid(restrictions)) {
+            Log.w(TAG, "Ignoring invalid ConnectionRestrictions for " + nodeId);
+            nodeRestrictions.remove(nodeId);
+            return;
+        }
+        Log.d(TAG, "Applying ConnectionRestrictions for " + nodeId + ": " + restrictions);
+        nodeRestrictions.put(nodeId, restrictions);
+    }
+
+    public void clearConnectionRestrictions(String nodeId) {
+        if (nodeId != null) nodeRestrictions.remove(nodeId);
     }
 
     private void syncAssetToPeer(WearableConnection connection, DataItemRecord record, Asset asset) throws IOException {
@@ -881,6 +920,7 @@ public class WearableImpl {
             dt.onDisconnect();
         }
 
+        peerWriters.remove(connect.id);
         assetManager.removeWriter(connect.id);
 
         if (channelManager != null) {
@@ -1349,7 +1389,25 @@ public class WearableImpl {
                     });
                 }
             } else if (config.role == ROLE_SERVER) {
-                Log.w(TAG, "Bluetooth role Server not implemented");
+                networkHandlerLock.await();
+                networkHandler.post(() -> {
+                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+
+                    if (adapter == null) {
+                        Log.w(TAG, "handlelegacy: no bluetooth adapter, cannot serve " + config.name);
+                        return;
+                    }
+
+                    if (enabled) {
+                        if (bluetoothServer == null) {
+                            Log.d(TAG, "handleLegacy: Initializing BluetoothServer");
+                            bluetoothServer = new BluetoothServer(context, this, adapter);
+                        }
+                        bluetoothServer.addConfiguration(config);
+                    } else if (bluetoothServer != null) {
+                        bluetoothServer.removeConfiguration(config);
+                    }
+                });
             }
         } catch (InterruptedException e) {
             Log.w(TAG, "Interrupted while handling Bluetooth", e);
@@ -1387,6 +1445,7 @@ public class WearableImpl {
 
     private void closeConnection(String nodeId) {
         WearableConnection connection = activeConnections.remove(nodeId);
+        nodeRestrictions.remove(nodeId);
         if (connection != null) {
             try {
                 connection.close();
@@ -1516,6 +1575,7 @@ public class WearableImpl {
 
     public void unregisterPeerTransport(String peerNodeId) {
         peerTransports.remove(peerNodeId);
+        peerWriters.remove(peerNodeId);
         assetManager.removeWriter(peerNodeId);
         assetFetcher.resetTracking();
         Log.d(TAG, "unregisterPeerTransport: " + peerNodeId);
@@ -1569,28 +1629,29 @@ public class WearableImpl {
         PendingRpcRequest pending = consumePendingRpcRequest(nodeId, path);
         if (pending != null) {
             RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
-            try {
-                pending.connection.writeMessage(new RootMessage.Builder()
-                        .rpcRequest(new Request.Builder()
-                                .targetNodeId(nodeId)
-                                .path(path)
-                                .rawData(ByteString.of(data))
-                                .packageName(pending.packageName)
-                                .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
-                                .sourceNodeId(getLocalNodeId())
-                                .generation(pending.gen)
-                                .requestId(state.lastRequestId)
-                                .requiresResponse(false)
-                                .senderRequestId(pending.reqId)
-                                .build()).build());
-                Log.d(TAG, "writeToConnection: sent RPC response"
-                        + " senderRequestId=" + pending.reqId
-                        + " path=" + path + " peer=" + nodeId);
-            } catch (IOException e) {
-                Log.w(TAG, "writeToConnection: failed to write RPC response for " + path, e);
+            RootMessage msg = new RootMessage.Builder()
+                    .rpcRequest(new Request.Builder()
+                            .targetNodeId(nodeId)
+                            .path(path)
+                            .rawData(data != null ? ByteString.of(data) : ByteString.EMPTY)
+                            .packageName(pending.packageName)
+                            .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
+                            .sourceNodeId(getLocalNodeId())
+                            .generation(pending.gen)
+                            .requestId(state.lastRequestId)
+                            .requiresResponse(false)
+                            .senderRequestId(pending.reqId)
+                            .build()).build();
+
+            WearableWriter writer = peerWriters.get(nodeId);
+            if (writer == null || !writer.enqueue(msg)) {
+                Log.w(TAG, "writeToConnection: no writer available for " + nodeId);
                 closeConnection(nodeId);
                 return -1;
             }
+            Log.d(TAG, "writeToConnection: queued RPC response"
+                    + " senderRequestId=" + pending.reqId
+                    + " path=" + path + " peer=" + nodeId);
             return (state.generation + 527) * 31 + state.lastRequestId;
         }
 
@@ -1602,7 +1663,7 @@ public class WearableImpl {
         Request request = new Request.Builder()
                 .targetNodeId(nodeId)
                 .path(path)
-                .rawData(ByteString.of(data))
+                .rawData(data != null ? ByteString.of(data) : ByteString.EMPTY)
                 .packageName(packageName)
                 .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
                 .sourceNodeId(getLocalNodeId())
@@ -1610,16 +1671,16 @@ public class WearableImpl {
                 .requestId(state.lastRequestId)
                 .requiresResponse(false)
                 .build();
-        try {
-            connection.writeMessage(new RootMessage.Builder()
-                    .rpcRequest(request)
-                    .build());
-        } catch (IOException e) {
-            Log.w(TAG, "Error while writing, closing link", e);
+
+        RootMessage msg = new RootMessage.Builder().rpcRequest(request).build();
+
+        WearableWriter writer = peerWriters.get(nodeId);
+        if (writer == null || !writer.enqueue(msg)) {
+            Log.w(TAG, "writeToConnectionWithoutPending: no writer available for " + nodeId);
             closeConnection(nodeId);
             return -1;
         }
-        return (state.generation + 527) * 31 + state.lastRequestId;
+        return state.lastRequestId;
     }
 
     public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {

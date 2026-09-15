@@ -25,12 +25,23 @@ public abstract class WearableConnection implements Runnable {
     private static String B64ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
     private final String TAG = "WearableConnection";
 
+    public static final int DEFAULT_MAX_PIECE_SIZE = 12288;
+    private final Object writeLock = new Object();
+
     private HashMap<Integer, List<MessagePiece>> piecesQueues = new HashMap<Integer, List<MessagePiece>>();
     private final Listener listener;
     private Connect peerConnect = null;
 
     public WearableConnection(Listener listener) {
         this.listener = listener;
+    }
+
+    protected int getMaxPieceSize() {
+        return DEFAULT_MAX_PIECE_SIZE;
+    }
+
+    protected int getWriteQueueId() {
+        return 0;
     }
 
     public static String base64encode(byte[] bytes) {
@@ -56,12 +67,30 @@ public abstract class WearableConnection implements Runnable {
 
     public void writeMessage(RootMessage message) throws IOException {
         byte[] bytes = RootMessage.ADAPTER.encode(message);
-        // TODO: cut in pieces
-        writeMessagePiece(new MessagePiece.Builder()
-                .data(ByteString.of(bytes))
-                .digest(calculateDigest(bytes))
-                .thisPiece(1)
-                .totalPieces(1).build());
+        final String digest = calculateDigest(bytes);
+        final int maxPieceSize = Math.max(1, getMaxPieceSize());
+        final int queueId = getWriteQueueId();
+        final int total = Math.max(1, (bytes.length + maxPieceSize - 1) / maxPieceSize);
+
+        synchronized (writeLock) {
+            for (int i = 0; i < total; i++) {
+                int offset =  i * maxPieceSize;
+                int length = Math.min(bytes.length - offset, maxPieceSize);
+                writeMessagePiece(new MessagePiece.Builder()
+                        .data(ByteString.of(bytes, offset, length))
+                        .digest(digest)
+                        .thisPiece(i + 1)
+                        .totalPieces(total)
+                        .queueId(queueId)
+                        .build()
+                );
+            }
+        }
+
+        if (total > 1) {
+            Log.d(TAG, "writeMessage: sent " + bytes.length + " bytes as " + total
+                    + " pieces (queueId=" + queueId + ", digest=" + digest + ")");
+        }
     }
 
     protected abstract void writeMessagePiece(MessagePiece piece) throws IOException;

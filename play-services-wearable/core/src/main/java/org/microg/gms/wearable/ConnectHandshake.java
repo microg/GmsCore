@@ -1,6 +1,7 @@
 package org.microg.gms.wearable;
 
 import android.content.OperationApplicationException;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.wearable.Wearable;
@@ -19,16 +20,42 @@ public class ConnectHandshake {
 
     private ConnectHandshake() {}
 
+    public static final class LocalIdentity {
+        public final String nodeId;
+        public final String nodeName;
+        public final long androidId;
+        public final String networkId;
+        public final String packageName;
+        public final boolean migrating;
+        public final String migratingFromNodeId;
+
+        public LocalIdentity(String nodeId, String nodeName, long androidId, String networkId,
+                             String packageName, boolean migrating, String migratingFromNodeId) {
+            this.nodeId = nodeId;
+            this.nodeName = nodeName;
+            this.androidId = androidId;
+            this.networkId = networkId;
+            this.packageName = packageName;
+            this.migrating = migrating;
+            this.migratingFromNodeId = migratingFromNodeId;
+        }
+    }
+
+    public static Connect perform(WearableConnection connection, LocalIdentity local)
+            throws IOException {
+        connection.writeMessage(new RootMessage.Builder().connect(build(local)).build());
+
+        return readAndValidatePeerConnect(connection, local);
+    }
+
     public static Connect perform(
             WearableConnection connection,
             String localNodeId, String localNodeName,
             long androidId, boolean isMigrating,
             String migratingFrom
     ) throws IOException {
-        sendLocalConnect(connection, localNodeId, localNodeName,
-                androidId, isMigrating, migratingFrom);
-
-        return readAndValidatePeerConnect(connection, isMigrating);
+        return perform(connection, new LocalIdentity(localNodeId, localNodeName, androidId,
+                null, null, isMigrating, migratingFrom));
     }
 
     public static Connect perform(
@@ -40,36 +67,36 @@ public class ConnectHandshake {
                 androidId, false, null);
     }
 
-    private static void sendLocalConnect(
-            WearableConnection connection,
-            String localNodeId, String localNodeName,
-            long androidId, boolean isMigrating,
-            String migratingFrom
-    ) throws IOException {
+    public static Connect build(LocalIdentity local) {
         Connect.Builder cb = new Connect.Builder()
-                .id(localNodeId)
-                .name(localNodeName != null ? localNodeName : localNodeId)
-                .peerAndroidId(androidId)
+                .id(local.nodeId)
+                .name(local.nodeName != null ? local.nodeName : local.nodeId)
+                .peerAndroidId(local.androidId)
                 .unknown4(3)
                 .peerVersion(PEER_VERSION)
                 .peerMinimumVersion(PEER_MIN_VERSION)
                 .androidSdkVersion(Build.VERSION.SDK_INT);
 
-        if (isMigrating) {
+        if (!TextUtils.isEmpty(local.networkId)) {
+            cb.networkId(local.networkId);
+        }
+
+        if (!TextUtils.isEmpty(local.packageName)) {
+            cb.packageName(local.packageName);
+        }
+
+        if (local.migrating) {
             cb.migrating(true);
-            if (migratingFrom != null && !migratingFrom.isEmpty()) {
-                cb.migratingFromNodeId(migratingFrom);
+            if (!TextUtils.isEmpty(local.migratingFromNodeId)) {
+                cb.migratingFromNodeId(local.migratingFromNodeId);
             }
         }
 
-        connection.writeMessage(new RootMessage.Builder().connect(cb.build()).build());
-        Log.d(TAG, "sendLocalConnect: localNodeId=" + localNodeId +
-                " version=" + PEER_VERSION + "/" + PEER_MIN_VERSION +
-                " sdkInt=" + Build.VERSION.SDK_INT + " migrating=" + isMigrating);
+        return cb.build();
     }
 
     private static Connect readAndValidatePeerConnect(
-            WearableConnection connection, boolean isMigrating
+            WearableConnection connection, LocalIdentity local
     ) throws IOException {
         RootMessage incoming = connection.readMessage();
         Log.d(TAG, "readAndValidatePeerConnect: received=" + incoming);
@@ -87,7 +114,9 @@ public class ConnectHandshake {
         }
 
         checkVersionCompatibility(peer);
-        checkMigrationParity(peer, isMigrating);
+        checkMigrationParity(peer, local.migrating);
+        checkNetworkId(peer, local);
+        checkMigrationSource(peer, local);
 
         connection.setPeerConnect(peer);
 
@@ -113,6 +142,24 @@ public class ConnectHandshake {
         if (migrating != peerMigrating) {
             throw new IOException("isMigrating state mismatch: local=" + migrating
                     + " peer=" + peerMigrating);
+        }
+    }
+
+    private static void checkNetworkId(Connect peer, LocalIdentity local) throws IOException {
+        if (local.migrating) return;
+        String peerNetworkId = peer.networkId;
+        if (TextUtils.isEmpty(peerNetworkId) || TextUtils.isEmpty(local.networkId)) return;
+        if (!local.networkId.equals(peerNetworkId)) {
+            throw new IOException("networkId mismatch - expected " + local.networkId
+                    + " but peer advertised " + peerNetworkId);
+        }
+    }
+
+    private static void checkMigrationSource(Connect peer, LocalIdentity local) throws IOException {
+        if (!local.migrating) return;
+        if (!TextUtils.isEmpty(local.migratingFromNodeId)) return;
+        if (TextUtils.isEmpty(peer.migratingFromNodeId)) {
+            throw new IOException("Peer is migrating but Connect is missing migratingFromNodeId");
         }
     }
 }

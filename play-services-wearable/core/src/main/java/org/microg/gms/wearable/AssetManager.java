@@ -48,10 +48,10 @@ public class AssetManager {
     public AssetManager(WearableImpl wearable) {
         this.wearable = wearable;
     }
-    
+
     public void addWriter(String nodeId, WearableWriter writer) {
         writers.put(nodeId, writer);
-        
+
         if (entries.isEmpty()) return;
 
         Log.d(TAG, "addWriter: replaying " + entries.size() + " to " + nodeId);
@@ -67,7 +67,11 @@ public class AssetManager {
     }
 
     public void onAssetMissing(String digest, String packageName, String signature) {
-        Log.d(TAG, "onAssetMissing: " + digest);
+		FetchEntry existing = entries.get(digest);
+		if (existing != null && !existing.permission) {
+			Log.d(TAG, "onAssetMissing: full fetch already pending for " + digest);
+			return;
+		}
         enqueueFetch(digest, packageName, signature, false);
     }
 

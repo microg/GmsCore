@@ -21,6 +21,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.wearable.ConnectHandshake;
 import org.microg.gms.wearable.TransportConnectionHandler;
 import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.WearableConnection;
@@ -272,9 +273,18 @@ public class BluetoothServer implements Closeable {
                     String localNodeId = wearable.getLocalNodeId();
 
                     BluetoothWearableConnection connection = new BluetoothWearableConnection(
-                            clientSocket, localNodeId, getAndroidId(),
-                            WearableConnection.NOOP
-                    );
+                            clientSocket,
+                            new ConnectHandshake.LocalIdentity(
+                                    wearable.getLocalNodeId(),
+                                    Build.MODEL,
+                                    getAndroidId(),
+                                    wearable.getClockworkNodePreferences().getNetworkId(),
+                                    null,
+                                    config.migrating,
+                                    config.migrating
+                                            ? wearable.getClockworkNodePreferences().getPeerNodeId()
+                                            : null),
+                            WearableConnection.NOOP);
 
                     if (!connection.handshake()) {
                         Log.w(TAG, "Handshake failed for "

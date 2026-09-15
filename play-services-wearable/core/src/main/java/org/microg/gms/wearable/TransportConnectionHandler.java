@@ -85,7 +85,9 @@ public class TransportConnectionHandler {
 
             config.peerNodeId = peerNodeId;
             config.connected = true;
-//
+
+            wearable.setConnectionRestrictions(peerNodeId, config.connectionRestrictions);
+
 //            if (config.nodeId == null || config.nodeId.isEmpty()) {
 //                config.nodeId = wearable.getLocalNodeId();
 //            }

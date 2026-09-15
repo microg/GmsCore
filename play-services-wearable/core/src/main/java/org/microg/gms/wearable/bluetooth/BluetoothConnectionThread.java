@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -19,6 +20,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.wearable.ConnectHandshake;
 import org.microg.gms.wearable.MessageHandler;
 import org.microg.gms.wearable.TransportConnectionHandler;
 import org.microg.gms.wearable.WearableConnection;
@@ -211,21 +213,27 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         isConnected = true;
         markActivity();
 
+        ConnectHandshake.LocalIdentity local = new ConnectHandshake.LocalIdentity(
+                wearableImpl.getLocalNodeId(),
+                Build.MODEL,
+                getAndroidId(),
+                wearableImpl.getClockworkNodePreferences().getNetworkId(),
+                null,
+                config.migrating,
+                config.migrating ? wearableImpl.getClockworkNodePreferences().getPeerNodeId() : null
+        );
+
         BluetoothWearableConnection btConn =
-                  new BluetoothWearableConnection(socket, wearableImpl.getLocalNodeId(), getAndroidId(),
-                          new WearableConnection.Listener() {
-                              public void onConnected(WearableConnection c) {}
-                              public void onMessage(WearableConnection c, RootMessage m) {}
-                              public void onDisconnected() {}
-                          });
-          wearableConnection = btConn;
+                new BluetoothWearableConnection(socket, local, WearableConnection.NOOP);
 
-          if (!btConn.handshake()) {
-              Log.e(TAG, "Handshake failed");
-              return;
-          }
+        wearableConnection = btConn;
 
-          new TransportConnectionHandler(wearableImpl, config).handle(btConn);
+        if (!btConn.handshake()) {
+            Log.e(TAG, "Handshake failed");
+            return;
+        }
+
+        new TransportConnectionHandler(wearableImpl, config).handle(btConn);
     }
 
     private long getAndroidId() {

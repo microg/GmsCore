@@ -391,7 +391,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void sendRequest(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
-        Log.d(TAG, "sendRequest: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
         sendRequestWithOptions(callbacks, targetNodeId, path, data, new MessageOptions(0));
     }
 
@@ -415,6 +414,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
 
                 wearable.getRpcHelper().addResponseListener(
+                        targetNodeId,
                         messageId,
                         SEND_REQUEST_TIMEOUT_MS,
                         responseData -> mainHandler.post(() -> {
@@ -714,7 +714,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
                         });
                         return;
                     }
-                    wearable.getRpcHelper().addResponseListener(messageId,
+                    wearable.getRpcHelper().addResponseListener(nodeId, messageId,
                             BACKUP_RPC_TIMEOUT_MS, responseData -> {
                                 boolean supported = false;
                                 try {
@@ -822,7 +822,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
                     });
                     return;
                 }
-                wearable.getRpcHelper().addResponseListener(messageId,
+                wearable.getRpcHelper().addResponseListener(nodeId, messageId,
                         BACKUP_RPC_TIMEOUT_MS, responseData -> {
                             boolean enabled = false;
                             try {

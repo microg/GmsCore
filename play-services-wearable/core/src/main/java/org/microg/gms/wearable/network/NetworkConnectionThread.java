@@ -1,5 +1,7 @@
 package org.microg.gms.wearable.network;
 
+import static org.microg.gms.wearable.WearableImpl.ROLE_CLIENT;
+
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
@@ -106,7 +108,15 @@ public class NetworkConnectionThread extends Thread implements Cloneable{
         Log.d(TAG, "Connected to " + config.address);
 
         SocketWearableConnection raw = new SocketWearableConnection(socket, null);
-        ConnectHandshake.perform(raw, wearable.getLocalNodeId(), Build.MODEL, getAndroidId(), config.migrating, null);
+        ConnectHandshake.perform(raw,
+                new ConnectHandshake.LocalIdentity(
+                        wearable.getLocalNodeId(),
+                        Build.MODEL,
+                        getAndroidId(),
+                        wearable.getClockworkNodePreferences().getNetworkId(),
+                        config.role == ROLE_CLIENT ? config.packageName : null,
+                        config.migrating,
+                        config.migrating ? wearable.getClockworkNodePreferences().getPeerNodeId() : null));
         new TransportConnectionHandler(wearable, config).handle(raw);
         activeWriter = null;
     }

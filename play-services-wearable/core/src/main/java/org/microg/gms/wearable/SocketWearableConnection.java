@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class SocketWearableConnection extends WearableConnection {
-    private final int MAX_PIECE_SIZE = 20 * 1024 * 1024;
+    private final int MAX_PIECE_SIZE = DEFAULT_MAX_PIECE_SIZE + 4096;
     private final Socket socket;
     private final DataInputStream is;
     private final DataOutputStream os;
@@ -33,10 +33,9 @@ public class SocketWearableConnection extends WearableConnection {
 
     protected MessagePiece readMessagePiece() throws IOException {
         int len = is.readInt();
-        if (len > MAX_PIECE_SIZE) {
+        if (len <= 0 || len > MAX_PIECE_SIZE) {
             throw new IOException("Piece size " + len + " exceeded limit of " + MAX_PIECE_SIZE + " bytes.");
         }
-        System.out.println("Reading piece of length " + len);
         byte[] bytes = new byte[len];
         is.readFully(bytes);
         return MessagePiece.ADAPTER.decode(bytes);

@@ -26,7 +26,7 @@ public class BluetoothWearableConnection extends WearableConnection {
     private static final String TAG = "BtWearableConnection";
     private static final long HANDSHAKE_TIMEOUT_MS = 30000;
     private static final long WRITE_STUCK_TIMEOUT_MS = 15000;
-    private final int MAX_PIECE_SIZE = 64 * 1024 * 1024;
+    private final int MAX_PIECE_SIZE = DEFAULT_MAX_PIECE_SIZE + 4096;
     private final BluetoothSocket socket;
     private final DataInputStream is;
     private final DataOutputStream os;
@@ -37,22 +37,21 @@ public class BluetoothWearableConnection extends WearableConnection {
     private final Handler watchdogHandler;
     private final Runnable writeStuckRunnable;
     private final long androidId;
+    private final ConnectHandshake.LocalIdentity localIdentity;
     private String peerNodeId;
     private boolean handshakeComplete = false;
     private volatile Thread readerThread;
 
-    public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, long androidId, Listener listener) throws IOException {
+    public BluetoothWearableConnection(BluetoothSocket socket, ConnectHandshake.LocalIdentity localIdentity, Listener listener) throws IOException {
         super(listener);
         this.socket = socket;
         this.is = new DataInputStream(socket.getInputStream());
         this.os = new DataOutputStream(socket.getOutputStream());
-        this.localNodeId = localNodeId;
+        this.localIdentity = localIdentity;
+        this.localNodeId = localIdentity.nodeId;
         this.listener = listener;
-        this.androidId = androidId;
+        this.androidId = localIdentity.androidId;
 
-        if (localNodeId == null) {
-            throw new IllegalArgumentException("localNodeId cannot be null");
-        }
         this.watchdogThread = new HandlerThread("BtWatchdog-" + localNodeId);
         this.watchdogThread.start();
         this.watchdogHandler = new Handler(watchdogThread.getLooper());
@@ -92,7 +91,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         watchdogHandler.postDelayed(timeoutWatchdog, HANDSHAKE_TIMEOUT_MS);
 
         try {
-            Connect peer = ConnectHandshake.perform(this, localNodeId, Build.MODEL, androidId);
+            Connect peer = ConnectHandshake.perform(this, localIdentity);
 
             if (timedOut.get()) {
                 return false;

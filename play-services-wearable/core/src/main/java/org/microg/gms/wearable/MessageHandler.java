@@ -19,6 +19,8 @@ package org.microg.gms.wearable;
 import static org.microg.gms.wearable.WearableConnection.calculateDigest;
 import static org.microg.gms.wearable.WearableImpl.ROLE_CLIENT;
 import static org.microg.gms.wearable.WearableImpl.ROLE_SERVER;
+import static org.microg.gms.wearable.WearableImpl.TYPE_BLE;
+import static org.microg.gms.wearable.WearableImpl.TYPE_BLUETOOTH_RFCOMM;
 import static org.microg.gms.wearable.WearableImpl.TYPE_NETWORK;
 import static org.microg.gms.wearable.WearableServiceImpl.DATA_SYNC_PROGRESS_PATH;
 
@@ -89,30 +91,25 @@ public class MessageHandler extends ServerMessageListener {
                 new String[]{SettingsContract.CheckIn.ANDROID_ID},
                 c -> c.getLong(0));
 
-        Connect.Builder b = new Connect.Builder()
-                .name(Build.MODEL) // TODO: Should be hostname, but seems to be irrelevant
-                .id(wearable.getLocalNodeId())
-                .peerAndroidId(androidId)
-                .unknown4(3)
-                .peerVersion(ConnectHandshake.PEER_VERSION)
-                .peerMinimumVersion(0)
-                .androidSdkVersion(Build.VERSION.SDK_INT);
-
-        if (config.type == TYPE_NETWORK && config.address != null)
-            b.networkId(config.address);
-
+        String migratingFrom = null;
         if (config.migrating && config.role == ROLE_SERVER) {
-            String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
-            b.migrating(true);
-            if (prevPeerNodeId != null) {
-                Log.i(TAG, "Migration handshake: migratingFromNodeId=" + prevPeerNodeId);
-                b.migratingFromNodeId(prevPeerNodeId);
+            migratingFrom = wearable.getClockworkNodePreferences().getPeerNodeId();
+            if (migratingFrom != null) {
+                Log.i(TAG, "Migration handshake: migratingFromNodeId=" + migratingFrom);
             } else {
                 Log.w(TAG, "Migration requested but no previous peer nodeId stored");
             }
         }
 
-        return b.build();
+        return ConnectHandshake.build(new ConnectHandshake.LocalIdentity(
+                wearable.getLocalNodeId(),
+                Build.MODEL, // TODO: Should be hostname, but seems to be irrelevant
+                androidId,
+                wearable.getClockworkNodePreferences().getNetworkId(),
+                (config.type == TYPE_NETWORK && config.role == ROLE_CLIENT)
+                        ? config.packageName : null,
+                config.migrating,
+                migratingFrom));
     }
 
     @Override
@@ -157,22 +154,26 @@ public class MessageHandler extends ServerMessageListener {
             return;
         }
 
-        if (config.role == ROLE_SERVER) {
+        if (connect.peerAndroidId != null) {
+            wearable.getClockworkNodePreferences().setPeerAndroidId(connect.peerAndroidId);
+        }
+
+        if (config.role == ROLE_SERVER
+                && (config.type == TYPE_BLUETOOTH_RFCOMM || config.type == TYPE_BLE))  {
             String storedPeerId = wearable.getClockworkNodePreferences().getPeerNodeId();
             if (storedPeerId == null) {
                 Log.i(TAG, "onConnect: first pairing, storing peerNodeId=" + peerNodeId);
                 wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
             } else if (!storedPeerId.equals(peerNodeId) && !config.migrating) {
-//                Log.w(TAG, "onConnect: mismatched peerNodeId: stored=" + storedPeerId +
-//                        " incoming=" + peerNodeId + " — rejecting");
-//                try {
-//                    getConnection().close();
-//                } catch (IOException ignored) {}
-//                return;
-                Log.i(TAG, "onConnect: peerNodeId changed stored=" + storedPeerId
-                        + " incoming=" + peerNodeId + " — accepting re-pair, updating");
-                wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
+                Log.w(TAG, "onConnect: mismatched peerNodeId: stored=" + storedPeerId
+                        + " incoming=" + peerNodeId + " - rejecting");
+                try {
+                    getConnection().close();
+                } catch (IOException ignored) {}
+                return;
             }
+        } else if (config.role == ROLE_SERVER) {
+            wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
         }
 
         if (!wearable.getActiveConnections().containsKey(connect.id)) {
@@ -191,13 +192,28 @@ public class MessageHandler extends ServerMessageListener {
             String fallbackName = (peerNodeId != null && !peerNodeId.isEmpty()) ? peerNodeId : "Wear device";
             connect = new Connect.Builder().id(fallbackId).name(fallbackName).build();
         }
-        wearable.onDisconnectReceived(getConnection(), connect);
+        // wearable.onDisconnectReceived(getConnection(), connect);
         super.onDisconnected();
     }
 
     @Override
     public void onSetAsset(SetAsset setAsset) {
         Log.d(TAG, "onSetAsset: " + setAsset);
+		if (setAsset.data == null && setAsset.digest != null) {
+			String fileName = WearableConnection.calculateDigest(
+					new RootMessage.Builder()
+							.setAsset(setAsset)
+							.hasAsset(true)
+							.build()
+							.encode());
+			File staleTemp = wearable.createAssetReceiveTempFile(fileName);
+			if (staleTemp.exists()) {
+				Log.d(TAG, "onSetAsset: discarding stale partial transfer for " + fileName);
+				if (!staleTemp.delete()) {
+					Log.w(TAG, "onSetAsset: failed to delete stale temp file " + staleTemp);
+				}
+			}
+		}
         Asset asset;
         if (setAsset.data != null) {
             asset = Asset.createFromBytes(setAsset.data.toByteArray());
@@ -308,7 +324,7 @@ public class MessageHandler extends ServerMessageListener {
             byte[] responseData = rpcRequest.rawData != null
                     ? rpcRequest.rawData.toByteArray() : null;
             boolean consumed = wearable.getRpcHelper()
-                    .deliverRpcResponse(rpcRequest.senderRequestId, responseData);
+                    .deliverRpcResponse(peerNodeId, rpcRequest.senderRequestId, responseData);
             if (consumed) return;
         }
 

@@ -32,7 +32,7 @@ public class RpcHelper {
     private final SharedPreferences preferences;
     private final Context context;
 
-    private final Map<Integer, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
     private final Map<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -40,6 +40,10 @@ public class RpcHelper {
     public RpcHelper(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences("wearable.rpc_service.settings", 0);
+    }
+
+    private static String rpcListenerKey(String peerNodeId, int requestId) {
+        return peerNodeId + ":" + requestId;
     }
 
     private String getRpcConnectionId(String packageName, String targetNodeId, String path) {
@@ -91,12 +95,13 @@ public class RpcHelper {
 //            }
 //        }, timeoutMs);
 //    }
-    public void addResponseListener(int messageId, long timeoutMs,
+    public void addResponseListener(String peerNodeId, int requestId, long timeoutMs,
                                     RpcResponseCallback onResponse,
                                     RpcTimeoutCallback onTimeout) {
-        rpcListeners.put(messageId, new PendingRpcListener(messageId, onResponse, onTimeout));
+        String key = rpcListenerKey(peerNodeId, requestId);
+        rpcListeners.put(key, new PendingRpcListener(requestId, onResponse, onTimeout));
         mainHandler.postDelayed(() -> {
-            if (rpcListeners.remove(messageId) != null) {
+            if (rpcListeners.remove(key) != null) {
                 onTimeout.onTimeout();
             }
         }, timeoutMs);
@@ -115,8 +120,8 @@ public class RpcHelper {
 //        return true;
 //    }
 
-    public boolean deliverRpcResponse(int senderRequestId, @Nullable byte[] data) {
-        PendingRpcListener listener = rpcListeners.remove(senderRequestId);
+    public boolean deliverRpcResponse(String peerNodeId, int senderRequestId, @Nullable byte[] data) {
+        PendingRpcListener listener = rpcListeners.remove(rpcListenerKey(peerNodeId, senderRequestId));
         if (listener == null) return false;
         listener.callback.onResponse(data);
         return true;
