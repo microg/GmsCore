@@ -78,6 +78,17 @@ internal data class ReceivedSms(
     val sender: String
 )
 
+internal fun assembleReceivedSms(
+    bodyParts: List<String?>,
+    sender: String?
+): ReceivedSms? {
+    if (bodyParts.isEmpty() || bodyParts.any { it == null }) return null
+    return ReceivedSms(
+        body = bodyParts.joinToString(separator = "") { it.orEmpty() },
+        sender = sender.orEmpty()
+    )
+}
+
 private data class PendingMatch(
     val expectedBody: String,
     val continuation: CancellableContinuation<ReceivedSms?>
@@ -138,28 +149,24 @@ internal class MtSmsInbox(
     }
 
     private fun onMessagesReceived(messages: Array<SmsMessage>) {
-        val receivedMessages = messages.mapNotNull { message ->
-            val body = message.messageBody ?: return@mapNotNull null
-            ReceivedSms(
-                body = body,
-                sender = message.originatingAddress ?: ""
-            )
-        }
-        if (receivedMessages.isEmpty()) return
+        // Android provides the ordered parts of one logical SMS in each broadcast;
+        // valid multipart messages share a sender, so keep the first available address.
+        val receivedMessage = assembleReceivedSms(
+            bodyParts = messages.map { it.messageBody },
+            sender = messages.firstNotNullOfOrNull { it.originatingAddress }
+        ) ?: return
 
         synchronized(lock) {
-            bufferedMessages += receivedMessages
-            for (receivedMessage in receivedMessages) {
-                val iterator = pendingMatches.iterator()
-                while (iterator.hasNext()) {
-                    val pendingMatch = iterator.next()
-                    if (!receivedMessage.body.contains(pendingMatch.expectedBody)) continue
+            bufferedMessages += receivedMessage
+            val iterator = pendingMatches.iterator()
+            while (iterator.hasNext()) {
+                val pendingMatch = iterator.next()
+                if (!receivedMessage.body.contains(pendingMatch.expectedBody)) continue
 
-                    iterator.remove()
-                    Log.d(TAG, "Matching MT SMS received from ${receivedMessage.sender}")
-                    if (pendingMatch.continuation.isActive) {
-                        pendingMatch.continuation.resume(receivedMessage)
-                    }
+                iterator.remove()
+                Log.d(TAG, "Matching MT SMS received from ${receivedMessage.sender}")
+                if (pendingMatch.continuation.isActive) {
+                    pendingMatch.continuation.resume(receivedMessage)
                 }
             }
         }
