@@ -53,6 +53,7 @@ suspend operator fun RequestHeader.Companion.invoke(
     val authManager = if (includeClientAuth) context.authManager else null
     val clientAuth = if (includeClientAuth) {
         val (signature, timestamp) = authManager!!.signIidToken(buildContext.iidToken)
+        org.microg.gms.constellation.core.requireNonEmptyClientSignature(signature)
         org.microg.gms.constellation.core.proto.ClientAuth(
             device_id = DeviceID(context, buildContext.iidToken),
             signature = signature.toByteString(),

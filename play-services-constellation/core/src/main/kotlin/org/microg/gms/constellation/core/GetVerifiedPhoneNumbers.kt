@@ -46,6 +46,7 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     require(iidToken.isNotEmpty()) { "Instance ID token is empty" }
     val iidTokenAuth = if (VerifyPhoneNumberApiPhenotypes.ENABLE_CLIENT_SIGNATURE) {
         val (signatureBytes, signTimestamp) = signIidToken(iidToken)
+        requireNonEmptyClientSignature(signatureBytes)
         IIDTokenAuth(
             iid_token = iidToken,
             client_sign = signatureBytes.toByteString(),

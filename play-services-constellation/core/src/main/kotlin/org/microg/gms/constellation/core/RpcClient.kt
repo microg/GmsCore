@@ -31,7 +31,10 @@ object RpcClient {
     }
 
     private val client: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .callTimeout(60, TimeUnit.SECONDS)
         .addInterceptor { chain ->
             val originalRequest = chain.request()
             val builder = originalRequest.newBuilder()

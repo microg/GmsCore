@@ -50,6 +50,7 @@ internal suspend fun handleGetIidToken(
         require(iidToken.isNotEmpty()) { "Instance ID token is empty" }
         val fid = credentialProvider.getFid()
         val (signature, timestamp) = credentialProvider.signIidToken(iidToken)
+        requireNonEmptyClientSignature(signature)
 
         callbacks.onIidTokenGenerated(
             Status.SUCCESS,

@@ -230,6 +230,7 @@ private suspend fun handleVerifyPhoneNumberRequest(
         Log.e(TAG, "verifyPhoneNumber failed", e)
         when {
             e is PhoneNumberVerificationDisabledException -> Status(5000)
+            e is NoConsentException -> Status(5001)
             readCallbackMode != ReadCallbackMode.NONE -> Status.INTERNAL_ERROR
             e is GrpcException -> handleRpcError(e)
             else -> Status.INTERNAL_ERROR
@@ -269,6 +270,7 @@ private suspend fun handleVerifyPhoneNumberRequest(
 }
 
 private class PhoneNumberVerificationDisabledException : Exception("Phone number verification is disabled")
+internal class NoConsentException : Exception("RCS consent is required")
 
 private fun handleRpcError(error: GrpcException): Status {
     val statusCode = when (error.grpcStatus) {
@@ -281,6 +283,19 @@ private fun handleRpcError(error: GrpcException): Status {
         else -> 5002
     }
     return Status(statusCode, error.message)
+}
+
+internal fun hasRequiredVerificationConsent(
+    response: GetConsentResponse,
+    asterismClient: AsterismClient
+): Boolean {
+    response.gaia_consents.firstOrNull {
+        it.asterism_client == asterismClient
+    }?.let { matchingGaia ->
+        return matchingGaia.consent == Consent.CONSENTED
+    }
+    return asterismClient == AsterismClient.RCS &&
+            response.rcs_consent?.consent == Consent.CONSENTED
 }
 
 private suspend fun runVerificationFlow(
@@ -308,37 +323,8 @@ private suspend fun runVerificationFlow(
             sessionId,
         )
 
-        val consented = consent.rcs_consent?.consent == Consent.CONSENTED ||
-                consent.gaia_consents.any {
-                    it.asterism_client == asterismClient && it.consent == Consent.CONSENTED
-                }
-
-        if (!consented) {
-            Log.e(TAG, "Consent has not been set. Auto-setting consent.")
-            val consentType = parseConsentVersion(request.extras)
-            val semantics = resolveRcsAutoConsentRequestSemantics(consentType)
-            val setRequest = SetConsentRequest(
-                header_ = RequestHeader(
-                    context,
-                    sessionId,
-                    buildContext,
-                    "setConsent",
-                    semantics.triggerType
-                ),
-                asterism_client = asterismClient,
-                rcs_consent = RcsConsent(
-                    consent = Consent.CONSENTED,
-                    consent_version = semantics.rcsConsentVersion
-                ),
-                consent_version = semantics.requestConsentVersion,
-                api_params = Param.getList(request.extras)
-            )
-            try {
-                RpcClient.phoneDeviceVerificationClient.SetConsent().execute(setRequest)
-                Log.i(TAG, "Auto-consented for $asterismClient")
-            } catch (e: Exception) {
-                Log.w(TAG, "Auto-consent failed", e)
-            }
+        if (!hasRequiredVerificationConsent(consent, asterismClient)) {
+            throw NoConsentException()
         }
     }
 

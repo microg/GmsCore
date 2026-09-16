@@ -47,13 +47,18 @@ suspend fun MTChallenge.verify(
     )
 }
 
+internal fun effectiveMtSmsInboxSubIds(subIds: Iterable<Int>): List<Int> {
+    val specific = subIds.filter { it >= 0 }.distinct()
+    return specific + listOf(-1)
+}
+
 internal object MtSmsInboxRegistry {
     private val inboxes = ConcurrentHashMap<Int, MtSmsInbox>()
 
     fun prepare(context: Context, subIds: Iterable<Int>) {
         dispose()
 
-        val effectiveSubIds = subIds.distinct().ifEmpty { listOf(-1) }
+        val effectiveSubIds = effectiveMtSmsInboxSubIds(subIds)
         for (subId in effectiveSubIds) {
             inboxes[subId] = MtSmsInbox(context.applicationContext, subId)
         }

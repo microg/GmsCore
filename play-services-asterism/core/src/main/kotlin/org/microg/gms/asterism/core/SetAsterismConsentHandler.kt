@@ -47,6 +47,16 @@ import java.util.UUID
 
 private const val TAG = "SetAsterismConsent"
 
+internal fun isRcsConsentFastPath(
+    asterismClient: AsterismClient,
+    consentVersion: ConsentVersion?
+): Boolean = asterismClient == AsterismClient.RCS && consentVersion in listOf(
+    ConsentVersion.RCS_CONSENT,
+    ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
+    ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX,
+    ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS
+)
+
 suspend fun handleSetAsterismConsent(
     context: Context,
     callbacks: IAsterismCallbacks,
@@ -78,11 +88,9 @@ suspend fun handleSetAsterismConsent(
             ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
             ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX
         )
-        val hasRcsFastPath = request.asterismClient == AsterismClient.RCS &&
-                request.consentVersion in listOf(
-            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
-            ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX,
-            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS
+        val hasRcsFastPath = isRcsConsentFastPath(
+            request.asterismClient,
+            request.consentVersion
         )
 
         if (request.asterismClient != AsterismClient.RCS && isRcsSpecificConsentVersion) {
