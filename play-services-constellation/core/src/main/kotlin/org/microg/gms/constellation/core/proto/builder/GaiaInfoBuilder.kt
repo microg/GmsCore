@@ -27,7 +27,7 @@ suspend operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals
 
             for (account in accounts) {
                 var id = accountManager.getUserData(account, "GoogleUserId")
-                if (id == "") {
+                if (id.isNullOrEmpty()) {
                     try {
                         val future = accountManager.getAuthToken(
                             account,

@@ -109,8 +109,8 @@ class AuthManager private constructor(context: Context) {
             signature.initSign(kp.private)
             signature.update(content.toByteArray(StandardCharsets.UTF_8))
             signature.sign()
-        } catch (_: Exception) {
-            ByteArray(0)
+        } catch (e: Exception) {
+            throw IllegalStateException("Failed to sign Constellation authentication payload", e)
         }
     }
 
