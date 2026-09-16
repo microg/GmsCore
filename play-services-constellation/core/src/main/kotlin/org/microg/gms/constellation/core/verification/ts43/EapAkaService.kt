@@ -34,7 +34,7 @@ class EapAkaService(private val telephonyManager: TelephonyManager) {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun performSimAkaAuth(eapRelayBase64: String, imsi: String, mccMnc: String): String? {
+    fun performSimAkaAuth(eapRelayBase64: String, identity: String): String? {
         val eapPacket = Base64.decode(eapRelayBase64, Base64.DEFAULT)
         if (eapPacket.size < 12) return null
 
@@ -101,7 +101,6 @@ class EapAkaService(private val telephonyManager: TelephonyManager) {
                 val ck = extractTlv(1 + res.size + 1, iccBytes) ?: return null
                 val ik = extractTlv(1 + res.size + 1 + ck.size + 1, iccBytes) ?: return null
 
-                val identity = buildEapId(mccMnc, imsi)
                 val identityBytes = identity.toByteArray(StandardCharsets.UTF_8)
                 val keys = Fips186Prf.deriveKeys(identityBytes, ik, ck)
 
@@ -127,19 +126,8 @@ class EapAkaService(private val telephonyManager: TelephonyManager) {
         }
     }
 
-    fun buildEapId(mccMnc: String, imsi: String, realm: String? = null): String {
-        val mcc = mccMnc.substring(0, 3)
-        var mnc = mccMnc.substring(3)
-        if (mnc.length == 2) mnc = "0$mnc" // Zero-pad 2-digit MNCs
-        val defaultRealm = "nai.epc.mnc$mnc.mcc$mcc.3gppnetwork.org"
-        val resolvedRealm = when {
-            realm.isNullOrBlank() -> defaultRealm
-            realm == "nai.epc" -> defaultRealm
-            realm.contains(".mnc") && realm.contains(".mcc") && realm.contains("3gppnetwork.org") -> realm
-            else -> realm
-        }
-        return "0$imsi@$resolvedRealm"
-    }
+    fun buildEapId(mccMnc: String, imsi: String, realm: String? = null): String =
+        buildEapIdentity(mccMnc, imsi, realm)
 
     private fun extractTlv(index: Int, data: ByteArray): ByteArray? {
         if (index >= data.size) return null
@@ -208,4 +196,18 @@ class EapAkaService(private val telephonyManager: TelephonyManager) {
     } catch (_: Exception) {
         null
     }
+}
+
+internal fun buildEapIdentity(mccMnc: String, imsi: String, realm: String? = null): String {
+    val mcc = mccMnc.substring(0, 3)
+    var mnc = mccMnc.substring(3)
+    if (mnc.length == 2) mnc = "0$mnc" // Zero-pad 2-digit MNCs
+    val defaultRealm = "nai.epc.mnc$mnc.mcc$mcc.3gppnetwork.org"
+    val resolvedRealm = when {
+        realm.isNullOrBlank() -> defaultRealm
+        realm == "nai.epc" -> defaultRealm
+        realm.contains(".mnc") && realm.contains(".mcc") && realm.contains("3gppnetwork.org") -> realm
+        else -> realm
+    }
+    return "0$imsi@$resolvedRealm"
 }

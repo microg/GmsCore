@@ -16,10 +16,12 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.RpcClient
 import org.microg.gms.constellation.core.authManager
+import org.microg.gms.constellation.core.proto.AsterismClient
 import org.microg.gms.constellation.core.proto.Consent
 import org.microg.gms.constellation.core.proto.ConsentVersion
 import org.microg.gms.constellation.core.proto.DeviceID
 import org.microg.gms.constellation.core.proto.GetConsentRequest
+import org.microg.gms.constellation.core.proto.GetConsentResponse
 import org.microg.gms.constellation.core.proto.RequestHeader
 import org.microg.gms.constellation.core.proto.RequestTrigger
 import org.microg.gms.constellation.core.proto.builder.buildRequestContext
@@ -51,14 +53,10 @@ suspend fun handleGetAsterismConsent(
             )
         )
 
-        val gaiaConsent = response.gaia_consents.find {
-            it.asterism_client == request.asterismClient
-        }
-        val (consentValue, consentVersion) = if (gaiaConsent != null) {
-            gaiaConsent.consent to gaiaConsent.consent_version
-        } else {
-            Consent.NO_CONSENT to ConsentVersion.CONSENT_VERSION_UNSPECIFIED
-        }
+        val (consentValue, consentVersion) = resolveAsterismConsent(
+            response,
+            request.asterismClient
+        )
 
         callbacks.onConsentFetched(
             Status.SUCCESS,
@@ -83,6 +81,25 @@ suspend fun handleGetAsterismConsent(
             )
         )
     }
+}
+
+internal fun resolveAsterismConsent(
+    response: GetConsentResponse,
+    asterismClient: AsterismClient
+): Pair<Consent, ConsentVersion> {
+    response.gaia_consents.firstOrNull {
+        it.asterism_client == asterismClient
+    }?.let {
+        return it.consent to it.consent_version
+    }
+
+    if (asterismClient == AsterismClient.RCS) {
+        response.rcs_consent?.takeIf { it.consent != Consent.CONSENT_UNKNOWN }?.let {
+            return it.consent to it.consent_version
+        }
+    }
+
+    return Consent.NO_CONSENT to ConsentVersion.CONSENT_VERSION_UNSPECIFIED
 }
 
 suspend fun handleGetIsPnvrConstellationDevice(

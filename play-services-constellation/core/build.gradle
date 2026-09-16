@@ -57,6 +57,7 @@ dependencies {
     api project(':play-services-constellation')
 
     implementation project(':play-services-base-core')
+    implementation project(':play-services-api')
     implementation project(':play-services-iid')
     implementation project(':play-services-auth-base')
 

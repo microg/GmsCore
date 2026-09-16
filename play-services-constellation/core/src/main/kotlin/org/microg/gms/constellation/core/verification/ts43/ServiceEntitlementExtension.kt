@@ -25,6 +25,9 @@ fun ServiceEntitlementRequest.builder(
         null
     },
     terminalId = telephonyManager.imei,
+    terminalVendor = Build.MANUFACTURER.orEmpty(),
+    terminalModel = Build.MODEL.orEmpty(),
+    terminalSoftwareVersion = Build.VERSION.RELEASE.orEmpty(),
     groupIdLevel1 = runCatching { telephonyManager.groupIdLevel1 }.getOrNull(),
     eapId = eapId,
     appIds = appIds,
@@ -34,9 +37,9 @@ fun ServiceEntitlementRequest.builder(
 fun ServiceEntitlementRequest.userAgent(context: Context): String {
     val packageVersion =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
-    val vendor = terminal_vendor.take(4)
-    val model = terminal_model.take(10)
-    val swVersion = terminal_software_version.take(20)
+    val vendor = resolveTerminalValue(terminal_vendor, Build.MANUFACTURER.orEmpty(), 4)
+    val model = resolveTerminalValue(terminal_model, Build.MODEL.orEmpty(), 10)
+    val swVersion = resolveTerminalValue(terminal_software_version, Build.VERSION.RELEASE.orEmpty(), 20)
     return "PRD-TS43 term-$vendor/$model /$packageVersion OS-Android/$swVersion"
 }
 
@@ -52,6 +55,9 @@ fun OdsaOperation.builder(
         null
     },
     terminalId = telephonyManager.imei,
+    terminalVendor = Build.MANUFACTURER.orEmpty(),
+    terminalModel = Build.MODEL.orEmpty(),
+    terminalSoftwareVersion = Build.VERSION.RELEASE.orEmpty(),
     groupIdLevel1 = runCatching { telephonyManager.groupIdLevel1 }.getOrNull(),
     eapId = "", // Not needed for ODSA
     appIds = appIds,
@@ -63,6 +69,9 @@ class ServiceEntitlementBuilder(
     private val imsi: String,
     private val iccid: String?,
     private val terminalId: String?,
+    private val terminalVendor: String,
+    private val terminalModel: String,
+    private val terminalSoftwareVersion: String,
     private val groupIdLevel1: String?,
     private val eapId: String,
     private val appIds: List<String>,
@@ -73,9 +82,9 @@ class ServiceEntitlementBuilder(
         val baseUrl = entitlementUrl.toHttpUrl()
 
         // GMS truncates these fields: vendor (4), model (10), sw_version (20)
-        val vendor = req.terminal_vendor.take(4)
-        val model = req.terminal_model.take(10)
-        val swVersion = req.terminal_software_version.take(20)
+        val vendor = resolveTerminalValue(req.terminal_vendor, terminalVendor, 4)
+        val model = resolveTerminalValue(req.terminal_model, terminalModel, 10)
+        val swVersion = resolveTerminalValue(req.terminal_software_version, terminalSoftwareVersion, 20)
 
         return baseUrl.newBuilder().apply {
             when {
@@ -92,7 +101,8 @@ class ServiceEntitlementBuilder(
                     addQueryParameter("EAP_ID", eapId)
                 }
             }
-            addQueryParameter("terminal_id", terminalId ?: req.terminal_id)
+            val resolvedTerminalId = req.terminal_id.takeIf { it.isNotEmpty() } ?: terminalId.orEmpty()
+            addQueryParameter("terminal_id", resolvedTerminalId)
             if (req.gid1.isNotEmpty()) {
                 addQueryParameter("GID1", req.gid1)
             } else if ((req.entitlement_version.toBigDecimalOrNull()?.toInt() ?: 0) >= 12) {
@@ -202,4 +212,11 @@ class ServiceEntitlementBuilder(
             }
         }.build()
     }
+}
+
+internal fun resolveTerminalValue(requestValue: String, deviceFallback: String, maxLength: Int): String {
+    return requestValue
+        .takeIf { it.isNotEmpty() }
+        ?.take(maxLength)
+        ?: deviceFallback.take(maxLength)
 }

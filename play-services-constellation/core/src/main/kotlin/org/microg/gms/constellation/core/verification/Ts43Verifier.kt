@@ -298,7 +298,7 @@ private fun buildOdsaRequestPayload(
                 requestType = Ts43ChallengeResponseError.RequestType.TS43_REQUEST_TYPE_AUTH_API
             )
 
-        val akaResponse = eapAkaService.performSimAkaAuth(eapRelayPacket, imsi, mccMnc)
+        val akaResponse = eapAkaService.performSimAkaAuth(eapRelayPacket, eapId)
             ?: return null
 
         val postBody = JSONObject().put("eap-relay-packet", akaResponse).toString()

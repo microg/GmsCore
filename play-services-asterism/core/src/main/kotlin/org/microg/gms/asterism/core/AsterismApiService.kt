@@ -19,11 +19,17 @@ import kotlinx.coroutines.launch
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.constellation.core.RpcClient
 
 private const val TAG = "AsterismApiService"
 
 class AsterismApiService : BaseService(TAG, GmsService.ASTERISM) {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    override fun onCreate() {
+        super.onCreate()
+        RpcClient.initialize(this)
+    }
 
     override fun handleServiceRequest(
         callback: IGmsCallbacks?,

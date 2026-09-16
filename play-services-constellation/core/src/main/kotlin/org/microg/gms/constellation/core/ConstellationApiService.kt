@@ -28,6 +28,11 @@ private const val TAG = "C11NApiService"
 class ConstellationApiService : BaseService(TAG, GmsService.CONSTELLATION) {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    override fun onCreate() {
+        super.onCreate()
+        RpcClient.initialize(this)
+    }
+
     override fun handleServiceRequest(
         callback: IGmsCallbacks?,
         request: GetServiceRequest?,

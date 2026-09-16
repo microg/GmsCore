@@ -22,6 +22,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 
     compileOptions {
@@ -31,6 +32,10 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -43,4 +48,6 @@ dependencies {
 
     implementation project(':play-services-base-core')
     implementation project(':play-services-constellation-core')
+
+    testImplementation 'junit:junit:4.13.2'
 }
