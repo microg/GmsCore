@@ -24,9 +24,9 @@ public class DeleteDataItemsResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    private int status;
+    public int status;
     @SafeParceled(3)
-    private int count;
+    public int count;
 
     private DeleteDataItemsResponse() {
     }

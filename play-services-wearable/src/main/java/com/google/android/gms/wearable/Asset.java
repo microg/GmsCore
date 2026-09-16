@@ -64,7 +64,10 @@ public class Asset extends AutoSafeParcelable {
      * Creates an Asset using a byte array.
      */
     public static Asset createFromBytes(byte[] assetData) {
-        return null;
+        if (assetData == null) {
+            throw new IllegalArgumentException("Asset data cannot be null");
+        }
+        return new Asset(assetData, null, null, null);
     }
 
     /**
@@ -93,7 +96,10 @@ public class Asset extends AutoSafeParcelable {
      * Uri.
      */
     public static Asset createFromUri(Uri uri) {
-        return null;
+        if (uri == null) {
+            throw new IllegalArgumentException("Asset uri cannot be null");
+        }
+        return new Asset(null, null, null, uri);
     }
 
     /**
