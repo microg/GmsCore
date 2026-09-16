@@ -96,8 +96,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
                 hasAccount = try {
-                    context.getSystemService(AccountManager::class.java)
-                        ?.getAccountsByType("com.google")?.isNotEmpty() ?: false
+                    AccountManager.get(context).getAccountsByType("com.google").isNotEmpty()
                 } catch (e: SecurityException) {
                     false
                 },
