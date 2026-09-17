@@ -420,7 +420,6 @@ class ModuleDownloadActivity : Activity() {
             )
             startActivity(
                 ModuleDownloadRegistry.createExternalDownloadChooserIntent(
-                    this,
                     module.downloadUrl,
                     getString(R.string.chimera_module_choose_download_app),
                     apiFeatureRequest,
