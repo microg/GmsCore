@@ -47,15 +47,25 @@ import java.util.UUID
 
 private const val TAG = "SetAsterismConsent"
 
-internal fun isRcsConsentFastPath(
-    asterismClient: AsterismClient,
-    consentVersion: ConsentVersion?
-): Boolean = asterismClient == AsterismClient.RCS && consentVersion in listOf(
+private val RCS_FAST_PATH_CONSENT_VERSIONS = setOf(
     ConsentVersion.RCS_CONSENT,
     ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
     ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX,
     ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS
 )
+
+private val RCS_ONLY_CONSENT_VERSIONS =
+    RCS_FAST_PATH_CONSENT_VERSIONS + ConsentVersion.RCS_SAMSUNG_UNFREEZE
+
+internal fun isRcsSpecificConsentVersion(
+    consentVersion: ConsentVersion?
+): Boolean = consentVersion in RCS_ONLY_CONSENT_VERSIONS
+
+internal fun isRcsConsentFastPath(
+    asterismClient: AsterismClient,
+    consentVersion: ConsentVersion?
+): Boolean = asterismClient == AsterismClient.RCS &&
+        consentVersion in RCS_FAST_PATH_CONSENT_VERSIONS
 
 suspend fun handleSetAsterismConsent(
     context: Context,
@@ -83,17 +93,13 @@ suspend fun handleSetAsterismConsent(
             return@withContext
         }
 
-        val isRcsSpecificConsentVersion = request.consentVersion in listOf(
-            ConsentVersion.RCS_CONSENT,
-            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
-            ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX
-        )
+        val hasRcsSpecificConsentVersion = isRcsSpecificConsentVersion(request.consentVersion)
         val hasRcsFastPath = isRcsConsentFastPath(
             request.asterismClient,
             request.consentVersion
         )
 
-        if (request.asterismClient != AsterismClient.RCS && isRcsSpecificConsentVersion) {
+        if (request.asterismClient != AsterismClient.RCS && hasRcsSpecificConsentVersion) {
             Log.e(TAG, "RCS-only consent version cannot be used with non-RCS client")
             callbacks.onConsentRegistered(
                 Status.INTERNAL_ERROR,
