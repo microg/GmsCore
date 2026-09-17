@@ -278,20 +278,34 @@ object ModuleDownloadRegistry {
     /** Builds a system chooser that reports an actual target selection when the platform supports it. */
     @JvmStatic
     fun createExternalDownloadChooserIntent(
+        context: Context,
         downloadUrl: String,
         title: CharSequence?,
         apiFeatureRequest: ApiFeatureRequest?,
         selectionCallback: IntentSender?,
     ): Intent {
         val downloadIntent = createExternalDownloadIntent(downloadUrl, apiFeatureRequest)
-        return if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 &&
-            selectionCallback != null
-        ) {
+        val resolveInfos = context.packageManager.queryIntentActivities(
+            downloadIntent,
+            if (Build.VERSION.SDK_INT >= 23) PackageManager.MATCH_ALL else 0
+        )
+        val components = LinkedHashSet<ComponentName>()
+        for (resolveInfo in resolveInfos) {
+            val activityInfo = resolveInfo.activityInfo
+            components.add(ComponentName(activityInfo.packageName, activityInfo.name))
+        }
+        val chooserIntent = if (Build.VERSION.SDK_INT >= 22 && selectionCallback != null) {
             Intent.createChooser(downloadIntent, title, selectionCallback)
         } else {
             Intent.createChooser(downloadIntent, title)
         }
+        if (Build.VERSION.SDK_INT >= 24) {
+            chooserIntent.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, components.toTypedArray())
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                components.map { Intent(downloadIntent).setComponent(it) }.toTypedArray()
+            )
+        }
+        return chooserIntent
     }
 
     private fun splitFeatureNames(requestedFeatureNames: String?): List<String> {
