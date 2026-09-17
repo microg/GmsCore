@@ -8,7 +8,6 @@ package com.google.android.gms.droidguard;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -67,18 +66,18 @@ public class DroidGuardChimeraService extends TracingIntentService {
     private final void c(byte[] data) {
         PingData ping = null;
         if (data != null) {
-            Log.d("GmsGuardChimera", "c(" + Base64.encodeToString(data, Base64.NO_WRAP) + ")", new RuntimeException().fillInStackTrace());
+            Log.d("GmsGuardChimera", "Processing ping payload");
             try {
                 ping = PingData.ADAPTER.decode(data);
             } catch (Exception e) {
                 Log.w("GmsGuardChimera", e);
             }
         } else {
-            Log.d("GmsGuardChimera", "c(null)", new RuntimeException().fillInStackTrace());
+            Log.d("GmsGuardChimera", "Processing ping without payload");
         }
         try {
             byte[] bytes = b.createPingHandle(getPackageName(), "full", b(""), ping).run(Collections.emptyMap());
-            Log.d("GmsGuardChimera", "c.bytes = " + Base64.encodeToString(bytes, Base64.NO_WRAP));
+            Log.d("GmsGuardChimera", "Ping handle generated");
             Request fastRequest = b.createRequest("fast", getPackageName(), null, bytes);
             b.fetchFromServer("fast", fastRequest);
         } catch (Exception e) {

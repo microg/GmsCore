@@ -41,13 +41,13 @@ public class GuardCallback {
     public final String b() {
         try {
             long androidId = SettingsContract.INSTANCE.getSettings(context, SettingsContract.CheckIn.INSTANCE.getContentUri(context), new String[]{SettingsContract.CheckIn.ANDROID_ID}, cursor -> cursor.getLong(0));
-            Log.d(TAG, "b[getAndroidId]() = " + androidId);
+            Log.d(TAG, "b[getAndroidId]() succeeded");
             return String.valueOf(androidId);
         } catch (Throwable e) {
             Log.w(TAG, "Failed to get Android ID, fallback to random", e);
         }
         long androidId = (long) (Math.random() * Long.MAX_VALUE);
-        Log.d(TAG, "b[getAndroidId]() = " + androidId + " (random)");
+        Log.d(TAG, "b[getAndroidId]() using random fallback");
         return String.valueOf(androidId);
     }
 
