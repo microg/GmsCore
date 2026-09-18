@@ -69,7 +69,7 @@
     <string name="prefcat_exposure_rpis_histogram_title">已收集 <xliff:g example="230">%1$d</xliff:g> 个标识符</string>
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>，风险评分：<xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
-    <string name="pref_exposure_app_last_report_summary_encounters_prefix">已报告<xliff:g example="3">%1$d</xliff:g>暴露遭遇：</string>
-    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> 联系<xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
-    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">处理<xliff:g example="121031">%1$d</xliff:g>诊断密钥。</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">已报告 <xliff:g example="3">%1$d</xliff:g> 起暴露遭遇：</string>
+    <string name="pref_exposure_app_api_usage_summary_line">对 <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g> 的 <xliff:g example="12">%1$d</xliff:g> 次调用</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">处理了 <xliff:g example="121031">%1$d</xliff:g> 个诊断密钥。</string>
 </resources>
