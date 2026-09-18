@@ -23,6 +23,8 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.util.Log;
 
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -39,7 +41,11 @@ public class ConfigurationProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         selection = Uri.decode(uri.getLastPathSegment());
         if (selection == null) return null;
-        return new MatrixCursor(new String[]{"key", "value"});
+        MatrixCursor cursor = new MatrixCursor(new String[]{"key", "value"});
+        for (Map.Entry<String, String> flag : PhenotypeServiceKt.providerFlagValues(selection).entrySet()) {
+            cursor.addRow(new Object[]{flag.getKey(), flag.getValue()});
+        }
+        return cursor;
     }
 
     @Nullable

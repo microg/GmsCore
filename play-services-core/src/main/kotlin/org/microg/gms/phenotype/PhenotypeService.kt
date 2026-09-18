@@ -177,6 +177,14 @@ internal val CONFIGURATION_OPTIONS = mapOf(
     ),
 )
 
+/** Values exposed through the legacy ConfigurationProvider reader. */
+internal fun providerFlagValues(namespace: String?): Map<String, String> {
+    if (namespace != "com.google.android.ims.library") return emptyMap()
+    return CONFIGURATION_OPTIONS[namespace].orEmpty()
+        .filter { it.dataType == Flag.DATA_TYPE_BOOL }
+        .associate { it.name to it.bool.toString() }
+}
+
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
         Log.d(TAG, "register($packageName, $version, $p3, $p4)")
