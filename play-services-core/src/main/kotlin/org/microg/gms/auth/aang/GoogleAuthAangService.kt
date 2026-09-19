@@ -26,6 +26,7 @@ import com.google.android.gms.auth.aang.HasCapabilitiesRequest
 import com.google.android.gms.auth.aang.Oauth2TokenMetadata
 import com.google.android.gms.auth.aang.internal.IGoogleAuthAangCallbacks
 import com.google.android.gms.auth.aang.internal.IGoogleAuthAangService
+import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
@@ -47,8 +48,6 @@ private const val TOKEN_DATA = "TokenData"
 
 private val FEATURES = arrayOf(
     Feature("google_auth_api", 1),
-    Feature("sync_account_state_api", 1),
-    Feature("embedded_reauth", 1),
 )
 
 class GoogleAuthAangService : BaseService(TAG, GmsService.GOOGLE_AUTH_AANG) {
@@ -92,7 +91,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
         } else {
             emptyList()
         }
-        Log.d(TAG, "getAccounts($accountType, includeRestricted=${request?.includeRestrictedAccounts == true}) = ${accounts.size}")
+        Log.d(TAG, "getAccounts(includeRestricted=${request?.includeRestrictedAccounts == true}) = ${accounts.size}")
         callback?.onGetAccounts(Status.SUCCESS, GetAccountsResponse().apply {
             this.accounts = accounts
             this.restrictedAccounts = restrictedAccounts
@@ -115,7 +114,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
         val packageName = try {
             PackageUtils.getAndCheckCallingPackage(context, safeRequest.packageName)
         } catch (e: SecurityException) {
-            Log.w(TAG, "getToken rejected caller package", e)
+            Log.w(TAG, "getToken rejected caller package")
             return callback.sendTokenError(CommonStatusCodes.DEVELOPER_ERROR, e.message)
         } ?: return callback.sendTokenError(CommonStatusCodes.DEVELOPER_ERROR, "Missing caller package")
 
@@ -137,7 +136,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
         if (!token.isNullOrBlank()) {
             @Suppress("DEPRECATION")
             val tokenData = result.getBundle(TOKEN_DETAILS)?.getParcelable(TOKEN_DATA) as? TokenData
-            Log.d(TAG, "getToken(${account.name}, $scope, $packageName) = success")
+            Log.d(TAG, "getToken = success")
             callback?.onGetToken(Status.SUCCESS, GetTokenResponse().apply {
                 this.token = token
                 oauth2TokenMetadata = tokenData?.let {
@@ -153,7 +152,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
         val error = result.getString(AuthManagerServiceImpl.KEY_ERROR)
         @Suppress("DEPRECATION")
         val recoveryIntent = result.getParcelable(AuthManagerServiceImpl.KEY_USER_RECOVERY_INTENT) as? Intent
-        Log.w(TAG, "getToken(${account.name}, $scope, $packageName) failed: $error")
+        Log.w(TAG, "getToken failed")
         when (error) {
             "NeedPermission" -> {
                 val resolution = recoveryIntent?.let { PendingIntentCompat.getActivity(context, 0, it, 0, false) }
@@ -162,6 +161,14 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
             "NetworkError" -> callback.sendTokenError(CommonStatusCodes.INTERNAL_ERROR, error)
             else -> callback.sendTokenError(CommonStatusCodes.ERROR, error ?: "Token unavailable")
         }
+    }
+
+    override fun clearToken(callback: IStatusCallback?, token: String?) {
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT)
+        token?.takeIf { it.isNotBlank() }?.let {
+            AccountManager.get(context).invalidateAuthToken(AuthConstants.DEFAULT_ACCOUNT_TYPE, it)
+        }
+        callback?.onResult(Status.SUCCESS)
     }
 
     override fun hasCapabilities(
@@ -183,7 +190,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
             capabilities = safeRequest.capabilities?.toTypedArray() ?: emptyArray()
         }
         val result = HasCapabilitiesHandler(context).handle(legacyRequest)
-        Log.d(TAG, "hasCapabilities(${account.name}, ${legacyRequest.capabilities.contentToString()}) = $result")
+        Log.d(TAG, "hasCapabilities = $result")
         callback?.onHasCapabilities(Status.SUCCESS, result)
     }
 
@@ -197,7 +204,7 @@ internal class GoogleAuthAangServiceImpl(private val context: Context) : IGoogle
             callback?.onFetchAppRestriction(Status(CommonStatusCodes.INVALID_ACCOUNT), null)
             return
         }
-        Log.d(TAG, "fetchAppRestriction(${account.name}, ${request.languageTag}) = unrestricted")
+        Log.d(TAG, "fetchAppRestriction = unrestricted")
         callback?.onFetchAppRestriction(Status.SUCCESS, AppRestriction().apply {
             restrictionState = AppRestrictionState().apply {
                 restricted = false

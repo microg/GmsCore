@@ -42,4 +42,5 @@ dependencies {
     api 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
 
     annotationProcessor project(':safe-parcel-processor')
+    testImplementation 'junit:junit:4.13.2'
 }
