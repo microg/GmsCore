@@ -36,36 +36,40 @@ class LoaderActivity : AppCompatActivity() {
 
     private fun launchFallback() {
         val fallbackUrl = intent?.getStringExtra(EXTRA_FALLBACK_URL)
-
         if (fallbackUrl == null) {
             Log.d(TAG, "No fallback")
             finishResult(RESULT_CANCELED)
-        } else if (fallbackUrl in ALLOWED_FALLBACK_PREFIXES) {
+            return
+        }
+
+        val fallbackUrlNotAllowed = ALLOWED_FALLBACK_PREFIXES.none { fallbackUrl.startsWith(it) }
+        if (fallbackUrlNotAllowed) {
             // TODO: Error screen?
             Log.d(TAG, "Illegal fallback url")
             finishResult(RESULT_CANCELED)
-        } else {
-            val fallbackAuth = intent?.getBooleanExtra(EXTRA_FALLBACK_AUTH, false) ?: false
-            val uri = if (fallbackAuth) {
-                val builder = ACCOUNT_CHOOSER_URI.buildUpon().appendQueryParameter(QUERY_PARAM_CONTINUE, fallbackUrl)
-                val accountName = intent?.getStringExtra(EXTRA_ACCOUNT_NAME)
-                if (!accountName.isNullOrBlank()) {
-                    builder.appendQueryParameter(QUERY_PARAM_EMAIL, accountName)
-                }
-                val lang = Uri.parse(fallbackUrl).getQueryParameter(QUERY_PARAM_LANG)
-                if (lang != null) {
-                    builder.appendQueryParameter(QUERY_PARAM_LANG, lang)
-                }
-                builder.build()
-            } else {
-                Uri.parse(fallbackUrl)
-            }
-            Log.d(TAG, "Opening fallback $fallbackUrl")
-            // noinspection UnsafeImplicitIntentLaunch
-            val intent = Intent(ACTION_VIEW, uri).apply { addCategory(CATEGORY_BROWSABLE) }
-            startActivity(intent)
-            finishResult(RESULT_OK)
+            return
         }
+
+        val fallbackAuth = intent?.getBooleanExtra(EXTRA_FALLBACK_AUTH, false) ?: false
+        val uri = if (fallbackAuth) {
+            val builder = ACCOUNT_CHOOSER_URI.buildUpon().appendQueryParameter(QUERY_PARAM_CONTINUE, fallbackUrl)
+            val accountName = intent?.getStringExtra(EXTRA_ACCOUNT_NAME)
+            if (!accountName.isNullOrBlank()) {
+                builder.appendQueryParameter(QUERY_PARAM_EMAIL, accountName)
+            }
+            val lang = Uri.parse(fallbackUrl).getQueryParameter(QUERY_PARAM_LANG)
+            if (lang != null) {
+                builder.appendQueryParameter(QUERY_PARAM_LANG, lang)
+            }
+            builder.build()
+        } else {
+            Uri.parse(fallbackUrl)
+        }
+        Log.d(TAG, "Opening fallback $fallbackUrl")
+        // noinspection UnsafeImplicitIntentLaunch
+        val intent = Intent(ACTION_VIEW, uri).apply { addCategory(CATEGORY_BROWSABLE) }
+        startActivity(intent)
+        finishResult(RESULT_OK)
     }
 
     private fun launchMain() {
