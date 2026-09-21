@@ -9,6 +9,8 @@ apply plugin: 'kotlin'
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     api "com.squareup.wire:wire-grpc-client:$wireVersion"
+
+    testImplementation "junit:junit:4.13.2"
 }
 
 wire {
@@ -28,6 +30,11 @@ compileJava {
 
 compileKotlin {
     kotlinOptions.jvmTarget = 1.8
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }
 
 compileTestKotlin {

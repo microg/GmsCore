@@ -39,6 +39,28 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
+
+/**
+ * Builds the Android-ID Spatula fallback used when a DeviceKey is unavailable.
+ *
+ * Stock GMS prefers a HMAC DeviceKey Spatula; when device-key fetch fails, microG
+ * previously constructed this fallback proto and then discarded it with
+ * `return null // TODO`, so AuthProxy/AppCert callers always received null.
+ * Completing the fallback returns a Base64 Spatula with packageInfo + deviceId
+ * (no hmac/keyId/keyCert), matching the proto shape already documented in-tree.
+ *
+ * This does not claim full RCS provisioning; it only closes the incomplete
+ * AppCert Spatula path Google Messages may hit during Jibe/ACS setup (#2994).
+ */
+internal fun buildFallbackSpatulaHeaderProto(
+    packageName: String,
+    packageCertificateHash: String?,
+    androidId: Long,
+): SpatulaHeaderProto = SpatulaHeaderProto(
+    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
+    deviceId = androidId,
+)
+
 class AppCertManager(private val context: Context) {
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
@@ -171,11 +193,7 @@ class AppCertManager(private val context: Context) {
         } else {
             Log.d(TAG, "Using fallback spatula header based on Android ID")
             val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
-            SpatulaHeaderProto(
-                    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
-                    deviceId = androidId
-            )
-            return null // TODO
+            buildFallbackSpatulaHeaderProto(packageName, packageCertificateHash, androidId)
         }
         Log.d(TAG, "Spatula Header: $proto")
         return Base64.encodeToString(proto.encode(), Base64.NO_WRAP)
