@@ -26,6 +26,11 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 
     compileOptions {
@@ -47,3 +52,5 @@ dependencies {
 
     implementation "androidx.annotation:annotation:$annotationVersion"
 }
+
+    testImplementation 'junit:junit:4.13.2'

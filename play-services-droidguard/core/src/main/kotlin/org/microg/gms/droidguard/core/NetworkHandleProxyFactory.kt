@@ -5,6 +5,9 @@
 
 package org.microg.gms.droidguard.core
 
+import org.microg.gms.droidguard.formatVmCacheKey
+
+import android.accounts.AccountManager
 import android.content.Context
 import com.android.volley.NetworkResponse
 import com.android.volley.VolleyError
@@ -93,7 +96,11 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 ),
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
-                hasAccount = false,
+                hasAccount = try {
+                    AccountManager.get(context).getAccountsByType("com.google").isNotEmpty()
+                } catch (e: SecurityException) {
+                    false
+                },
                 isGoogleCn = false,
                 enableInlineVm = true,
                 cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
@@ -135,7 +142,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
         })
         val signed: SignedResponse = future.get()
         val response = signed.unpack()
-        val vmKey = response.vmChecksum!!.hex()
+        val vmKey = formatVmCacheKey(response.vmChecksum!!.hex())
         if (!isValidCache(vmKey)) {
             val temp = File(getCacheDir(), "${UUID.randomUUID()}.apk")
             temp.parentFile!!.mkdirs()
