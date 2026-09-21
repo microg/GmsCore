@@ -17,6 +17,8 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
 internal const val APP_CERT_SERVICE_ACTION = "com.google.android.gms.auth.be.appcert.AppCertService"
+/** Alternate action used by some Google clients (Messages) to bind AppCert. */
+internal const val APP_CERT_ACTION = "com.google.android.gms.auth.APP_CERT"
 private const val TAG = "SpatulaHeaderProvider"
 private const val BIND_TIMEOUT_SECONDS = 60L
 private const val CACHE_TTL_MS = 30L * 60L * 1000L
@@ -61,6 +63,12 @@ internal class AppCertSpatulaHeaderProvider(
     }
 
     private fun fetchFromAppCertService(packageName: String): String? {
+        // Prefer the classic be.appcert action; fall back to APP_CERT used by some clients.
+        return bindAndFetch(packageName, APP_CERT_SERVICE_ACTION)
+            ?: bindAndFetch(packageName, APP_CERT_ACTION)
+    }
+
+    private fun bindAndFetch(packageName: String, action: String): String? {
         val serviceQueue = LinkedBlockingQueue<IAppCertService>(1)
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -69,11 +77,11 @@ internal class AppCertSpatulaHeaderProvider(
 
             override fun onServiceDisconnected(name: ComponentName?) = Unit
         }
-        val intent = Intent(APP_CERT_SERVICE_ACTION).setPackage(context.packageName)
+        val intent = Intent(action).setPackage(context.packageName)
         val bound = try {
             context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
         } catch (e: Exception) {
-            Log.w(TAG, "Unable to bind AppCertService", e)
+            Log.w(TAG, "Unable to bind AppCertService via $action", e)
             false
         }
         if (!bound) return null
@@ -82,7 +90,7 @@ internal class AppCertSpatulaHeaderProvider(
             val service = serviceQueue.poll(BIND_TIMEOUT_SECONDS, TimeUnit.SECONDS) ?: return null
             service.getSpatulaHeader(packageName)
         } catch (e: Exception) {
-            Log.w(TAG, "AppCertService.getSpatulaHeader failed", e)
+            Log.w(TAG, "AppCertService.getSpatulaHeader failed via $action", e)
             null
         } finally {
             runCatching { context.unbindService(connection) }
