@@ -32,8 +32,8 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
 
     private fun initSpByPackage(): Map<String, *>? {
         val map = blockStoreSp.all
-        if (map.isNullOrEmpty() || map.all { !it.key.startsWith(callerPackage) }) return null
-        return map.filter { it.key.startsWith(callerPackage) }
+        if (map.isNullOrEmpty()) return null
+        return map.filter { it.key.startsWith("$callerPackage:") }.takeIf { it.isNotEmpty() }
     }
 
     suspend fun deleteBytesWithRequest(request: DeleteBytesRequest?): Boolean = withContext(Dispatchers.IO) {
