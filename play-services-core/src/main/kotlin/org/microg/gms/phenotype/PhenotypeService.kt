@@ -28,7 +28,7 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     }
 }
 
-private val CONFIGURATION_OPTIONS = mapOf(
+internal val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
         Flag("45477527", true, 0),
@@ -166,6 +166,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+        Flag("bugle_phenotype__enableDownloadCertificatesForMlsProvisioning", true, 0),
+        Flag("bugle_phenotype__enableUploadKeyPackagesForMlsProvisioning", true, 0),
+    ),
+    "com.google.android.ims.library" to arrayOf(
+        Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0)
     ),
 )
 
