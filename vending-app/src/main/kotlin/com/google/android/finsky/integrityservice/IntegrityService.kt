@@ -166,18 +166,23 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 }
                 Log.d(TAG, "requestIntegrityToken authToken: $authToken")
 
-                val droidGuardData = withContext(Dispatchers.IO) {
-                    val droidGuardResultsRequest = DroidGuardResultsRequest()
-                    droidGuardResultsRequest.bundle.putString("thirdPartyCallerAppPackageName", packageName)
-                    Log.d(TAG, "Running DroidGuard (flow: $INTEGRITY_FLOW_NAME, data: $data)")
-                    val droidGuardToken = DroidGuard.getClient(context).getResults(INTEGRITY_FLOW_NAME, data, droidGuardResultsRequest).await()
-                    Log.d(TAG, "Running DroidGuard (flow: $INTEGRITY_FLOW_NAME, droidGuardToken: $droidGuardToken)")
-                    Base64.decode(droidGuardToken, Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE).toByteString()
+                val droidGuardData = try {
+                    withContext(Dispatchers.IO) {
+                        val droidGuardResultsRequest = DroidGuardResultsRequest()
+                        droidGuardResultsRequest.bundle.putString("thirdPartyCallerAppPackageName", packageName)
+                        Log.d(TAG, "Running DroidGuard (flow: $INTEGRITY_FLOW_NAME, data: $data)")
+                        val droidGuardToken = DroidGuard.getClient(context).getResults(INTEGRITY_FLOW_NAME, data, droidGuardResultsRequest).await()
+                        Log.d(TAG, "Running DroidGuard (flow: $INTEGRITY_FLOW_NAME, droidGuardToken: $droidGuardToken)")
+                        Base64.decode(droidGuardToken, Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE).toByteString()
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "DroidGuard execution failed", e)
+                    throw StandardIntegrityException(IntegrityErrorCode.CANNOT_BIND_TO_SERVICE, "DroidGuard binding or execution failed: ${e.message}")
                 }
 
                 if (droidGuardData.utf8().startsWith(INTEGRITY_PREFIX_ERROR)) {
-                    Log.w(TAG, "droidGuardData: ${droidGuardData.utf8()}")
-                    throw StandardIntegrityException(IntegrityErrorCode.NETWORK_ERROR, "DroidGuard failed.")
+                    Log.w(TAG, "droidGuardData error: ${droidGuardData.utf8()}")
+                    throw StandardIntegrityException(IntegrityErrorCode.CANNOT_BIND_TO_SERVICE, "DroidGuard returned error: ${droidGuardData.utf8()}")
                 }
 
                 val integrityRequest = IntegrityRequest(
@@ -203,9 +208,9 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 val integrityToken = integrityResponse.contentWrapper?.content?.token
                 if (integrityToken.isNullOrEmpty()) {
                     if (integrityResponse.integrityResponseError?.error != null) {
-                        throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, integrityResponse.integrityResponseError.error)
+                        throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, integrityResponse.integrityResponseError.error)
                     }
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "No token in response.")
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "No token in response.")
                 }
 
                 Log.d(TAG, "requestIntegrityToken integrityToken: $integrityToken")
@@ -214,7 +219,8 @@ private class IntegrityServiceImpl(private val context: Context, override val li
             }.onFailure {
                 Log.w(TAG, "requestIntegrityToken has exception: ", it)
                 integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Integrity check failed: ${it.message}")
-                callback.onError(integrityData?.packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
+                val errorCode = (it as? StandardIntegrityException)?.code ?: IntegrityErrorCode.INTERNAL_ERROR
+                callback.onError(integrityData?.packageName ?: packageName, errorCode, it.message ?: "Exception")
             }
         }
     }
