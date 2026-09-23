@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
+import android.os.RemoteException
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
@@ -90,12 +91,38 @@ private class IntegrityServiceImpl(private val context: Context, override val li
     private var integrityData: PlayIntegrityData? = null
 
     override fun requestDialog(bundle: Bundle, callback: IRequestDialogCallback) {
-        Log.d(TAG, "Method (requestDialog) called but not implemented ")
         requestAndShowDialog(bundle, callback)
     }
 
     override fun requestAndShowDialog(bundle: Bundle?, callback: IRequestDialogCallback?) {
-        Log.d(TAG, "Not yet implemented: requestAndShowDialog")
+        Log.d(TAG, "requestAndShowDialog(bundle=$bundle)")
+
+        if (callback == null) {
+            Log.e(TAG, "requestAndShowDialog: null callback")
+            return
+        }
+
+        if (callback.asBinder()?.isBinderAlive == false) {
+            Log.w(TAG, "requestAndShowDialog: callback binder is dead")
+            return
+        }
+
+        try {
+            /*
+             * Play Integrity remediation dialogs are not implemented yet.
+             *
+             * Returning an empty Bundle makes Play Core report
+             * DIALOG_UNAVAILABLE instead of leaving the request pending forever.
+             *
+             * A proper remediation implementation should return a Bundle
+             * containing "dialog.intent".
+             */
+            Log.d(TAG, "requestAndShowDialog: Play Integrity remediation dialogs are not implemented yet")
+
+            callback.onRequestDialog(Bundle())
+        } catch (e: RemoteException) {
+            Log.e(TAG, "requestAndShowDialog: callback failed", e)
+        }
     }
 
     override fun requestIntegrityToken(request: Bundle, callback: IIntegrityServiceCallback) {
