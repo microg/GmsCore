@@ -1,63 +1,59 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2026 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.location.manager
 
+import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
-import android.location.Location
-import android.os.Binder
-import android.os.Process
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.internal.ConnectionInfo
-import com.google.android.gms.common.internal.GetServiceRequest
-import com.google.android.gms.common.internal.IGmsCallbacks
-import org.microg.gms.BaseService
-import org.microg.gms.common.GmsService
-import org.microg.gms.common.PackageUtils
-import org.microg.gms.location.EXTRA_LOCATION
-import org.microg.gms.utils.IntentCacheManager
-import java.io.FileDescriptor
-import java.io.PrintWriter
+import android.content.ServiceConnection
+import android.os.IBinder
+import android.util.Log
+import org.microg.gms.common.IIntentMessenger
 
-
-class LocationManagerService : BaseService(TAG, GmsService.GOOGLE_LOCATION_MANAGER) {
-    private val locationManager = LocationManager(this, lifecycle)
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        locationManager.start()
-        if (Binder.getCallingUid() == Process.myUid() && intent?.action == ACTION_REPORT_LOCATION) {
-            val location = intent.getParcelableExtra<Location>(EXTRA_LOCATION)
-            if (location != null) {
-                locationManager.updateNetworkLocation(location)
+class LocationManagerService : Service() {
+    private val queue = ArrayDeque<Intent>()
+    private var connecting = false
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            try {
+                val intentMessenger = IIntentMessenger.Stub.asInterface(service)
+                while (!queue.isEmpty()) {
+                    intentMessenger.sendIntent(queue.removeFirst())
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            } finally {
+                runCatching { unbindService(this) }
+                connecting = false
             }
         }
-        if (intent != null && IntentCacheManager.isCache(intent)) {
-            locationManager.handleCacheIntent(intent)
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            connecting = false
         }
-        return super.onStartCommand(intent, flags, startId)
+
+        override fun onBindingDied(name: ComponentName?) {
+            connecting = false
+        }
     }
 
-    override fun onDestroy() {
-        locationManager.stop()
-        super.onDestroy()
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent != null) {
+            queue.add(intent)
+            if (!connecting) {
+                connecting = true
+                val intent = Intent(this, GoogleLocationManagerService::class.java).apply { action = GoogleLocationManagerService.ACTION_BIND_INTERNAL }
+                bindService(intent, serviceConnection, BIND_AUTO_CREATE)
+            }
+        }
+        return START_NOT_STICKY
     }
 
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
-        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-            ?: throw IllegalArgumentException("Missing package name")
-        locationManager.start()
-        callback.onPostInitCompleteWithConnectionInfo(
-            CommonStatusCodes.SUCCESS,
-            LocationManagerInstance(this, locationManager, packageName, lifecycle).asBinder(),
-            ConnectionInfo().apply { features = FEATURES }
-        )
-    }
-
-    override fun dump(fd: FileDescriptor?, writer: PrintWriter, args: Array<out String>?) {
-        super.dump(fd, writer, args)
-        locationManager.dump(writer)
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
     companion object {
