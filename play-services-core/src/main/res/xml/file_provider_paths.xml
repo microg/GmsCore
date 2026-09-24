@@ -2,4 +2,5 @@
 <paths xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingDefaultResource">
     <cache-path name="octarine_camera_tmp" path="octa_camera_temp/"/>
+    <cache-path name="mlkit_docscan_ui" path="mlkit_docscan_ui/"/>
 </paths>

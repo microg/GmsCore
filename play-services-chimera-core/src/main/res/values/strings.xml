@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="chimera_module_required_title">Module required</string>
+    <string name="chimera_module_required_message">This feature needs an extra module. Tap Download to open it in an external download app. After downloading, open the .mods file with microG to verify and import it.\n\nRequested features: %1$s</string>
+    <string name="chimera_module_download">Download</string>
+    <string name="chimera_module_choose_download_app">Choose a download application</string>
+    <string name="chimera_module_cancel">Cancel</string>
+    <string name="chimera_module_document_scanner_name">Document scanner</string>
+    <string name="chimera_module_download_page_title">%1$s module</string>
+    <string name="chimera_module_download_section_title">Download</string>
+    <string name="chimera_module_download_description">The %1$s feature requires an additional module. microG will open an external application to download it. Open the downloaded .mods file with microG to verify and import it.</string>
+    <string name="chimera_module_permission_section_title">Required permissions</string>
+    <string name="chimera_module_permission_item">• %1$s — %2$s (%3$s)</string>
+    <string name="chimera_module_permission_granted">Granted</string>
+    <string name="chimera_module_permission_required">Required</string>
+    <string name="chimera_module_no_permissions">No additional permissions are required.</string>
+    <string name="chimera_module_permission_instruction">All required permissions must be granted before downloading. After authorization, microG will open an external download application.</string>
+    <string name="chimera_module_authorize_and_download">Authorize and download</string>
+    <string name="chimera_module_open_permission_settings">Open permission settings</string>
+    <string name="chimera_module_permission_denied">Permission was not granted. Download remains unavailable.</string>
+    <string name="chimera_module_permission_settings_unavailable">Unable to open the application permission settings.</string>
+    <string name="chimera_module_download_app_unavailable">No external application is available to download this module.</string>
+    <string name="chimera_permission_camera_label">Camera</string>
+    <string name="chimera_permission_camera_description">Allows microG services to capture document pages for scanning.</string>
+    <string name="chimera_module_use_section_title">Permission required</string>
+    <string name="chimera_module_use_description">The %1$s module is installed, but a required permission has been revoked. Grant it again to continue using this feature.</string>
+    <string name="chimera_module_permission_continue_instruction">All required permissions must be granted before using this module. After authorization, the requested feature opens automatically.</string>
+    <string name="chimera_module_authorize_and_continue">Authorize and continue</string>
+    <string name="chimera_module_continue">Continue</string>
+    <string name="chimera_module_permission_denied_continue">Permission was not granted. This module cannot be used.</string>
+    <string name="chimera_module_continue_unavailable">Unable to reopen the requested module.</string>
+    <string name="chimera_module_waiting_for_import">Waiting for the module to be downloaded and opened with microG. This request will continue automatically after a successful import.</string>
+    <string name="chimera_module_download_again">Open download again</string>
+</resources>

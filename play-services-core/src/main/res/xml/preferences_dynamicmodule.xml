@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/dynamicmodule_category_title"
+        app:iconSpaceReserved="false">
+        <org.microg.gms.ui.TextPreference
+            android:selectable="false"
+            android:summary="@string/dynamicmodule_category_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:key="pref_dynamicmodule_enabled"
+            android:persistent="false"
+            android:title="@string/dynamicmodule_enable"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="pref_dynamicmodule_import"
+            android:summary="@string/dynamicmodule_import_summary"
+            android:title="@string/dynamicmodule_import"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="prefcat_dynamicmodule_installed"
+        android:title="@string/prefcat_push_apps_registered_title"
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false">
+        <Preference
+            android:enabled="false"
+            android:key="pref_dynamicmodule_none"
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
