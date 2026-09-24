@@ -59,8 +59,8 @@ public class SessionImpl extends ISession.Stub {
 
         this.mIsConnecting = true;
         this.mIsConnected = false;
-        this.castContext.getSessionManagerImpl().onSessionStarting(this);
         this.proxy.start(routeInfoExtra);
+        this.castContext.getSessionManagerImpl().onSessionStarting(this);
     }
 
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
