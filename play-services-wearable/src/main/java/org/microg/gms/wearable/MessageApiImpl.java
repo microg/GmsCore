@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.content.IntentFilter;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,19 +24,59 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.AddListenerRequest;
+import com.google.android.gms.wearable.internal.IWearableListener;
+import com.google.android.gms.wearable.internal.MessageEventParcelable;
+import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 
 import org.microg.gms.common.GmsConnector;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class MessageApiImpl implements MessageApi {
+    private final Map<MessageListener, IWearableListener> listenerWrappers = new ConcurrentHashMap<MessageListener, IWearableListener>();
+
     @Override
-    public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> addListener(GoogleApiClient client, final MessageListener listener) {
+        final IWearableListener wrapper = new MessageListenerWrapper(listener);
+        listenerWrappers.put(listener, wrapper);
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().addListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new AddListenerRequest(wrapper, new IntentFilter[0], null));
+            }
+        });
     }
 
     @Override
-    public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> removeListener(GoogleApiClient client, final MessageListener listener) {
+        final IWearableListener wrapper = listenerWrappers.remove(listener);
+        if (wrapper == null) {
+            return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+                @Override
+                public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                    resultProvider.onResultAvailable(Status.SUCCESS);
+                }
+            });
+        }
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().removeListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new RemoveListenerRequest(wrapper));
+            }
+        });
     }
 
     @Override
@@ -68,6 +109,19 @@ public class MessageApiImpl implements MessageApi {
         @Override
         public Status getStatus() {
             return new Status(response.statusCode);
+        }
+    }
+
+    private static class MessageListenerWrapper extends BaseWearableListener {
+        private final MessageListener listener;
+
+        MessageListenerWrapper(MessageListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onMessageReceived(MessageEventParcelable messageEvent) throws RemoteException {
+            listener.onMessageReceived(messageEvent);
         }
     }
 }
