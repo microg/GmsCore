@@ -37,6 +37,9 @@ import org.json.JSONObject
 import org.microg.gms.fido.core.CredentialUserInfo
 import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.R
+import org.microg.gms.fido.core.encodeBase64Url
+import org.microg.gms.fido.core.parsePublicKeyCredentialCreationOptions
+import org.microg.gms.fido.core.parsePublicKeyCredentialRequestOptions
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CREDENTIAL_ID
 
