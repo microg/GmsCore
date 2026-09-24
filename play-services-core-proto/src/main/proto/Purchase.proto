@@ -263,13 +263,19 @@ message ClientInfo {
     string oldSkuPurchaseId = 17;
   }
   optional int32 versionCode1 = 18;
-  optional UnKnownMessage21 unKnownMessage21 = 21;
+  oneof DerivedApkInfo {
+    DerivedApkId derivedApkId = 21;
+    DerivedApkIdAbsent derivedApkIdAbsent = 22;
+  }
   optional string skuPackageSignatureSha256 = 23;
   optional AccountNameMessage secondaryAccount = 24;
 }
 
-message UnKnownMessage21 {
-  optional int32 unknown1 = 1;
+message DerivedApkId {
+  optional int32 derivedId = 1;
+}
+
+message DerivedApkIdAbsent {
 }
 
 message UnkMessage1 {
