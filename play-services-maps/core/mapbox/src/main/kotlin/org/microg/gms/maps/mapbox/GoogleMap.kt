@@ -93,6 +93,8 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
+import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.style.layers.RasterLayer
 import org.microg.gms.maps.mapbox.model.AbstractMarker
 import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl
 import org.microg.gms.maps.mapbox.model.CircleImpl
@@ -101,6 +103,7 @@ import org.microg.gms.maps.mapbox.model.InfoWindow
 import org.microg.gms.maps.mapbox.model.LayerKind
 import org.microg.gms.maps.mapbox.model.LayerKind.FILL
 import org.microg.gms.maps.mapbox.model.LayerKind.LINE
+import org.microg.gms.maps.mapbox.model.LayerKind.RASTER
 import org.microg.gms.maps.mapbox.model.LayerKind.SYMBOL
 import org.microg.gms.maps.mapbox.model.MarkerImpl
 import org.microg.gms.maps.mapbox.model.Markup
@@ -108,7 +111,6 @@ import org.microg.gms.maps.mapbox.model.PolygonImpl
 import org.microg.gms.maps.mapbox.model.PolylineImpl
 import org.microg.gms.maps.mapbox.model.TileOverlayImpl
 import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
-import org.microg.gms.maps.mapbox.utils.ComparablePair
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
@@ -149,7 +151,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private var cameraIdleListener: IOnCameraIdleListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
 
-    private val allocatedZLayers: TreeMap<ComparablePair<Float, LayerKind>, String> = TreeMap()
+    private val allocatedZLayers: TreeMap<ZLayerKey, String> = TreeMap()
 
     var lineManagers: MutableMap<Float, LineManager> = mutableMapOf()
     val pendingLines = mutableSetOf<Pair<Float, Markup<Line, LineOptions>>>()
@@ -671,6 +673,32 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
+    // Lower keys are drawn on top: higher z-index first, then by kind, then by id
+    private data class ZLayerKey(val zIndex: Float, val kind: LayerKind, val id: String = "") : Comparable<ZLayerKey> {
+        override fun compareTo(other: ZLayerKey) = compareValuesBy(this, other, { -it.zIndex }, { it.kind }, { it.id })
+    }
+
+    fun addRasterLayerForZIndex(style: Style, layer: RasterLayer, zIndex: Float, overlayId: String) {
+        synchronized(mapLock) {
+            val layerKey = ZLayerKey(zIndex, RASTER, overlayId)
+            allocatedZLayers[layerKey] = layer.id
+            // Neighbours may be missing from the style while it is being reloaded
+            val belowId = allocatedZLayers.headMap(layerKey).values.lastOrNull { style.getLayer(it) != null }
+            val aboveId = allocatedZLayers.tailMap(layerKey, false).values.firstOrNull { style.getLayer(it) != null }
+            when {
+                belowId != null -> style.addLayerBelow(layer, belowId)
+                aboveId != null -> style.addLayerAbove(layer, aboveId)
+                else -> style.addLayer(layer)
+            }
+        }
+    }
+
+    fun removeRasterLayerForZIndex(zIndex: Float, overlayId: String) {
+        synchronized(mapLock) {
+            allocatedZLayers.remove(ZLayerKey(zIndex, RASTER, overlayId))
+        }
+    }
+
     private data class LayerBuilderContext(
         val belowLayerId: String?,
         val aboveLayerId: String?
@@ -686,7 +714,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         if (mapView == null || map == null || map?.style == null) return null
 
         synchronized(mapLock) {
-            val layerKey = ComparablePair(-zIndex, layerKind)
+            val layerKey = ZLayerKey(zIndex, layerKind)
             val belowId = allocatedZLayers.lowerEntry(layerKey)?.value
             var aboveId = allocatedZLayers.higherEntry(layerKey)?.value
             if (aboveId == belowId) aboveId = null
