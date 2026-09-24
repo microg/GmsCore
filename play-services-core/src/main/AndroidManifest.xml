@@ -565,6 +565,7 @@
         <service android:name="org.microg.gms.auth.appcert.AppCertService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.be.appcert.AppCertService" />
+                <action android:name="com.google.android.gms.auth.APP_CERT" />
             </intent-filter>
         </service>
 
