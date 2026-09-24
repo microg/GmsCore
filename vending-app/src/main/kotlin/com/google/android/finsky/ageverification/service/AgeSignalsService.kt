@@ -12,6 +12,7 @@ import android.os.IBinder
 import android.os.Parcel
 import android.os.RemoteException
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
@@ -31,20 +32,6 @@ private const val AGE_SIGNALS_STATUS_NOT_SHARED = 2
 private const val ERROR_CODE_INTERNAL_ERROR = -100
 private const val CURRENT_API_VERSION = 4
 
-internal fun createCheckAgeSignalsResponse(version: Int): Bundle = Bundle().apply {
-    if (version >= CURRENT_API_VERSION) {
-        putInt(KEY_AGE_SIGNALS_STATUS, AGE_SIGNALS_STATUS_NOT_SHARED)
-    }
-}
-
-internal fun createAgeSignalsAccessResponse(): Bundle = Bundle().apply {
-    putInt(KEY_AGE_SIGNALS_STATUS, AGE_SIGNALS_STATUS_NOT_SHARED)
-}
-
-internal fun createErrorResponse(): Bundle = Bundle().apply {
-    putInt(KEY_ERROR_CODE, ERROR_CODE_INTERNAL_ERROR)
-}
-
 class AgeSignalsService : LifecycleService() {
 
     override fun onBind(intent: Intent): IBinder? {
@@ -54,16 +41,9 @@ class AgeSignalsService : LifecycleService() {
     }
 }
 
-internal fun interface CallingPackageVerifier {
-    fun verify(context: Context, packageName: String): String?
-}
-
 internal class AgeSignalsServiceImpl(
     private val context: Context,
     override val lifecycle: Lifecycle,
-    private val verifier: CallingPackageVerifier = CallingPackageVerifier { verifierContext, packageName ->
-        PackageUtils.getAndCheckCallingPackage(verifierContext, packageName)
-    }
 ) : IAgeSignalsService.Stub(), LifecycleOwner {
 
     override fun checkAgeSignals(packageName: String?, bundle: Bundle?, callback: IAgeSignalsServiceCallback?) {
@@ -71,19 +51,19 @@ internal class AgeSignalsServiceImpl(
             Log.w(TAG, "checkAgeSignals called without a callback")
             return
         }
-        if (packageName.isNullOrBlank()) {
-            Log.w(TAG, "checkAgeSignals called without a package name")
-            sendCheckError(callback)
+        try {
+            PackageUtils.getAndCheckCallingPackage(context, packageName)!!
+        } catch (e: Exception) {
+            Log.w(TAG, "checkAgeSignals called with invalid caller package: $packageName", e)
+            sendError(callback::onError)
             return
         }
-        if (!verifyCallingPackage(packageName, "checkAgeSignals", callback::onError)) return
 
-        val response = try {
-            createCheckAgeSignalsResponse(bundle?.getInt(KEY_PLAY_CORE_VERSION, 0) ?: 0)
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to create checkAgeSignals response for $packageName", e)
-            sendCheckError(callback)
-            return
+        val version = bundle?.getInt(KEY_PLAY_CORE_VERSION, 0) ?: 0
+        val response = Bundle().apply {
+            if (version >= CURRENT_API_VERSION) {
+                putInt(KEY_AGE_SIGNALS_STATUS, AGE_SIGNALS_STATUS_NOT_SHARED)
+            }
         }
         try {
             callback.onCompleteCheckAgeSignals(response)
@@ -97,20 +77,15 @@ internal class AgeSignalsServiceImpl(
             Log.w(TAG, "requestAgeSignalsAccess called without a callback")
             return
         }
-        if (packageName.isNullOrBlank()) {
-            Log.w(TAG, "requestAgeSignalsAccess called without a package name")
-            sendAccessError(callback)
-            return
-        }
-        if (!verifyCallingPackage(packageName, "requestAgeSignalsAccess", callback::onError)) return
-
-        val response = try {
-            createAgeSignalsAccessResponse()
+        try {
+            PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         } catch (e: Exception) {
-            Log.w(TAG, "Failed to create requestAgeSignalsAccess response for $packageName", e)
-            sendAccessError(callback)
+            Log.w(TAG, "requestAgeSignalsAccess called with invalid caller package: $packageName", e)
+            sendError(callback::onError)
             return
         }
+
+        val response = bundleOf(KEY_AGE_SIGNALS_STATUS to AGE_SIGNALS_STATUS_NOT_SHARED)
         try {
             callback.onCompleteRequestAgeSignalsAccess(response)
         } catch (e: RemoteException) {
@@ -118,35 +93,11 @@ internal class AgeSignalsServiceImpl(
         }
     }
 
-    private fun verifyCallingPackage(packageName: String, method: String, onError: (Bundle) -> Unit): Boolean {
-        val verifiedPackageName = try {
-            verifier.verify(context, packageName)
-        } catch (e: Exception) {
-            Log.w(TAG, "$method rejected caller for $packageName", e)
-            sendError(method, onError)
-            return false
-        }
-        if (verifiedPackageName == null) {
-            Log.w(TAG, "$method could not verify caller for $packageName")
-            sendError(method, onError)
-            return false
-        }
-        return true
-    }
-
-    private fun sendCheckError(callback: IAgeSignalsServiceCallback) {
-        sendError("checkAgeSignals", callback::onError)
-    }
-
-    private fun sendAccessError(callback: IAgeSignalsAccessCallback) {
-        sendError("requestAgeSignalsAccess", callback::onError)
-    }
-
-    private fun sendError(method: String, onError: (Bundle) -> Unit) {
+    private fun sendError(onError: (Bundle) -> Unit) {
         try {
-            onError(createErrorResponse())
+            onError(bundleOf(KEY_ERROR_CODE to ERROR_CODE_INTERNAL_ERROR))
         } catch (e: RemoteException) {
-            Log.w(TAG, "Failed to deliver $method error", e)
+            Log.w(TAG, "Failed to deliver error", e)
         }
     }
 
