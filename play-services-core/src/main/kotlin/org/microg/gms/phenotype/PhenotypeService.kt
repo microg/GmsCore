@@ -7,11 +7,14 @@ package org.microg.gms.phenotype
 
 import android.os.Parcel
 import android.util.Log
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.phenotype.*
+import com.google.android.gms.phenotype.internal.IGetStorageInfoCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeService
 import org.microg.gms.BaseService
@@ -20,11 +23,24 @@ import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "PhenotypeService"
+private const val STORAGE_INFO_UNAVAILABLE = 29514
+
+internal val PHENOTYPE_FEATURES = arrayOf(
+    Feature("get_storage_info_api", 1L),
+)
+
+internal fun deliverStorageInfoFallback(callbacks: IGetStorageInfoCallbacks) {
+    callbacks.onResult(Status(STORAGE_INFO_UNAVAILABLE), null)
+}
 
 class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
-        callback.onPostInitComplete(0, PhenotypeServiceImpl(packageName).asBinder(), null)
+        callback.onPostInitCompleteWithConnectionInfo(
+            0,
+            PhenotypeServiceImpl(packageName).asBinder(),
+            ConnectionInfo().apply { features = PHENOTYPE_FEATURES },
+        )
     }
 }
 
@@ -284,6 +300,12 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
         callbacks.onExperimentTokens(Status.SUCCESS, ExperimentTokens().apply {
             field2 = ""
         })
+    }
+
+    override fun getStorageInfo(callbacks: IGetStorageInfoCallbacks) {
+        Log.d(TAG, "getStorageInfo()")
+        // Current Google Messages explicitly treats 29514 as a storage-info fallback.
+        deliverStorageInfoFallback(callbacks)
     }
 
     override fun syncAllAfterOperation(callbacks: IPhenotypeCallbacks?, p1: Long) {
