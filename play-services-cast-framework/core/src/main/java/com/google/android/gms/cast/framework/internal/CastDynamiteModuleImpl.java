@@ -17,6 +17,8 @@
 package com.google.android.gms.cast.framework.internal;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -65,8 +67,27 @@ public class CastDynamiteModuleImpl extends ICastDynamiteModule.Stub {
 
     @Override
     public IReconnectionService newReconnectionServiceImpl(IObjectWrapper service, IObjectWrapper sessionManager, IObjectWrapper discoveryManager) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newReconnectionServiceImpl");
-        return null;
+        // Return a minimal no-op service rather than null: the Cast SDK's ReconnectionService calls
+        // onCreate() on this delegate without a null check, so returning null crashes the client app
+        // (NPE in ReconnectionService.onCreate). microG doesn't drive reconnection itself, so a no-op
+        // delegate is sufficient and keeps connectionless Cast sessions stable.
+        return new IReconnectionService.Stub() {
+            @Override
+            public void onCreate() {}
+
+            @Override
+            public int onStartCommand(Intent intent, int flags, int startId) {
+                return android.app.Service.START_NOT_STICKY;
+            }
+
+            @Override
+            public IBinder onBind(Intent intent) {
+                return null;
+            }
+
+            @Override
+            public void onDestroy() {}
+        };
     }
 
     @Override
