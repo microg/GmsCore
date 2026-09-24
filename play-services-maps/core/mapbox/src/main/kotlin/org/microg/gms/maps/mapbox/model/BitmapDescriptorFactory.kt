@@ -19,6 +19,7 @@ package org.microg.gms.maps.mapbox.model
 import android.content.res.Resources
 import android.graphics.*
 import android.os.Parcel
+import android.util.DisplayMetrics
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
@@ -108,7 +109,7 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     private fun registerBitmap(id: String, descriptorCreator: (id: String, size: FloatArray) -> BitmapDescriptorImpl = { id, size -> BitmapDescriptorImpl(id, size) }, bitmapCreator: () -> Bitmap?): IObjectWrapper {
         val bitmap: Bitmap? = synchronized(bitmaps) {
             if (bitmaps.contains(id)) return@synchronized null
-            val bitmap = bitmapCreator()
+            val bitmap = bitmapCreator()?.ensureMapboxDensity(id)
             if (bitmap == null) {
                 Log.w(TAG, "Failed to register bitmap $id, creator returned null")
                 return@synchronized null
@@ -132,6 +133,26 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
         }
 
         return ObjectWrapper.wrap(descriptorCreator(id, bitmapSize(id)))
+    }
+
+    private fun Bitmap.ensureMapboxDensity(id: String): Bitmap {
+        if (density > 0) return this
+
+        val densityDpi = resources?.displayMetrics?.densityDpi
+            ?: mapResources?.displayMetrics?.densityDpi
+            ?: DisplayMetrics.DENSITY_DEFAULT
+
+        Log.w(TAG, "Bitmap $id has density=$density; using densityDpi=$densityDpi for Mapbox")
+
+        return try {
+            copy(config ?: Bitmap.Config.ARGB_8888, false).also {
+                it.density = densityDpi
+            }
+        } catch (e: Throwable) {
+            this.also {
+                it.density = densityDpi
+            }
+        }
     }
 
     override fun fromResource(resourceId: Int): IObjectWrapper = registerBitmap("resource-$resourceId") {
