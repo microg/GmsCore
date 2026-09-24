@@ -12,7 +12,8 @@ class TermsOfServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
+        // microG does not require the user to accept a Terms of Service to pair a WearOS device.
+        setResult(RESULT_OK)
         finish()
     }
 }
