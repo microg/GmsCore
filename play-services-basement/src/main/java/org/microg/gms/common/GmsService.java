@@ -243,8 +243,6 @@ public enum GmsService {
     GOOGLE_AUTH(224, "com.google.android.gms.auth.account.authapi.START"),
     ENTERPRISE_LOADER(225, "com.google.android.gms.enterprise.loader.service.START"),
     THUNDERBIRD(226, "com.google.android.gms.thunderbird.service.START"),
-    CONSTELLATION(227, "com.google.android.gms.auth.api.phone.service.ConstellationService.START"),
-    ASTERISM(228, "com.google.android.gms.auth.api.phone.service.AsterismService.START"),
 
 
     BACKUP(229),
