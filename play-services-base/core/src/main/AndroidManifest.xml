@@ -41,5 +41,18 @@
                 <action android:name="android.intent.action.USER_INITIALIZE" />
             </intent-filter>
         </receiver>
+
+        <service android:name="com.google.android.gms.auth.api.phone.ConstellationService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.service.ConstellationService.START" />
+            </intent-filter>
+        </service>
+        
+        <service android:name="com.google.android.gms.auth.api.phone.AsterismService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.service.AsterismService.START" />
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>
