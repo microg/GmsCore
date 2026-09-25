@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Patched-GmsCore-APK
-        path: play-services-core/build/outputs/apk/debug/*.apk
+        path: '**/*.apk'
