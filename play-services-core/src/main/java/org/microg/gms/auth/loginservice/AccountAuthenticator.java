@@ -28,12 +28,17 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.internal.CertData;
+import org.microg.gms.accountaction.ErrorResolverKt;
+import org.microg.gms.accountaction.Reauthenticate;
+import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.auth.*;
 import org.microg.gms.auth.login.LoginActivity;
+import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.utils.PackageManagerUtilsKt;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -129,7 +134,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             authManager = new AuthManager(context, account.name, app, authTokenType);
         }
         try {
-            AuthResponse res = authManager.requestAuthWithBackgroundResolution(true);
+            AuthResponse res = requestAuthForAccountManager(authManager, account, true);
             if (res.auth != null) {
                 Log.d(TAG, "getAuthToken: " + res.auth);
                 Bundle result = new Bundle();
@@ -155,9 +160,54 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 result.putParcelable(KEY_INTENT, i);
                 return result;
             }
+        } catch (ReauthenticationRequiredException e) {
+            Log.w(TAG, "Re-authentication required for account " + account.name, e);
+            return createReAuthIntentResult(response, account, options);
         } catch (Exception e) {
             Log.w(TAG, e);
             throw new NetworkErrorException(e);
+        }
+    }
+
+    private AuthResponse requestAuthForAccountManager(AuthManager authManager, Account account, boolean legacy) throws IOException, ReauthenticationRequiredException {
+        try {
+            return authManager.requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution instanceof Reauthenticate) {
+                    throw new ReauthenticationRequiredException(e);
+                }
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromBackgroundBlocking(
+                            errorResolution,
+                            context,
+                            account,
+                            () -> authManager.requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                }
+            }
+            throw new IOException(e);
+        }
+    }
+
+    private Bundle createReAuthIntentResult(AccountAuthenticatorResponse response, Account account, Bundle options) {
+        Bundle result = new Bundle();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtras(options);
+        intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        intent.putExtra(KEY_ACCOUNT_TYPE, account.type);
+        intent.putExtra(KEY_ACCOUNT_NAME, account.name);
+        intent.putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account);
+        result.putParcelable(KEY_INTENT, intent);
+        return result;
+    }
+
+    private static class ReauthenticationRequiredException extends Exception {
+        ReauthenticationRequiredException(Throwable cause) {
+            super(cause);
         }
     }
 
