@@ -475,4 +475,20 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- Account Timeline settings -->
+    <string name="pref_account_details_title">Account details</string>
+    <string name="pref_account_type_google">Google account</string>
+    <string name="prefcat_account_timeline_title">Google Maps Timeline</string>
+    <string name="pref_account_timeline_title">Enable location history</string>
+    <string name="pref_account_timeline_summary">Periodically save this account\'s location history so Google Maps Timeline can work.</string>
+    <string name="pref_account_timeline_upload_title">Allow sync to server</string>
+    <string name="pref_account_timeline_upload_summary">Allow this device to periodically upload this account\'s location history to Google servers.</string>
+    <string name="pref_account_timeline_cloud_notice">Location History is synchronized with this Google Account. Upload permission applies only to this device.</string>
+    <string name="prefcat_account_settings_title">Settings</string>
+    <string name="pref_account_system_sync_title">System account sync settings</string>
+    <string name="pref_account_timeline_loading">Loading account settings…</string>
+    <string name="pref_account_timeline_unavailable">Account settings are currently unavailable.</string>
+    <string name="pref_account_timeline_restricted">This setting is restricted for this account.</string>
+    <string name="pref_account_timeline_update_failed">The local upload preference was saved, but the account setting could not be confirmed. Refresh and try again.</string>
 </resources>
