@@ -5,6 +5,7 @@
 
 package org.microg.gms.fido.core.transport.usb
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -32,12 +33,12 @@ import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidConnection
 import org.microg.gms.utils.toBase64
 
 @RequiresApi(21)
-class UsbTransportHandler(private val context: Context, callback: TransportHandlerCallback? = null) :
+class UsbTransportHandler(private val activity: Activity, callback: TransportHandlerCallback? = null) :
     TransportHandler(Transport.USB, callback) {
     override val isSupported: Boolean
-        get() = context.packageManager.hasSystemFeature("android.hardware.usb.host") && context.usbManager != null
+        get() = activity.packageManager.hasSystemFeature("android.hardware.usb.host") && activity.usbManager != null
 
-    private val devicePermissionManager by lazy { UsbDevicePermissionManager(context) }
+    private val devicePermissionManager by lazy { UsbDevicePermissionManager(activity) }
 
     private var device: UsbDevice? = null
 
@@ -55,7 +56,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
             Log.d(TAG, "${device.productName} has suitable hid interface ${iface.id}")
             if (!devicePermissionManager.awaitPermission(device)) continue
             Log.d(TAG, "${device.productName} has permission")
-            val match = context.usbManager?.openDevice(device)?.use { connection ->
+            val match = activity.usbManager?.openDevice(device)?.use { connection ->
                 if (connection.claimInterface(iface, true)) {
                     val buf = ByteArray(256)
                     val read = connection.controlTransfer(0x81, 0x06, 0x2200, iface.id, buf, buf.size, 5000)
@@ -83,8 +84,8 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         pinRequested: Boolean,
         pin: String?
     ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
-        return CtapHidConnection(context, device, iface).open {
-            register(it, context, options, callerPackage, pinRequested, pin)
+        return CtapHidConnection(activity, device, iface).open {
+            register(it, activity, options, callerPackage, pinRequested, pin)
         }
     }
 
@@ -96,8 +97,8 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         pinRequested: Boolean,
         pin: String?
     ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
-        return CtapHidConnection(context, device, iface).open {
-            sign(it, context, options, callerPackage, pinRequested, pin)
+        return CtapHidConnection(activity, device, iface).open {
+            sign(it, activity, options, callerPackage, pinRequested, pin)
         }
     }
 
@@ -110,10 +111,10 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                 deferred.complete(device)
             }
         }
-        ContextCompat.registerReceiver(context, receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED), RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(activity, receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED), RECEIVER_NOT_EXPORTED)
         invokeStatusChanged(TransportHandlerCallback.STATUS_WAITING_FOR_DEVICE)
         val device = deferred.await()
-        context.unregisterReceiver(receiver)
+        activity.unregisterReceiver(receiver)
         return device
     }
 
@@ -146,7 +147,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         pin: String?,
         credentialIdString: String?
     ): AuthenticatorResponseWithUser<*> {
-        for (device in context.usbManager?.deviceList?.values.orEmpty()) {
+        for (device in activity.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {
                 return handle(options, callerPackage, device, iface, pinRequested, pin)
