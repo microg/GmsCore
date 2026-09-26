@@ -28,7 +28,7 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     }
 }
 
-private val CONFIGURATION_OPTIONS = mapOf(
+val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
         Flag("45477527", true, 0),
