@@ -59,9 +59,7 @@ suspend fun handleGetPnvCapabilities(
                         verificationCapability(
                             9,
                             when {
-                                !GetPnvCapabilitiesApiPhenotype.FPNV_ALLOWED_CARRIER_IDS.contains(
-                                    carrierId
-                                ) ->
+                                !GetPnvCapabilitiesApiPhenotype.isCarrierAllowedForFpnv(carrierId) ->
                                     VerificationStatus.UNSUPPORTED_CARRIER
 
                                 telephonyManager.simState != TelephonyManager.SIM_STATE_READY ->

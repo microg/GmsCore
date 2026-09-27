@@ -182,7 +182,7 @@ internal fun providerFlagValues(namespace: String?): Map<String, String> {
     if (namespace != "com.google.android.ims.library") return emptyMap()
     return CONFIGURATION_OPTIONS[namespace].orEmpty()
         .filter { it.dataType == Flag.DATA_TYPE_BOOL }
-        .associate { it.name to it.bool.toString() }
+        .associate { it.name to it.getBool().toString() }
 }
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {

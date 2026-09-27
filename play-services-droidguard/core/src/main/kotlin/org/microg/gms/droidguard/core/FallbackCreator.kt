@@ -26,8 +26,16 @@ object FallbackCreator {
         }
     }
 
+    /**
+     * Soft fallback when the local DroidGuard VM cannot produce a token.
+     *
+     * Stock GMS has a proprietary offline synthesizer here. Until that is
+     * reverse-engineered, return an ERROR payload instead of throwing
+     * NotImplementedError (callers already tolerate ERROR strings).
+     */
     @JvmStatic
     fun create(map: Map<Any?, Any?>, bytes: ByteArray?, flow: String?, context: Context, e: Throwable): ByteArray {
-        TODO("Not yet implemented")
+        Log.w("DGFallback", "offline fallback unimplemented for flow=$flow", e)
+        return "ERROR : DG fallback unavailable for $flow: ${e.message}".encodeToByteArray()
     }
 }
