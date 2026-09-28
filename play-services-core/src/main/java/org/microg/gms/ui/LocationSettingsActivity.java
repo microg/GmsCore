@@ -29,6 +29,7 @@ import org.microg.gms.accountsettings.ui.MainActivity;
 public class LocationSettingsActivity extends Activity {
 
     private final static String ACCOUNT_NAME = "account_name";
+    private final static String ACCOUNT_NAME_V2 = "accountName";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,8 +39,17 @@ public class LocationSettingsActivity extends Activity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setAction(ACTION_LOCATION_SHARING);
                 Bundle extras = getIntent().getExtras();
-                if (extras != null && extras.containsKey(ACCOUNT_NAME)) {
-                    intent.putExtra(EXTRA_ACCOUNT_NAME, extras.getString(ACCOUNT_NAME));
+                if (extras != null) {
+                    String accountName = null;
+                    if (extras.containsKey(ACCOUNT_NAME)) {
+                        accountName = extras.getString(ACCOUNT_NAME);
+                    }
+                    else if (extras.containsKey(ACCOUNT_NAME_V2)) {
+                        accountName = extras.getString(ACCOUNT_NAME_V2);
+                    }
+                    if (accountName != null) {
+                        intent.putExtra(EXTRA_ACCOUNT_NAME, accountName);
+                    }
                 }
                 startActivity(intent);
             }
