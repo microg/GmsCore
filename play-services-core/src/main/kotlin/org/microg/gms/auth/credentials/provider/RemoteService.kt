@@ -37,6 +37,7 @@ import androidx.credentials.provider.RemoteEntry
 import com.google.android.gms.fido.fido2.api.common.Attachment
 import com.squareup.wire.Instant
 import org.json.JSONObject
+import org.microg.gms.fido.core.parsePublicKeyCredentialCreationOptions
 
 private const val TAG = "RemoteCredentialService"
 
