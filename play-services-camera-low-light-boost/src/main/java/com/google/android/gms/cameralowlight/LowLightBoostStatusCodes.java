@@ -15,9 +15,8 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import org.microg.gms.common.PublicApi;
 
 /**
- * Status codes reported by Camera Low Light Boost operations.
+ * Status codes for {@link LowLightBoost} APIs.
  */
-@PublicApi
 public class LowLightBoostStatusCodes extends CommonStatusCodes {
     public static final int MAX_SESSIONS_REACHED = 52501;
     public static final int GLOBAL_INIT_FAILED = 52502;
@@ -34,6 +33,9 @@ public class LowLightBoostStatusCodes extends CommonStatusCodes {
     protected LowLightBoostStatusCodes() {
     }
 
+    /**
+     * Returns untranslated debug string associated with the status code.
+     */
     @NonNull
     public static String getStatusCodeString(int statusCode) {
         switch (statusCode) {

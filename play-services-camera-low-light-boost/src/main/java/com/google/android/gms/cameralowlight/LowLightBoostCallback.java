@@ -15,17 +15,18 @@ import com.google.android.gms.common.api.Status;
 import org.microg.gms.common.PublicApi;
 
 /**
- * Receives low light boost session lifecycle events.
+ * Callbacks for a {@link LowLightBoostSession}.
  */
-@PublicApi
 public interface LowLightBoostCallback {
     /**
-     * Called when the session is closed and its resources have been released.
+     * Called when the {@link LowLightBoostSession} is destroyed.
      */
     void onSessionDestroyed();
 
     /**
-     * Called when the session is disconnected because of an error.
+     * Called when a {@link LowLightBoostSession} encounters an error.
+     *
+     * @param status the reason for the failure.
      */
     void onSessionDisconnected(@NonNull Status status);
 }

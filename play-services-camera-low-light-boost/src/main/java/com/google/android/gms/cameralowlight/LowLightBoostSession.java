@@ -20,39 +20,58 @@ import org.microg.gms.common.PublicApi;
 import java.util.concurrent.Executor;
 
 /**
- * Active Camera Low Light Boost session.
+ * A low light boost session.
+ * <p>
+ * Manages the necessary surfaces to provide to the camera capture session and outputs the brightened preview to a
+ * {@link Surface} provided by the app.
  */
-@PublicApi
 @RequiresApi(30)
 public interface LowLightBoostSession {
     /**
-     * Returns the camera output surface that receives frames for this session.
+     * Enables automatic preview brightening.
+     * <p>
+     * Enables low light boost to automatically vary the level of brightening applied based on what's appropriate for the scene's
+     * estimated luminance. Disabling low light boost will disable preview brightening.
+     *
+     * @param enable True to enable low boost and False to disable.
+     */
+    void enableLowLightBoost(boolean enable);
+
+    /**
+     * Returns the camera surface.
+     *
+     * @return The camera surface with the requested dimensions. To be used as a capture target.
      */
     @NonNull
     Surface getCameraSurface();
 
     /**
-     * Supplies capture metadata associated with the frames sent to the session surface.
-     */
-    void processCaptureResult(@NonNull TotalCaptureResult captureResult);
-
-    /**
-     * Enables or disables low light boost.
-     */
-    void enableLowLightBoost(boolean enabled);
-
-    /**
-     * Returns whether low light boost is currently enabled for this session.
+     * Returns whether low light boost is enabled.
      */
     boolean isLowLightBoostEnabled();
 
     /**
-     * Registers a callback that receives boost strength changes.
+     * Provides the latest capture result to the render service.
+     * <p>
+     * This must be called for every call to {@link android.hardware.camera2.CameraCaptureSession.CaptureCallback#onCaptureCompleted} in order for automatic
+     * adjustment of preview brightening to function.
+     *
+     * @param captureResult The latest capture result.
      */
-    void setSceneDetectorCallback(@Nullable SceneDetectorCallback callback, @Nullable Executor executor);
+    void processCaptureResult(@NonNull TotalCaptureResult captureResult);
 
     /**
-     * Releases this session and its rendering resources.
+     * Releases this session, freeing up resources.
+     * <p>
+     * The session should no longer be used once released.
      */
     void release();
+
+    /**
+     * Sets the callback for scene detector.
+     *
+     * @param callback The callback for scene detector.
+     * @param executor The executor to run the callback. If not provided, the callback will be run on the main thread.
+     */
+    void setSceneDetectorCallback(@Nullable SceneDetectorCallback callback, @Nullable Executor executor);
 }

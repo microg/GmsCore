@@ -148,11 +148,6 @@ private class LowLightBoostServiceImpl(
         }
     }
 
-    override fun release() {
-        Log.d(TAG, "release service for $packageName")
-        close()
-    }
-
     fun close() {
         val activeSession = synchronized(lock) {
             if (released) return

@@ -10,7 +10,7 @@ import android.os.Parcel
 import android.os.RemoteException
 import android.util.Log
 import android.view.Surface
-import com.google.android.libraries.camera.capture.lowlightboost.internal.CaptureResultParcelable
+import com.google.android.libraries.camera.capture.lowlightboost.internal.FrameMetadata
 import com.google.android.libraries.camera.capture.lowlightboost.internal.ILowLightBoostCallback
 import com.google.android.libraries.camera.capture.lowlightboost.internal.ILowLightBoostSession
 import com.google.android.libraries.camera.capture.lowlightboost.internal.LowLightBoostOptionsParcelable
@@ -64,7 +64,7 @@ internal class LowLightBoostSessionImpl(
     private var creationCallbackDelivered = false
 
     @Volatile
-    private var boostMode = options.enableLowLightBoost
+    private var boostMode = options.initialBoostMode
 
     @Volatile
     private var released = false
@@ -138,15 +138,15 @@ internal class LowLightBoostSessionImpl(
         accepted
     }
 
-    override fun processCaptureResult(captureResult: CaptureResultParcelable?) {
+    override fun processCaptureResult(captureResult: FrameMetadata?) {
         val sensorTimestamp = captureResult?.sensorTimestamp ?: return
         if (sensorTimestamp <= 0) return
         synchronized(lock) { renderer }?.queueCaptureTimestamp(sensorTimestamp)
     }
 
-    override fun isLowLightBoostEnabled(): Int = boostMode
+    override fun getLowLightBoostMode(): Int = boostMode
 
-    override fun enableLowLightBoost(boostMode: Int) {
+    override fun setLowLightBoostMode(boostMode: Int) {
         if (!boostMode.isSupportedLowLightBoostMode) {
             Log.w(TAG, "Ignoring invalid low light boost mode: $boostMode")
             return

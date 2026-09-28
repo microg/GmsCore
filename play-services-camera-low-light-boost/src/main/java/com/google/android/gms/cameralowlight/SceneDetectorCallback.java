@@ -13,9 +13,14 @@ import androidx.annotation.NonNull;
 import org.microg.gms.common.PublicApi;
 
 /**
- * Receives changes to the recommended low light boost strength.
+ * Handles callbacks notifying changes in scene lighting conditions.
  */
-@PublicApi
 public interface SceneDetectorCallback {
+    /**
+     * Called when the scene brightness changes.
+     *
+     * @param session       the session associated with the brightness change.
+     * @param boostStrength the current boost value, in the range 0.0, 1.0. When the value exceeds 0.5, the scene is considered low light.
+     */
     void onSceneBrightnessChanged(@NonNull LowLightBoostSession session, float boostStrength);
 }

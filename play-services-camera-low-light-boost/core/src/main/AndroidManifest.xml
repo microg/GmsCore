@@ -6,7 +6,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <application>
-        <!-- Intentionally exported for Play services clients; the Binder entry verifies package and UID. -->
         <service
             android:name="org.microg.gms.cameralowlight.CameraLowLightService"
             android:exported="true"

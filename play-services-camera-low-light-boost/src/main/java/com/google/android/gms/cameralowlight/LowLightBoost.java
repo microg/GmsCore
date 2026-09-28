@@ -13,23 +13,29 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import org.microg.gms.common.PublicApi;
-
 /**
- * Entry point for the Camera Low Light Boost APIs.
+ * Low Light Boost API.
+ * <p>
+ * Low Light Boost automatically adjusts the camera surface brightness to adapt to low light scenes. The capability can apply
+ * to the preview stream, still captures, and video recordings.
+ * <p>
+ * To use this API, you must get an instance of {@link com.google.android.gms.cameralowlight.LowLightBoostClient} and then
+ * check that the device supports the feature.
  */
-@PublicApi
-@RequiresApi(30)
 public class LowLightBoost {
+    @NonNull
     public static final LowLightBoost INSTANCE = new LowLightBoost();
 
     private LowLightBoost() {
     }
 
     /**
-     * Creates a client scoped to a context.
+     * Creates a new instance of {@link LowLightBoostClient}.
+     *
+     * @param context the context that is using this client
      */
     @NonNull
+    @RequiresApi(30)
     public static LowLightBoostClient getClient(@NonNull Context context) {
         throw new UnsupportedOperationException();
     }

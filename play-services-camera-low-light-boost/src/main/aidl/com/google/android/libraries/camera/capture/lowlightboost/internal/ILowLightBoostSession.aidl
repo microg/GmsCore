@@ -5,11 +5,11 @@
 
 package com.google.android.libraries.camera.capture.lowlightboost.internal;
 
-import com.google.android.libraries.camera.capture.lowlightboost.internal.CaptureResultParcelable;
+import com.google.android.libraries.camera.capture.lowlightboost.internal.FrameMetadata;
 
 interface ILowLightBoostSession {
-    oneway void processCaptureResult(in CaptureResultParcelable captureResult) = 0;
-    int isLowLightBoostEnabled() = 1;
-    oneway void enableLowLightBoost(int boostMode) = 2;
+    oneway void processCaptureResult(in FrameMetadata frameMetadata) = 0;
+    int getLowLightBoostMode() = 1;
+    oneway void setLowLightBoostMode(int boostMode) = 2;
     oneway void release() = 3;
 }

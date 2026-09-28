@@ -46,7 +46,7 @@ internal fun LowLightBoostOptionsParcelable.isValidForSession(): Boolean {
             captureWidth in 1..MAX_CAPTURE_DIMENSION &&
             captureHeight in 1..MAX_CAPTURE_DIMENSION &&
             captureWidth.toLong() * captureHeight <= MAX_CAPTURE_PIXELS &&
-            enableLowLightBoost.isSupportedLowLightBoostMode
+            initialBoostMode.isSupportedLowLightBoostMode
 }
 
 internal fun ILowLightBoostCallback.tryNotifySessionStatus(status: Int): Boolean {

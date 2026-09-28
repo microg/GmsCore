@@ -5,4 +5,4 @@
 
 package com.google.android.libraries.camera.capture.lowlightboost.internal;
 
-parcelable CaptureResultParcelable;
+parcelable FrameMetadata;
