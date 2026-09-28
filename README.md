@@ -7,7 +7,12 @@
 
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
-### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+## Getting started
+
+- [Download the latest release](https://github.com/microg/GmsCore/releases/latest) or use the [Downloads wiki page](https://github.com/microg/GmsCore/wiki/Downloads) for microG Services, Services Framework Proxy, FakeStore, and related components.
+- Follow the [Installation guide](https://github.com/microg/GmsCore/wiki/Installation) to install microG Services and companion packages.
+- Check [Signature Spoofing](https://github.com/microg/GmsCore/wiki/Signature-Spoofing) if your ROM or installation method needs permission setup.
+- See the [full wiki](https://github.com/microg/GmsCore/wiki) for device-specific notes, troubleshooting, and optional configuration.
 
 ## Translations
 
