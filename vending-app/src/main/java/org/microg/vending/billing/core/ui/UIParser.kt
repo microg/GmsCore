@@ -98,7 +98,10 @@ private fun parseAction(action: Action?, result: BAction): Boolean {
     }
     action.viewClickAction?.let { viewClickAction ->
         if (viewClickAction.uiInfo != null) {
-            result.uiInfo = parseUIInfo(viewClickAction.uiInfo!!)
+            val parsedUiInfo = parseUIInfo(viewClickAction.uiInfo!!)
+            if (parsedUiInfo.uiType != UIType.UNKNOWN) {
+                result.uiInfo = parsedUiInfo
+            }
         }
         return parseAction(viewClickAction.action, result)
     }

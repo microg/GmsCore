@@ -27,6 +27,8 @@ dependencies {
     }
     implementation 'org.maplibre.gl:android-sdk-turf:5.9.0'
 
+    compileOnly 'com.squareup.okhttp3:okhttp:4.10.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
