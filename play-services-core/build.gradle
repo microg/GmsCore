@@ -52,6 +52,7 @@ dependencies {
     implementation project(':play-services-wearable-core')
 
     implementation project(':play-services-core-proto')
+    implementation project(':play-services-chimera-core')
 
     implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-base-core-package')

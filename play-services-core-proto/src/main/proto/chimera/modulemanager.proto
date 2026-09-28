@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package com.google.android.chimera.config;
+import "chimera/chimeramanifest.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ModuleManagerProto";
+
+message FeatureMessage {
+  optional string featureName = 1;
+  optional int64 featureVersion = 2;
+  optional bool unknownBool3 = 3;
+  optional bool unknownBool4 = 4;
+  optional bool unknownBool5 = 5;
+  repeated FeatureDescriptor featureDescriptor = 6;
+}
+
+message FeaturesMessage {
+  repeated FeatureMessage features = 1;
+}

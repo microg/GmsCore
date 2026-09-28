@@ -9,12 +9,15 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.chimera.DynamiteContextFactory;
 
+import java.io.File;
+
 public class DynamiteContext extends ContextWrapper {
-    private static final String TAG = "DynamiteContext";
     private DynamiteModuleInfo moduleInfo;
     private Context originalContext;
     private Context gmsContext;
@@ -44,13 +47,29 @@ public class DynamiteContext extends ContextWrapper {
     }
 
     @Override
+    public File getDir(String name, int mode) {
+        if ("chimera".equals(name)) {
+            return gmsContext.getDir(name, mode);
+        } else {
+            return super.getDir(name, mode);
+        }
+    }
+
+    @RequiresApi(30)
+    @NonNull
+    @Override
+    public Context createAttributionContext(@Nullable String attributionTag) {
+        return new DynamiteContext(moduleInfo, super.createAttributionContext(attributionTag), gmsContext.createAttributionContext(attributionTag), this);
+    }
+
+    @Override
     public ApplicationInfo getApplicationInfo() {
         return gmsContext.getApplicationInfo();
     }
 
     @Override
     public Context getApplicationContext() {
-        return appContext;
+        return appContext == null ? this : appContext;
     }
 
     @RequiresApi(24)

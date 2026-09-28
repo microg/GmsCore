@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+option java_package = "com.google.android.gms.chimera";
+option java_multiple_files = false;
+
+message ModuleInfo {
+  optional string source = 1;
+  optional int32 status = 2;
+  optional string filename = 3;
+  optional string sha256_hash = 4;
+  optional int32 priority = 5;
+  optional string module_name = 6;
+  optional string module_version = 7;
+}

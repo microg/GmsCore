@@ -157,6 +157,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
@@ -527,6 +528,50 @@
             android:process=":ui"
             android:theme="@style/Theme.App.Translucent" />
 
+        <activity
+            android:name="com.google.android.chimera.component.ModuleDownloadActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent" />
+
+        <receiver
+            android:name="com.google.android.chimera.component.ModuleImportCompletionReceiver"
+            android:exported="false"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.chimera.component.MODULE_IMPORT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="org.microg.gms.moduleinstall.dynamicmodule.ModuleImportActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboardHidden"
+            android:label="@string/gms_app_name"
+            android:theme="@style/Theme.App.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.microg.mods" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/vnd.microg.mods" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".auth.GetToken"
             android:exported="true" />
@@ -806,10 +851,66 @@
             android:exported="false" />
 
         <!-- Chimera -->
+        <service
+            android:exported="true"
+            android:name="com.google.android.gms.chimera.GmsApiService">
+            <intent-filter>
+                <action android:name="com.google.android.chimera.BoundService.START"/>
+                <data android:scheme="chimera-action"/>
+            </intent-filter>
+        </service>
+        <service
+            android:exported="true"
+            android:name="com.google.android.gms.chimera.PersistentApiService">
+            <intent-filter>
+                <action android:name="com.google.android.chimera.BoundService.START"/>
+                <data android:scheme="chimera-action"/>
+            </intent-filter>
+        </service>
+        <service
+            android:exported="true"
+            android:directBootAware="true"
+            android:name="com.google.android.gms.chimera.PersistentDirectBootAwareApiService">
+            <intent-filter>
+                <action android:name="com.google.android.chimera.BoundService.START"/>
+                <data android:scheme="chimera-action"/>
+            </intent-filter>
+        </service>
+
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
             android:authorities="com.google.android.gms.chimera"
             android:exported="true" />
+
+        <!-- Module Install -->
+        <service
+            android:name="org.microg.gms.moduleinstall.ModuleInstallService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- DocScan -->
+        <activity
+            android:name="com.google.android.gms.mlkit.docscan.ui.DocumentScanningActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:process=":ui"
+            android:resizeableActivity="false"
+            android:supportsPictureInPicture="false"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+            tools:targetApi="24">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_DOCUMENT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data
+                android:name="chimera.requested_features"
+                android:value="mlkit.docscan.ui"/>
+        </activity>
 
         <!-- Fonts -->
         <provider
