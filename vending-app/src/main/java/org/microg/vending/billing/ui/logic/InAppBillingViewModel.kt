@@ -75,6 +75,8 @@ class InAppBillingViewModel : ViewModel() {
         )
     )
     private lateinit var lastBuyFlowResult: BuyFlowResult
+    private val screenHistory = BillingScreenHistory()
+    private var currentScreenId: String? = null
 
     private fun finishWithResult(result: Bundle) {
         viewModelScope.launch {
@@ -268,14 +270,36 @@ class InAppBillingViewModel : ViewModel() {
                         }
                     }
 
+                    UIType.BILLING_PROFILE_SCREEN_ABANDON -> {
+                        if (showPreviousScreen()) return
+                        finishWithResult(billingUiViewState.result)
+                    }
+
                     else -> finishWithResult(billingUiViewState.result)
                 }
             }
         }
     }
 
-    private fun showScreen(screenId: String): Boolean {
+    private fun showPreviousScreen(): Boolean {
+        val previousScreenId = screenHistory.popPrevious(
+            currentScreenId,
+            billingUiViewState.screenMap::containsKey
+        )
+        return previousScreenId != null && showScreen(
+            previousScreenId,
+            recordHistory = false
+        )
+    }
+
+    private fun showScreen(
+        screenId: String,
+        recordHistory: Boolean = true
+    ): Boolean {
+        val previousScreenId = currentScreenId
         val showScreen = billingUiViewState.screenMap[screenId] ?: return false
+        if (recordHistory) screenHistory.recordTransition(previousScreenId, screenId)
+        currentScreenId = screenId
         billingUiViewState = billingUiViewState.copy(
             showScreen = showScreen,
             visible = true
@@ -300,11 +324,15 @@ class InAppBillingViewModel : ViewModel() {
         }
         val action = buyFlowResult.acquireResult?.action ?: return failAction()
         val screenMap = buyFlowResult.acquireResult.screenMap
-        val showScreen = screenMap[action.screenId] ?: return failAction()
+        val targetScreenId = action.screenId ?: return failAction()
+        val showScreen = screenMap[targetScreenId] ?: return failAction()
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "handleAcquireResult, showScreen:$showScreen result:${buyFlowResult.acquireResult}")
         if (action.type != ActionType.SHOW) return failAction()
         lastBuyFlowResult = buyFlowResult
+        val previousScreenId = currentScreenId
         billingUiViewState.screenMap.putAll(screenMap)
+        screenHistory.recordTransition(previousScreenId, targetScreenId)
+        currentScreenId = targetScreenId
         billingUiViewState = billingUiViewState.copy(
             showScreen = showScreen,
             result = buyFlowResult.result,

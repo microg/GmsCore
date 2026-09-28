@@ -67,7 +67,6 @@
             android:excludeFromRecents="true"
             android:configChanges="smallestScreenSize|screenSize|uiMode|screenLayout|orientation|keyboardHidden|keyboard"
             android:launchMode="singleTask"
-            android:noHistory="true"
             tools:targetApi="23">
             <intent-filter android:icon="@drawable/ic_fido_passkey">
                 <action android:name="android.intent.action.VIEW"/>
