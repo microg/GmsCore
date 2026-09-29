@@ -16,6 +16,9 @@
 
 package org.microg.gms.wearable;
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -87,6 +90,9 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionThread flowServer;
+    private BluetoothConnectionThread flow15Server;
+    private final Map<String, BluetoothConnectionThread> bluetoothClients = new HashMap<String, BluetoothConnectionThread>();
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
@@ -392,6 +398,13 @@ public class WearableImpl {
         return nodes;
     }
 
+    /**
+     * Node IDs with an active wire connection.
+     */
+    public Set<String> getAllConnectedNodes() {
+        return new HashSet<String>(activeConnections.keySet());
+    }
+
     interface ListenerInvoker {
         void invoke(IWearableListener listener) throws RemoteException;
     }
@@ -491,6 +504,9 @@ public class WearableImpl {
         if (!listeners.containsKey(packageName)) {
             listeners.put(packageName, new ArrayList<ListenerInfo>());
         }
+        if (filters == null) {
+            filters = new IntentFilter[0];
+        }
         listeners.get(packageName).add(new ListenerInfo(listener, filters));
     }
 
@@ -508,20 +524,113 @@ public class WearableImpl {
     public void enableConnection(String name) {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
         if (name.equals("server") && sct == null) {
             Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
-            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, config))).start();
         }
+        startBluetoothForConfig(config);
     }
 
     public void disableConnection(String name) {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
         if (name.equals("server") && sct != null) {
-            activeConnections.remove(sct.getWearableConnection());
+            WearableConnection conn = sct.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
             sct.close();
             sct.interrupt();
             sct = null;
+        }
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+        if (config != null && !TextUtils.isEmpty(config.address)) {
+            stopBluetoothClient(config.address);
+        }
+    }
+
+    /**
+     * Starts Flow/Flow15 listeners (phone-as-server) and, when {@code config.address} is a
+     * Bluetooth MAC, a WearableBt client connection to that watch.
+     */
+    @SuppressLint("MissingPermission")
+    private void startBluetoothForConfig(ConnectionConfiguration config) {
+        if (config == null) return;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null || !adapter.isEnabled()) {
+            Log.w(TAG, "Bluetooth unavailable or disabled; skipping RFCOMM for " + config.name);
+            return;
+        }
+        ensureBluetoothServers(adapter, config);
+        if (!TextUtils.isEmpty(config.address) && BluetoothAdapter.checkBluetoothAddress(config.address)) {
+            startBluetoothClient(adapter, config);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private synchronized void ensureBluetoothServers(BluetoothAdapter adapter, ConnectionConfiguration config) {
+        if (flowServer == null) {
+            Log.d(TAG, "Starting Bluetooth Flow server");
+            flowServer = BluetoothConnectionThread.serverListen(
+                    adapter,
+                    BluetoothConnectionThread.FLOW_SERVICE_NAME,
+                    BluetoothConnectionThread.FLOW_UUID,
+                    new MessageHandler(context, this, config));
+            flowServer.start();
+        }
+        if (flow15Server == null) {
+            Log.d(TAG, "Starting Bluetooth Flow15 server");
+            flow15Server = BluetoothConnectionThread.serverListen(
+                    adapter,
+                    BluetoothConnectionThread.FLOW15_SERVICE_NAME,
+                    BluetoothConnectionThread.FLOW15_UUID,
+                    new MessageHandler(context, this, config));
+            flow15Server.start();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private synchronized void startBluetoothClient(BluetoothAdapter adapter, ConnectionConfiguration config) {
+        String address = config.address;
+        BluetoothConnectionThread existing = bluetoothClients.get(address);
+        if (existing != null && existing.isAlive()) {
+            Log.d(TAG, "Bluetooth client already running for " + address);
+            return;
+        }
+        BluetoothDevice device = adapter.getRemoteDevice(address);
+        Log.d(TAG, "Connecting WearableBt client to " + address);
+        BluetoothConnectionThread client = BluetoothConnectionThread.clientConnect(
+                device, new MessageHandler(context, this, config));
+        bluetoothClients.put(address, client);
+        client.start();
+    }
+
+    private synchronized void stopBluetoothClient(String address) {
+        BluetoothConnectionThread client = bluetoothClients.remove(address);
+        if (client != null) {
+            WearableConnection conn = client.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
+            client.close();
+            client.interrupt();
+        }
+    }
+
+    private synchronized void stopAllBluetooth() {
+        if (flowServer != null) {
+            flowServer.close();
+            flowServer.interrupt();
+            flowServer = null;
+        }
+        if (flow15Server != null) {
+            flow15Server.close();
+            flow15Server.interrupt();
+            flow15Server = null;
+        }
+        for (String address : new ArrayList<String>(bluetoothClients.keySet())) {
+            stopBluetoothClient(address);
         }
     }
 
@@ -581,7 +690,7 @@ public class WearableImpl {
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
@@ -622,6 +731,12 @@ public class WearableImpl {
     }
 
     public void stop() {
+        stopAllBluetooth();
+        if (sct != null) {
+            sct.close();
+            sct.interrupt();
+            sct = null;
+        }
         try {
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
