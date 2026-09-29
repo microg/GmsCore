@@ -74,6 +74,7 @@ import com.google.android.play.core.integrity.protocol.IExpressIntegrityServiceC
 import com.google.android.play.core.integrity.protocol.IRequestDialogCallback
 import com.google.crypto.tink.config.TinkConfig
 import okio.ByteString.Companion.toByteString
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.vending.PlayIntegrityData
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
@@ -103,9 +104,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
     private var visitData: PlayIntegrityData? = null
 
     override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
+        val callingPackageName = PackageUtils.getAndCheckCallingPackage(context, bundle.getString(KEY_PACKAGE_NAME))
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
                 if (callingPackageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }
@@ -264,9 +265,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
     override fun requestExpressIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         Log.d(TAG, "requestExpressIntegrityToken bundle:$bundle")
+        val callingPackageName = PackageUtils.getAndCheckCallingPackage(context, bundle.getString(KEY_PACKAGE_NAME))
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
                 if (callingPackageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }
