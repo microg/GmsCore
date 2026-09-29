@@ -17,6 +17,7 @@
 package org.microg.gms.wearable.location;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -139,12 +140,15 @@ public class WearableLocationService extends WearableListenerService {
     }
 
     private static ClientIdentity generateClientIdentity(String packageName, Context context) {
-        return null;
-        /*try {
-            return new ClientIdentity(context.getPackageManager().getApplicationInfo(packageName, 0).uid, packageName);
+        ClientIdentity identity = new ClientIdentity();
+        try {
+            identity.uid = context.getPackageManager().getApplicationInfo(packageName, 0).uid;
+            identity.packageName = packageName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Unknown client identity: " + packageName, e);
-            return new ClientIdentity(context.getApplicationInfo().uid, context.getPackageName());
-        }*/
+            identity.uid = context.getApplicationInfo().uid;
+            identity.packageName = context.getPackageName();
+        }
+        return identity;
     }
 }
