@@ -15,38 +15,38 @@ import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.droidguard.DroidGuardClient
-import com.google.android.gms.safetynet.AttestationData
 import com.google.android.gms.safetynet.HarmfulAppsInfo
 import com.google.android.gms.safetynet.RecaptchaResultData
 import com.google.android.gms.safetynet.SafeBrowsingData
 import com.google.android.gms.safetynet.SafetyNetStatusCodes
 import com.google.android.gms.safetynet.internal.ISafetyNetCallbacks
 import com.google.android.gms.safetynet.internal.ISafetyNetService
-import com.google.android.gms.tasks.await
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.CheckIn.getContentUri
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.getCertificates
+import org.microg.gms.utils.toBase64
 import org.microg.gms.utils.warnOnTransactionIssues
-import java.io.IOException
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 import java.net.URLEncoder
+import java.security.MessageDigest
 
 private const val TAG = "GmsSafetyNet"
 private const val DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
 
 class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+        PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         callback.onPostInitComplete(0, SafetyNetClientServiceImpl(this, request.packageName, lifecycle), null)
     }
 }
@@ -67,74 +67,8 @@ class SafetyNetClientServiceImpl(
     }
 
     override fun attestWithApiKey(callbacks: ISafetyNetCallbacks, nonce: ByteArray?, apiKey: String) {
-        if (nonce == null) {
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "Nonce missing"), null)
-            return
-        }
-
-        if (!SafetyNetPreferences.isEnabled(context)) {
-            Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
-            return
-        }
-
-        if (!DroidGuardPreferences.isAvailable(context)) {
-            Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Unsupported"), null)
-            return
-        }
-
-        lifecycleScope.launchWhenStarted {
-            val db = SafetyNetDatabase(context)
-            var requestID: Long = -1
-            try {
-                val attestation = Attestation(context, packageName)
-                val safetyNetData = attestation.buildPayload(nonce)
-
-                requestID = db.insertRecentRequestStart(
-                    SafetyNetRequestType.ATTESTATION,
-                    safetyNetData.packageName,
-                    safetyNetData.nonce?.toByteArray(),
-                    safetyNetData.currentTimeMs ?: 0
-                )
-
-                val data = mapOf("contentBinding" to attestation.payloadHashBase64)
-                val dg = withContext(Dispatchers.IO) { DroidGuardClient.getResults(context, "attest", data).await() }
-                attestation.setDroidGuardResult(dg)
-                val jwsResult = withContext(Dispatchers.IO) { attestation.attest(apiKey) }
-
-
-                val jsonData = try {
-                    requireNotNull(jwsResult)
-                    jwsResult.split(".").let {
-                        assert(it.size == 3)
-                        return@let Base64.decode(it[1], Base64.URL_SAFE).decodeToString()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.w(TAG, "An exception occurred when parsing the JWS token.")
-                    null
-                }
-
-                db.insertRecentRequestEnd(requestID, Status.SUCCESS, jsonData)
-                callbacks.onAttestationResult(Status.SUCCESS, AttestationData(jwsResult))
-            } catch (e: Exception) {
-                Log.w(TAG, "Exception during attest: ${e.javaClass.name}", e)
-                val code = when (e) {
-                    is IOException -> SafetyNetStatusCodes.NETWORK_ERROR
-                    else -> SafetyNetStatusCodes.ERROR
-                }
-                val status = Status(code, e.localizedMessage)
-
-                // This shouldn't happen, but do not update the database if it didn't insert the start of the request
-                if (requestID != -1L) db.insertRecentRequestEnd(requestID, status, null)
-                try {
-                    callbacks.onAttestationResult(Status(code, e.localizedMessage), null)
-                } catch (e: Exception) {
-                    Log.w(TAG, "Exception while sending error", e)
-                }
-            }
-            db.close()
+        runCatching {
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.API_NOT_CONNECTED, "The SafetyNet Attestation API is deprecated and no longer functional."), null)
         }
     }
 
@@ -162,6 +96,21 @@ class SafetyNetClientServiceImpl(
         callbacks.onHarmfulAppsInfo(Status.SUCCESS, HarmfulAppsInfo().apply {
             lastScanTime = ((System.currentTimeMillis() - VERIFY_APPS_LAST_SCAN_DELAY) / VERIFY_APPS_LAST_SCAN_TIME_ROUNDING) * VERIFY_APPS_LAST_SCAN_TIME_ROUNDING + VERIFY_APPS_LAST_SCAN_OFFSET
         })
+    }
+
+    private fun InputStream.digest(algorithm: String): ByteArray {
+        val digest = MessageDigest.getInstance(algorithm)
+        val data = ByteArray(4096)
+        while (true) {
+            val read = read(data)
+            if (read < 0) break
+            digest.update(data, 0, read)
+        }
+        return digest.digest()
+    }
+
+    private fun File.digest(algorithm: String): ByteArray {
+        return FileInputStream(this).use { it.digest(algorithm) }
     }
 
     override fun verifyWithRecaptcha(callbacks: ISafetyNetCallbacks, siteKey: String?) {
@@ -199,11 +148,11 @@ class SafetyNetClientServiceImpl(
         val (packageFileDigest, packageSignatures) = try {
             Pair(
                 Base64.encodeToString(
-                    Attestation.getPackageFileDigest(context, packageName),
+                    File(context.packageManager.getApplicationInfo(packageName, 0).sourceDir).digest("SHA-256"),
                     Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
                 ),
-                Attestation.getPackageSignatures(context, packageName)
-                    .map { Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING) }
+                context.packageManager.getCertificates(packageName)
+                    .map { it.digest("SHA-256").toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING) }
             )
         } catch (e: Exception) {
             db.insertRecentRequestEnd(requestID, Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
