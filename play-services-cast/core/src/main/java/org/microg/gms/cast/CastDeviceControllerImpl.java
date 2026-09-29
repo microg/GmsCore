@@ -23,6 +23,7 @@ import java.util.Collections;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Base64;
@@ -66,7 +67,9 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     private CastDevice castDevice;
     boolean notificationEnabled;
     long castFlags;
-    ICastDeviceControllerListener listener;
+    volatile ICastDeviceControllerListener listener;
+    private IBinder listenerBinder;
+    private IBinder.DeathRecipient listenerDeathRecipient;
 
     ChromeCast chromecast;
 
@@ -89,6 +92,63 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.chromecast.registerListener(this);
         this.chromecast.registerRawMessageListener(this);
         this.chromecast.registerConnectionListener(this);
+    }
+
+    private synchronized void replaceListener(ICastDeviceControllerListener listener) {
+        clearListenerLocked();
+        if (listener == null) return;
+
+        IBinder binder = listener.asBinder();
+        IBinder.DeathRecipient deathRecipient = () -> handleListenerDeath(binder);
+        this.listener = listener;
+        this.listenerBinder = binder;
+        this.listenerDeathRecipient = deathRecipient;
+        try {
+            binder.linkToDeath(deathRecipient, 0);
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to link Cast client death: " + e.getMessage());
+            handleListenerDeath(binder);
+        }
+    }
+
+    private synchronized void clearListener() {
+        clearListenerLocked();
+    }
+
+    private void clearListenerLocked() {
+        IBinder binder = this.listenerBinder;
+        IBinder.DeathRecipient deathRecipient = this.listenerDeathRecipient;
+        this.listener = null;
+        this.listenerBinder = null;
+        this.listenerDeathRecipient = null;
+        if (binder != null && deathRecipient != null) {
+            try {
+                binder.unlinkToDeath(deathRecipient, 0);
+            } catch (Exception ignored) {
+                // listener may already be dead
+            }
+        }
+    }
+
+    private void handleListenerDeath(IBinder deadBinder) {
+        synchronized (this) {
+            // A death notification can already be queued when a listener is replaced. Never let
+            // the old client's death tear down the newer client's active Cast session.
+            if (deadBinder != this.listenerBinder) return;
+            this.listener = null;
+            this.listenerBinder = null;
+            this.listenerDeathRecipient = null;
+        }
+        Log.d(TAG, "Cast client died; disconnecting from device");
+        disconnectChromecast();
+    }
+
+    private void disconnectChromecast() {
+        try {
+            this.chromecast.disconnect();
+        } catch (IOException e) {
+            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
+        }
     }
 
     @Override
@@ -147,12 +207,12 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         switch (message.getPayloadType()) {
             case STRING:
                 String response = message.getPayloadUtf8();
-                if (requestId == null) {
-                    this.onTextMessageReceived(message.getNamespace(), response);
-                } else {
-                    this.onSendMessageSuccess(response, requestId);
-                    this.onTextMessageReceived(message.getNamespace(), response);
-                }
+                // Every inbound text message is an application-level message (e.g. MEDIA_STATUS)
+                // and must be delivered via onTextMessageReceived. Do NOT report it as a send
+                // success here: onSendMessageSuccess is keyed by the *outgoing* send's requestId
+                // (signalled in sendMessage), not the response's requestId — conflating them
+                // completes a non-existent client task and throws a RemoteException.
+                this.onTextMessageReceived(message.getNamespace(), response);
                 break;
             case BINARY:
                 byte[] payload = message.getPayloadBinary();
@@ -162,19 +222,51 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     @Override
-    public void disconnect() {
+    public void connect() {
+        // Connectionless (cxless) entry point. The classic path connects lazily on first
+        // launch/sendMessage, but the cxless client blocks until it receives
+        // onConnectedWithResult, so open the CastV2 channel now and signal readiness.
+        Log.d(TAG, "connect()");
         try {
-            this.chromecast.disconnect();
-        } catch (IOException e) {
-            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
-            return;
+            if (!this.chromecast.isConnected()) {
+                this.chromecast.connect();
+            }
+            this.onConnectedWithResult(CommonStatusCodes.SUCCESS);
+        } catch (Exception e) {
+            Log.w(TAG, "Error connecting to chromecast: " + e.getMessage());
+            this.onConnectedWithResult(CommonStatusCodes.NETWORK_ERROR);
         }
+    }
+
+    @Override
+    public void setListener(ICastDeviceControllerListener listener) {
+        // cxless delivers the listener here instead of via the GetServiceRequest "listener" extra.
+        Log.d(TAG, "setListener()");
+        replaceListener(listener);
+    }
+
+    @Override
+    public void unregisterListener() {
+        Log.d(TAG, "unregisterListener()");
+        clearListener();
+    }
+
+    @Override
+    public void disconnect() {
+        // ChromeCast.disconnect() synchronously emits the connection event used to deliver the
+        // client's onDisconnected callback, so keep the live listener until that event returns.
+        disconnectChromecast();
+        clearListener();
     }
 
     @Override
     public void sendMessage(String namespace, String message, long requestId) {
         try {
             this.chromecast.sendRawRequest(namespace, message, requestId);
+            // Signal transport-level send success keyed by the outgoing send's requestId so the
+            // client's sendMessage Task completes; the receiver's reply arrives separately as an
+            // inbound message via onTextMessageReceived.
+            this.onSendMessageSuccess("", requestId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
@@ -226,9 +318,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onDisconnected(int reason) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onDisconnected(reason);
+                l.onDisconnected(reason);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDisconnected: " + ex.getMessage());
             }
@@ -236,9 +329,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
+                l.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + ex.getMessage());
             }
@@ -246,9 +340,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationConnectionFailure(int statusCode) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationConnectionFailure(statusCode);
+                l.onApplicationConnectionFailure(statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionFailure: " + ex.getMessage());
             }
@@ -256,9 +351,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onTextMessageReceived(String namespace, String message) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onTextMessageReceived(namespace, message);
+                l.onTextMessageReceived(namespace, message);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
             }
@@ -266,9 +362,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onBinaryMessageReceived(String namespace, byte[] data) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onBinaryMessageReceived(namespace, data);
+                l.onBinaryMessageReceived(namespace, data);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onBinaryMessageReceived: " + ex.getMessage());
             }
@@ -277,9 +374,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
     public void onApplicationDisconnected(int paramInt) {
         Log.d(TAG, "unimplemented Method: onApplicationDisconnected");
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationDisconnected(paramInt);
+                l.onApplicationDisconnected(paramInt);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationDisconnected: " + ex.getMessage());
             }
@@ -287,9 +385,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onSendMessageFailure(String response, long requestId, int statusCode) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onSendMessageFailure(response, requestId, statusCode);
+                l.onSendMessageFailure(response, requestId, statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onSendMessageFailure: " + ex.getMessage());
             }
@@ -297,9 +396,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onSendMessageSuccess(String response, long requestId) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onSendMessageSuccess(response, requestId);
+                l.onSendMessageSuccess(response, requestId);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onSendMessageSuccess: " + ex.getMessage());
             }
@@ -307,9 +407,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationStatusChanged(ApplicationStatus applicationStatus) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationStatusChanged(applicationStatus);
+                l.onApplicationStatusChanged(applicationStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationStatusChanged: " + ex.getMessage());
             }
@@ -317,11 +418,23 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onDeviceStatusChanged(CastDeviceStatus deviceStatus) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onDeviceStatusChanged(deviceStatus);
+                l.onDeviceStatusChanged(deviceStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onConnectedWithResult(int statusCode) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
+            try {
+                l.onConnectedWithResult(statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onConnectedWithResult: " + ex.getMessage());
             }
         }
     }
