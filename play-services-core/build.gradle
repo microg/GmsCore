@@ -29,10 +29,12 @@ dependencies {
     implementation project(':play-services-auth-api-phone-core')
     implementation project(':play-services-auth-blockstore-core')
     implementation project(':play-services-auth-workaccount-core')
+    implementation project(':play-services-asterism-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
     implementation project(':play-services-conscrypt-provider-core')
+    implementation project(':play-services-constellation-core')
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')
     implementation project(':play-services-fido-core')
@@ -111,6 +113,8 @@ dependencies {
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
     implementation "io.coil-kt:coil-compose:2.4.0"
+
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
@@ -153,6 +157,9 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
+        }
+        test {
+            java.srcDirs += 'src/test/kotlin'
         }
     }
 
