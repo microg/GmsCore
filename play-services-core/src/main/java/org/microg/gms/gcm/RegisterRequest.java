@@ -20,6 +20,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.android.gms.BuildConfig;
+
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.profile.Build;
@@ -41,6 +43,10 @@ public class RegisterRequest extends HttpFormClient.Request {
     private String auth;
     @RequestHeader("User-Agent")
     private String userAgent;
+
+    @RequestHeader("gcm_ver")
+    @RequestContent("gcm_ver")
+    private int gcmVersion = BuildConfig.VERSION_CODE;
 
     @RequestHeader("app")
     @RequestContent("app")
