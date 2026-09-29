@@ -16,9 +16,10 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
-import org.microg.gms.location.LocationSettings
+import org.microg.gms.location.reporting.hasAnyLocalAccountReportingEnabled
 
 private const val TAG = "OdlhBackupService"
 
@@ -29,13 +30,21 @@ class OdlhBackupService : LifecycleService() {
         private const val BACKUP_INTERVAL_MS = 8 * 60 * 60 * 1000L // 8h
 
         fun scheduleBackup(context: Context) {
-            val allowedMapsTimelineFeature = LocationSettings(context).mapsTimelineUpload
-            if (!allowedMapsTimelineFeature) {
-                Log.w(TAG, "scheduleBackup: not allowed report")
+            if (!hasAnyLocalAccountReportingEnabled(context)) {
+                cancelBackup(context)
+                Log.d(TAG, "scheduleBackup: skipped because local upload is disabled")
                 return
             }
             val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, OdlhBackupService::class.java).setAction(ACTION_BACKUP)
+            val existingIntent = PendingIntent.getService(
+                context, 0, intent,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            )
+            if (existingIntent != null) {
+                Log.d(TAG, "scheduleBackup: periodic backup already scheduled")
+                return
+            }
             val pendingIntent = PendingIntent.getService(
                 context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -55,9 +64,10 @@ class OdlhBackupService : LifecycleService() {
             val intent = Intent(context, OdlhBackupService::class.java).setAction(ACTION_BACKUP)
             val pendingIntent = PendingIntent.getService(
                 context, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            ) ?: return
             alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
             Log.d(TAG, "cancelBackup: periodic backup cancelled")
         }
     }
@@ -74,7 +84,7 @@ class OdlhBackupService : LifecycleService() {
 
         Log.d(TAG, "onStartCommand: periodic backup triggered")
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 performBackupForAllAccounts()
             } catch (e: Exception) {
@@ -101,7 +111,7 @@ class OdlhBackupService : LifecycleService() {
         for (account in accounts) {
             try {
                 Log.d(TAG, "performBackupForAllAccounts: starting for ${account.name}")
-                val result = OdlhBackupProcessor.performIncrementalBackup(this, account.name)
+                val result = OdlhBackupProcessor.performIncrementalBackup(this, account)
                 Log.d(TAG, "performBackupForAllAccounts: ${account.name} result=$result")
             } catch (e: Exception) {
                 Log.e(TAG, "performBackupForAllAccounts: failed for ${account.name}", e)
