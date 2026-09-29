@@ -59,10 +59,18 @@
             android:exported="false" />
 
         <service
-            android:name="org.microg.gms.location.manager.LocationManagerService"
+            android:name="org.microg.gms.location.manager.GoogleLocationManagerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.location.manager.LocationManagerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.microg.gms.location.manager.ACTION_REPORT_LOCATION" />
             </intent-filter>
         </service>
 
