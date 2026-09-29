@@ -1,0 +1,14 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+syntax = "proto3";
+
+option java_package = "org.microg.gms.recaptcha.qr";
+
+message CachedInitCredential {
+  reserved 3, 4;
+  string credential = 1;
+  bytes nonceUuid = 2;
+  bytes droidGuardNonce = 5;
+}
