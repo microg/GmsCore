@@ -65,7 +65,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.ThemeTranslucentCommon)
         Log.d(TAG, "onCreate: clientPackageName:$clientPackageName")
-        if (clientPackageName == null) return errorResult(
+        if (clientPackageName == null || (clientPackageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName)) return errorResult(
             Status(
                 CommonStatusCodes.ERROR, "Invalid calling package."
             )
