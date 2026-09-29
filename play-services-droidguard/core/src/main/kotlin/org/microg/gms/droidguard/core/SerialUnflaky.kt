@@ -20,7 +20,7 @@ object SerialUnflaky {
             val res1 = runCatching { android.os.Build.getSerial() }.fold({ it }, { it.javaClass.name })
             val res2 = runCatching { android.os.Build.getSerial() }.fold({ it }, { it.javaClass.name })
             if (res1 != res2) {
-                Log.w("SerialUnflaky", "Build.getSerial() was flaky. res1=$res1, res2=$res2")
+                Log.w("SerialUnflaky", "Build.getSerial() returned inconsistent results")
             }
         }
     }
