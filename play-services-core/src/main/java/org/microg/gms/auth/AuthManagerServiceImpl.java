@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,6 +46,7 @@ import com.google.android.gms.common.api.Scope;
 import org.microg.gms.auth.capabilities.HasCapabilitiesHandler;
 import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.ui.UnpackingRedirectActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,6 +79,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
+    public static final String KEY_USER_RECOVERY_PENDING_INTENT = "userRecoveryPendingIntent";
 
     private final Context context;
 
@@ -171,16 +174,20 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
+                PendingIntent pi = PendingIntentCompat.getActivity(context, 0, i, 0, false);
                 if (notify) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
-                            .setContentIntent(PendingIntentCompat.getActivity(context, 0, i, 0, false))
+                            .setContentIntent(pi)
                             .setContentTitle(context.getString(R.string.auth_notification_title))
                             .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
                             .setSmallIcon(android.R.drawable.stat_notify_error)
                             .build());
                 }
-                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+                if (pi != null) {
+                    result.putParcelable(KEY_USER_RECOVERY_INTENT, UnpackingRedirectActivity.createIntent(context, pi));
+                    result.putParcelable(KEY_USER_RECOVERY_PENDING_INTENT, pi);
+                }
             }
         } catch (IOException e) {
             Log.w(TAG, e);
