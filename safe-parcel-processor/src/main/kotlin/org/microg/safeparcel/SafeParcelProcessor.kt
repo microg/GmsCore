@@ -407,6 +407,7 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             }
 
             else -> when {
+                isList && isParcelable && useValueParcel -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
                 isParcelable -> "$SafeParcelWriter.write(parcel, $id, $variableName, flags, $mayNull);"
                 isIInterface -> "$SafeParcelWriter.write(parcel, $id, $variableName.asBinder(), $mayNull);"
                 else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
