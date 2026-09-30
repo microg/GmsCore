@@ -439,6 +439,11 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="camera_permission_dialog_button">OK</string>
     <string name="camera_permission_dialog_message">microG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
     <string name="camera_permission_dialog_title">Camera permission required</string>
+    <string name="document_scanner_camera_permission_message">microG services needs to access your device\'s camera to scan documents for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
+    <string name="document_scanner_capture">Capture page</string>
+    <string name="document_scanner_import">Import</string>
+    <string name="document_scanner_done">Done (%1$d)</string>
+    <string name="document_scanner_capture_failed">Failed to capture page</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>
     <string name="pref_app_install_switch_title">Allow App Installation</string>
