@@ -20,12 +20,14 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.AssetManager
+import android.content.res.Resources
 import android.view.LayoutInflater
-import org.microg.gms.common.Constants
 import java.io.File
 
-class MapContext(private val context: Context) : ContextWrapper(context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)) {
+class MapContext(private val context: Context) : ContextWrapper(context) {
     private var layoutInflater: LayoutInflater? = null
+    private var theme: Resources.Theme? = null
     private val appContext: Context
         get() = context.applicationContext ?: context
 
@@ -47,6 +49,21 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
 
     override fun getPackageName(): String {
         return appContext.packageName
+    }
+
+    override fun getResources(): Resources {
+        return getModuleResources()
+    }
+
+    override fun getAssets(): AssetManager {
+        return resources.assets
+    }
+
+    override fun getTheme(): Resources.Theme {
+        return theme ?: resources.newTheme().also {
+            it.setTo(context.theme)
+            theme = it
+        }
     }
 
     override fun getClassLoader(): ClassLoader {
@@ -76,6 +93,17 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
     }
 
     companion object {
+        private var moduleResources: Resources? = null
+
+        @JvmStatic
+        fun setModuleResources(resources: Resources) {
+            moduleResources = resources
+        }
+
+        private fun getModuleResources(): Resources {
+            return moduleResources ?: throw IllegalStateException("Resources have not been initialized")
+        }
+
         val TAG = "GmsMapContext"
     }
 }

@@ -7,6 +7,8 @@ package com.google.android.gms.chimera.container;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.content.pm.ApplicationInfo;
 
 import androidx.annotation.RequiresApi;
@@ -46,6 +48,16 @@ public class DynamiteContext extends ContextWrapper {
     @Override
     public ApplicationInfo getApplicationInfo() {
         return gmsContext.getApplicationInfo();
+    }
+
+    @Override
+    public Resources getResources() {
+        return gmsContext.getResources();
+    }
+
+    @Override
+    public AssetManager getAssets() {
+        return gmsContext.getAssets();
     }
 
     @Override
