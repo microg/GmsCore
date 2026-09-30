@@ -2,4 +2,5 @@
 <resources>
     <string name="sms_user_consent_allow">Benarkan</string>
     <string name="sms_user_consent_deny">Tolak</string>
+    <string name="sms_user_consent_title">Benarkan <b>%s</b> membaca mesej di bawah dan memasukkan kod?</string>
 </resources>
