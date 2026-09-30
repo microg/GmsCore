@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.os.Build.VERSION.SDK_INT
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -20,19 +21,22 @@ private const val JPEG_QUALITY = 90
 private const val PDF_PAGE_LONG_SIDE_POINTS = 842
 
 fun normalizePage(file: File) {
-    val rotation = when (ExifInterface(file.absolutePath).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
-        ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-        ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-        ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-        else -> 0f
-    }
+    val rotation = exifRotation(ExifInterface(file.absolutePath))
     val bitmap = decodeScaled({ file.inputStream() }) ?: throw IllegalArgumentException("Failed to decode $file")
     writePage(bitmap, rotation, file)
 }
 
 fun importPage(open: () -> InputStream, file: File) {
+    val rotation = if (SDK_INT >= 24) runCatching { open().use { exifRotation(ExifInterface(it)) } }.getOrDefault(0f) else 0f
     val bitmap = decodeScaled(open) ?: throw IllegalArgumentException("Failed to decode image")
-    writePage(bitmap, 0f, file)
+    writePage(bitmap, rotation, file)
+}
+
+private fun exifRotation(exif: ExifInterface) = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+    ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+    ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+    ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+    else -> 0f
 }
 
 fun writePdf(pages: List<File>, file: File) {
@@ -94,22 +98,22 @@ private class PdfWriter(private val out: OutputStream) {
     }
 }
 
-private fun decodeScaled(open: () -> InputStream): Bitmap? {
+internal fun decodeScaled(open: () -> InputStream, maxSize: Int = MAX_PAGE_PIXELS): Bitmap? {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     open().use { BitmapFactory.decodeStream(it, null, bounds) }
     if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
     var sampleSize = 1
-    while (max(bounds.outWidth, bounds.outHeight) / (sampleSize * 2) >= MAX_PAGE_PIXELS) sampleSize *= 2
+    while (max(bounds.outWidth, bounds.outHeight) / (sampleSize * 2) >= maxSize) sampleSize *= 2
     val bitmap = open().use { BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sampleSize }) } ?: return null
     val longSide = max(bitmap.width, bitmap.height)
-    if (longSide <= MAX_PAGE_PIXELS) return bitmap
-    val scale = MAX_PAGE_PIXELS.toFloat() / longSide
+    if (longSide <= maxSize) return bitmap
+    val scale = maxSize.toFloat() / longSide
     val scaled = Bitmap.createScaledBitmap(bitmap, (bitmap.width * scale).roundToInt(), (bitmap.height * scale).roundToInt(), true)
     if (scaled != bitmap) bitmap.recycle()
     return scaled
 }
 
-private fun writePage(bitmap: Bitmap, rotation: Float, file: File) {
+internal fun writePage(bitmap: Bitmap, rotation: Float, file: File) {
     val upright = if (rotation == 0f) bitmap else {
         Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, Matrix().apply { postRotate(rotation) }, true).also {
             if (it != bitmap) bitmap.recycle()
