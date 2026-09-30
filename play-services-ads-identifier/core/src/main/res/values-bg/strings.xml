@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Разрешение за рекламен идентификатор</string>
+    <string name="perm_ad_id_description">Позволява на приложението издател пряк или косвен достъп до валиден рекламен идентификатор.</string>
+    <string name="perm_ad_id_notification_label">Известие за рекламен идентификатор</string>
+    <string name="perm_ad_id_notification_description">Позволява на приложението да получава известие при промяна на рекламния идентификатор или на предпочитанието на потребителя за ограничаване на проследяването на реклами.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_all_label">Всички услуги на Google</string>
+    <string name="permission_service_all_description">Позволява на приложението достъп до всички услуги на Google чрез всеки свързан профил в Google.</string>
+    <string name="permission_service_android_label">Услуги на Android</string>
+    <string name="permission_service_cl_label">Google календар</string>
+    <string name="permission_service_cl_description">Позволява на приложението достъп до услугите на Android чрез всеки свързан профил в Google.</string>
+    <string name="permission_service_cp_label">Контакти</string>
+    <string name="permission_service_cp_description">Позволява на приложението достъп до Контакти чрез всеки свързан профил в Google.</string>
+    <string name="permission_service_android_description">Позволява на приложението достъп до услугите на Android чрез всеки свързан профил в Google.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+</resources>
