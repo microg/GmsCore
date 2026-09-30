@@ -28,6 +28,7 @@ import kotlin.math.roundToInt
 private const val DETECTION_SIZE = 640
 private const val LIVE_DETECTION_SIZE = 320
 private const val MIN_DOCUMENT_AREA = 0.2
+private const val MIN_OUTER_FILL = 0.85
 
 internal val openCvLoaded by lazy { OpenCVLoader.initLocal() }
 
@@ -89,7 +90,6 @@ private fun findDocumentQuad(gray: Mat): Array<Point>? {
     val contours = ArrayList<MatOfPoint>()
     val hierarchy = Mat()
     Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE)
-    edges.release()
     hierarchy.release()
 
     val minArea = gray.rows() * gray.cols() * MIN_DOCUMENT_AREA
@@ -110,7 +110,35 @@ private fun findDocumentQuad(gray: Mat): Array<Point>? {
         contour.release()
     }
 
-    return best?.let { orderCorners(it) }
+    val quad = best ?: findOuterQuad(edges, minArea)
+    edges.release()
+    return quad?.let { orderCorners(it) }
+}
+
+private fun findOuterQuad(edges: Mat, minArea: Double): Array<Point>? {
+    val kernelSize = (max(edges.rows(), edges.cols()) / 29.0).roundToInt().coerceAtLeast(3).toDouble()
+    val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(kernelSize, kernelSize))
+    val closed = Mat()
+    Imgproc.morphologyEx(edges, closed, Imgproc.MORPH_CLOSE, kernel)
+    kernel.release()
+    val contours = ArrayList<MatOfPoint>()
+    val hierarchy = Mat()
+    Imgproc.findContours(closed, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+    closed.release()
+    hierarchy.release()
+
+    val largest = contours.maxByOrNull { Imgproc.contourArea(it) }
+    val contourArea = largest?.let { Imgproc.contourArea(it) } ?: 0.0
+    val quad = largest?.let { quadFromHull(it) }
+    contours.forEach { it.release() }
+    if (quad == null) return null
+    val quadCurve = MatOfPoint2f(*quad)
+    val quadArea = abs(Imgproc.contourArea(quadCurve))
+    quadCurve.release()
+    val quadPolygon = MatOfPoint(*quad)
+    val convex = Imgproc.isContourConvex(quadPolygon)
+    quadPolygon.release()
+    return quad.takeIf { convex && quadArea > minArea && contourArea / quadArea >= MIN_OUTER_FILL }
 }
 
 private fun findPaperQuad(rgba: Mat): Array<Point>? {
