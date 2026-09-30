@@ -5,6 +5,8 @@
 
 package com.google.android.gms.phenotype;
 
+import android.util.Base64;
+
 import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -93,6 +95,23 @@ public class Flag extends AutoSafeParcelable {
         if (dataType == DATA_TYPE_BYTES)
             return bytesValue;
         throw new IllegalArgumentException("Not a bytes type");
+    }
+
+    public String getValueString() {
+        switch (dataType) {
+            case DATA_TYPE_LONG:
+                return Long.toString(longValue);
+            case DATA_TYPE_BOOL:
+                return boolValue ? "true" : "false";
+            case DATA_TYPE_DOUBLE:
+                return Double.toString(doubleValue);
+            case DATA_TYPE_STRING:
+                return stringValue;
+            case DATA_TYPE_BYTES:
+                return Base64.encodeToString(bytesValue, Base64.NO_WRAP | Base64.URL_SAFE);
+            default:
+                return null;
+        }
     }
 
     public static final int DATA_TYPE_LONG = 1;
