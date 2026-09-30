@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2025 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/pref_wearable_tos_category"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/pref_wearable_auto_accept_tos_switch"
+            android:summary="@string/pref_wearable_auto_accept_tos_summary"
+            android:key="wearable_auto_accept_tos"
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
