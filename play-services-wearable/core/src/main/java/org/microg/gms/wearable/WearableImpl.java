@@ -18,9 +18,12 @@ package org.microg.gms.wearable;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -45,7 +48,9 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
 import com.google.android.gms.wearable.internal.ChannelParcelable;
+import com.google.android.gms.wearable.internal.IRpcResponseCallback;
 import com.google.android.gms.wearable.internal.IWearableListener;
+import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 
@@ -135,6 +140,8 @@ public class WearableImpl {
     private AssetFetcher assetFetcher;
     private NetworkConnectionManager networkManager;
 
+    private RpcMessageTransport rpcTransport;
+
     private final Map<String, ConnectionRestrictions> nodeRestrictions = new ConcurrentHashMap<>();
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
@@ -143,6 +150,11 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.rpcTransport = new RpcMessageTransport(rpcHelper, new RpcMessageTransport.Host() {
+            @Override public String getLocalNodeId() { return WearableImpl.this.getLocalNodeId(); }
+            @Override public WearableWriter getWriter(String nodeId) { return peerWriters.get(nodeId); }
+            @Override public void onWriteFailed(String nodeId) { closeConnection(nodeId); }
+        });
         this.migrationTracker = new NodeMigrationTracker(nodeDatabase);
 
         Map<String, ConnectionConfiguration> best = new HashMap<>();
@@ -1582,6 +1594,14 @@ public class WearableImpl {
     }
 
     public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
+        return sendInternal(packageName, targetNodeId, path, data, options, false);
+    }
+
+    public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
+        return sendInternal(packageName, targetNodeId, path, data, options, true);
+    }
+
+    public int sendInternal(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options, boolean requiresResponse) {
         targetNodeId = resolveToWearableNodeId(targetNodeId);
 
         if (activeConnections.containsKey(targetNodeId)) {
@@ -1600,7 +1620,7 @@ public class WearableImpl {
             }
 
             WearableConnection connection = activeConnections.get(targetNodeId);
-            return writeToConnection(packageName, targetNodeId, connection, path, data);
+            return writeToConnection(packageName, targetNodeId, connection, path, data, options, requiresResponse);
         }
 
         if ("*".equals(targetNodeId)) {
@@ -1614,8 +1634,7 @@ public class WearableImpl {
                     }
                 }
                 if (nearby) {
-                    lastResult = writeToConnection(packageName, e.getKey(),
-                            e.getValue(), path, data);
+                    lastResult = writeToConnection(packageName, e.getKey(), e.getValue(), path, data, options, requiresResponse);
                 }
             }
             return lastResult;
@@ -1625,68 +1644,98 @@ public class WearableImpl {
         return -1;
     }
 
-    private int writeToConnection(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
+    private int writeToConnection(String packageName, String nodeId, WearableConnection connection,
+                                  String path, byte[] data, MessageOptions options, boolean requiresResponse) {
         PendingRpcRequest pending = consumePendingRpcRequest(nodeId, path);
-        if (pending != null) {
-            RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
-            RootMessage msg = new RootMessage.Builder()
-                    .rpcRequest(new Request.Builder()
-                            .targetNodeId(nodeId)
-                            .path(path)
-                            .rawData(data != null ? ByteString.of(data) : ByteString.EMPTY)
-                            .packageName(pending.packageName)
-                            .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
-                            .sourceNodeId(getLocalNodeId())
-                            .generation(pending.gen)
-                            .requestId(state.lastRequestId)
-                            .requiresResponse(false)
-                            .senderRequestId(pending.reqId)
-                            .build()).build();
+        Log.d(TAG, "writeToConnection: node=" + nodeId + " path=" + path
+                + " package=" + packageName + " pending=" + (pending != null));
 
-            WearableWriter writer = peerWriters.get(nodeId);
-            if (writer == null || !writer.enqueue(msg)) {
-                Log.w(TAG, "writeToConnection: no writer available for " + nodeId);
-                closeConnection(nodeId);
+        if (pending != null) {
+            if (TextUtils.isEmpty(pending.packageName) || TextUtils.isEmpty(pending.signatureDigest)) {
+                Log.w(TAG, "writeToConnection: dropping response for " + path + ", request had empty package/signatureDigest");
                 return -1;
             }
-            Log.d(TAG, "writeToConnection: queued RPC response"
-                    + " senderRequestId=" + pending.reqId
-                    + " path=" + path + " peer=" + nodeId);
-            return (state.generation + 527) * 31 + state.lastRequestId;
+            return rpcTransport.sendResponse(pending.packageName, pending.signatureDigest,
+                    nodeId, path, data, pending.reqId);
         }
-
-        return writeToConnectionWithoutPending(packageName, nodeId, connection, path, data);
+        return writeToConnectionWithoutPending(packageName, nodeId, connection, path, data, options, requiresResponse);
     }
 
-    private int writeToConnectionWithoutPending(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
-        RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
-        Request request = new Request.Builder()
-                .targetNodeId(nodeId)
-                .path(path)
-                .rawData(data != null ? ByteString.of(data) : ByteString.EMPTY)
-                .packageName(packageName)
-                .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
-                .sourceNodeId(getLocalNodeId())
-                .generation(state.generation)
-                .requestId(state.lastRequestId)
-                .requiresResponse(false)
-                .build();
-
-        RootMessage msg = new RootMessage.Builder().rpcRequest(request).build();
-
-        WearableWriter writer = peerWriters.get(nodeId);
-        if (writer == null || !writer.enqueue(msg)) {
-            Log.w(TAG, "writeToConnectionWithoutPending: no writer available for " + nodeId);
-            closeConnection(nodeId);
+    private int writeToConnectionWithoutPending(String packageName, String nodeId, WearableConnection connection,
+                                                String path, byte[] data, MessageOptions options, boolean requiresResponse) {
+        String digest = PackageUtils.firstSignatureDigest(context, packageName);
+        if (TextUtils.isEmpty(packageName) || TextUtils.isEmpty(digest)) {
+            Log.w(TAG, "writeToConnectionWithoutPending: no signature digest for " + packageName
+                    + ", not sending " + path);
             return -1;
         }
-        return state.lastRequestId;
+        return requiresResponse
+                ? rpcTransport.sendRequest(packageName, digest, nodeId, path, data, options)
+                : rpcTransport.sendMessage(packageName, digest, nodeId, path, data, options);
     }
 
-    public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
-        targetNodeId = resolveToWearableNodeId(targetNodeId);
-        return sendMessage(packageName, targetNodeId, path, data, options);
+    public void sendRpcResponse(PendingRpcRequest p, byte[] data) {
+        if (TextUtils.isEmpty(p.packageName) || TextUtils.isEmpty(p.signatureDigest)) {
+            Log.w(TAG, "sendRpcResponse: missing package/signatureDigest for " + p.path);
+            return;
+        }
+        try {
+            p.connection.writeMessage(RpcMessageTransport.wrap(rpcTransport.buildRequest(
+                    p.packageName, p.signatureDigest, p.peerNodeId, p.path, data,
+                    null, false, p.reqId, null)));
+            Log.d(TAG, "sendRpcResponse: path=" + p.path + " senderRequestId=" + p.reqId
+                    + " bytes=" + (data != null ? data.length : 0));
+        } catch (IOException e) {
+            Log.w(TAG, "sendRpcResponse: write failed for " + p.path, e);
+        }
     }
+
+    public boolean dispatchRpcRequest(Intent intent, MessageEventParcelable event,
+                                      PendingRpcRequest pending, Runnable onDeclined) {
+        ResolveInfo info = context.getPackageManager().resolveService(intent, 0);
+        if (info == null || info.serviceInfo == null) return false;
+
+        Intent bind = new Intent("com.google.android.gms.wearable.BIND_LISTENER")
+                .setClassName(info.serviceInfo.packageName, info.serviceInfo.name);
+        final ServiceConnection[] holder = new ServiceConnection[1];
+        final boolean[] done = {false};
+        final Runnable unbind = () -> {
+            synchronized (done) {
+                if (done[0]) return;
+                done[0] = true;
+            }
+            try { context.unbindService(holder[0]); } catch (Exception ignored) {}
+        };
+        final IRpcResponseCallback callback = new IRpcResponseCallback.Stub() {
+            @Override
+            public void onResponse(boolean success, byte[] data) {
+                Log.d(TAG, "onRequest response: success=" + success + " path=" + pending.path
+                        + " bytes=" + (data != null ? data.length : 0));
+                if (success) sendRpcResponse(pending, data);
+                else if (onDeclined != null) networkHandler.post(onDeclined);
+                networkHandler.post(unbind);
+            }
+        };
+        holder[0] = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                try {
+                    IWearableListener.Stub.asInterface(service).onRequest(event, callback);
+                } catch (RemoteException e) {
+                    Log.w(TAG, "onRequest dispatch failed for " + name, e);
+                    networkHandler.post(unbind);
+                }
+            }
+            @Override public void onServiceDisconnected(ComponentName name) {}
+        };
+        if (!context.bindService(bind, holder[0], Context.BIND_AUTO_CREATE)) {
+            Log.w(TAG, "dispatchRpcRequest: could not bind " + bind);
+            return false;
+        }
+        networkHandler.postDelayed(unbind, 30_000);
+        return true;
+    }
+
 
     public void stop() {
         if (channelManager != null) {
@@ -1751,6 +1800,8 @@ public class WearableImpl {
         return rpcHelper;
     }
 
+    public RpcMessageTransport getRpcTransport() { return rpcTransport; }
+
 
     interface ListenerInvoker {
         void invoke(IWearableListener listener) throws RemoteException;
@@ -1762,16 +1813,18 @@ public class WearableImpl {
         public final String path;
         public final String peerNodeId;
         public final String packageName;
+        public final String signatureDigest;
         public final WearableConnection connection;
 
         public PendingRpcRequest(int requestId, int generation, String path,
-                                 String peerNodeId, String packageName,
+                                 String peerNodeId, String packageName, String signatureDigest,
                                  WearableConnection connection) {
             this.reqId = requestId;
             this.gen = generation;
             this.path = path;
             this.peerNodeId = peerNodeId;
             this.packageName = packageName;
+            this.signatureDigest = signatureDigest;
             this.connection = connection;
         }
     }

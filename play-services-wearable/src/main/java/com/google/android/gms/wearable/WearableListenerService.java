@@ -31,9 +31,11 @@ import com.google.android.gms.wearable.internal.AmsEntityUpdateParcelable;
 import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
 import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
+import com.google.android.gms.wearable.internal.ConsentResponse;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
+import com.google.android.gms.wearable.internal.IRpcResponseCallback;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.wearable.ChannelImpl;
@@ -193,6 +195,12 @@ public abstract class WearableListenerService extends Service implements Capabil
         @Override
         public void onEntityUpdate(final AmsEntityUpdateParcelable update) throws RemoteException {
             post(() -> WearableListenerService.this.onEntityUpdate(update));
+        }
+
+        @Override
+        public void onRequest(final MessageEventParcelable messageEvent, final IRpcResponseCallback callback) throws RemoteException {
+            post(() -> WearableListenerService.this.onMessageReceived(messageEvent));
+            if (callback != null) callback.onResponse(false, null);
         }
 
         @Override

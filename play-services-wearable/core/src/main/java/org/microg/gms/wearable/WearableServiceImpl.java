@@ -412,9 +412,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
                     return;
                 }
 
-
+                final String routedNode = wearable.resolveToWearableNodeId(targetNodeId);
                 wearable.getRpcHelper().addResponseListener(
-                        targetNodeId,
+                        routedNode,
                         messageId,
                         SEND_REQUEST_TIMEOUT_MS,
                         responseData -> mainHandler.post(() -> {

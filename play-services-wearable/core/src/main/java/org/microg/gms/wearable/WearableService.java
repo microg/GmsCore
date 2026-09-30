@@ -26,6 +26,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -39,8 +40,6 @@ public class WearableService extends BaseService {
 
     private WearableImpl wearable;
 
-    // All what i found
-    // for now, just to not spam outdated GMS at my companion
     public static final Feature[] FEATURES = new Feature[]{
             new Feature("app_client", 4L),
             new Feature("carrier_auth", 1L),
@@ -133,7 +132,7 @@ public class WearableService extends BaseService {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName);
         ConnectionInfo connectionInfo = new ConnectionInfo();
         connectionInfo.features = FEATURES;
-        callback.onPostInitCompleteWithConnectionInfo(0, new WearableServiceImpl(this, wearable, request.packageName), connectionInfo);
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, new WearableServiceImpl(this, wearable, request.packageName), connectionInfo);
 
     }
 }

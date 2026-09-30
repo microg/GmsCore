@@ -1,5 +1,7 @@
 package org.microg.gms.wearable;
 
+// TODO: needed ukey2 or similar
+
 public class A2AEncryption {
     private static final String TAG = "WearA2AEncryption";
 

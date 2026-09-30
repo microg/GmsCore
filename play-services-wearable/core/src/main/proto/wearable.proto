@@ -227,9 +227,9 @@ message Request {
     optional string sourceNodeId = 8;
     optional ChannelRequest request = 9;
     optional int32 generation = 10;
-    optional bool requiresResponse = 13;
-    optional int32 senderRequestId = 14;
-    optional int32 priority = 15;
+    optional bool requiresResponse = 11;
+    optional int32 senderRequestId = 12;
+    optional int32 priority = 13;
 }
 
 message RootMessage {

@@ -266,27 +266,59 @@ public class MessageHandler extends ServerMessageListener {
     }
 
     @Override
-    public void onRpcRequest(Request rpcRequest) {
-        Log.d(TAG, "onRpcRequest: " + rpcRequest);
+    public void onRpcRequest(Request rawRequest) {
+        Log.d(TAG, "onRpcRequest: " + rawRequest);
 
-        if (rpcRequest.request != null) {
+        if (rawRequest.request != null) {
             if (wearable.getChannelManager() != null) {
-                wearable.getChannelManager().onChannelRequestReceived(getConnection(), peerNodeId, rpcRequest);
+                wearable.getChannelManager().onChannelRequestReceived(getConnection(), peerNodeId, rawRequest);
             }
             return;
         }
 
+        final RpcMessageTransport transport = wearable.getRpcTransport();
+        final Request rpcRequest = transport.normalizeInbound(peerNodeId, rawRequest);
+
         if (Boolean.TRUE.equals(rpcRequest.requiresResponse)
                 && rpcRequest.requestId != null && peerNodeId != null
-                && rpcRequest.path != null) {
-            wearable.storePendingRpcRequest(new WearableImpl.PendingRpcRequest(
-                    rpcRequest.requestId,
-                    rpcRequest.generation != null ? rpcRequest.generation : 0,
+                && rpcRequest.path != null && transport.isForLocalNode(rpcRequest)) {
+
+            final int reqGen = rpcRequest.generation != null ? rpcRequest.generation : 0;
+            final WearableImpl.PendingRpcRequest pending = new WearableImpl.PendingRpcRequest(
+                    RpcHelper.combineId(reqGen, rpcRequest.requestId),
+                    reqGen,
                     rpcRequest.path,
                     peerNodeId,
                     rpcRequest.packageName != null ? rpcRequest.packageName : "",
+                    rpcRequest.signatureDigest != null ? rpcRequest.signatureDigest : "",
                     getConnection()
-            ));
+            );
+
+            if (!TextUtils.isEmpty(rpcRequest.packageName)
+                    && (TextUtils.isEmpty(rpcRequest.targetNodeId)
+                    || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId()))) {
+                String src = TextUtils.isEmpty(rpcRequest.sourceNodeId)
+                        ? peerNodeId : rpcRequest.sourceNodeId;
+                MessageEventParcelable ev = new MessageEventParcelable(
+                        pending.reqId,
+                        rpcRequest.path,
+                        rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null, src);
+                Intent reqIntent = new Intent("com.google.android.gms.wearable.REQUEST_RECEIVED");
+                reqIntent.setPackage(rpcRequest.packageName);
+                reqIntent.setData(new Uri.Builder().scheme("wear").authority(src).path(rpcRequest.path).build());
+                if (wearable.dispatchRpcRequest(reqIntent, ev, pending, () -> {
+                    Log.d(TAG, "onRpcRequest: declined by app, delivering as message: " + rpcRequest.path);
+                    wearable.storePendingRpcRequest(pending);
+                    sendMessageReceived(rpcRequest.packageName, ev);
+                })) {
+                    Log.d(TAG, "onRpcRequest: dispatched onRequest to " + rpcRequest.packageName
+                            + " path=" + rpcRequest.path);
+                    return;
+                }
+                Log.d(TAG, "onRpcRequest: no REQUEST_RECEIVED service in " + rpcRequest.packageName
+                        + ", falling back");
+            }
+            wearable.storePendingRpcRequest(pending);
 
             final int pendingReqId = rpcRequest.requestId;
             final String pendingPath = rpcRequest.path;
@@ -298,21 +330,14 @@ public class MessageHandler extends ServerMessageListener {
                 Log.d(TAG, "onRpcRequest: auto-ACK, no app response for path=" + pendingPath
                         + " requestId=" + pendingReqId + " — sending empty ACK");
                 try {
-                    RpcHelper.RpcConnectionState state = wearable.getRpcHelper()
-                            .useConnectionState(still.packageName, still.peerNodeId, still.path);
-                    still.connection.writeMessage(new RootMessage.Builder().rpcRequest(
-                            new Request.Builder()
-                                    .requestId(state.lastRequestId)
-                                    .generation(still.gen)
-                                    .senderRequestId(still.reqId)
-                                    .requiresResponse(false)
-                                    .path(still.path)
-                                    .rawData(ByteString.of(new byte[0]))
-                                    .packageName(still.packageName)
-                                    .sourceNodeId(wearable.getLocalNodeId())
-                                    .targetNodeId(still.peerNodeId)
-                                    .build()
-                    ).build());
+                    if (TextUtils.isEmpty(still.packageName) || TextUtils.isEmpty(still.signatureDigest)) {
+                        Log.w(TAG, "onRpcRequest: auto-ACK skipped for " + pendingPath
+                                + ", request lacks package/signatureDigest");
+                        return;
+                    }
+                    still.connection.writeMessage(RpcMessageTransport.wrap(transport.buildRequest(
+                            still.packageName, still.signatureDigest, still.peerNodeId, still.path,
+                            null, null, false, still.reqId, null)));
                 } catch (IOException e) {
                     Log.w(TAG, "onRpcRequest: auto-ACK, write failed for path=" + pendingPath, e);
                 }
@@ -326,6 +351,8 @@ public class MessageHandler extends ServerMessageListener {
             boolean consumed = wearable.getRpcHelper()
                     .deliverRpcResponse(peerNodeId, rpcRequest.senderRequestId, responseData);
             if (consumed) return;
+            Log.w(TAG, "onRpcRequest: unmatched response senderRequestId=" + rpcRequest.senderRequestId
+                    + " path=" + rpcRequest.path + " peer=" + peerNodeId);
         }
 
 
