@@ -29,6 +29,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.vision.document.DocumentCaptureView
+import org.microg.gms.vision.document.DocumentCropView
+import org.microg.gms.vision.document.cropPage
+import org.microg.gms.vision.document.detectDocumentCorners
 import org.microg.gms.vision.document.importPage
 import org.microg.gms.vision.document.normalizePage
 import org.microg.gms.vision.document.writePdf
@@ -52,6 +55,9 @@ private const val SCAN_DIR = "mlkit_docscan"
 class DocumentScanningActivity : AppCompatActivity() {
 
     private val pages = mutableListOf<File>()
+    private val pendingReview = ArrayDeque<File>()
+    private var reviewing: File? = null
+    private var fileCounter = 0
     private var busy = false
     private lateinit var scanDir: File
 
@@ -93,6 +99,8 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.document_scanning_cancel).setOnClickListener { finish() }
         findViewById<View>(R.id.document_scanning_capture).setOnClickListener { capturePage() }
         findViewById<Button>(R.id.document_scanning_done).setOnClickListener { finishScanning() }
+        findViewById<Button>(R.id.document_scanning_keep).setOnClickListener { keepReviewedPage() }
+        findViewById<Button>(R.id.document_scanning_retake).setOnClickListener { retakeReviewedPage() }
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
@@ -115,10 +123,13 @@ class DocumentScanningActivity : AppCompatActivity() {
         }
     }
 
-    private val isPageLimitReached: Boolean
-        get() = pageLimit > 0 && pages.size >= pageLimit
+    private val pageCount: Int
+        get() = pages.size + pendingReview.size + (if (reviewing != null) 1 else 0)
 
-    private fun nextPageFile() = File(scanDir, "page_${pages.size + 1}.jpg")
+    private val isPageLimitReached: Boolean
+        get() = pageLimit > 0 && pageCount >= pageLimit
+
+    private fun nextPageFile() = File(scanDir, "page_${++fileCounter}.jpg")
 
     private fun capturePage() {
         if (SDK_INT < 21 || busy || isPageLimitReached) return
@@ -129,10 +140,9 @@ class DocumentScanningActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val added = success && runCatching { withContext(Dispatchers.IO) { normalizePage(file) } }
                     .onFailure { Log.w(TAG, "Failed to process captured page", it) }.isSuccess
-                if (added) pages.add(file) else Toast.makeText(this@DocumentScanningActivity, R.string.document_scanner_capture_failed, Toast.LENGTH_SHORT).show()
+                if (!added) Toast.makeText(this@DocumentScanningActivity, R.string.document_scanner_capture_failed, Toast.LENGTH_SHORT).show()
                 busy = false
-                updateControls()
-                if (added && isPageLimitReached) finishScanning()
+                if (added) queueForReview(file) else updateControls()
             }
         }
     }
@@ -141,26 +151,79 @@ class DocumentScanningActivity : AppCompatActivity() {
         busy = true
         updateControls()
         lifecycleScope.launch {
+            val imported = mutableListOf<File>()
             for (uri in uris) {
-                if (isPageLimitReached) break
+                if (pageLimit > 0 && pageCount + imported.size >= pageLimit) break
                 val file = nextPageFile()
                 val added = runCatching { withContext(Dispatchers.IO) { importPage({ contentResolver.openInputStream(uri)!! }, file) } }
                     .onFailure { Log.w(TAG, "Failed to import $uri", it) }.isSuccess
-                if (added) pages.add(file)
+                if (added) imported.add(file)
             }
             busy = false
+            imported.forEach { queueForReview(it) }
             updateControls()
-            if (isPageLimitReached) finishScanning()
         }
     }
 
+    private fun queueForReview(file: File) {
+        pendingReview.addLast(file)
+        if (reviewing == null) showNextReview() else updateControls()
+    }
+
+    private fun showNextReview() {
+        val file = pendingReview.removeFirstOrNull()
+        reviewing = file
+        if (file == null) {
+            findViewById<DocumentCropView>(R.id.document_scanning_crop).clear()
+            findViewById<View>(R.id.document_scanning_review).visibility = View.GONE
+            updateControls()
+            if (pageLimit > 0 && pages.size >= pageLimit) finishScanning()
+            return
+        }
+        busy = true
+        updateControls()
+        lifecycleScope.launch {
+            val corners = runCatching { withContext(Dispatchers.IO) { detectDocumentCorners(file) } }
+                .onFailure { Log.w(TAG, "Failed to detect document edges", it) }.getOrNull()
+            findViewById<DocumentCropView>(R.id.document_scanning_crop).setPage(file, corners)
+            findViewById<View>(R.id.document_scanning_review).visibility = View.VISIBLE
+            busy = false
+            updateControls()
+        }
+    }
+
+    private fun keepReviewedPage() {
+        val file = reviewing ?: return
+        if (busy) return
+        busy = true
+        updateControls()
+        val corners = findViewById<DocumentCropView>(R.id.document_scanning_crop).corners.copyOf()
+        lifecycleScope.launch {
+            runCatching { withContext(Dispatchers.IO) { cropPage(file, corners) } }
+                .onFailure { Log.w(TAG, "Failed to crop page", it) }
+            pages.add(file)
+            busy = false
+            showNextReview()
+        }
+    }
+
+    private fun retakeReviewedPage() {
+        val file = reviewing ?: return
+        if (busy) return
+        file.delete()
+        showNextReview()
+    }
+
     private fun updateControls() {
-        findViewById<View>(R.id.document_scanning_capture).isEnabled = !busy && !isPageLimitReached
-        findViewById<Button>(R.id.document_scanning_import).isEnabled = !busy && !isPageLimitReached
+        val canAdd = !busy && reviewing == null && !isPageLimitReached
+        findViewById<View>(R.id.document_scanning_capture).isEnabled = canAdd
+        findViewById<Button>(R.id.document_scanning_import).isEnabled = canAdd
         findViewById<Button>(R.id.document_scanning_done).apply {
-            isEnabled = !busy && pages.isNotEmpty()
+            isEnabled = !busy && reviewing == null && pages.isNotEmpty()
             text = getString(R.string.document_scanner_done, pages.size)
         }
+        findViewById<Button>(R.id.document_scanning_keep).isEnabled = !busy && reviewing != null
+        findViewById<Button>(R.id.document_scanning_retake).isEnabled = !busy && reviewing != null
     }
 
     private fun finishScanning() {
