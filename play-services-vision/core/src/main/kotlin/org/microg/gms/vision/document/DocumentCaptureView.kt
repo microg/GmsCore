@@ -16,6 +16,7 @@ import android.view.Surface
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -45,6 +46,7 @@ class DocumentCaptureView @JvmOverloads constructor(
 
     private val analysisExecutor: ExecutorService = Executors.newSingleThreadExecutor()
     private var imageCapture: ImageCapture? = null
+    private var camera: Camera? = null
     private val previewView: PreviewView = PreviewView(context).apply {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         scaleType = PreviewView.ScaleType.FIT_CENTER
@@ -58,7 +60,14 @@ class DocumentCaptureView @JvmOverloads constructor(
         addView(overlay)
     }
 
-    fun startCamera(lifecycleOwner: LifecycleOwner) {
+    val hasFlash: Boolean
+        get() = camera?.cameraInfo?.hasFlashUnit() == true
+
+    fun setTorch(enabled: Boolean) {
+        camera?.cameraControl?.enableTorch(enabled)
+    }
+
+    fun startCamera(lifecycleOwner: LifecycleOwner, onReady: () -> Unit = {}) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -86,8 +95,9 @@ class DocumentCaptureView @JvmOverloads constructor(
                 .also { it.setAnalyzer(analysisExecutor, ::analyze) }
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, capture, analysis)
+                camera = cameraProvider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, capture, analysis)
                 imageCapture = capture
+                onReady()
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to bind camera", e)
             }
