@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.os.SystemClock
 import android.util.AttributeSet
 import android.util.Log
 import android.util.Size
@@ -33,11 +34,14 @@ import androidx.lifecycle.LifecycleOwner
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
 import kotlin.math.min
 
 private const val TAG = "DocumentCaptureView"
 private const val MAX_MISSED_FRAMES = 5
 private const val SMOOTHING = 0.5f
+private const val STABLE_TOLERANCE = 0.02f
+private const val STABLE_DURATION_MS = 1000L
 
 @RequiresApi(21)
 class DocumentCaptureView @JvmOverloads constructor(
@@ -58,6 +62,16 @@ class DocumentCaptureView @JvmOverloads constructor(
     init {
         addView(previewView)
         addView(overlay)
+    }
+
+    var onDocumentStable: (() -> Unit)?
+        get() = overlay.onStable
+        set(value) {
+            overlay.onStable = value
+        }
+
+    fun resetStability() {
+        overlay.resetStability()
     }
 
     val hasFlash: Boolean
@@ -152,9 +166,17 @@ private class EdgeOverlayView(context: Context) : View(context) {
     private var corners: FloatArray? = null
     private var aspectRatio = 0f
     private var missedFrames = 0
+    private var lastDetected: FloatArray? = null
+    private var stableSince = 0L
+    var onStable: (() -> Unit)? = null
 
     val visibleCorners: FloatArray?
         get() = corners?.copyOf()
+
+    fun resetStability() {
+        lastDetected = null
+        stableSince = 0L
+    }
 
     fun update(detected: FloatArray?, frameAspectRatio: Float) {
         aspectRatio = frameAspectRatio
@@ -165,7 +187,22 @@ private class EdgeOverlayView(context: Context) : View(context) {
             missedFrames = 0
             corners = if (current == null) detected else FloatArray(8) { current[it] + (detected[it] - current[it]) * SMOOTHING }
         }
+        updateStability(detected)
         invalidate()
+    }
+
+    private fun updateStability(detected: FloatArray?) {
+        val previous = lastDetected
+        lastDetected = detected
+        val now = SystemClock.elapsedRealtime()
+        if (detected == null || previous == null || (0 until 8).any { abs(detected[it] - previous[it]) > STABLE_TOLERANCE }) {
+            stableSince = if (detected == null) 0L else now
+            return
+        }
+        if (stableSince != 0L && now - stableSince >= STABLE_DURATION_MS) {
+            stableSince = 0L
+            onStable?.invoke()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {

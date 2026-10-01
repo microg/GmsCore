@@ -46,12 +46,15 @@ private const val KEY_PAGE_LIMIT_MAX = "int_extra_page_limit_max"
 private const val KEY_RESULT_FORMATS = "int_array_extra_result_formats"
 private const val KEY_GALLERY_IMPORT_ALLOWED = "boolean_extra_gallery_import_allowed"
 private const val KEY_FLASH_MODE_CHANGE_ALLOWED = "boolean_extra_flash_mode_change_allowed"
+private const val KEY_DEFAULT_CAPTURE_MODE = "int_extra_default_capture_mode"
 private const val KEY_RESULT_IMAGE_URIS = "uri_array_extra_result_image_uris"
 private const val KEY_RESULT_PDF_URI = "uri_extra_result_pdf_uri"
 private const val KEY_RESULT_PAGE_COUNT = "int_extra_result_page_count"
 
 private const val RESULT_FORMAT_JPEG = 101
 private const val RESULT_FORMAT_PDF = 102
+
+private const val CAPTURE_MODE_AUTO = 1
 
 private const val SCAN_DIR = "mlkit_docscan"
 
@@ -62,6 +65,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private var reviewing: File? = null
     private var fileCounter = 0
     private var torchEnabled = false
+    private var autoCapture = false
     private var busy = false
     private lateinit var scanDir: File
 
@@ -108,6 +112,9 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<Button>(R.id.document_scanning_auto_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectDetected() }
         findViewById<Button>(R.id.document_scanning_no_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectFullPage() }
         findViewById<Button>(R.id.document_scanning_rotate).setOnClickListener { rotateReviewedPage() }
+        findViewById<Button>(R.id.document_scanning_mode_manual).setOnClickListener { setAutoCapture(false) }
+        findViewById<Button>(R.id.document_scanning_mode_auto).setOnClickListener { setAutoCapture(true) }
+        setAutoCapture(intent.getIntExtra(KEY_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
@@ -127,6 +134,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private fun startCamera() {
         if (SDK_INT >= 21) {
             val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
+            camera.onDocumentStable = { if (autoCapture) capturePage() }
             camera.startCamera(this) {
                 if (intent.getBooleanExtra(KEY_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
                     findViewById<ImageView>(R.id.document_scanning_flash).apply {
@@ -136,6 +144,14 @@ class DocumentScanningActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setAutoCapture(enabled: Boolean) {
+        autoCapture = enabled
+        findViewById<Button>(R.id.document_scanning_mode_manual).alpha = if (enabled) 0.5f else 1f
+        findViewById<Button>(R.id.document_scanning_mode_auto).alpha = if (enabled) 1f else 0.5f
+        findViewById<View>(R.id.document_scanning_hint).visibility = if (enabled) View.VISIBLE else View.GONE
+        if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
     }
 
     private fun toggleTorch() {
@@ -155,7 +171,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private fun nextPageFile() = File(scanDir, "page_${++fileCounter}.jpg")
 
     private fun capturePage() {
-        if (SDK_INT < 21 || busy || isPageLimitReached) return
+        if (SDK_INT < 21 || busy || reviewing != null || isPageLimitReached) return
         busy = true
         updateControls()
         val file = nextPageFile()
@@ -199,6 +215,7 @@ class DocumentScanningActivity : AppCompatActivity() {
         if (file == null) {
             findViewById<DocumentCropView>(R.id.document_scanning_crop).clear()
             findViewById<View>(R.id.document_scanning_review).visibility = View.GONE
+            if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
             updateControls()
             if (pageLimit > 0 && pages.size >= pageLimit) finishScanning()
             return
