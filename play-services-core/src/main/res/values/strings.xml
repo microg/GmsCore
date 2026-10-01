@@ -449,6 +449,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="document_scanner_auto_crop">Automatic crop</string>
     <string name="document_scanner_no_crop">No crop</string>
     <string name="document_scanner_rotate">Rotate</string>
+    <string name="document_scanner_manual">Manual</string>
+    <string name="document_scanner_auto_capture">Auto capture</string>
+    <string name="document_scanner_hold_steady">Scanning… hold steady</string>
     <string name="document_scanner_capture_failed">Failed to capture page</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>

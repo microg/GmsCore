@@ -30,6 +30,21 @@
         android:src="@drawable/ic_document_scanner_flash_off"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/document_scanning_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="24dp"
+        android:background="#99000000"
+        android:paddingLeft="16dp"
+        android:paddingTop="6dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="6dp"
+        android:text="@string/document_scanner_hold_steady"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +60,30 @@
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/darker_gray"
             android:textSize="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/document_scanning_mode_manual"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/document_scanner_manual"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/document_scanning_mode_auto"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/document_scanner_auto_capture"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
