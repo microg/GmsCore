@@ -44,6 +44,7 @@ private const val KEY_CALLING_APP_NAME = "string_extra_calling_app_name"
 private const val KEY_PAGE_LIMIT_MAX = "int_extra_page_limit_max"
 private const val KEY_RESULT_FORMATS = "int_array_extra_result_formats"
 private const val KEY_GALLERY_IMPORT_ALLOWED = "boolean_extra_gallery_import_allowed"
+private const val KEY_FLASH_MODE_CHANGE_ALLOWED = "boolean_extra_flash_mode_change_allowed"
 private const val KEY_RESULT_IMAGE_URIS = "uri_array_extra_result_image_uris"
 private const val KEY_RESULT_PDF_URI = "uri_extra_result_pdf_uri"
 private const val KEY_RESULT_PAGE_COUNT = "int_extra_result_page_count"
@@ -59,6 +60,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private val pendingReview = ArrayDeque<Pair<File, FloatArray?>>()
     private var reviewing: File? = null
     private var fileCounter = 0
+    private var torchEnabled = false
     private var busy = false
     private lateinit var scanDir: File
 
@@ -120,8 +122,24 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun startCamera() {
         if (SDK_INT >= 21) {
-            findViewById<DocumentCaptureView>(R.id.document_scanning_camera).startCamera(this)
+            val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
+            camera.startCamera(this) {
+                if (intent.getBooleanExtra(KEY_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
+                    findViewById<ImageView>(R.id.document_scanning_flash).apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener { toggleTorch() }
+                    }
+                }
+            }
         }
+    }
+
+    private fun toggleTorch() {
+        if (SDK_INT < 21) return
+        torchEnabled = !torchEnabled
+        findViewById<DocumentCaptureView>(R.id.document_scanning_camera).setTorch(torchEnabled)
+        findViewById<ImageView>(R.id.document_scanning_flash)
+            .setImageResource(if (torchEnabled) R.drawable.ic_document_scanner_flash_on else R.drawable.ic_document_scanner_flash_off)
     }
 
     private val pageCount: Int

@@ -445,6 +445,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="document_scanner_done">Done (%1$d)</string>
     <string name="document_scanner_retake">Retake</string>
     <string name="document_scanner_keep">Keep</string>
+    <string name="document_scanner_flash">Flash</string>
     <string name="document_scanner_capture_failed">Failed to capture page</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>
