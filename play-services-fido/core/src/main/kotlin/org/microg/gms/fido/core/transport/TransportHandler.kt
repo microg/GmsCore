@@ -5,16 +5,24 @@
 
 package org.microg.gms.fido.core.transport
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ResidentKeyRequirement.*
 import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.upokecenter.cbor.CBORObject
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.timeout
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.protocol.CoseKey.Companion.toByteArray
@@ -30,6 +38,7 @@ import javax.crypto.KeyAgreement
 import javax.crypto.Mac
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.time.Duration.Companion.seconds
 
 class AuthenticatorResponseWithUser<T: AuthenticatorResponse>(val response: T, val user: PublicKeyCredentialUserEntity?)
 
@@ -430,14 +439,85 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         }
     }
 
+    @OptIn(FlowPreview::class)
+    suspend fun chooseFromList(
+        activity: Activity,
+        items: List<Pair<AuthenticatorGetAssertionResponse, ByteArray?>>,
+    ) = callbackFlow {
+        val items = items.filter { it.first.user != null }
+        val dialog = try {
+            MaterialAlertDialogBuilder(activity)
+        } catch (_: Exception) {
+            AlertDialog.Builder(activity)
+        }
+            .setTitle(activity.getString(R.string.fido_sign_in_selection_title))
+            .setItems(items.map { it.first.user!!.name }.toTypedArray()) { _, i ->
+                trySend(items[i])
+            }.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+                trySend(null)
+            }.show()
+        awaitClose {
+            dialog.dismiss()
+        }
+    }.timeout(10.seconds)
+        .firstOrNull()
+
     internal suspend fun sign(
+        connection: CtapConnection,
+        activity: Activity,
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
+        val getAssertionRes = getAssertion(connection, activity, options, callerPackage, pinRequested, pin)
+        var response = getAssertionRes.response
+        var credentialId = getAssertionRes.credentialId
+        val nCreds = getAssertionRes.response.numberOfCredentials ?: 0
+        if (nCreds > 1) {
+            val creds = mutableListOf(response to credentialId)
+            for (k in 2..nCreds) {
+                try {
+                    val ctap2Response =
+                        connection.runCommand(AuthenticatorGetNextAssertionCommand())
+                    creds += ctap2Response to ctap2Response.credential?.id
+                } catch (e: Exception) {
+                    Log.e(TAG, "Got an exception while getting next assertion", e)
+                    break
+                }
+            }
+            chooseFromList(activity, creds)?.let { (r, c) ->
+                response = r
+                credentialId = c
+            }
+        }
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAssertionResponse(
+                credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
+                getAssertionRes.clientData,
+                response.authData,
+                response.signature,
+                response.user?.id
+            ),
+            response.user
+        )
+    }
+
+    private class GetAssertionRes(
+        val clientData: ByteArray,
+        val response: AuthenticatorGetAssertionResponse,
+        val credentialId: ByteArray?
+    )
+
+    private suspend fun getAssertion(
         connection: CtapConnection,
         context: Context,
         options: RequestOptions,
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
+    ): GetAssertionRes {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val (response, credentialId) = when {
@@ -498,16 +578,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorResponseWithUser(
-            AuthenticatorAssertionResponse(
-                credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-                clientData,
-                response.authData,
-                response.signature,
-                response.user?.id
-            ),
-            response.user
-        )
+        return GetAssertionRes(clientData, response, credentialId)
     }
 
     companion object {
