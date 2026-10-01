@@ -51,6 +51,7 @@ private const val KEY_RESULT_FORMATS = "int_array_extra_result_formats"
 private const val KEY_GALLERY_IMPORT_ALLOWED = "boolean_extra_gallery_import_allowed"
 private const val KEY_FLASH_MODE_CHANGE_ALLOWED = "boolean_extra_flash_mode_change_allowed"
 private const val KEY_DEFAULT_CAPTURE_MODE = "int_extra_default_capture_mode"
+private const val KEY_CAMERA_ID = "string_extra_camera_id"
 private const val KEY_FILTER_ALLOWED = "boolean_extra_filter_allowed"
 private const val KEY_AUTO_ENHANCEMENTS = "boolean_extra_enable_auto_enhancements"
 private const val KEY_SHADOW_REMOVAL_ALLOWED = "boolean_extra_shadow_removal_allowed"
@@ -167,7 +168,7 @@ class DocumentScanningActivity : AppCompatActivity() {
         if (SDK_INT >= 21) {
             val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
             camera.onDocumentStable = { if (autoCapture) capturePage() }
-            camera.startCamera(this) {
+            camera.startCamera(this, intent.getStringExtra(KEY_CAMERA_ID)) {
                 if (intent.getBooleanExtra(KEY_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
                     findViewById<ImageView>(R.id.document_scanning_flash).apply {
                         visibility = View.VISIBLE
