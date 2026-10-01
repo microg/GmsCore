@@ -59,6 +59,9 @@ class DocumentCropView @JvmOverloads constructor(
     var corners = FloatArray(8)
         private set
 
+    val detectedCorners: FloatArray?
+        get() = detected?.copyOf()
+
     fun setPage(file: File, detected: FloatArray?, current: FloatArray? = null) {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.absolutePath, bounds)

@@ -452,6 +452,12 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="document_scanner_manual">Manual</string>
     <string name="document_scanner_auto_capture">Auto capture</string>
     <string name="document_scanner_hold_steady">Scanning… hold steady</string>
+    <string name="document_scanner_preview">Preview</string>
+    <string name="document_scanner_finish">Done</string>
+    <string name="document_scanner_page_counter">%1$d/%2$d</string>
+    <string name="document_scanner_add_page">Add page</string>
+    <string name="document_scanner_crop_rotate">Crop &amp; rotate</string>
+    <string name="document_scanner_delete">Delete</string>
     <string name="document_scanner_capture_failed">Failed to capture page</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>

@@ -206,10 +206,11 @@ private fun orderCorners(corners: Array<Point>) = arrayOf(
     corners.maxBy { it.y - it.x }
 )
 
-fun cropPage(file: File, corners: FloatArray) {
-    val bitmap = BitmapFactory.decodeFile(file.absolutePath) ?: throw IllegalArgumentException("Failed to decode $file")
+fun cropPage(source: File, corners: FloatArray, output: File) {
+    val bitmap = BitmapFactory.decodeFile(source.absolutePath) ?: throw IllegalArgumentException("Failed to decode $source")
     if (corners.contentEquals(fullPageCorners(bitmap.width, bitmap.height))) {
         bitmap.recycle()
+        source.copyTo(output, overwrite = true)
         return
     }
     if (!openCvLoaded) throw IllegalStateException("Unable to load OpenCV")
@@ -229,7 +230,7 @@ fun cropPage(file: File, corners: FloatArray) {
     source.release()
     transform.release()
     warped.release()
-    writePage(result, 0f, file)
+    writePage(result, 0f, output)
 }
 
 private fun distance(a: Point, b: Point) = hypot(a.x - b.x, a.y - b.y)
