@@ -16,7 +16,10 @@ import android.util.Size
 import android.view.Surface
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
+import androidx.camera.camera2.interop.Camera2CameraInfo
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -81,7 +84,7 @@ class DocumentCaptureView @JvmOverloads constructor(
         camera?.cameraControl?.enableTorch(enabled)
     }
 
-    fun startCamera(lifecycleOwner: LifecycleOwner, onReady: () -> Unit = {}) {
+    fun startCamera(lifecycleOwner: LifecycleOwner, cameraId: String? = null, onReady: () -> Unit = {}) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -107,16 +110,24 @@ class DocumentCaptureView @JvmOverloads constructor(
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also { it.setAnalyzer(analysisExecutor, ::analyze) }
-            try {
-                cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, capture, analysis)
-                imageCapture = capture
-                onReady()
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed to bind camera", e)
+            for (selector in listOfNotNull(cameraId?.let { cameraSelector(it) }, CameraSelector.DEFAULT_BACK_CAMERA)) {
+                try {
+                    cameraProvider.unbindAll()
+                    camera = cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, capture, analysis)
+                    imageCapture = capture
+                    onReady()
+                    break
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to bind camera", e)
+                }
             }
         }, ContextCompat.getMainExecutor(context))
     }
+
+    @OptIn(ExperimentalCamera2Interop::class)
+    private fun cameraSelector(cameraId: String) = CameraSelector.Builder()
+        .addCameraFilter { cameras -> cameras.filter { Camera2CameraInfo.from(it).cameraId == cameraId } }
+        .build()
 
     private fun analyze(image: ImageProxy) {
         try {
