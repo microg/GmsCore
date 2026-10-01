@@ -4,7 +4,6 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
@@ -28,13 +27,6 @@ dependencies {
     implementation "androidx.webkit:webkit:$webkitVersion"
 
     implementation "com.android.volley:volley:$volleyVersion"
-    implementation "com.squareup.wire:wire-runtime:$wireVersion"
-}
-
-wire {
-    kotlin {
-        javaInterop = true
-    }
 }
 
 android {

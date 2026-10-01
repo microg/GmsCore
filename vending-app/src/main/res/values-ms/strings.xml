@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vending_overview_row_action_install">Pasang</string>
+    <string name="vending_overview_row_action_update">Kemas Kini</string>
+    <string name="vending_overview_row_action_uninstall">Nyahpasang</string>
+    <string name="error_retry">Cuba semula</string>
+    <string name="tips_input_passwd">Masukkan kata laluan anda</string>
+    <string name="tips_remember_login_info">Ingat butiran log masuk saya pada peranti ini</string>
+    <string name="tips_forget_passwd">Lupa kata laluan?</string>
+    <string name="text_verify_button">Sahkan</string>
+    <string name="installer_notification_progress_downloading">Sedang memuat turun \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Memasang \"%s\"</string>
+    <string name="installer_notification_progress_complete">\"%s\" telah dipasang</string>
+    <string name="installer_notification_progress_failed">Gagal memasang \"%s\"</string>
+    <string name="installer_dependency_noun">Komponen yang diperlukan untuk %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Memuat turun komponen yang diperlukan untuk %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Memasang komponen yang diperlukan untuk %s</string>
+    <string name="download_notification_attachment_file">Fail tambahan untuk %s</string>
+    <string name="download_notification_tips">Sedang memuat turun</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Klik untuk memasang komponen yang diperlukan oleh %s</string>
+    <string name="billing_permission_desc">Membolehkan pengguna membeli item melalui Google Play dari dalam aplikasi ini.</string>
+    <string name="app_install_permission_allowed">Benarkan</string>
+    <string name="app_install_needs_permissions_title">Pemasang Aplikasi</string>
+    <string name="app_install_allow_to_install_third_app">Benarkan \"microG Companion\" memasang aplikasi yang dimuat turun daripada \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Jika anda menolak, pemasangan aplikasi akan gagal.</string>
+    <string name="app_install_not_remind_again">Kekalkan pilihan ini dan jangan tanya lagi</string>
+</resources>

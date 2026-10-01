@@ -185,4 +185,16 @@
     <string name="auth_action_step_enable_lockscreen_description">تتم إدارة حسابك على جوجل بواسطة مكان عملك أو مؤسستك التعليمية. قرر مسؤولك أن الأجهزة تحتاج إلى قفل شاشة آمن قبل أن تتمكن من الوصول إلى بيانات الحساب.\n\nيُرجى إعداد كلمة مرور أو رقم تعريف شخصي أو قفل شاشة بنمط معين.</string>
     <string name="safetynet_intro">نظام جوجل سيفتي-نت هو نظام اعتماد للجهاز، يضمن أن الجهاز مؤَمْن بشكل صحيح ومتوافق مع نظام اندرويد CTS. تستخدم بعض التطبيقات سيفتي-نت لأسباب أمنية أو كشرط أساسي للحماية من العبث.\n\nيحتوي مايكرو-جي GmsCore على تطبيق مجاني لسيفتي-نت، لكن الخادم الرسمي يتطلب توقيع طلبات سيفتي-نت باستخدام نظام درويد-جارد الإحتكاري.</string>
     <string name="auth_action_reauth_notification_title">إجراء الحساب مطلوب</string>
+    <string name="push_notifications_summary_values_seconds">%s ثانية</string>
+    <string name="push_notifications_summary_values_minutes">%s دقيقة</string>
+    <string name="push_notifications_summary_off">معطل</string>
+    <string name="push_notifications_summary_automatic">مفعل / تلقائي: %s</string>
+    <string name="push_notifications_summary_manual">مفعل / يدوي: %s</string>
+    <string name="pref_safetynet_recent_copied">تم النسخ إلى الحافظة!</string>
+    <string name="credentials_assisted_cancel">إلغاء</string>
+    <string name="games_delete_snapshot_dialog_ok">موافق</string>
+    <string name="games_change_per_game_dialog_option_sign_out">تسجيل الخروج</string>
+    <string name="family_management_input_pwd">يرجى إدخال كلمة المرور الخاصة بك</string>
+    <string name="camera_permission_dialog_button">موافق</string>
+    <string name="family_management_delete_group_confirm">موافق</string>
 </resources>
