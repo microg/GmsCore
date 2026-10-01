@@ -32,6 +32,7 @@ import org.microg.gms.vision.document.DocumentCaptureView
 import org.microg.gms.vision.document.DocumentCropView
 import org.microg.gms.vision.document.cropPage
 import org.microg.gms.vision.document.detectDocumentCorners
+import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.importPage
 import org.microg.gms.vision.document.normalizePage
 import org.microg.gms.vision.document.writePdf
@@ -55,7 +56,7 @@ private const val SCAN_DIR = "mlkit_docscan"
 class DocumentScanningActivity : AppCompatActivity() {
 
     private val pages = mutableListOf<File>()
-    private val pendingReview = ArrayDeque<File>()
+    private val pendingReview = ArrayDeque<Pair<File, FloatArray?>>()
     private var reviewing: File? = null
     private var fileCounter = 0
     private var busy = false
@@ -136,13 +137,13 @@ class DocumentScanningActivity : AppCompatActivity() {
         busy = true
         updateControls()
         val file = nextPageFile()
-        findViewById<DocumentCaptureView>(R.id.document_scanning_camera).capture(file) { success ->
+        findViewById<DocumentCaptureView>(R.id.document_scanning_camera).capture(file) { success, previewCorners ->
             lifecycleScope.launch {
                 val added = success && runCatching { withContext(Dispatchers.IO) { normalizePage(file) } }
                     .onFailure { Log.w(TAG, "Failed to process captured page", it) }.isSuccess
                 if (!added) Toast.makeText(this@DocumentScanningActivity, R.string.document_scanner_capture_failed, Toast.LENGTH_SHORT).show()
                 busy = false
-                if (added) queueForReview(file) else updateControls()
+                if (added) queueForReview(file, previewCorners) else updateControls()
             }
         }
     }
@@ -160,18 +161,18 @@ class DocumentScanningActivity : AppCompatActivity() {
                 if (added) imported.add(file)
             }
             busy = false
-            imported.forEach { queueForReview(it) }
+            imported.forEach { queueForReview(it, null) }
             updateControls()
         }
     }
 
-    private fun queueForReview(file: File) {
-        pendingReview.addLast(file)
+    private fun queueForReview(file: File, previewCorners: FloatArray?) {
+        pendingReview.addLast(file to previewCorners)
         if (reviewing == null) showNextReview() else updateControls()
     }
 
     private fun showNextReview() {
-        val file = pendingReview.removeFirstOrNull()
+        val (file, previewCorners) = pendingReview.removeFirstOrNull() ?: (null to null)
         reviewing = file
         if (file == null) {
             findViewById<DocumentCropView>(R.id.document_scanning_crop).clear()
@@ -183,7 +184,7 @@ class DocumentScanningActivity : AppCompatActivity() {
         busy = true
         updateControls()
         lifecycleScope.launch {
-            val corners = runCatching { withContext(Dispatchers.IO) { detectDocumentCorners(file) } }
+            val corners = runCatching { withContext(Dispatchers.IO) { previewCorners?.let { scaleCorners(file, it) } ?: detectDocumentCorners(file) } }
                 .onFailure { Log.w(TAG, "Failed to detect document edges", it) }.getOrNull()
             findViewById<DocumentCropView>(R.id.document_scanning_crop).setPage(file, corners)
             findViewById<View>(R.id.document_scanning_review).visibility = View.VISIBLE

@@ -108,17 +108,18 @@ class DocumentCaptureView @JvmOverloads constructor(
         }
     }
 
-    fun capture(file: File, onResult: (Boolean) -> Unit) {
-        val capture = imageCapture ?: return onResult(false)
+    fun capture(file: File, onResult: (Boolean, FloatArray?) -> Unit) {
+        val capture = imageCapture ?: return onResult(false, null)
+        val previewCorners = overlay.visibleCorners
         val options = ImageCapture.OutputFileOptions.Builder(file).build()
         capture.takePicture(options, ContextCompat.getMainExecutor(context), object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                onResult(true)
+                onResult(true, previewCorners)
             }
 
             override fun onError(exception: ImageCaptureException) {
                 Log.w(TAG, "Failed to capture image", exception)
-                onResult(false)
+                onResult(false, null)
             }
         })
     }
@@ -141,6 +142,9 @@ private class EdgeOverlayView(context: Context) : View(context) {
     private var corners: FloatArray? = null
     private var aspectRatio = 0f
     private var missedFrames = 0
+
+    val visibleCorners: FloatArray?
+        get() = corners?.copyOf()
 
     fun update(detected: FloatArray?, frameAspectRatio: Float) {
         aspectRatio = frameAspectRatio

@@ -27,12 +27,19 @@ import kotlin.math.roundToInt
 
 private const val DETECTION_SIZE = 640
 private const val LIVE_DETECTION_SIZE = 320
-private const val MIN_DOCUMENT_AREA = 0.2
+private const val MIN_DOCUMENT_AREA = 0.05
 private const val MIN_OUTER_FILL = 0.85
 
 internal val openCvLoaded by lazy { OpenCVLoader.initLocal() }
 
 fun fullPageCorners(width: Int, height: Int) = floatArrayOf(0f, 0f, width.toFloat(), 0f, width.toFloat(), height.toFloat(), 0f, height.toFloat())
+
+fun scaleCorners(file: File, relative: FloatArray): FloatArray? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(file.absolutePath, bounds)
+    if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+    return FloatArray(8) { relative[it] * if (it % 2 == 0) bounds.outWidth else bounds.outHeight }
+}
 
 fun detectDocumentCorners(file: File): FloatArray? {
     if (!openCvLoaded) return null
@@ -127,11 +134,15 @@ private fun findOuterQuad(edges: Mat, minArea: Double): Array<Point>? {
     closed.release()
     hierarchy.release()
 
-    val largest = contours.maxByOrNull { Imgproc.contourArea(it) }
-    val contourArea = largest?.let { Imgproc.contourArea(it) } ?: 0.0
-    val quad = largest?.let { quadFromHull(it) }
+    val quad = largestFilledQuad(contours, minArea)
     contours.forEach { it.release() }
-    if (quad == null) return null
+    return quad
+}
+
+private fun largestFilledQuad(contours: List<MatOfPoint>, minArea: Double): Array<Point>? {
+    val largest = contours.maxByOrNull { Imgproc.contourArea(it) } ?: return null
+    val contourArea = Imgproc.contourArea(largest)
+    val quad = quadFromHull(largest) ?: return null
     val quadCurve = MatOfPoint2f(*quad)
     val quadArea = abs(Imgproc.contourArea(quadCurve))
     quadCurve.release()
@@ -161,8 +172,7 @@ private fun findPaperQuad(rgba: Mat): Array<Point>? {
     mask.release()
     hierarchy.release()
 
-    val largest = contours.maxByOrNull { Imgproc.contourArea(it) }
-    val quad = largest?.takeIf { Imgproc.contourArea(it) >= minArea }?.let { quadFromHull(it) }
+    val quad = largestFilledQuad(contours, minArea)
     contours.forEach { it.release() }
     return quad?.let { orderCorners(it) }
 }
