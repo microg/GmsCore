@@ -35,6 +35,7 @@ import org.microg.gms.vision.document.detectDocumentCorners
 import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.importPage
 import org.microg.gms.vision.document.normalizePage
+import org.microg.gms.vision.document.rotatePage
 import org.microg.gms.vision.document.writePdf
 import java.io.File
 
@@ -104,6 +105,9 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<Button>(R.id.document_scanning_done).setOnClickListener { finishScanning() }
         findViewById<Button>(R.id.document_scanning_keep).setOnClickListener { keepReviewedPage() }
         findViewById<Button>(R.id.document_scanning_retake).setOnClickListener { retakeReviewedPage() }
+        findViewById<Button>(R.id.document_scanning_auto_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectDetected() }
+        findViewById<Button>(R.id.document_scanning_no_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectFullPage() }
+        findViewById<Button>(R.id.document_scanning_rotate).setOnClickListener { rotateReviewedPage() }
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
@@ -226,6 +230,22 @@ class DocumentScanningActivity : AppCompatActivity() {
         }
     }
 
+    private fun rotateReviewedPage() {
+        val file = reviewing ?: return
+        if (busy) return
+        busy = true
+        updateControls()
+        val cropView = findViewById<DocumentCropView>(R.id.document_scanning_crop)
+        val (corners, detected) = cropView.rotatedClockwise()
+        lifecycleScope.launch {
+            runCatching { withContext(Dispatchers.IO) { rotatePage(file) } }
+                .onSuccess { cropView.setPage(file, detected, corners) }
+                .onFailure { Log.w(TAG, "Failed to rotate page", it) }
+            busy = false
+            updateControls()
+        }
+    }
+
     private fun retakeReviewedPage() {
         val file = reviewing ?: return
         if (busy) return
@@ -243,6 +263,9 @@ class DocumentScanningActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.document_scanning_keep).isEnabled = !busy && reviewing != null
         findViewById<Button>(R.id.document_scanning_retake).isEnabled = !busy && reviewing != null
+        for (id in intArrayOf(R.id.document_scanning_auto_crop, R.id.document_scanning_no_crop, R.id.document_scanning_rotate)) {
+            findViewById<Button>(id).isEnabled = !busy && reviewing != null
+        }
     }
 
     private fun finishScanning() {
