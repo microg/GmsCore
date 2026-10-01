@@ -32,6 +32,11 @@ fun importPage(open: () -> InputStream, file: File) {
     writePage(bitmap, rotation, file)
 }
 
+fun rotatePage(file: File) {
+    val bitmap = decodeScaled({ file.inputStream() }) ?: throw IllegalArgumentException("Failed to decode $file")
+    writePage(bitmap, 90f, file)
+}
+
 private fun exifRotation(exif: ExifInterface) = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
     ExifInterface.ORIENTATION_ROTATE_90 -> 90f
     ExifInterface.ORIENTATION_ROTATE_180 -> 180f

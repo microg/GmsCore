@@ -21,6 +21,7 @@ import kotlin.math.hypot
 import kotlin.math.min
 
 private const val PREVIEW_SIZE = 1280
+private const val LOUPE_ZOOM = 2.5f
 
 class DocumentCropView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -29,6 +30,8 @@ class DocumentCropView @JvmOverloads constructor(
     private val density = resources.displayMetrics.density
     private val handleRadius = 12 * density
     private val touchRadius = 36 * density
+    private val loupeRadius = 56 * density
+    private val loupeMargin = 8 * density
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = 0xFF4285F4.toInt()
         style = Paint.Style.STROKE
@@ -36,26 +39,35 @@ class DocumentCropView @JvmOverloads constructor(
     }
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x334285F4 }
     private val handlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE }
+    private val loupeBorderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        strokeWidth = 2 * density
+    }
+    private val loupeBackgroundPaint = Paint().apply { color = Color.BLACK }
     private val bitmapPaint = Paint(Paint.FILTER_BITMAP_FLAG)
     private val imageRect = RectF()
     private val path = Path()
+    private val loupeClip = Path()
 
     private var preview: Bitmap? = null
     private var imageWidth = 0
     private var imageHeight = 0
     private var activeCorner = -1
+    private var detected: FloatArray? = null
 
     var corners = FloatArray(8)
         private set
 
-    fun setPage(file: File, detected: FloatArray?) {
+    fun setPage(file: File, detected: FloatArray?, current: FloatArray? = null) {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.absolutePath, bounds)
         imageWidth = bounds.outWidth
         imageHeight = bounds.outHeight
         preview?.recycle()
         preview = decodeScaled({ file.inputStream() }, PREVIEW_SIZE)
-        corners = detected?.copyOf() ?: fullPageCorners(imageWidth, imageHeight)
+        this.detected = detected?.copyOf()
+        corners = current?.copyOf() ?: detected?.copyOf() ?: fullPageCorners(imageWidth, imageHeight)
         updateImageRect()
         invalidate()
     }
@@ -64,6 +76,23 @@ class DocumentCropView @JvmOverloads constructor(
         preview?.recycle()
         preview = null
         invalidate()
+    }
+
+    fun selectDetected() {
+        corners = detected?.copyOf() ?: fullPageCorners(imageWidth, imageHeight)
+        invalidate()
+    }
+
+    fun selectFullPage() {
+        corners = fullPageCorners(imageWidth, imageHeight)
+        invalidate()
+    }
+
+    fun rotatedClockwise(): Pair<FloatArray, FloatArray?> = rotateClockwise(corners) to detected?.let { rotateClockwise(it) }
+
+    private fun rotateClockwise(points: FloatArray): FloatArray {
+        val rotated = FloatArray(8) { if (it % 2 == 0) imageHeight - points[it + 1] else points[it - 1] }
+        return FloatArray(8) { rotated[(it + 6) % 8] }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -86,6 +115,17 @@ class DocumentCropView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val bitmap = preview ?: return
+        drawPage(canvas, bitmap)
+        for (i in 0 until 4) {
+            val x = toViewX(corners[i * 2])
+            val y = toViewY(corners[i * 2 + 1])
+            canvas.drawCircle(x, y, handleRadius, handlePaint)
+            canvas.drawCircle(x, y, handleRadius, linePaint)
+        }
+        if (activeCorner >= 0) drawLoupe(canvas, bitmap)
+    }
+
+    private fun drawPage(canvas: Canvas, bitmap: Bitmap) {
         canvas.drawBitmap(bitmap, null, imageRect, bitmapPaint)
         path.reset()
         for (i in 0 until 4) {
@@ -96,12 +136,26 @@ class DocumentCropView @JvmOverloads constructor(
         path.close()
         canvas.drawPath(path, fillPaint)
         canvas.drawPath(path, linePaint)
-        for (i in 0 until 4) {
-            val x = toViewX(corners[i * 2])
-            val y = toViewY(corners[i * 2 + 1])
-            canvas.drawCircle(x, y, handleRadius, handlePaint)
-            canvas.drawCircle(x, y, handleRadius, linePaint)
-        }
+    }
+
+    private fun drawLoupe(canvas: Canvas, bitmap: Bitmap) {
+        val focusX = toViewX(corners[activeCorner * 2])
+        val focusY = toViewY(corners[activeCorner * 2 + 1])
+        val centerX = if (focusX < width / 2f) width - loupeMargin - loupeRadius else loupeMargin + loupeRadius
+        val centerY = if (focusY < height / 2f) height - loupeMargin - loupeRadius else loupeMargin + loupeRadius
+        loupeClip.reset()
+        loupeClip.addCircle(centerX, centerY, loupeRadius, Path.Direction.CW)
+        canvas.save()
+        canvas.clipPath(loupeClip)
+        canvas.drawCircle(centerX, centerY, loupeRadius, loupeBackgroundPaint)
+        canvas.translate(centerX, centerY)
+        canvas.scale(LOUPE_ZOOM, LOUPE_ZOOM)
+        canvas.translate(-focusX, -focusY)
+        drawPage(canvas, bitmap)
+        canvas.restore()
+        canvas.drawCircle(centerX, centerY, loupeRadius, loupeBorderPaint)
+        canvas.drawLine(centerX - handleRadius, centerY, centerX + handleRadius, centerY, loupeBorderPaint)
+        canvas.drawLine(centerX, centerY - handleRadius, centerX, centerY + handleRadius, loupeBorderPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -110,7 +164,10 @@ class DocumentCropView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 activeCorner = (0 until 4).minByOrNull { hypot(toViewX(corners[it * 2]) - event.x, toViewY(corners[it * 2 + 1]) - event.y) }
                     ?.takeIf { hypot(toViewX(corners[it * 2]) - event.x, toViewY(corners[it * 2 + 1]) - event.y) <= touchRadius } ?: -1
-                if (activeCorner >= 0) parent?.requestDisallowInterceptTouchEvent(true)
+                if (activeCorner >= 0) {
+                    parent?.requestDisallowInterceptTouchEvent(true)
+                    invalidate()
+                }
                 return activeCorner >= 0
             }
             MotionEvent.ACTION_MOVE -> {
@@ -122,6 +179,7 @@ class DocumentCropView @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 activeCorner = -1
+                invalidate()
                 return true
             }
         }
