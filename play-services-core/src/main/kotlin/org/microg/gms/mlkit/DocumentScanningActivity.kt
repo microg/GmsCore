@@ -31,6 +31,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.vision.document.DocumentCaptureView
 import org.microg.gms.vision.document.DocumentCropView
+import org.microg.gms.vision.document.DocumentFilter
+import org.microg.gms.vision.document.applyFilter
 import org.microg.gms.vision.document.cropPage
 import org.microg.gms.vision.document.detectDocumentCorners
 import org.microg.gms.vision.document.importPage
@@ -49,6 +51,10 @@ private const val KEY_RESULT_FORMATS = "int_array_extra_result_formats"
 private const val KEY_GALLERY_IMPORT_ALLOWED = "boolean_extra_gallery_import_allowed"
 private const val KEY_FLASH_MODE_CHANGE_ALLOWED = "boolean_extra_flash_mode_change_allowed"
 private const val KEY_DEFAULT_CAPTURE_MODE = "int_extra_default_capture_mode"
+private const val KEY_FILTER_ALLOWED = "boolean_extra_filter_allowed"
+private const val KEY_AUTO_ENHANCEMENTS = "boolean_extra_enable_auto_enhancements"
+private const val KEY_SHADOW_REMOVAL_ALLOWED = "boolean_extra_shadow_removal_allowed"
+private const val KEY_STAIN_REMOVAL_ALLOWED = "boolean_extra_stain_removal_allowed"
 private const val KEY_RESULT_IMAGE_URIS = "uri_array_extra_result_image_uris"
 private const val KEY_RESULT_PDF_URI = "uri_extra_result_pdf_uri"
 private const val KEY_RESULT_PAGE_COUNT = "int_extra_result_page_count"
@@ -62,7 +68,7 @@ private const val SCAN_DIR = "mlkit_docscan"
 private const val PREVIEW_SIZE = 1280
 private const val THUMBNAIL_SIZE = 192
 
-private class ScanPage(val source: File, val output: File, var corners: FloatArray?, var detected: FloatArray?)
+private class ScanPage(val source: File, val cropped: File, val output: File, var corners: FloatArray?, var detected: FloatArray?, var filter: DocumentFilter)
 
 private class Review(val source: File, val corners: FloatArray?, val detected: FloatArray?, val page: ScanPage?)
 
@@ -84,6 +90,12 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private val pageLimit: Int
         get() = runCatching { intent?.getIntExtra(KEY_PAGE_LIMIT_MAX, -1) }.getOrNull() ?: -1
+
+    private val removeShadows: Boolean
+        get() = intent.getBooleanExtra(KEY_SHADOW_REMOVAL_ALLOWED, true) || intent.getBooleanExtra(KEY_STAIN_REMOVAL_ALLOWED, true)
+
+    private val defaultFilter: DocumentFilter
+        get() = if (intent.getBooleanExtra(KEY_AUTO_ENHANCEMENTS, false)) DocumentFilter.AUTO else DocumentFilter.ORIGINAL
 
     private val resultFormats: IntArray
         get() = runCatching { intent?.getIntArrayExtra(KEY_RESULT_FORMATS) }.getOrNull()?.takeIf { it.isNotEmpty() }
@@ -130,6 +142,10 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<Button>(R.id.document_scanning_preview_crop).setOnClickListener { editSelectedPage() }
         findViewById<Button>(R.id.document_scanning_preview_retake).setOnClickListener { retakeSelectedPage() }
         findViewById<Button>(R.id.document_scanning_preview_delete).setOnClickListener { deleteSelectedPage() }
+        findViewById<Button>(R.id.document_scanning_preview_filter).apply {
+            visibility = if (intent.getBooleanExtra(KEY_FILTER_ALLOWED, true)) View.VISIBLE else View.GONE
+            setOnClickListener { chooseFilter() }
+        }
         setAutoCapture(intent.getIntExtra(KEY_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
@@ -267,12 +283,16 @@ class DocumentScanningActivity : AppCompatActivity() {
         val cropView = findViewById<DocumentCropView>(R.id.document_scanning_crop)
         val corners = cropView.corners.copyOf()
         val detected = cropView.detectedCorners
-        val page = review.page ?: ScanPage(review.source, nextPageFile("page"), corners, detected)
+        val page = review.page ?: ScanPage(review.source, nextPageFile("crop"), nextPageFile("page"), corners, detected, defaultFilter)
         page.corners = corners
         page.detected = detected
         lifecycleScope.launch {
-            runCatching { withContext(Dispatchers.IO) { cropPage(page.source, corners, page.output) } }
-                .onFailure { Log.w(TAG, "Failed to crop page", it) }
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    cropPage(page.source, corners, page.cropped)
+                    applyFilter(page.cropped, page.filter, page.output, removeShadows)
+                }
+            }.onFailure { Log.w(TAG, "Failed to crop page", it) }
             busy = false
             if (review.page == null) {
                 val index = (insertIndex ?: pages.size).coerceIn(0, pages.size)
@@ -360,12 +380,48 @@ class DocumentScanningActivity : AppCompatActivity() {
         openReview(Review(page.source, page.corners, page.detected, page))
     }
 
+    private fun chooseFilter() {
+        val page = pages.getOrNull(selectedPage) ?: return
+        if (busy) return
+        val labels = arrayOf(
+            getString(R.string.document_scanner_filter_original),
+            getString(R.string.document_scanner_filter_auto),
+            getString(R.string.document_scanner_filter_grayscale),
+            getString(R.string.document_scanner_filter_black_white)
+        )
+        AlertDialog.Builder(this)
+            .setTitle(R.string.document_scanner_filter)
+            .setSingleChoiceItems(labels, page.filter.ordinal) { dialog, which ->
+                dialog.dismiss()
+                setFilter(page, DocumentFilter.values()[which])
+            }
+            .show()
+    }
+
+    private fun setFilter(page: ScanPage, filter: DocumentFilter) {
+        if (filter == page.filter) return
+        busy = true
+        updateControls()
+        lifecycleScope.launch {
+            runCatching { withContext(Dispatchers.IO) { applyFilter(page.cropped, filter, page.output, removeShadows) } }
+                .onSuccess { page.filter = filter }
+                .onFailure { Log.w(TAG, "Failed to apply filter", it) }
+            busy = false
+            showPreview()
+        }
+    }
+
+    private fun deletePageFiles(page: ScanPage) {
+        page.source.delete()
+        page.cropped.delete()
+        page.output.delete()
+    }
+
     private fun retakeSelectedPage() {
         val page = pages.getOrNull(selectedPage) ?: return
         if (busy) return
         pages.removeAt(selectedPage)
-        page.source.delete()
-        page.output.delete()
+        deletePageFiles(page)
         showCamera(selectedPage)
     }
 
@@ -373,8 +429,7 @@ class DocumentScanningActivity : AppCompatActivity() {
         val page = pages.getOrNull(selectedPage) ?: return
         if (busy) return
         pages.removeAt(selectedPage)
-        page.source.delete()
-        page.output.delete()
+        deletePageFiles(page)
         if (selectedPage >= pages.size) selectedPage = pages.size - 1
         showPreview()
     }
@@ -393,7 +448,7 @@ class DocumentScanningActivity : AppCompatActivity() {
             findViewById<Button>(id).isEnabled = reviewEnabled
         }
         val previewEnabled = !busy && reviewing == null && pages.isNotEmpty()
-        for (id in intArrayOf(R.id.document_scanning_preview_done, R.id.document_scanning_preview_crop, R.id.document_scanning_preview_retake, R.id.document_scanning_preview_delete)) {
+        for (id in intArrayOf(R.id.document_scanning_preview_done, R.id.document_scanning_preview_crop, R.id.document_scanning_preview_filter, R.id.document_scanning_preview_retake, R.id.document_scanning_preview_delete)) {
             findViewById<Button>(id).isEnabled = previewEnabled
         }
     }

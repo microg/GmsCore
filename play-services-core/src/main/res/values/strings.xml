@@ -458,6 +458,11 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="document_scanner_add_page">Add page</string>
     <string name="document_scanner_crop_rotate">Crop &amp; rotate</string>
     <string name="document_scanner_delete">Delete</string>
+    <string name="document_scanner_filter">Filter</string>
+    <string name="document_scanner_filter_original">Original</string>
+    <string name="document_scanner_filter_auto">Auto</string>
+    <string name="document_scanner_filter_grayscale">Grayscale</string>
+    <string name="document_scanner_filter_black_white">Black &amp; white</string>
     <string name="document_scanner_capture_failed">Failed to capture page</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>
