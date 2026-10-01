@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,10 +33,11 @@ import org.microg.gms.vision.document.DocumentCaptureView
 import org.microg.gms.vision.document.DocumentCropView
 import org.microg.gms.vision.document.cropPage
 import org.microg.gms.vision.document.detectDocumentCorners
-import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.importPage
+import org.microg.gms.vision.document.loadPagePreview
 import org.microg.gms.vision.document.normalizePage
 import org.microg.gms.vision.document.rotatePage
+import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.writePdf
 import java.io.File
 
@@ -57,12 +59,20 @@ private const val RESULT_FORMAT_PDF = 102
 private const val CAPTURE_MODE_AUTO = 1
 
 private const val SCAN_DIR = "mlkit_docscan"
+private const val PREVIEW_SIZE = 1280
+private const val THUMBNAIL_SIZE = 192
+
+private class ScanPage(val source: File, val output: File, var corners: FloatArray?, var detected: FloatArray?)
+
+private class Review(val source: File, val corners: FloatArray?, val detected: FloatArray?, val page: ScanPage?)
 
 class DocumentScanningActivity : AppCompatActivity() {
 
-    private val pages = mutableListOf<File>()
+    private val pages = mutableListOf<ScanPage>()
     private val pendingReview = ArrayDeque<Pair<File, FloatArray?>>()
-    private var reviewing: File? = null
+    private var reviewing: Review? = null
+    private var insertIndex: Int? = null
+    private var selectedPage = 0
     private var fileCounter = 0
     private var torchEnabled = false
     private var autoCapture = false
@@ -106,14 +116,20 @@ class DocumentScanningActivity : AppCompatActivity() {
         setContentView(R.layout.activity_document_scanning)
         findViewById<ImageView>(R.id.document_scanning_cancel).setOnClickListener { finish() }
         findViewById<View>(R.id.document_scanning_capture).setOnClickListener { capturePage() }
-        findViewById<Button>(R.id.document_scanning_done).setOnClickListener { finishScanning() }
+        findViewById<Button>(R.id.document_scanning_done).setOnClickListener { showPreview() }
         findViewById<Button>(R.id.document_scanning_keep).setOnClickListener { keepReviewedPage() }
-        findViewById<Button>(R.id.document_scanning_retake).setOnClickListener { retakeReviewedPage() }
+        findViewById<Button>(R.id.document_scanning_retake).setOnClickListener { discardReview() }
         findViewById<Button>(R.id.document_scanning_auto_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectDetected() }
         findViewById<Button>(R.id.document_scanning_no_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectFullPage() }
         findViewById<Button>(R.id.document_scanning_rotate).setOnClickListener { rotateReviewedPage() }
         findViewById<Button>(R.id.document_scanning_mode_manual).setOnClickListener { setAutoCapture(false) }
         findViewById<Button>(R.id.document_scanning_mode_auto).setOnClickListener { setAutoCapture(true) }
+        findViewById<ImageView>(R.id.document_scanning_preview_cancel).setOnClickListener { finish() }
+        findViewById<Button>(R.id.document_scanning_preview_done).setOnClickListener { finishScanning() }
+        findViewById<View>(R.id.document_scanning_preview_add).setOnClickListener { showCamera(null) }
+        findViewById<Button>(R.id.document_scanning_preview_crop).setOnClickListener { editSelectedPage() }
+        findViewById<Button>(R.id.document_scanning_preview_retake).setOnClickListener { retakeSelectedPage() }
+        findViewById<Button>(R.id.document_scanning_preview_delete).setOnClickListener { deleteSelectedPage() }
         setAutoCapture(intent.getIntExtra(KEY_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
@@ -162,19 +178,22 @@ class DocumentScanningActivity : AppCompatActivity() {
             .setImageResource(if (torchEnabled) R.drawable.ic_document_scanner_flash_on else R.drawable.ic_document_scanner_flash_off)
     }
 
+    private val isPreviewVisible: Boolean
+        get() = findViewById<View>(R.id.document_scanning_preview).visibility == View.VISIBLE
+
     private val pageCount: Int
-        get() = pages.size + pendingReview.size + (if (reviewing != null) 1 else 0)
+        get() = pages.size + pendingReview.size + (if (reviewing?.page == null && reviewing != null) 1 else 0)
 
     private val isPageLimitReached: Boolean
         get() = pageLimit > 0 && pageCount >= pageLimit
 
-    private fun nextPageFile() = File(scanDir, "page_${++fileCounter}.jpg")
+    private fun nextPageFile(suffix: String) = File(scanDir, "page_${++fileCounter}_$suffix.jpg")
 
     private fun capturePage() {
-        if (SDK_INT < 21 || busy || reviewing != null || isPageLimitReached) return
+        if (SDK_INT < 21 || busy || reviewing != null || isPreviewVisible || isPageLimitReached) return
         busy = true
         updateControls()
-        val file = nextPageFile()
+        val file = nextPageFile("source")
         findViewById<DocumentCaptureView>(R.id.document_scanning_camera).capture(file) { success, previewCorners ->
             lifecycleScope.launch {
                 val added = success && runCatching { withContext(Dispatchers.IO) { normalizePage(file) } }
@@ -193,7 +212,7 @@ class DocumentScanningActivity : AppCompatActivity() {
             val imported = mutableListOf<File>()
             for (uri in uris) {
                 if (pageLimit > 0 && pageCount + imported.size >= pageLimit) break
-                val file = nextPageFile()
+                val file = nextPageFile("source")
                 val added = runCatching { withContext(Dispatchers.IO) { importPage({ contentResolver.openInputStream(uri)!! }, file) } }
                     .onFailure { Log.w(TAG, "Failed to import $uri", it) }.isSuccess
                 if (added) imported.add(file)
@@ -211,13 +230,9 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun showNextReview() {
         val (file, previewCorners) = pendingReview.removeFirstOrNull() ?: (null to null)
-        reviewing = file
         if (file == null) {
-            findViewById<DocumentCropView>(R.id.document_scanning_crop).clear()
-            findViewById<View>(R.id.document_scanning_review).visibility = View.GONE
-            if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
-            updateControls()
-            if (pageLimit > 0 && pages.size >= pageLimit) finishScanning()
+            closeReview()
+            if (pages.isNotEmpty()) showPreview() else showCamera(insertIndex)
             return
         }
         busy = true
@@ -225,49 +240,143 @@ class DocumentScanningActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val corners = runCatching { withContext(Dispatchers.IO) { previewCorners?.let { scaleCorners(file, it) } ?: detectDocumentCorners(file) } }
                 .onFailure { Log.w(TAG, "Failed to detect document edges", it) }.getOrNull()
-            findViewById<DocumentCropView>(R.id.document_scanning_crop).setPage(file, corners)
-            findViewById<View>(R.id.document_scanning_review).visibility = View.VISIBLE
-            busy = false
-            updateControls()
+            openReview(Review(file, corners, corners, null))
         }
+    }
+
+    private fun openReview(review: Review) {
+        reviewing = review
+        findViewById<DocumentCropView>(R.id.document_scanning_crop).setPage(review.source, review.detected, review.corners)
+        findViewById<View>(R.id.document_scanning_review).visibility = View.VISIBLE
+        busy = false
+        updateControls()
+    }
+
+    private fun closeReview() {
+        reviewing = null
+        findViewById<DocumentCropView>(R.id.document_scanning_crop).clear()
+        findViewById<View>(R.id.document_scanning_review).visibility = View.GONE
+        updateControls()
     }
 
     private fun keepReviewedPage() {
-        val file = reviewing ?: return
+        val review = reviewing ?: return
         if (busy) return
         busy = true
         updateControls()
-        val corners = findViewById<DocumentCropView>(R.id.document_scanning_crop).corners.copyOf()
+        val cropView = findViewById<DocumentCropView>(R.id.document_scanning_crop)
+        val corners = cropView.corners.copyOf()
+        val detected = cropView.detectedCorners
+        val page = review.page ?: ScanPage(review.source, nextPageFile("page"), corners, detected)
+        page.corners = corners
+        page.detected = detected
         lifecycleScope.launch {
-            runCatching { withContext(Dispatchers.IO) { cropPage(file, corners) } }
+            runCatching { withContext(Dispatchers.IO) { cropPage(page.source, corners, page.output) } }
                 .onFailure { Log.w(TAG, "Failed to crop page", it) }
-            pages.add(file)
             busy = false
-            showNextReview()
+            if (review.page == null) {
+                val index = (insertIndex ?: pages.size).coerceIn(0, pages.size)
+                pages.add(index, page)
+                selectedPage = index
+                insertIndex = null
+                if (pageLimit > 0 && pages.size >= pageLimit && pendingReview.isEmpty()) {
+                    closeReview()
+                    finishScanning()
+                    return@launch
+                }
+                showNextReview()
+            } else {
+                closeReview()
+                showPreview()
+            }
         }
     }
 
+    private fun discardReview() {
+        val review = reviewing ?: return
+        if (busy) return
+        if (review.page != null) {
+            closeReview()
+            showPreview()
+            return
+        }
+        review.source.delete()
+        showNextReview()
+    }
+
     private fun rotateReviewedPage() {
-        val file = reviewing ?: return
+        val review = reviewing ?: return
         if (busy) return
         busy = true
         updateControls()
         val cropView = findViewById<DocumentCropView>(R.id.document_scanning_crop)
         val (corners, detected) = cropView.rotatedClockwise()
         lifecycleScope.launch {
-            runCatching { withContext(Dispatchers.IO) { rotatePage(file) } }
-                .onSuccess { cropView.setPage(file, detected, corners) }
+            runCatching { withContext(Dispatchers.IO) { rotatePage(review.source) } }
+                .onSuccess { cropView.setPage(review.source, detected, corners) }
                 .onFailure { Log.w(TAG, "Failed to rotate page", it) }
             busy = false
             updateControls()
         }
     }
 
-    private fun retakeReviewedPage() {
-        val file = reviewing ?: return
+    private fun showCamera(insertAt: Int?) {
+        insertIndex = insertAt
+        findViewById<View>(R.id.document_scanning_preview).visibility = View.GONE
+        if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
+        updateControls()
+    }
+
+    private fun showPreview() {
+        if (pages.isEmpty()) return showCamera(null)
+        selectedPage = selectedPage.coerceIn(0, pages.size - 1)
+        findViewById<View>(R.id.document_scanning_preview).visibility = View.VISIBLE
+        val thumbnails = findViewById<LinearLayout>(R.id.document_scanning_preview_thumbnails)
+        val addButton = findViewById<View>(R.id.document_scanning_preview_add)
+        thumbnails.removeAllViews()
+        val density = resources.displayMetrics.density
+        pages.forEachIndexed { index, page ->
+            thumbnails.addView(ImageView(this).apply {
+                layoutParams = LinearLayout.LayoutParams((48 * density).toInt(), (64 * density).toInt()).apply { marginEnd = (8 * density).toInt() }
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                alpha = if (index == selectedPage) 1f else 0.5f
+                setImageBitmap(loadPagePreview(page.output, THUMBNAIL_SIZE))
+                setOnClickListener {
+                    selectedPage = index
+                    showPreview()
+                }
+            })
+        }
+        thumbnails.addView(addButton)
+        addButton.visibility = if (isPageLimitReached) View.GONE else View.VISIBLE
+        findViewById<ImageView>(R.id.document_scanning_preview_image).setImageBitmap(loadPagePreview(pages[selectedPage].output, PREVIEW_SIZE))
+        findViewById<TextView>(R.id.document_scanning_preview_counter).text = getString(R.string.document_scanner_page_counter, selectedPage + 1, pages.size)
+        updateControls()
+    }
+
+    private fun editSelectedPage() {
+        val page = pages.getOrNull(selectedPage) ?: return
         if (busy) return
-        file.delete()
-        showNextReview()
+        openReview(Review(page.source, page.corners, page.detected, page))
+    }
+
+    private fun retakeSelectedPage() {
+        val page = pages.getOrNull(selectedPage) ?: return
+        if (busy) return
+        pages.removeAt(selectedPage)
+        page.source.delete()
+        page.output.delete()
+        showCamera(selectedPage)
+    }
+
+    private fun deleteSelectedPage() {
+        val page = pages.getOrNull(selectedPage) ?: return
+        if (busy) return
+        pages.removeAt(selectedPage)
+        page.source.delete()
+        page.output.delete()
+        if (selectedPage >= pages.size) selectedPage = pages.size - 1
+        showPreview()
     }
 
     private fun updateControls() {
@@ -275,13 +384,17 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<View>(R.id.document_scanning_capture).isEnabled = canAdd
         findViewById<Button>(R.id.document_scanning_import).isEnabled = canAdd
         findViewById<Button>(R.id.document_scanning_done).apply {
-            isEnabled = !busy && reviewing == null && pages.isNotEmpty()
+            visibility = if (pages.isNotEmpty()) View.VISIBLE else View.INVISIBLE
+            isEnabled = !busy && reviewing == null
             text = getString(R.string.document_scanner_done, pages.size)
         }
-        findViewById<Button>(R.id.document_scanning_keep).isEnabled = !busy && reviewing != null
-        findViewById<Button>(R.id.document_scanning_retake).isEnabled = !busy && reviewing != null
-        for (id in intArrayOf(R.id.document_scanning_auto_crop, R.id.document_scanning_no_crop, R.id.document_scanning_rotate)) {
-            findViewById<Button>(id).isEnabled = !busy && reviewing != null
+        val reviewEnabled = !busy && reviewing != null
+        for (id in intArrayOf(R.id.document_scanning_keep, R.id.document_scanning_retake, R.id.document_scanning_auto_crop, R.id.document_scanning_no_crop, R.id.document_scanning_rotate)) {
+            findViewById<Button>(id).isEnabled = reviewEnabled
+        }
+        val previewEnabled = !busy && reviewing == null && pages.isNotEmpty()
+        for (id in intArrayOf(R.id.document_scanning_preview_done, R.id.document_scanning_preview_crop, R.id.document_scanning_preview_retake, R.id.document_scanning_preview_delete)) {
+            findViewById<Button>(id).isEnabled = previewEnabled
         }
     }
 
@@ -305,19 +418,20 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun buildResult(): Intent {
         val authority = "$packageName.fileprovider"
+        val outputs = pages.map { it.output }
         val uris = arrayListOf<Uri>()
         val result = Intent()
         if (RESULT_FORMAT_JPEG in resultFormats) {
-            pages.mapTo(uris) { FileProvider.getUriForFile(this, authority, it) }
+            outputs.mapTo(uris) { FileProvider.getUriForFile(this, authority, it) }
             result.putParcelableArrayListExtra(KEY_RESULT_IMAGE_URIS, ArrayList(uris))
         }
         if (RESULT_FORMAT_PDF in resultFormats) {
             val pdf = File(scanDir, "scan.pdf")
-            writePdf(pages, pdf)
+            writePdf(outputs, pdf)
             val pdfUri = FileProvider.getUriForFile(this, authority, pdf)
             uris.add(pdfUri)
             result.putExtra(KEY_RESULT_PDF_URI, pdfUri)
-            result.putExtra(KEY_RESULT_PAGE_COUNT, pages.size)
+            result.putExtra(KEY_RESULT_PAGE_COUNT, outputs.size)
         }
         // URI permissions are only granted for data and clip data, not extras
         if (uris.isNotEmpty()) {

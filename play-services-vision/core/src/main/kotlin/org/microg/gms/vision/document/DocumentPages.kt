@@ -32,6 +32,8 @@ fun importPage(open: () -> InputStream, file: File) {
     writePage(bitmap, rotation, file)
 }
 
+fun loadPagePreview(file: File, maxSize: Int): Bitmap? = decodeScaled({ file.inputStream() }, maxSize)
+
 fun rotatePage(file: File) {
     val bitmap = decodeScaled({ file.inputStream() }) ?: throw IllegalArgumentException("Failed to decode $file")
     writePage(bitmap, 90f, file)
