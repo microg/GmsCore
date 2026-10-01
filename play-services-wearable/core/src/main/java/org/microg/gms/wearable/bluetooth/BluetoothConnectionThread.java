@@ -229,8 +229,7 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         wearableConnection = btConn;
 
         if (!btConn.handshake()) {
-            Log.e(TAG, "Handshake failed");
-            return;
+            throw new IOException("Bluetooth handshake failed");
         }
 
         new TransportConnectionHandler(wearableImpl, config).handle(btConn);
@@ -320,19 +319,21 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     private void waitForRetry() throws InterruptedException {
-        if (!running.get()) return;
+        if (!running.get()) {
+            return;
+        }
+
+        if (immediateRetry.getAndSet(false)) {
+            Log.d(TAG, "Immediate retry requested");
+            wakeLockManager.acquire("retry", 60_000);
+            return;
+        }
 
         long delayMs = retryStrategy.nextDelayMs();
 
         if (delayMs < 0) {
             Log.d(TAG, "Retry strategy OFF, waiting for external trigger");
             waitForExternalRetry();
-            return;
-        }
-
-        if (immediateRetry.getAndSet(false)) {
-            Log.d(TAG, "Immediate retry requested");
-            wakeLockManager.acquire("retry", delayMs + 5000);
             return;
         }
 

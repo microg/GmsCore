@@ -18,6 +18,7 @@ import org.microg.gms.wearable.WearableImpl;
 import java.io.Closeable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -29,8 +30,8 @@ public class BluetoothClient implements Closeable {
     private final BroadcastReceiver btStateReceiver;
     private final BroadcastReceiver aclConnReceiver;
 
-    private final Map<String, ConnectionConfiguration> configurations = new HashMap<>();
-    private final Map<String, BluetoothConnectionThread> connections = new HashMap<>();
+    private final ConcurrentHashMap<String, ConnectionConfiguration> configurations = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, BluetoothConnectionThread> connections = new ConcurrentHashMap<>();
 
     private final WearableImpl wearableImpl;
 
@@ -174,16 +175,23 @@ public class BluetoothClient implements Closeable {
 
         synchronized (this) {
             ConnectionConfiguration config = configurations.get(address);
-            if (config != null) {
-                Log.d(TAG, "ACL_CONNECTED for configured device " + address +
-                        ", attempting reconnection");
+            if (config == null) {
+                return;
+            }
 
-                BluetoothConnectionThread thread = connections.get(address);
-                if (thread != null) {
-                    thread.retryConnection();
-                } else {
-                    startConnection(config);
-                }
+            BluetoothConnectionThread thread = connections.get(address);
+
+            if (thread == null) {
+                Log.d(TAG, "ACL_CONNECTED for configured device " + address +
+                        ", starting connection");
+                startConnection(config);
+            } else if (!thread.isConnectionHealthy()) {
+                Log.d(TAG, "ACL_CONNECTED for unhealthy connection " + address +
+                        ", requesting retry");
+                thread.retryConnection();
+            } else {
+                Log.d(TAG, "ACL_CONNECTED for healthy connection " + address +
+                        ", ignoring");
             }
         }
     }

@@ -1737,12 +1737,28 @@ public class WearableImpl {
     }
 
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     public void stop() {
         if (channelManager != null) {
             channelManager.stop();
+            channelManager = null;
         }
         if (networkHandlerThread != null) {
             networkHandlerThread.quitSafely();
+            networkHandlerThread = null;
+        }
+
+        if (bluetoothClient != null) {
+            bluetoothClient.close();
+            bluetoothClient = null;
+        }
+        if (bluetoothServer != null) {
+            bluetoothServer.close();
+            bluetoothServer = null;
+        }
+        if (sct != null) {
+            sct.close();
+            sct = null;
         }
     }
 
