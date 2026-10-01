@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.GmsCore">
+
+    <!-- WearOS specific permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application>
+        <!-- Wearable Service Definition -->
+        <service
+            android:name="org.microg.GmsCore.wear.WearableService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="com.google.android.gms.permission.BIND_SYNC_ADAPTER">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.WearableService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
