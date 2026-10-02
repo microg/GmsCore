@@ -87,7 +87,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
         this.chromecast.registerListener(this);
-        this.chromecast.registerTawMessageListener(this);
+        this.chromecast.registerRawMessageListener(this);
         this.chromecast.registerConnectionListener(this);
     }
 
@@ -146,7 +146,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     public void rawMessageReceived(ChromeCastRawMessage message, Long requestId) {
         switch (message.getPayloadType()) {
             case STRING:
-                String response = message.getPayloadTuf8();
+                String response = message.getPayloadUtf8();
                 if (requestId == null) {
                     this.onTextMessageReceived(message.getNamespace(), response);
                 } else {
