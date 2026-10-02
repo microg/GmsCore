@@ -11,7 +11,7 @@ interface ICastDeviceControllerListener {
   void onApplicationConnectionFailure(int statusCode);
   void onApplicationDisconnected(int errorCode);
   void onTextMessageReceived(String namespace, String message);
-  void onBinaryMessageReceived(String namespace, byte[] data);
+  void onBinaryMessageReceived(String namespace, in byte[] data);
   void onApplicationStatusChanged(in ApplicationStatus applicationStatus);
   void onDeviceStatusChanged(in CastDeviceStatus deviceStatus);
   void onSendMessageSuccess(String response, long requestId);
