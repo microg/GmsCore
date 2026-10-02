@@ -35,7 +35,7 @@ const val NAMESPACE_MEDIA = "urn:x-cast:com.google.cast.media"
 const val RECEIVER_ID = "receiver-0"
 const val BROADCAST_ID = "*"
 
-/** Largest payload a receiver accepts in one CastMessage. */
+/** Largest serialized CastMessage body a receiver accepts, excluding the 4-byte length prefix. */
 const val MAX_PAYLOAD_SIZE = 64 * 1024
 
 class MessageTooLargeException(size: Int) : IOException("Cast message payload of $size bytes exceeds $MAX_PAYLOAD_SIZE")
@@ -174,6 +174,7 @@ class CastChannel(
         val out = output ?: throw IOException("Cast channel to $host is not connected")
         if (closed) throw IOException("Cast channel to $host is closed")
         val bytes = message.encode()
+        if (bytes.size > MAX_PAYLOAD_SIZE) throw MessageTooLargeException(bytes.size)
         out.writeInt(bytes.size)
         out.write(bytes)
         out.flush()
@@ -181,7 +182,7 @@ class CastChannel(
 
     private fun readMessage(input: DataInputStream): CastMessage {
         val length = input.readInt()
-        if (length < 0 || length > MAX_FRAME_SIZE) throw IOException("Invalid Cast frame length $length")
+        if (length < 0 || length > MAX_PAYLOAD_SIZE) throw IOException("Invalid Cast frame length $length")
         val bytes = ByteArray(length)
         input.readFully(bytes)
         return CastMessage.ADAPTER.decode(bytes)
@@ -253,8 +254,6 @@ class CastChannel(
         const val CONNECT_TIMEOUT_MILLIS = 10_000
         const val HEARTBEAT_INTERVAL_MILLIS = 5_000L
         const val HEARTBEAT_TIMEOUT_MILLIS = 20_000L
-        private const val MAX_FRAME_SIZE = MAX_PAYLOAD_SIZE + 4096
-
         private const val CONNECT_PAYLOAD = """{"type":"CONNECT","origin":{}}"""
         private const val CLOSE_PAYLOAD = """{"type":"CLOSE"}"""
         private const val PING_PAYLOAD = """{"type":"PING"}"""
