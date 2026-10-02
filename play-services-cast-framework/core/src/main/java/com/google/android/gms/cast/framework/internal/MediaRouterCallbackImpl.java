@@ -13,56 +13,92 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.android.gms.cast.framework.internal;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.framework.ISession;
-import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.dynamic.ObjectWrapper;
+import org.microg.gms.common.Constants;
 
+/**
+ * Receives media route events from the client library's MediaRouter for routes matching the merged selector.
+ */
 public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     private static final String TAG = MediaRouterCallbackImpl.class.getSimpleName();
 
-    private CastContextImpl castContext;
+    private final CastContextImpl castContext;
 
     public MediaRouterCallbackImpl(CastContextImpl castContext) {
         this.castContext = castContext;
     }
 
+    private SessionManagerImpl getSessionManager() {
+        return castContext.getSessionManagerImpl();
+    }
+
+    void updateCastState() {
+        getSessionManager().updateCastState();
+    }
+
     @Override
     public void onRouteAdded(String routeId, Bundle extras) {
-        Log.d(TAG, "unimplemented Method: onRouteAdded");
+        Log.d(TAG, "onRouteAdded: " + routeId);
+        updateCastState();
+        getSessionManager().onRouteAdded(routeId);
     }
+
     @Override
     public void onRouteChanged(String routeId, Bundle extras) {
-        Log.d(TAG, "unimplemented Method: onRouteChanged");
+        Log.d(TAG, "onRouteChanged: " + routeId);
+        getSessionManager().onRouteChanged(routeId, extras);
+        updateCastState();
     }
+
     @Override
     public void onRouteRemoved(String routeId, Bundle extras) {
-        Log.d(TAG, "unimplemented Method: onRouteRemoved");
+        Log.d(TAG, "onRouteRemoved: " + routeId);
+        updateCastState();
     }
-    @Override
-    public void onRouteSelected(String routeId, Bundle extras) throws RemoteException {
-        CastDevice castDevice = CastDevice.getFromBundle(extras);
 
-        SessionImpl session = (SessionImpl) ObjectWrapper.unwrap(this.castContext.defaultSessionProvider.getSession(null));
-        Bundle routeInfoExtras = this.castContext.getRouter().getRouteInfoExtrasById(routeId);
-        if (routeInfoExtras != null) {
-            session.start(this.castContext, castDevice, routeId, routeInfoExtras);
-        }
+    @Override
+    public void onRouteSelected(String routeId, Bundle extras) {
+        Log.d(TAG, "onRouteSelected: " + routeId);
+        getSessionManager().onRouteSelected(routeId, extras);
     }
+
     @Override
     public void unknown(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: unknown");
     }
+
     @Override
     public void onRouteUnselected(String routeId, Bundle extras, int reason) {
-        Log.d(TAG, "unimplemented Method: onRouteUnselected");
+        Log.d(TAG, "onRouteUnselected: " + routeId + " reason=" + reason);
+        getSessionManager().onRouteUnselected(routeId, reason);
+        updateCastState();
+    }
+
+    @Override
+    public int getSupportedVersion() {
+        return Constants.GMS_VERSION_CODE;
+    }
+
+    @Override
+    public void onRouteSelectedWithRequestedRoute(String requestedRouteId, String selectedRouteId, Bundle extras) {
+        Log.d(TAG, "onRouteSelected: " + selectedRouteId + " (requested " + requestedRouteId + ")");
+        getSessionManager().onRouteSelected(selectedRouteId, extras);
+    }
+
+    @Override
+    public void onRouteConnected(String requestedRouteId, String connectedRouteId, Bundle extras) {
+        // Route connections are used for media transfer (output switcher), they don't start a session on their own.
+        Log.d(TAG, "onRouteConnected: " + connectedRouteId + " (requested " + requestedRouteId + ")");
+    }
+
+    @Override
+    public void onRouteDisconnected(String requestedRouteId, String disconnectedRouteId, Bundle extras, int reason) {
+        Log.d(TAG, "onRouteDisconnected: " + disconnectedRouteId + " reason=" + reason);
+        getSessionManager().onRouteUnselected(disconnectedRouteId, reason);
+        updateCastState();
     }
 }

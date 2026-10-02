@@ -105,7 +105,7 @@ public final class CastMediaControlIntent {
      * restrictions. See {@link #categoryForCast(Collection)} and {@link #categoryForCast(String)} for more details.
      */
     public static String categoryForCast(String applicationId, Collection<String> namespaces) {
-        return CATEGORY_CAST + "" + applicationId + "/" + TextUtils.join(",", namespaces);
+        return CATEGORY_CAST + "/" + applicationId + "/" + TextUtils.join(",", namespaces);
     }
 
     /**

@@ -9,4 +9,8 @@ interface IMediaRouterCallback {
     void onRouteSelected(String routeId, in Bundle extras) = 3;
     void unknown(String routeId, in Bundle extras) = 4;
     void onRouteUnselected(String routeId, in Bundle extras, int reason) = 5;
+    int getSupportedVersion() = 6;
+    void onRouteSelectedWithRequestedRoute(String requestedRouteId, String selectedRouteId, in Bundle extras) = 7;
+    void onRouteConnected(String requestedRouteId, String connectedRouteId, in Bundle extras) = 8;
+    void onRouteDisconnected(String requestedRouteId, String disconnectedRouteId, in Bundle extras, int reason) = 9;
 }
