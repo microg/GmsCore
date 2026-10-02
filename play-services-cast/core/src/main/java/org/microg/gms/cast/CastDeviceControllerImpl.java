@@ -17,6 +17,7 @@
 package org.microg.gms.cast;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -331,7 +332,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         try {
             this.chromecast.connect();
             this.onConnectedWithResult(CommonStatusCodes.SUCCESS);
-        } catch (IOException e) {
+        } catch (IOException | GeneralSecurityException e) {
             Log.w(TAG, "Error connecting to cast device: " + e.getMessage());
             this.onConnectedWithResult(CommonStatusCodes.NETWORK_ERROR);
         }
