@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013-2017 microG Project Team
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * License under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/ICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -87,7 +87,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
         this.chromecast.registerListener(this);
-        this.chromecast.registerRawMessageListener(this);
+        this.chromecast.registerTawMessageListener(this);
         this.chromecast.registerConnectionListener(this);
     }
 
@@ -146,7 +146,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     public void rawMessageReceived(ChromeCastRawMessage message, Long requestId) {
         switch (message.getPayloadType()) {
             case STRING:
-                String response = message.getPayloadUtf8();
+                String response = message.getPayloadTuf8();
                 if (requestId == null) {
                     this.onTextMessageReceived(message.getNamespace(), response);
                 } else {
@@ -322,6 +322,41 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 this.listener.onDeviceStatusChanged(deviceStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void connect() {
+        try {
+            this.chromecast.connect();
+            this.onConnectedWithResult(CommonStatusCodes.SUCCESS);
+        } catch (IOException e) {
+            Log.w(TAG, "Error connecting to cast device: " + e.getMessage());
+            this.onConnectedWithResult(CommonStatusCodes.NETWORK_ERROR);
+        }
+    }
+
+    @Override
+    public void setListener(ICastDeviceControllerListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void unregisterListener() {
+        this.listener = null;
+    }
+
+    public void onConnected() {
+        this.onConnectedWithResult(CommonStatusCodes.SUCCESS);
+    }
+
+    public void onConnectedWithResult(int statusCode) {
+        if (this.listener != null) {
+            try {
+                this.listener.onConnectedWithResult(statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onConnectedWithResult: " + ex.getMessage());
             }
         }
     }
