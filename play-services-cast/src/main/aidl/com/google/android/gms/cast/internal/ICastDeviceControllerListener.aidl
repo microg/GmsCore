@@ -7,7 +7,7 @@ import com.google.android.gms.cast.CastDeviceStatus;
 interface ICastDeviceControllerListener {
   void onConnected();
   void onDisconnected(int reason);
-  void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched);
+  void onApplicationConnectionSuccess(in ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched);
   void onApplicationConnectionFailure(int statusCode);
   void onApplicationDisconnected(int errorCode);
   void onTextMessageReceived(String namespace, String message);
