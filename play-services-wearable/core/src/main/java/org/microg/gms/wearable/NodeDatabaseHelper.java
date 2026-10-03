@@ -27,6 +27,7 @@ import android.util.Log;
 import com.google.android.gms.wearable.Asset;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,29 +67,28 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized Cursor getDataItemsForDataHolder(String packageName, String signatureDigest) {
-        return getDataItemsForDataHolderByHostAndPath(packageName, signatureDigest, null, null);
+        return getDataItemsForDataHolder(DataItemQuery.all(packageName, signatureDigest));
     }
 
-    public synchronized Cursor getDataItemsForDataHolderByHostAndPath(String packageName, String signatureDigest, String host, String path) {
-        String[] params;
-        String selection;
-        if (path == null) {
-            params = new String[]{packageName, signatureDigest};
-            selection = "packageName = ? AND signatureDigest = ?";
-        } else if (TextUtils.isEmpty(host)) {
-            if (path.endsWith("/")) path = path + "%";
-            path = path.replace("*", "%");
-            params = new String[]{packageName, signatureDigest, path};
-            selection = "packageName = ? AND signatureDigest = ? AND path LIKE ?";
-        } else {
-            if (path.endsWith("/")) path = path + "%";
-            path = path.replace("*", "%");
-            host = host.replace("*", "%");
-            params = new String[]{packageName, signatureDigest, host, path};
-            selection = "packageName = ? AND signatureDigest = ? AND host = ? AND path LIKE ?";
-        }
-        selection += " AND deleted=0 AND assetsPresent !=0";
-        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
+    synchronized Cursor getCapabilityRecords() {
+        return getReadableDatabase().query("appKeyDataItems", new String[]{"host", "path", "data"},
+                "packageName=? AND signatureDigest=? AND deleted=0 AND path LIKE ? AND "
+                        + "(assetsPresent!=0 OR NOT EXISTS(SELECT 1 FROM assetrefs WHERE assetrefs.dataitems_id=appKeyDataItems.dataitems_id))",
+                new String[]{org.microg.wearable.CapabilityPaths.PACKAGE,
+                        org.microg.wearable.CapabilityPaths.SIGNATURE, "/capabilities/%"},
+                null, null, "path,host");
+    }
+
+    public synchronized Cursor getDataItemsForDataHolderByHostAndPath(String packageName, String signatureDigest,
+                                                                    String host, String path, int filterType) {
+        return getDataItemsForDataHolder(DataItemQuery.filtered(packageName, signatureDigest, host, path, filterType));
+    }
+
+    private Cursor getDataItemsForDataHolder(DataItemQuery query) {
+        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,'' AS tags,"
+                        + "assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE "
+                        + query.selection + " AND assetsPresent != 0 ORDER BY host, path, assetname",
+                query.arguments);
     }
 
     public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {
@@ -134,8 +134,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     public synchronized void putRecord(DataItemRecord record) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        Cursor cursor = getDataItemsByHostAndPath(db, record.packageName, record.signatureDigest, record.dataItem.host, record.dataItem.path);
-        try {
+        try (Cursor cursor = getDataItemsByHostAndPath(db, record.packageName, record.signatureDigest, record.dataItem.host, record.dataItem.path)) {
             String key;
             if (cursor.moveToNext()) {
                 // update
@@ -152,14 +151,14 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             }
             db.setTransactionSuccessful();
         } finally {
-            cursor.close();
+            db.endTransaction();
         }
-        db.endTransaction();
     }
 
     private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
         ContentValues cv = record.toContentValues();
         db.update("dataitems", cv, "_id=?", new String[]{key});
+        db.delete("assetrefs", "dataitems_id=?", new String[]{key});
         finishRecord(db, key, record);
     }
 
@@ -174,6 +173,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
 
     private static String finishRecord(SQLiteDatabase db, String key, DataItemRecord record) {
         if (!record.deleted) {
+            record.assetsAreReady = record.dataItem.getAssets().isEmpty();
             for (Map.Entry<String, Asset> asset : record.dataItem.getAssets().entrySet()) {
                 ContentValues assetValues = new ContentValues();
                 assetValues.put("assets_digest", asset.getValue().getDigest());
@@ -206,32 +206,47 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             selection = "packageName =? AND signatureDigest =? AND host =? AND path =?";
         }
         selection += " AND deleted=0";
-        return db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, params, null, null, "packageName, signatureDigest, host, path");
+        return db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, params, null, null, "packageName, signatureDigest, host, path, dataitems_id");
     }
 
     public Cursor getModifiedDataItems(final String nodeId, final long seqId, final boolean excludeDeleted) {
         String selection = "sourceNode =? AND seqId >?" + (excludeDeleted ? " AND deleted =0" : "");
-        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId", null);
+        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId, dataitems_id", null);
     }
 
     public synchronized List<DataItemRecord> deleteDataItems(String packageName, String signatureDigest, String host, String path) {
-        List<DataItemRecord> updated = new ArrayList<DataItemRecord>();
+        return deleteDataItems(packageName, signatureDigest, host, path, DataItemQuery.FILTER_LITERAL);
+    }
+
+    public synchronized List<DataItemRecord> deleteDataItems(String packageName, String signatureDigest,
+                                                           String host, String path, int filterType) {
+        DataItemQuery query = DataItemQuery.filtered(packageName, signatureDigest, host, path, filterType);
+        Map<String, DataItemRecord> updated = new LinkedHashMap<>();
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        Cursor cursor = getDataItemsByHostAndPath(db, packageName, signatureDigest, host, path);
-        while (cursor.moveToNext()) {
-            DataItemRecord record = DataItemRecord.fromCursor(cursor);
-            record.deleted = true;
-            record.assetsAreReady = true;
-            record.dataItem.data = null;
-            record.seqId = clockworkNodePreferences.getNextSeqId();
-            record.v1SeqId = record.seqId;
-            updateRecord(db, cursor.getString(0), record);
-            updated.add(record);
+        try {
+            // Read the joined rows before changing assetrefs, and update each data item once.
+            try (Cursor cursor = db.query("dataItemsAndAssets", GDIBHAP_FIELDS, query.selection,
+                    query.arguments, null, null, "dataitems_id")) {
+                while (cursor.moveToNext()) {
+                    String id = cursor.getString(0);
+                    updated.put(id, DataItemRecord.fromCursor(cursor));
+                }
+            }
+            for (Map.Entry<String, DataItemRecord> entry : updated.entrySet()) {
+                DataItemRecord record = entry.getValue();
+                record.deleted = true;
+                record.assetsAreReady = true;
+                record.dataItem.data = null;
+                record.seqId = clockworkNodePreferences.getNextSeqId();
+                record.v1SeqId = record.seqId;
+                updateRecord(db, entry.getKey(), record);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return updated;
+        return new ArrayList<>(updated.values());
     }
 
     public long getCurrentSeqId(String sourceNode) {
