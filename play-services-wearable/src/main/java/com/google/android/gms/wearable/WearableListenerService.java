@@ -133,6 +133,15 @@ public abstract class WearableListenerService extends Service implements Capabil
     private class Listener extends IWearableListener.Stub {
         private int knownGoodUid = -1;
 
+        @Override
+        public void onRequestReceived(MessageEventParcelable event,
+                com.google.android.gms.wearable.internal.IRpcResponseCallback callback) throws RemoteException {
+            // This legacy client has no RpcService API. Report unsupported requests to the peer.
+            post(() -> {
+                try { callback.onResponse(false, null); } catch (RemoteException ignored) { }
+            });
+        }
+
         private boolean post(Runnable runnable) {
             int callingUid = Binder.getCallingUid();
             if (callingUid != knownGoodUid) {

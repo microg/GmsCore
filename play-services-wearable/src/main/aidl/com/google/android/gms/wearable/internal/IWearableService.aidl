@@ -2,7 +2,9 @@ package com.google.android.gms.wearable.internal;
 
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.AddListenerRequest;
+import com.google.android.gms.wearable.internal.AddAccountToConsentRequest;
 import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
@@ -17,6 +19,7 @@ interface IWearableService {
     void getConfigs(IWearableCallbacks callbacks) = 21;
     void enableConfig(IWearableCallbacks callbacks, String name) = 22;
     void disableConfig(IWearableCallbacks callbacks, String name) = 23;
+    void updateConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 73;
 
     // DataItems
     void putData(IWearableCallbacks callbacks, in PutDataRequest request) = 5;
@@ -28,6 +31,8 @@ interface IWearableService {
     void deleteDataItemsWithFilter(IWearableCallbacks callbacks, in Uri uri, int typeFilter) = 40;
 
     void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 11;
+    void sendRequest(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 57;
+    void sendRequestWithOptions(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data, in MessageOptions options) = 59;
     void getFdForAsset(IWearableCallbacks callbacks, in Asset asset) = 12;
 
     void getLocalNode(IWearableCallbacks callbacks) = 13;
@@ -71,6 +76,10 @@ interface IWearableService {
     void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) = 49;
     void getCloudSyncSetting(IWearableCallbacks callbacks) = 50;
     void getCloudSyncOptInStatus(IWearableCallbacks callbacks) = 51;
+
+    // Consent
+    void getConsent(IWearableCallbacks callbacks) = 64;
+    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
 
     void sendRemoteCommand(IWearableCallbacks callbacks, byte b) = 52;
 
