@@ -451,6 +451,17 @@
 
         <!-- Wearable -->
 
+        <service
+            android:name="org.microg.gms.wearable.WearableMediaBridge"
+            android:enabled="@bool/wearable_media_bridge_enabled"
+            android:label="@string/wearable_media_bridge_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.wearable.WearableService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND" />
