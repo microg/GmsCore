@@ -1407,6 +1407,22 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.smartdevice.directtransfer.SourceDirectTransferService"
+            android:exported="true"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.smartdevice.directtransfer.SourceTransferConsentActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:process=":persistent"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1507,7 +1523,6 @@
                 <action android:name="com.google.android.gms.setup.auth.SecondDeviceAuth.START" />
                 <action android:name="com.google.android.gms.smartdevice.d2d.SourceDeviceService.START" />
                 <action android:name="com.google.android.gms.smartdevice.d2d.TargetDeviceService.START" />
-                <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
                 <action android:name="com.google.android.gms.smartdevice.directtransfer.TargetDirectTransferService.START" />
                 <action android:name="com.google.android.gms.smartdevice.postsetup.PostSetupService.START" />
                 <action android:name="com.google.android.gms.smartdevice.setup.accounts.AccountsService.START" />
