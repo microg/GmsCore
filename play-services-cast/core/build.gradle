@@ -4,6 +4,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
@@ -16,10 +17,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
-    // TODO: Switch to upstream once raw requests are merged
-    // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
-    // implementation "su.litvak.chromecast:api-v2:0.10.4"
-    implementation "info.armills.chromecast-java-api-v2:api-v2-raw-request:0.10.4-raw-request-1"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
@@ -54,6 +53,10 @@ android {
     kotlinOptions {
         jvmTarget = 1.8
     }
+}
+
+wire {
+    kotlin {}
 }
 
 apply from: '../../gradle/publish-android.gradle'

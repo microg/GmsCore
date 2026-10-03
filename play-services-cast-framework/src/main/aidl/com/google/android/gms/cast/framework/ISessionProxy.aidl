@@ -11,4 +11,5 @@ interface ISessionProxy {
     int getSupportedVersion() = 5;
     void onStarting(in Bundle routeInfoExtra) = 6;
     void onResuming(in Bundle routeInfoExtra) = 7;
+    void onRouteInfoUpdated(in Bundle routeInfoExtra) = 8;
 }

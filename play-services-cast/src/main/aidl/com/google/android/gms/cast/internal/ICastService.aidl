@@ -15,4 +15,5 @@ interface ICastService {
     oneway void getCxLessStatus(IStatusCallback callback) = 3;
     oneway void getFeatureFlags(IBundleCallback callback, in String[] flags) = 4;
     oneway void getCastStatusCodeDictionary(IBundleCallback callback, in String[] dictionaries) = 5;
+    oneway void getIntegerMaps(IBundleCallback callback, in String[] keys) = 6;
 }

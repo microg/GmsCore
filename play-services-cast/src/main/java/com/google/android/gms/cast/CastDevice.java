@@ -48,9 +48,12 @@ public class CastDevice extends AutoSafeParcelable {
         this.deviceVersion = deviceVersion;
         this.friendlyName = friendlyName;
         this.icons = new ArrayList<WebImage>();
-        this.icons.add(new WebImage(Uri.parse(String.format("http://%s:8008%s", this.address, iconPath))));
+        if (iconPath != null) {
+            this.icons.add(new WebImage(Uri.parse(String.format("http://%s:8008%s", this.address, iconPath))));
+        }
         this.modelName = modelName;
         this.capabilities = capabilities;
+        this.status = status;
     }
 
     /**
