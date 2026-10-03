@@ -451,6 +451,17 @@
 
         <!-- Wearable -->
 
+        <service
+            android:name="org.microg.gms.wearable.WearableMediaBridge"
+            android:enabled="@bool/wearable_media_bridge_enabled"
+            android:label="@string/wearable_media_bridge_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.wearable.WearableService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND" />
@@ -460,7 +471,7 @@
         <activity
             android:name="com.google.android.gms.wearable.consent.TermsOfServiceActivity"
             android:process=":ui"
-            android:configChanges="screenSize|orientation|keyboardHidden">
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|keyboard|uiMode|locale|layoutDirection|density|fontScale">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.TOS"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -1396,6 +1407,22 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.smartdevice.directtransfer.SourceDirectTransferService"
+            android:exported="true"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.smartdevice.directtransfer.SourceTransferConsentActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:process=":persistent"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1496,7 +1523,6 @@
                 <action android:name="com.google.android.gms.setup.auth.SecondDeviceAuth.START" />
                 <action android:name="com.google.android.gms.smartdevice.d2d.SourceDeviceService.START" />
                 <action android:name="com.google.android.gms.smartdevice.d2d.TargetDeviceService.START" />
-                <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
                 <action android:name="com.google.android.gms.smartdevice.directtransfer.TargetDirectTransferService.START" />
                 <action android:name="com.google.android.gms.smartdevice.postsetup.PostSetupService.START" />
                 <action android:name="com.google.android.gms.smartdevice.setup.accounts.AccountsService.START" />

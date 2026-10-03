@@ -26,7 +26,7 @@ public class GetAllCapabilitiesResponse extends AutoSafeParcelable {
     private int versionCode = 1;
     @Field(2)
     public int statusCode;
-    @Field(3)
+    @Field(value = 3, subClass = CapabilityInfoParcelable.class)
     public List<CapabilityInfoParcelable> capabilities;
 
     public static final Creator<GetAllCapabilitiesResponse> CREATOR = findCreator(GetAllCapabilitiesResponse.class);

@@ -129,6 +129,7 @@ public class DataItemRecord {
     }
 
     public static DataItemRecord fromCursor(Cursor cursor) {
+        long dataItemId = cursor.getLong(0);
         DataItemRecord record = new DataItemRecord();
         record.packageName = cursor.getString(1);
         record.signatureDigest = cursor.getString(2);
@@ -139,11 +140,14 @@ public class DataItemRecord {
         record.dataItem.data = cursor.getBlob(8);
         record.lastModified = cursor.getLong(9);
         record.assetsAreReady = cursor.getLong(10) > 0;
+        record.v1SeqId = cursor.getLong(14);
         if (cursor.getString(11) != null) {
             record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
             while (cursor.moveToNext()) {
-                if (cursor.getLong(5) == record.seqId) {
+                if (cursor.getLong(0) == dataItemId) {
                     record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                } else {
+                    break;
                 }
             }
             cursor.moveToPrevious();

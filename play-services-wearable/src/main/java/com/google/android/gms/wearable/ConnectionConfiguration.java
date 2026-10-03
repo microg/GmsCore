@@ -16,8 +16,11 @@
 
 package com.google.android.gms.wearable;
 
+import android.os.Parcel;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelReader;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
+import java.util.List;
 
 public class ConnectionConfiguration extends AutoSafeParcelable {
 
@@ -41,6 +44,27 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
     public boolean btlePriority = true;
     @SafeParceled(10)
     public String nodeId;
+    @SafeParceled(11)
+    public String packageName;
+    @SafeParceled(12)
+    public int connectionRetryStrategy;
+    @SafeParceled(value = 13, subClass = String.class)
+    public List<String> allowedConfigPackages;
+    @SafeParceled(14)
+    public boolean migrating;
+    @SafeParceled(15)
+    public boolean dataItemSyncEnabled = true;
+    @SafeParceled(17)
+    public boolean removeConnectionWhenBondRemovedByUser = true;
+    @SafeParceled(19)
+    public int maxSupportedRemoteAndroidSdkVersion;
+    @SafeParceled(20)
+    public int runtimeType;
+    @SafeParceled(21)
+    public boolean skipConnectingIfNotBonded;
+
+    // Retain the presence of unsupported policies instead of silently dropping them.
+    public boolean hasUnsupportedConnectionPolicies;
 
     private ConnectionConfiguration() {
         name = address = null;
@@ -81,5 +105,27 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         return sb.toString();
     }
 
-    public static final Creator<ConnectionConfiguration> CREATOR = new AutoCreator<ConnectionConfiguration>(ConnectionConfiguration.class);
+    public static final Creator<ConnectionConfiguration> CREATOR = new AutoCreator<ConnectionConfiguration>(ConnectionConfiguration.class) {
+        @Override
+        public ConnectionConfiguration createFromParcel(Parcel source) {
+            int start = source.dataPosition();
+            ConnectionConfiguration result = super.createFromParcel(source);
+            int end = source.dataPosition();
+            source.setDataPosition(start);
+            int objectEnd = SafeParcelReader.readObjectHeader(source);
+            while (source.dataPosition() < objectEnd) {
+                int header = SafeParcelReader.readHeader(source);
+                int field = SafeParcelReader.getFieldId(header);
+                int size = (header & 0xffff0000) == 0xffff0000 ? source.readInt() : (header >>> 16);
+                int next = source.dataPosition() + size;
+                if (size < 0 || next < source.dataPosition() || next > objectEnd) {
+                    throw new IllegalArgumentException("Invalid connection configuration field");
+                }
+                if ((field == 16 || field == 18) && size != 0) result.hasUnsupportedConnectionPolicies = true;
+                source.setDataPosition(next);
+            }
+            source.setDataPosition(end);
+            return result;
+        }
+    };
 }

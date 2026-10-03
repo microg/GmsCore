@@ -17,4 +17,5 @@
 
 <resources>
     <bool name="is_gmscore">true</bool>
+    <bool name="wearable_media_bridge_enabled">false</bool>
 </resources>

@@ -65,6 +65,12 @@ public class Conditions {
             }).build();
 
     private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
+    private static String[] requiredPermissions() {
+        if (SDK_INT < 31) return REQUIRED_PERMISSIONS;
+        String[] permissions = java.util.Arrays.copyOf(REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS.length + 1);
+        permissions[REQUIRED_PERMISSIONS.length] = android.Manifest.permission.BLUETOOTH_CONNECT;
+        return permissions;
+    }
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
             .summaryPlurals(R.plurals.cond_perm_summary)
@@ -74,7 +80,7 @@ public class Conditions {
                 public boolean isActive(Context context) {
                     count = 0;
                     if (SDK_INT >= 23) {
-                        for (String permission : REQUIRED_PERMISSIONS) {
+                        for (String permission : requiredPermissions()) {
                             if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
                                 count++;
                         }
@@ -91,7 +97,7 @@ public class Conditions {
                 @Override
                 public void onClick(View v) {
                     if (v.getContext() instanceof Activity) {
-                        ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
+                        ActivityCompat.requestPermissions((Activity) v.getContext(), requiredPermissions(), 0);
                     }
                 }
             }).build();
