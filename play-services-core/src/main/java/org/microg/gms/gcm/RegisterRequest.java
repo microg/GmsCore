@@ -58,6 +58,12 @@ public class RegisterRequest extends HttpFormClient.Request {
     @RequestContent("delete")
     public boolean delete;
     public long securityToken;
+
+    @Override
+    public boolean isContentLoggingAllowed() {
+        // The request carries the device's security token and the response an instance token.
+        return false;
+    }
     public String deviceName;
     public String buildVersion;
     @RequestContent("target_ver")
