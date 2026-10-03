@@ -18,6 +18,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
