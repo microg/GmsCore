@@ -16,14 +16,14 @@
 
     <style name="Theme.Base.Dark" />
 
-    <style name="Theme.Base.Dark.NoActionBar">
+    <style name="Theme.Base.Dark.NoActionBar" parent="Theme.Material3.Dark.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.Base.Light" />
 
-    <style name="Theme.Base.Light.NoActionBar">
+    <style name="Theme.Base.Light.NoActionBar" parent="Theme.Material3.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

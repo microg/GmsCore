@@ -25,7 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.util.Base64;
 import android.util.Log;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
@@ -56,7 +56,7 @@ import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
  * The <code>com.google.android.c2dm.permission.SEND</code> permission is held by Google Play
  * services. This prevents other apps from invoking the broadcast receiver.
  */
-public class GcmReceiver extends WakefulBroadcastReceiver {
+public class GcmReceiver extends BroadcastReceiver {
     private static final String TAG = "GcmReceiver";
 
     public void onReceive(Context context, Intent intent) {

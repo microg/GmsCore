@@ -5,7 +5,7 @@
   -->
 <resources>
 
-    <style name="Theme.Dialog.NoActionBar" parent="@android:style/Theme.Dialog">
+    <style name="Theme.Dialog.NoActionBar" parent="Theme.Material3.DayNight.Dialog">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

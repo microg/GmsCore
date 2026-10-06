@@ -5,13 +5,13 @@
   -->
 
 <resources>
-    <style name="Theme.Dialog.NoActionBar" parent="@android:style/Theme.Dialog">
+    <style name="Theme.Dialog.NoActionBar" parent="Theme.Material3.DayNight.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="MyDialogStyle" parent="android:Theme.Dialog">
+    <style name="MyDialogStyle" parent="Theme.Material3.DayNight.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>

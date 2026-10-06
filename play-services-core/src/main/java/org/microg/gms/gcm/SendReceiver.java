@@ -21,11 +21,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
 
-public class SendReceiver extends WakefulBroadcastReceiver {
+public class SendReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getExtras() == null) return;

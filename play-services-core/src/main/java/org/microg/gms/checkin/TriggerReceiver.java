@@ -25,7 +25,7 @@ import android.net.NetworkRequest;
 import android.util.Log;
 
 import androidx.core.app.PendingIntentCompat;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import org.microg.gms.common.ForegroundServiceContext;
 
@@ -35,7 +35,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
 import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
 
-public class TriggerReceiver extends WakefulBroadcastReceiver {
+public class TriggerReceiver extends BroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
     private static boolean registered = false;
 

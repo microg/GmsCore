@@ -9,16 +9,16 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 import org.microg.gms.common.Hide;
 
 /**
  * TODO: This should end up in play-services-stats eventually
  */
 @Hide
-public abstract class GCoreWakefulBroadcastReceiver extends WakefulBroadcastReceiver {
+public abstract class GCoreWakefulBroadcastReceiver extends BroadcastReceiver {
     public static boolean completeWakefulIntent(@NonNull Context context, @Nullable Intent intent) {
         if (intent == null) return false;
-        return WakefulBroadcastReceiver.completeWakefulIntent(intent);
+        return // Removed completeWakefulIntent(intent);
     }
 }

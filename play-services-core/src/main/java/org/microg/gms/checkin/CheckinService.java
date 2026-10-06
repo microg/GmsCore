@@ -31,7 +31,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import androidx.core.app.PendingIntentCompat;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import com.google.android.gms.checkin.internal.ICheckinService;
 
@@ -101,7 +101,7 @@ public class CheckinService extends IntentService {
             Log.w(TAG, e);
         } finally {
             if (intent != null) {
-                WakefulBroadcastReceiver.completeWakefulIntent(intent);
+                // Removed completeWakefulIntent(intent);
             }
             schedule(this);
             stopSelf();

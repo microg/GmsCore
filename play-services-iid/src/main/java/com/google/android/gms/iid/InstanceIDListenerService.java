@@ -25,7 +25,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 import com.google.android.gms.stats.GCoreWakefulBroadcastReceiver;
 
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
@@ -105,7 +105,7 @@ public class InstanceIDListenerService extends Service {
                 handleIntent(intent);
 
                 if (intent.hasExtra(EXTRA_FROM))
-                    GCoreWakefulBroadcastReceiver.completeWakefulIntent(intent);
+                    GCore// Removed completeWakefulIntent(intent);
             }
         } finally {
             stop();
