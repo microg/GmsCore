@@ -60,7 +60,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         setIntentRedelivery(true);
         this.b = factory;
         this.g = ping;
-        this.h = new Handler();
+        this.h = new Handler(android.os.Looper.getMainLooper());
     }
 
     // fsc
@@ -130,7 +130,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.e = new Object();
         this.b = new NetworkHandleProxyFactory(this);
         this.g = new Object();
-        this.h = new Handler();
+        this.h = new Handler(android.os.Looper.getMainLooper());
         this.c = new Object();
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
         HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));

@@ -26,7 +26,7 @@ suspend fun BluetoothAdapter.enableAsync(context: Context): Boolean {
             }
         }
     }
-    context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+    androidx.core.content.ContextCompat.registerReceiver(context, receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED), androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
     if (!isEnabled) {
         try {
             enable()

@@ -16,6 +16,6 @@ public class WakeUpService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new Messenger(new Handler()).getBinder();
+        return new Messenger(new Handler(android.os.Looper.getMainLooper())).getBinder();
     }
 }

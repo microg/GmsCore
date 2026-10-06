@@ -69,7 +69,7 @@ class DownloadManager(private val context: Context) {
     init {
         createNotificationChannel()
         val filter = IntentFilter(CANCEL_ACTION)
-        context.registerReceiver(cancelReceiver, filter)
+        androidx.core.content.ContextCompat.registerReceiver(context, cancelReceiver, filter, androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     private fun createNotificationChannel() {

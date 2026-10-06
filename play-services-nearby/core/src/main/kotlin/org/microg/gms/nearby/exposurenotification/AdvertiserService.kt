@@ -72,7 +72,7 @@ class AdvertiserService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) })
+        androidx.core.content.ContextCompat.registerReceiver(this, trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) }, androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

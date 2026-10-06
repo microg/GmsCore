@@ -40,7 +40,7 @@ buildscript {
     ext.androidBuildVersionTools = '35.0.0'
 
     ext.androidMinSdk = 19
-    ext.androidTargetSdk = 29
+    ext.androidTargetSdk = 34
     ext.androidCompileSdk = 35
 
     ext.localProperties = new Properties()
