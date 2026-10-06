@@ -182,6 +182,7 @@ class PushRegisterService : LifecycleService() {
                 .sender(intent.getStringExtra(EXTRA_SENDER))
                 .checkin(LastCheckinInfo.read(this))
                 .app(packageName)
+                .delete(true)
                 .extraParams(intent.extras)
         )
         val outIntent = Intent(ACTION_C2DM_REGISTRATION)

@@ -142,6 +142,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <!-- SMS permissions required for RCS provisioning via Google Messages -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -1303,6 +1308,13 @@
             </intent-filter>
         </service>
 
+        <!-- RCS support for Google Messages -->
+        <service android:name="org.microg.gms.rcs.RcsService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.common.ClientTelemetryService">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.telemetry.service.START" />
@@ -1485,7 +1497,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

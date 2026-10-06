@@ -166,6 +166,22 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+        // Enable RCS chat features provisioning
+        Flag("bugle_phenotype__enable_rcs_provisioning", true, 0),
+        Flag("bugle_phenotype__enable_rcs_auto_provisioning", true, 0),
+        // Allow RCS on non-Google-certified (microG) devices
+        Flag("bugle_phenotype__skip_rcs_device_check", true, 0),
+        Flag("bugle_phenotype__rcs_requires_play_integrity", false, 0),
+        // Disable Dasher (Google Workspace) account requirement for RCS
+        Flag("bugle_phenotype__rcs_require_dasher_account", false, 0),
+        // Enable RCS unified service (Jibe integration)
+        Flag("bugle_phenotype__enable_jibe_service", true, 0),
+        Flag("bugle_phenotype__enable_universal_rcs", true, 0),
+        // Enable RCS on Wi-Fi-only (no carrier SMS fallback required)
+        Flag("bugle_phenotype__enable_rcs_over_wifi", true, 0),
+        // Show RCS chat features settings entry
+        Flag("bugle_phenotype__show_chat_features_setting", true, 0),
+        Flag("bugle_phenotype__enable_chat_features", true, 0),
     ),
     "com.google.android.videos" to arrayOf(
         Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
