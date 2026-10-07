@@ -102,7 +102,7 @@ public class GcmReceiver extends BroadcastReceiver {
         try {
             ComponentName startedComponent;
             if (context.checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-                startedComponent = startWakefulService(context, intent);
+                startedComponent = context.startService(intent);
             } else {
                 Log.d(TAG, "Missing wake lock permission, service start may be delayed");
                 startedComponent = context.startService(intent);

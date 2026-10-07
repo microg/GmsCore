@@ -19,6 +19,6 @@ import org.microg.gms.common.Hide;
 public abstract class GCoreWakefulBroadcastReceiver extends BroadcastReceiver {
     public static boolean completeWakefulIntent(@NonNull Context context, @Nullable Intent intent) {
         if (intent == null) return false;
-        return // Removed completeWakefulIntent(intent);
+        return false; // Removed completeWakefulIntent(intent);
     }
 }
