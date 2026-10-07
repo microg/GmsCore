@@ -166,6 +166,12 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+        // Tell Google Messages that RCS (Chat Features) is available on this device.
+        // Without this flag the app never attempts provisioning and shows the
+        // "RCS chats aren't available for this device" error.
+        Flag("rcs_phenotype__enable_rcs", true, 0),
+        Flag("rcs_phenotype__rcs_enabled", true, 0),
+        Flag("rcs_phenotype__use_gms_rcs_service", true, 0),
     ),
     "com.google.android.videos" to arrayOf(
         Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
