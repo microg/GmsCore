@@ -352,7 +352,7 @@
 
         <service
             android:name="org.microg.gms.gcm.McsService"
-            android:process=":persistent" / android:exported="true">
+            android:process=":persistent" android:exported="true" />
 
         <service
             android:name="org.microg.gms.gcm.GcmInGmsService"
@@ -382,7 +382,7 @@
 
         <receiver
             android:name="org.microg.gms.gcm.ServiceInfoReceiver"
-            android:process=":persistent" / android:exported="true">
+            android:process=":persistent" android:exported="true" />
 
         <receiver
             android:name="org.microg.gms.gcm.TriggerReceiver"
