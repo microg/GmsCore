@@ -248,7 +248,7 @@
             android:excludeFromRecents="true"
             android:exported="false" />
 
-        <service android:name="org.microg.gms.places.GeoDataService">
+        <service android:name="org.microg.gms.places.GeoDataService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.location.places.GeoDataApi" />
                 <action android:name="com.google.android.gms.location.places.PlacesApi" />
@@ -386,7 +386,7 @@
 
         <receiver
             android:name="org.microg.gms.gcm.TriggerReceiver"
-            android:process=":persistent">
+            android:process=":persistent" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
@@ -569,7 +569,7 @@
 
         <activity
             android:name="org.microg.gms.auth.credentials.CredentialPickerActivity"
-            android:process=":ui">
+            android:process=":ui" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.credentials.PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -637,7 +637,7 @@
             android:name="org.microg.gms.auth.signin.SignInConfigurationService"
             android:exported="false" />
 
-        <service android:name="org.microg.gms.auth.credentials.identity.AuthorizationService">
+        <service android:name="org.microg.gms.auth.credentials.identity.AuthorizationService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
             </intent-filter>
@@ -802,7 +802,7 @@
         <activity
             android:name="org.microg.gms.games.UpgradeActivity"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.games.PLAY_GAMES_UPGRADE" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -911,7 +911,7 @@
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
-            android:taskAffinity="org.microg.gms.settings">
+            android:taskAffinity="org.microg.gms.settings" android:exported="true">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
             </intent-filter>
@@ -1149,7 +1149,7 @@
             android:name=".gcm.http.GoogleHttpService"
             android:exported="true" />
 
-        <service android:name="org.microg.gms.ads.GService">
+        <service android:name="org.microg.gms.ads.GService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.ads.gservice.START" />
             </intent-filter>
@@ -1200,7 +1200,7 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.Translucent"/>
 
-        <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
+        <service android:name="org.microg.gms.clearcut.ClearcutLoggerService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
