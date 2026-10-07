@@ -105,7 +105,7 @@ public class InstanceIDListenerService extends Service {
                 handleIntent(intent);
 
                 if (intent.hasExtra(EXTRA_FROM))
-                    GCore// Removed completeWakefulIntent(intent);
+                    // Removed completeWakefulIntent(intent);
             }
         } finally {
             stop();
