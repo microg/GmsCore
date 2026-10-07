@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -54,11 +55,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static android.accounts.AccountManager.*;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
+import static org.microg.gms.auth.AskPermissionActivity.EXTRA_FROM_ACCOUNT_MANAGER;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";
@@ -161,20 +164,21 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             } else {
                 result.putString(KEY_ERROR, "NeedPermission");
                 Intent i = new Intent(context, AskPermissionActivity.class);
-                i.putExtras(extras);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
                 i.putExtra(KEY_ACCOUNT_TYPE, authManager.getAccountType());
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, scope);
                 i.putExtra(KEY_CALLER_UID, getCallingUid());
                 i.putExtra(KEY_CALLER_PID, getCallingPid());
+                i.putExtra(EXTRA_FROM_ACCOUNT_MANAGER, false);
+                i.putExtra(EXTRA_CONSENT_DATA, (byte[]) null);
                 try {
                     if (res.consentDataBase64 != null)
                         i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
-                PendingIntent pi = PendingIntentCompat.getActivity(context, 0, i, 0, false);
+                PendingIntent pi = UnpackingRedirectActivity.createUniquePendingIntent(context, i);
                 if (notify) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
@@ -184,10 +188,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                             .setSmallIcon(android.R.drawable.stat_notify_error)
                             .build());
                 }
-                if (pi != null) {
-                    result.putParcelable(KEY_USER_RECOVERY_INTENT, UnpackingRedirectActivity.createIntent(context, pi));
-                    result.putParcelable(KEY_USER_RECOVERY_PENDING_INTENT, pi);
-                }
+                result.putParcelable(KEY_USER_RECOVERY_INTENT, UnpackingRedirectActivity.createIntent(context, pi));
+                result.putParcelable(KEY_USER_RECOVERY_PENDING_INTENT, pi);
             }
         } catch (IOException e) {
             Log.w(TAG, e);
