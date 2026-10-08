@@ -5,6 +5,7 @@
 
 package org.microg.gms.droidguard.core
 
+import android.accounts.AccountManager
 import android.content.Context
 import com.android.volley.NetworkResponse
 import com.android.volley.VolleyError
@@ -18,16 +19,17 @@ import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.singleInstanceOf
 import java.io.File
+import java.security.MessageDigest
 import java.util.*
 import com.android.volley.Request as VolleyRequest
 import com.android.volley.Response as VolleyResponse
 
-class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFactory(context) {
+open class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFactory(context) {
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
     private val version = VersionUtil(context)
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
-    fun createHandle(packageName: String, flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
+    open fun createHandle(packageName: String, flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
         if (!DroidGuardPreferences.isLocalAvailable(context)) throw IllegalAccessException("DroidGuard should not be available locally")
         val (vmKey, byteCode, bytes) = readFromDatabase(flow) ?: fetchFromServer(flow, packageName)
         return createHandleProxy(flow, vmKey, byteCode, bytes, callback, request)
@@ -53,10 +55,15 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
         }
     }
 
-    private fun readFromDatabase(flow: String?): Triple<String, ByteArray, ByteArray>? {
+    internal fun databaseId(flow: String?): String {
         ProfileManager.ensureInitialized(context)
-        val id = "$flow/${version.versionString}/${Build.FINGERPRINT}"
-        return dgDb.get(id)
+        return "$flow/${version.versionString}/${Build.FINGERPRINT}"
+    }
+
+    internal fun readFromDatabase(flow: String?): Triple<String, ByteArray, ByteArray>? {
+        // A row whose VM is no longer in the cache (e.g. stored under the old cache layout or a
+        // lowercase key) cannot be loaded; skip it so the caller fetches the VM again.
+        return dgDb.get(databaseId(flow))?.takeIf { (vmKey, _, _) -> isValidCache(vmKey) }
     }
 
     fun createRequest(flow: String?, packageName: String, pingData: PingData? = null, extra: ByteArray? = null): Request {
@@ -93,7 +100,11 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 ),
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
-                hasAccount = false,
+                hasAccount = try {
+                    AccountManager.get(context).getAccountsByType("com.google").isNotEmpty()
+                } catch (e: SecurityException) {
+                    false
+                },
                 isGoogleCn = false,
                 enableInlineVm = true,
                 cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
@@ -135,11 +146,18 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
         })
         val signed: SignedResponse = future.get()
         val response = signed.unpack()
-        val vmKey = response.vmChecksum!!.hex()
+        val vmKey = formatVmCacheKey(response.vmChecksum!!.hex())
         if (!isValidCache(vmKey)) {
+            // vmChecksum is SHA-1 over content on the wire (verified against a captured
+            // production response); bytes are persisted under that key, so fail closed
+            // before storing a payload under a checksum it does not match.
+            val content = response.content!!.toByteArray()
+            if (!MessageDigest.getInstance("SHA-1").digest(content).contentEquals(response.vmChecksum!!.toByteArray())) {
+                throw SecurityException("VM content does not match its declared checksum")
+            }
             val temp = File(getCacheDir(), "${UUID.randomUUID()}.apk")
             temp.parentFile!!.mkdirs()
-            temp.writeBytes(response.content!!.toByteArray())
+            temp.writeBytes(content)
             getOptDir(vmKey).mkdirs()
             temp.renameTo(getTheApkFile(vmKey))
             updateCacheTimestamp(vmKey)
@@ -148,7 +166,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 throw IllegalStateException()
             }
         }
-        val id = "$flow/${version.versionString}/${Build.FINGERPRINT}"
+        val id = databaseId(flow)
         val expiry = (response.expiryTimeSecs ?: 0).toLong()
         val byteCode = response.byteCode?.toByteArray() ?: ByteArray(0)
         val extra = response.extra?.toByteArray() ?: ByteArray(0)
