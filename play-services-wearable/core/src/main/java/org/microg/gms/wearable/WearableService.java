@@ -16,7 +16,13 @@
 
 package org.microg.gms.wearable;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.RemoteException;
+
+import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.common.Feature;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -29,6 +35,8 @@ import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
 
 public class WearableService extends BaseService {
+
+    private WearableImpl wearable;
 
     public static final Feature[] FEATURES = new Feature[]{
             new Feature("app_client", 4L),
@@ -66,7 +74,7 @@ public class WearableService extends BaseService {
             new Feature("wear_notify_channel_flushed", 1L)
     };
 
-    private WearableImpl wearable;
+    private static final String CHANNEL_ID = "wearable_service";
 
     public WearableService() {
         super("GmsWearSvc", GmsService.WEAR);
@@ -75,11 +83,26 @@ public class WearableService extends BaseService {
     @Override
     public void onCreate() {
         super.onCreate();
+        createNotificationChannel();
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Wearable Connection",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel.setShowBadge(false);
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            nm.createNotificationChannel(channel);
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     @Override
     public void onDestroy() {
         super.onDestroy();

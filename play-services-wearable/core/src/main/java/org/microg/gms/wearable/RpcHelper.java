@@ -18,18 +18,37 @@ package org.microg.gms.wearable;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RpcHelper {
     private final Map<String, RpcConnectionState> rpcStateMap = new HashMap<String, RpcConnectionState>();
     private final SharedPreferences preferences;
     private final Context context;
 
+    private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final Map<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     public RpcHelper(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences("wearable.rpc_service.settings", 0);
+    }
+
+    public static int combineId(int generation, int requestId) {
+        // magic numbers, need to find out what exactly is 527 and 31
+        return ((generation + 527) * 31) + requestId;
+    }
+
+    private static String rpcListenerKey(String peerNodeId, int requestId) {
+        return peerNodeId + ":" + requestId;
     }
 
     private String getRpcConnectionId(String packageName, String targetNodeId, String path) {
@@ -67,4 +86,89 @@ public class RpcHelper {
             return res;
         }
     }
+
+    public void addResponseListener(String peerNodeId, int requestId, long timeoutMs,
+                                    RpcResponseCallback onResponse,
+                                    RpcTimeoutCallback onTimeout) {
+        String key = rpcListenerKey(peerNodeId, requestId);
+        rpcListeners.put(key, new PendingRpcListener(requestId, onResponse, onTimeout));
+        mainHandler.postDelayed(() -> {
+            if (rpcListeners.remove(key) != null) {
+                onTimeout.onTimeout();
+            }
+        }, timeoutMs);
+    }
+
+    public boolean deliverRpcResponse(String peerNodeId, int senderRequestId, @Nullable byte[] data) {
+        PendingRpcListener listener = rpcListeners.remove(rpcListenerKey(peerNodeId, senderRequestId));
+        if (listener == null) return false;
+        listener.callback.onResponse(data);
+        return true;
+    }
+
+
+    public interface RpcResponseCallback {
+        void onResponse(@Nullable byte[] data);
+    }
+
+    public interface RpcTimeoutCallback {
+        void onTimeout();
+    }
+
+    private static final class PendingRpcListener {
+        final int reqId;
+        final RpcResponseCallback callback;
+        final RpcTimeoutCallback timeout;
+
+        PendingRpcListener(int reqId, RpcResponseCallback rc, RpcTimeoutCallback tc) {
+            this.reqId = reqId;
+            this.callback = rc;
+            this.timeout = tc;
+        }
+    }
+
+    public void addDataSyncListener(String nodeId, String trackerId,
+                                    long timeoutMs, DataSyncResponseCallback onReached,
+                                    DataSyncTimeoutCallback onTimeout) {
+        String key = nodeId + ":" + trackerId;
+        dataSyncListeners.put(key, new PendingDataSyncListener(onReached, onTimeout));
+        mainHandler.postDelayed(() -> {
+            if (dataSyncListeners.remove(key) != null) {
+                onTimeout.onTimeout();
+            }
+        }, timeoutMs);
+    }
+
+    public void cancelDataSyncListener(String nodeId, String trackerId) {
+        dataSyncListeners.remove(nodeId + ":" + trackerId);
+    }
+
+    public boolean deliverDataSyncResponse(String peerNodeId, String trackerId,
+                                           long reachedSeqId) {
+        String key = peerNodeId + ":" + trackerId;
+        PendingDataSyncListener listener = dataSyncListeners.remove(key);
+        if (listener == null) return false;
+        listener.callback.onReached(reachedSeqId);
+        return true;
+    }
+
+    public interface DataSyncResponseCallback {
+        void onReached(long reachedSeqId);
+    }
+
+    public interface DataSyncTimeoutCallback {
+        void onTimeout();
+    }
+
+    private static final class PendingDataSyncListener {
+        final DataSyncResponseCallback callback;
+        final DataSyncTimeoutCallback timeout;
+
+        PendingDataSyncListener(DataSyncResponseCallback cb, DataSyncTimeoutCallback to) {
+            this.callback = cb;
+            this.timeout = to;
+        }
+    }
+
+
 }
