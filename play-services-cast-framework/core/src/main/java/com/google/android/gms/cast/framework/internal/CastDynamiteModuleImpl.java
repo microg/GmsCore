@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.android.gms.cast.framework.internal;
 
-import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -28,14 +26,13 @@ import com.google.android.gms.cast.framework.IReconnectionService;
 import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.cast.framework.ISessionProxy;
 import com.google.android.gms.cast.framework.media.CastMediaOptions;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
-import com.google.android.gms.cast.framework.internal.CastSessionImpl;
-import com.google.android.gms.cast.framework.internal.MediaRouterCallbackImpl;
-import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.cast.framework.media.IMediaNotificationService;
+import com.google.android.gms.cast.framework.media.internal.FetchBitmapTaskImpl;
 import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTask;
 import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTaskProgressPublisher;
 import com.google.android.gms.dynamic.IObjectWrapper;
+
+import org.microg.gms.common.Constants;
 
 import java.util.Map;
 
@@ -59,19 +56,28 @@ public class CastDynamiteModuleImpl extends ICastDynamiteModule.Stub {
 
     @Override
     public IMediaNotificationService newMediaNotificationServiceImpl(IObjectWrapper service, IObjectWrapper castContext, IObjectWrapper resources, CastMediaOptions options) throws RemoteException {
+        // Only used by old client libraries, current ones build the media notification themselves.
         Log.d(TAG, "unimplemented Method: newMediaNotificationServiceImpl");
         return null;
     }
 
     @Override
     public IReconnectionService newReconnectionServiceImpl(IObjectWrapper service, IObjectWrapper sessionManager, IObjectWrapper discoveryManager) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newReconnectionServiceImpl");
-        return null;
+        return new ReconnectionServiceImpl(service, sessionManager, discoveryManager);
     }
 
     @Override
-    public IFetchBitmapTask newFetchBitmapTaskImpl(IObjectWrapper asyncTask, IFetchBitmapTaskProgressPublisher progressPublisher, int i1, int i2, boolean b1, long l1, int i3, int i4, int i5) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newFetchBitmapTaskImpl");
-        return null;
+    public IFetchBitmapTask newFetchBitmapTaskImpl(IObjectWrapper asyncTask, IFetchBitmapTaskProgressPublisher progressPublisher, int targetWidth, int targetHeight, boolean b1, long maxBytes, int maxRedirects, int i4, int timeout) throws RemoteException {
+        return new FetchBitmapTaskImpl(progressPublisher, targetWidth, targetHeight, maxBytes, maxRedirects, timeout, timeout);
+    }
+
+    @Override
+    public IFetchBitmapTask newFetchBitmapTaskImplWithContext(IObjectWrapper context, IObjectWrapper asyncTask, IFetchBitmapTaskProgressPublisher progressPublisher, int targetWidth, int targetHeight, boolean b1, long maxBytes, int maxRedirects, int i4, int timeout) throws RemoteException {
+        return new FetchBitmapTaskImpl(progressPublisher, targetWidth, targetHeight, maxBytes, maxRedirects, timeout, timeout);
+    }
+
+    @Override
+    public int getSupportedVersion() {
+        return Constants.GMS_VERSION_CODE;
     }
 }
