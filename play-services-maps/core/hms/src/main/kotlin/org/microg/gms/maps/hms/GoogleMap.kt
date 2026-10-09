@@ -8,6 +8,7 @@ package org.microg.gms.maps.hms
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.*
@@ -116,6 +117,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var isAddLocationCallback: Boolean = false
     private var lastLocation: Location? = null
     private var myLocationChangeListener: IOnMyLocationChangeListener? = null
+    private var appliedMapStyle: Pair<String?, Int>? = null
 
     private val locationService by lazy { LocationServices.getFusedLocationProviderClient(context) }
     private val locationCallback = LocationListener { location ->
@@ -346,11 +348,14 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
         Log.d(TAG, "setMapStyle: ")
-        val bool = options?.toHms(mapContext).let {
+        val style = options?.json to (mapContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)
+        if (style == appliedMapStyle) return true
+        val success = options?.toHms(mapContext).let {
             map?.setMapStyle(it)
         }
-        Log.d(TAG, "setMapStyle: bool: $bool")
-        return true == bool
+        Log.d(TAG, "setMapStyle: bool: $success")
+        if (success == true) appliedMapStyle = style
+        return success == true
     }
 
     override fun setMinZoomPreference(minZoom: Float) = afterInitialize {
@@ -852,6 +857,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         if (this.map != null && initialized) return
 
         loaded = true
+        appliedMapStyle = null
         this.map = map
 
         map.setOnCameraIdleListener {
