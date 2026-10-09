@@ -84,7 +84,7 @@ public class CapabilityManager {
         if (withAuthority) builder.authority(wearable.getLocalNodeId());
         builder.appendPath(packageName);
         builder.appendPath(PackageUtils.firstSignatureDigest(context, packageName));
-        builder.appendPath(Uri.encode(capability));
+        builder.appendPath(capability);
         return builder.build();
     }
 
