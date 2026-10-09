@@ -8,19 +8,22 @@ package org.microg.gms.accountsettings.ui.bridge
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import org.json.JSONException
 import org.json.JSONObject
-import org.microg.gms.accountsettings.ui.EXTRA_ACCOUNT_NAME
-import org.microg.gms.accountsettings.ui.EXTRA_SCREEN_ID
+import org.microg.gms.accountsettings.AccountSettingsHelpParams
+import org.microg.gms.accountsettings.ui.EXTRA_SCREEN_OPTIONS_PREFIX
 import org.microg.gms.accountsettings.ui.KEY_UPDATED_PHOTO_URL
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.accountsettings.ui.finishActivity
+import org.microg.gms.accountsettings.ui.getHelpUrl
+import org.microg.gms.accountsettings.ui.openScreen
+import org.microg.gms.accountsettings.ui.openUrl
 import org.microg.gms.accountsettings.ui.runOnMainLooper
 
-class OcUiBridge(val activity: MainActivity, val accountName:String?, val webView: WebView?) {
+class OcUiBridge(val activity: MainActivity, val accountName: String?, val callingPackage: String, val webView: WebView?) {
 
     companion object{
         const val NAME = "ocUi"
@@ -51,7 +54,7 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
     @JavascriptInterface
     fun goBackOrClose() {
         Log.d(TAG, "goBackOrClose: ")
-        activity.onBackPressed()
+        runOnMainLooper { activity.onBackPressed() }
     }
 
     @JavascriptInterface
@@ -86,21 +89,27 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
     @JavascriptInterface
     fun open(str: String?) {
         Log.d(TAG, "open: str -> $str")
+        runOnMainLooper { activity.openUrl(str, accountName, callingPackage) }
     }
 
     @JavascriptInterface
     fun openHelp(str: String?) {
         Log.d(TAG, "openHelp: str -> $str")
+        val params = runCatching {
+            str?.let { AccountSettingsHelpParams.ADAPTER.decode(Base64.decode(it, Base64.DEFAULT)) }
+        }.onFailure { Log.w(TAG, "Unable to parse help parameters: ${it.javaClass.simpleName}") }.getOrNull() ?: return
+        runOnMainLooper { activity.openUrl(activity.getHelpUrl(params), accountName, callingPackage, openExternally = true) }
     }
 
     @JavascriptInterface
     fun openScreen(screenId: Int, str: String?) {
         Log.d(TAG, "openScreen: screenId -> $screenId str -> $str accountName -> $accountName")
-        val intent = Intent(activity, MainActivity::class.java).apply {
-            putExtra(EXTRA_SCREEN_ID, screenId)
-            putExtra(EXTRA_ACCOUNT_NAME, accountName)
+        val options = jsonToMap(str).orEmpty()
+        runOnMainLooper {
+            activity.openScreen(screenId, Bundle().apply {
+                options.forEach { (key, value) -> putString(EXTRA_SCREEN_OPTIONS_PREFIX + key, value) }
+            }, accountName, callingPackage)
         }
-        activity.startActivity(intent)
     }
 
     @JavascriptInterface
@@ -134,7 +143,7 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
                     val obj = jSONObject[next]
                     hashMap[next] = obj as String
                 }
-            } catch (e: JSONException) {
+            } catch (e: Exception) {
                 Log.d(TAG, "Unable to parse result JSON string", e)
                 return null
             }

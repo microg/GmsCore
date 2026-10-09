@@ -123,7 +123,7 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                     activity.finishActivity()
                     return true
                 }
-                if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
+                if (allowedPrefixes.isNotEmpty() && !url.isAllowedWebUrl(allowedPrefixes)) {
                     try {
                         // noinspection UnsafeImplicitIntentLaunch
                         val intent = Intent(Intent.ACTION_VIEW, overrideUri).apply { addCategory(Intent.CATEGORY_BROWSABLE) }

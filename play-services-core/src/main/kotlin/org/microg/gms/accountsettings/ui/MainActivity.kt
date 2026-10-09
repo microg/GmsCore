@@ -60,7 +60,7 @@ import java.util.concurrent.Executors
 private const val TAG = "AccountSettings"
 
 // TODO: There likely is some API to figure those out...
-private val SCREEN_ID_TO_URL = hashMapOf(
+internal val SCREEN_ID_TO_URL = hashMapOf(
     1 to "https://myaccount.google.com",
     200 to "https://myaccount.google.com/privacycheckup",
     203 to "https://myaccount.google.com/email",
@@ -137,7 +137,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     14500 to "https://profilewidgets.google.com/alternate-profile/edit?interop=o&opts=sb",
 )
 
-private val ALLOWED_WEB_PREFIXES = setOf(
+internal val ALLOWED_WEB_PREFIXES = setOf(
     "https://accounts.google.com/",
     "https://myaccount.google.com/",
     "https://one.google.com/",
@@ -210,6 +210,21 @@ class MainActivity : AppCompatActivity() {
             Log.w(TAG, "No account, going without!")
         }
 
+        if (screenId == SCREEN_ID_ACCOUNT_SEARCH) {
+            supportFragmentManager.setFragmentResultListener(REQUEST_ACCOUNT_SEARCH_NAVIGATION, this) { _, result ->
+                val url = result.getString(EXTRA_URL)
+                if (!url.isNullOrBlank()) openUrl(url, accountName, callingPackage, result.getBoolean(EXTRA_OPEN_EXTERNALLY))
+                else openScreen(result.getInt(EXTRA_SCREEN_ID), result, accountName, callingPackage)
+            }
+            if (savedInstanceState == null) {
+                supportFragmentManager.beginTransaction()
+                    .replace(android.R.id.content, AccountSearchFragment.newInstance(accountName, callingPackage))
+                    .commit()
+            }
+            setResult(RESULT_OK)
+            return
+        }
+
         if (screenId in SCREEN_ID_TO_URL) {
             val screenUrl = screenUrl ?: SCREEN_ID_TO_URL[screenId]?.run {
                 if (screenId == 547 && !product.isNullOrEmpty()) {
@@ -259,7 +274,7 @@ class MainActivity : AppCompatActivity() {
                     addRule(RelativeLayout.BELOW, toolbar.id)
                 }
                 visibility = View.INVISIBLE
-                loadJsBridge(accountName, toolbar)
+                loadJsBridge(accountName, callingPackage, toolbar)
             }
             layout.addView(toolbar)
             layout.addView(progressBar)
@@ -289,9 +304,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun WebView.loadJsBridge(accountName: String?, toolbar: Toolbar) {
+    internal fun createScreenIntent(accountName: String?, callingPackage: String): Intent = Intent(this, MainActivity::class.java).apply {
+        putExtra(EXTRA_ACCOUNT_NAME, accountName)
+        putExtra(EXTRA_CALLING_PACKAGE_NAME, callingPackage)
+        putExtra(EXTRA_THEME_CHOICE, this@MainActivity.intent.getIntExtra(EXTRA_THEME_CHOICE, 0))
+    }
+
+    private fun WebView.loadJsBridge(accountName: String?, callingPackage: String, toolbar: Toolbar) {
         ProfileManager.ensureInitialized(this@MainActivity)
-        addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this), OcUiBridge.NAME)
+        addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, callingPackage, this), OcUiBridge.NAME)
         addJavascriptInterface(OcConsistencyBridge(), OcConsistencyBridge.NAME)
         addJavascriptInterface(OcAppBarBridge(toolbar, this), OcAppBarBridge.NAME)
         addJavascriptInterface(OcPlayProtectBridge(this), OcPlayProtectBridge.NAME)
