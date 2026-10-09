@@ -123,7 +123,7 @@ public abstract class GcmListenerService extends Service {
             if (ACTION_NOTIFICATION_OPEN.equals(intent.getAction())) {
                 handlePendingNotification(intent);
                 finishCounter();
-                GcmReceiver.completeWakefulIntent(intent);
+
             } else if (ACTION_C2DM_RECEIVE.equals(intent.getAction())) {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
@@ -165,7 +165,7 @@ public abstract class GcmListenerService extends Service {
             }
             finishCounter();
         } finally {
-            GcmReceiver.completeWakefulIntent(intent);
+            // completeWakefulIntent(intent) removed
         }
     }
 

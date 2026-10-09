@@ -19,7 +19,7 @@ import android.os.Messenger
 import android.os.Process
 import android.util.Log
 import androidx.core.app.PendingIntentCompat
-import androidx.legacy.content.WakefulBroadcastReceiver
+import android.content.BroadcastReceiver
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.BuildConfig
@@ -228,7 +228,7 @@ class GcmInGmsService : LifecycleService() {
     }
 }
 
-class GcmRegistrationReceiver : WakefulBroadcastReceiver() {
+class GcmRegistrationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val shouldReceiveTwoStepVerification = AuthPrefs.shouldReceiveTwoStepVerification(context)
         val allowedFindDevicesRequest = AuthPrefs.allowedFindDevices(context)
