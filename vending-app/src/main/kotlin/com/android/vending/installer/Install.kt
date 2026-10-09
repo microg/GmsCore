@@ -119,9 +119,7 @@ private suspend fun Context.installPackagesInternal(
     val key = computeUniqueKey(packageName, componentNames)
     params.setAppLabel(key)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
-    // Suppress EMUI (Huawei) InstallDistActivity confirmation dialog for every session.
-    // Without this flag, EMUI intercepts each PackageInstaller session and shows a
-    // mandatory user-confirmation dialog — including for Dynamic Feature Module installs.
+    // Lets the installer of record update without user confirmation (also skips EMUI InstallDistActivity)
     if (SDK_INT >= 31) {
         params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
     }

@@ -92,11 +92,6 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
     override fun splitDeferred(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
         Log.d(TAG, "splitDeferred(${splits.joinToString()}) called for $packageName")
-        // Deferred installs are background pre-fetch requests (e.g. Facebook DFMs like pytorch/papaya).
-        // If we only ACK without actually installing, the app falls back to calling startInstall()
-        // for the same modules later — which triggers another PackageInstaller session and, on EMUI,
-        // another InstallDistActivity confirmation dialog per module.
-        // Fix: route deferred requests through the same install flow as startInstall().
         if (VendingPreferences.isSplitInstallEnabled(context)) {
             lifecycleScope.launch {
                 runCatching {
