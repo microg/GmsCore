@@ -55,7 +55,7 @@ class AuthServiceImpl(private val context: Context, override val lifecycle: Life
         lifecycleScope.launchWhenStarted {
             val result = withContext(Dispatchers.IO) { AppCertManager(context).getSpatulaHeader(packageName) }
             Log.d(TAG, "Result: $result")
-            callbacks.onSpatulaHeader(result)
+            runCatching { callbacks.onSpatulaHeader(result) }
         }
     }
 
