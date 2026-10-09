@@ -35,6 +35,8 @@ class UnpackingRedirectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Already redirected before recreation, the result is delivered to the restored launcher
+        if (savedInstanceState != null) return
         val target =
             IntentCompat.getParcelableExtra(intent, EXTRA_TARGET, PendingIntent::class.java)
         if (target != null) {

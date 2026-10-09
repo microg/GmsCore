@@ -10,11 +10,15 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.core.app.PendingIntentCompat;
 
 import com.google.android.gms.common.internal.CertData;
 import org.microg.gms.accountaction.ErrorResolverKt;
@@ -25,11 +29,13 @@ import org.microg.gms.auth.login.LoginActivity;
 import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.ui.UnpackingRedirectActivity;
 import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static android.accounts.AccountManager.*;
 import static android.os.Build.VERSION.SDK_INT;
@@ -124,7 +130,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 authManager = new AuthManager(context, account.name, overridePackage, authTokenType);
                 authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA1"), ""));
             } else {
-                Bundle result = new Bundle();
                 Intent i = new Intent(context, AskPackageOverrideActivity.class);
                 i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
@@ -132,8 +137,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_OVERRIDE_PACKAGE, overridePackage);
                 i.putExtra(KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
-                result.putParcelable(KEY_INTENT, i);
-                return result;
+                return createRedirectIntentResult(i);
             }
         } else {
             authManager = new AuthManager(context, account.name, app, authTokenType);
@@ -149,7 +153,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 result.putString(KEY_AUTHTOKEN, res.auth);
                 return result;
             } else {
-                Bundle result = new Bundle();
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(options);
                 i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -163,8 +166,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
-                result.putParcelable(KEY_INTENT, i);
-                return result;
+                return createRedirectIntentResult(i);
             }
         } catch (ReauthenticationRequiredException e) {
             Log.w(TAG, "Re-authentication required for account " + account.name, e);
@@ -197,6 +199,18 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             }
             throw new IOException(e);
         }
+    }
+
+    private Bundle createRedirectIntentResult(Intent intent) {
+        intent.setData(Uri.fromParts("request", UUID.randomUUID().toString(), null));
+        PendingIntent pi = PendingIntentCompat.getActivity(context, 0, intent, 0, false);
+        Bundle result = new Bundle();
+        if (pi == null) {
+            result.putInt(KEY_ERROR_CODE, ERROR_CODE_BAD_REQUEST);
+            return result;
+        }
+        result.putParcelable(KEY_INTENT, UnpackingRedirectActivity.createIntent(context, pi));
+        return result;
     }
 
     private Bundle createReAuthIntentResult(AccountAuthenticatorResponse response, Account account, Bundle options) {
