@@ -31,26 +31,45 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "GmsFirebaseAuthClient"
 
-class IdentityToolkitClient(context: Context, private val apiKey: String, private val packageName: String? = null, private val certSha1Hash: ByteArray? = null) {
+class IdentityToolkitClient(
+    context: Context,
+    private val apiKey: String,
+    private val packageName: String? = null,
+    private val certSha1Hash: ByteArray? = null,
+    private val appCheckTokenProvider: AppCheckTokenProvider? = null,
+) {
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+
+    private var appCheckToken: String? = null
 
     private fun buildRelyingPartyUrl(method: String) = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/$method?key=$apiKey"
     private fun buildStsUrl(method: String) = "https://securetoken.googleapis.com/v1/$method?key=$apiKey"
 
+    private suspend fun refreshAppCheckToken() {
+        appCheckToken = appCheckTokenProvider?.getToken()
+    }
+
     private fun getRequestHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
         if (packageName != null) put("X-Android-Package", packageName)
         if (certSha1Hash != null) put("X-Android-Cert", certSha1Hash.toHexString().uppercase())
+        val token = appCheckToken
+        if (token != null) {
+            put("X-Firebase-AppCheck", token)
+        }
     }
 
-    private suspend fun request(method: String, data: JSONObject): JSONObject = suspendCoroutine { continuation ->
-        queue.add(object : JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
-            continuation.resume(it)
-        }, {
-            Log.d(TAG, "Error: ${it.networkResponse?.data?.decodeToString() ?: it.message}")
-            continuation.resumeWithException(RuntimeException(it))
-        }) {
-            override fun getHeaders(): Map<String, String> = getRequestHeaders()
-        })
+    private suspend fun request(method: String, data: JSONObject): JSONObject {
+        refreshAppCheckToken()
+        return suspendCoroutine { continuation ->
+            queue.add(object : JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
+                continuation.resume(it)
+            }, {
+                Log.d(TAG, "Error: ${it.networkResponse?.data?.decodeToString() ?: it.message}")
+                continuation.resumeWithException(RuntimeException(it))
+            }) {
+                override fun getHeaders(): Map<String, String> = this@IdentityToolkitClient.getRequestHeaders()
+            })
+        }
     }
 
     suspend fun createAuthUri(identifier: String? = null, tenantId: String? = null, continueUri: String? = "http://localhost"): JSONObject =
@@ -63,8 +82,13 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
             request("getAccountInfo", JSONObject()
                     .put("idToken", idToken))
 
-    suspend fun getProjectConfig(): JSONObject = suspendCoroutine { continuation ->
-        queue.add(JsonObjectRequest(GET, buildRelyingPartyUrl("getProjectConfig"), null, { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }))
+    suspend fun getProjectConfig(): JSONObject {
+        refreshAppCheckToken()
+        return suspendCoroutine { continuation ->
+            queue.add(JsonObjectRequest(GET, buildRelyingPartyUrl("getProjectConfig"), null, { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
+                override fun getHeaders(): Map<String, String> = this@IdentityToolkitClient.getRequestHeaders()
+            })
+        }
     }
 
     suspend fun getOobConfirmationCode(requestType: String, email: String? = null, newEmail: String? = null, continueUrl: String? = null, idToken: String? = null, iOSBundleId: String? = null, iOSAppStoreId: String? = null, androidMinimumVersion: String? = null, androidInstallApp: Boolean? = null, androidPackageName: String? = null, canHandleCodeInApp: Boolean? = null): JSONObject =
@@ -132,8 +156,10 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
                     .put("phoneNumber", phoneNumber)
                     .put("sessionInfo", sessionInfo))
 
-    suspend fun getTokenByRefreshToken(refreshToken: String): JSONObject = suspendCoroutine { continuation ->
-        queue.add(object : JsonRequest<JSONObject>(POST, buildStsUrl("token"), "grant_type=refresh_token&refresh_token=$refreshToken", { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
+    suspend fun getTokenByRefreshToken(refreshToken: String): JSONObject {
+        refreshAppCheckToken()
+        return suspendCoroutine { continuation ->
+            queue.add(object : JsonRequest<JSONObject>(POST, buildStsUrl("token"), "grant_type=refresh_token&refresh_token=$refreshToken", { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
             override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject> {
                 return try {
                     val jsonString = String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)))
