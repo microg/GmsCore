@@ -10,6 +10,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 dependencies {
+    testImplementation "junit:junit:4.13.2"
     api project(':play-services-droidguard')
 
     implementation project(':play-services-base-core')
