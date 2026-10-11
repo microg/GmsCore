@@ -22,7 +22,7 @@ public final class EmulatorTransportPolicy {
     static boolean isAllowed(boolean debuggable, String bootQemu, String legacyQemu) {
         if (!debuggable || bootQemu == null) return false;
         // A present modern property is authoritative; legacy is only for older emulator images.
-        if (bootQemu != null && !bootQemu.isEmpty()) return "1".equals(bootQemu);
+        if (!bootQemu.isEmpty()) return "1".equals(bootQemu);
         return "1".equals(legacyQemu);
     }
 
@@ -33,7 +33,10 @@ public final class EmulatorTransportPolicy {
         try {
             Class<?> properties = Class.forName("android.os.SystemProperties");
             return (String) properties.getMethod("get", String.class, String.class).invoke(null, name, "");
-        } catch (ReflectiveOperationException | RuntimeException error) {
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError error) {
+            // Security policy must fail closed if the platform property API is unavailable or
+            // cannot be loaded. In particular, class-linkage failures must not escape here and
+            // accidentally turn a policy check into a process crash.
             return null;
         }
     }
