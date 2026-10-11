@@ -1,12 +1,18 @@
 package org.microg.gms.cryptauth
 
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.BuildConfig
 import cryptauthv2.ApplicationSpecificMetadata
 import cryptauthv2.ClientAppMetadata
+import cryptauthv2.SyncKeysRequest
+import cryptauthv2.SyncKeysResponse
+import cryptauthv2.EnrollKeysRequest
+import cryptauthv2.EnrollKeysResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import org.json.JSONArray
 import org.json.JSONObject
@@ -15,11 +21,10 @@ import org.microg.gms.common.DeviceConfiguration
 import org.microg.gms.common.Utils
 import org.microg.gms.profile.Build
 import java.io.IOException
+import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.roundToInt
-
-private const val TAG = "CryptAuthRequests"
 
 private const val CRYPTAUTH_BASE_URL = "https://cryptauthenrollment.googleapis.com/"
 private const val CRYPTAUTH_METHOD_SYNC_KEYS = "v1:syncKeys"
@@ -31,11 +36,9 @@ internal const val CERTIFICATE = "58E1C4133F7441EC3D2C270270A14802DA47BA0E"
 internal const val CRYPTAUTH_FIELD_SESSION_ID = "randomSessionId"
 
 
-internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: String, instanceToken: String, androidId: Long): JSONObject? {
-    // CryptAuth sync request tells server whether or not screenlock is enabled
-
+internal fun Context.cryptAuthMetadata(instanceId: String, instanceToken: String, androidId: Long): ByteString {
     val deviceConfig = DeviceConfiguration(this)
-    val clientAppMetadata = ClientAppMetadata(
+    return ClientAppMetadata(
         application_specific_metadata = listOf(
             ApplicationSpecificMetadata(
                 gcm_registration_id = instanceToken.toByteArray().toByteString(),
@@ -66,7 +69,22 @@ internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: St
         // droid_guard_response = "…"
     )
         .encodeByteString()
-        .base64Url()
+}
+
+internal class CryptAuthHttpTransport(private val authToken: String) : CryptAuthTransport {
+    override suspend fun sync(request: SyncKeysRequest): SyncKeysResponse = SyncKeysResponse.ADAPTER.decode(
+        cryptAuthQuery(CRYPTAUTH_METHOD_SYNC_KEYS, authToken, request.encode(), "application/x-protobuf", true)
+    )
+
+    override suspend fun enroll(request: EnrollKeysRequest): EnrollKeysResponse = EnrollKeysResponse.ADAPTER.decode(
+        cryptAuthQuery(CRYPTAUTH_METHOD_ENROLL_KEYS, authToken, request.encode(), "application/x-protobuf", true)
+    )
+}
+
+// Retain the pre-existing metadata-only screen-lock flow on all supported Android versions.
+// A successful result here does not imply enrollment or account-transfer support.
+internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: String, instanceToken: String, androidId: Long): JSONObject? {
+    val clientAppMetadata = cryptAuthMetadata(instanceId, instanceToken, androidId).base64Url()
 
     val jsonBody = jsonObjectOf(
         "applicationName" to Constants.GMS_PACKAGE_NAME,
@@ -83,7 +101,8 @@ internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: St
         "clientAppMetadata" to clientAppMetadata,
     )
 
-    return cryptAuthQuery(CRYPTAUTH_BASE_URL + CRYPTAUTH_METHOD_SYNC_KEYS, authToken, jsonBody)
+    return JSONObject(String(cryptAuthQuery(CRYPTAUTH_METHOD_SYNC_KEYS, authToken,
+        jsonBody.toString().toByteArray(Charsets.UTF_8), "application/json"), Charsets.UTF_8))
 }
 
 internal suspend fun Context.cryptAuthEnrollKeys(authToken: String, session: String): JSONObject? {
@@ -93,12 +112,15 @@ internal suspend fun Context.cryptAuthEnrollKeys(authToken: String, session: Str
         "enrollSingleKeyRequests" to JSONArray(),
     )
 
-    return cryptAuthQuery(CRYPTAUTH_BASE_URL + CRYPTAUTH_METHOD_ENROLL_KEYS, authToken, jsonBody)
+    return JSONObject(String(cryptAuthQuery(CRYPTAUTH_METHOD_ENROLL_KEYS, authToken,
+        jsonBody.toString().toByteArray(Charsets.UTF_8), "application/json"), Charsets.UTF_8))
 }
 
-private suspend fun Context.cryptAuthQuery(url: String, authToken: String, requestBody: JSONObject) = withContext(
+private suspend fun cryptAuthQuery(method: String, authToken: String, body: ByteArray,
+                                  contentType: String, protobuf: Boolean = false): ByteArray = withContext(
     Dispatchers.IO) {
-    val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+    currentCoroutineContext().ensureActive()
+    val connection = (URL(CRYPTAUTH_BASE_URL + method + if (protobuf) "?alt=proto" else "").openConnection() as HttpURLConnection).apply {
         setRequestMethod("POST")
         setDoInput(true)
         setDoOutput(true)
@@ -106,32 +128,33 @@ private suspend fun Context.cryptAuthQuery(url: String, authToken: String, reque
         setRequestProperty("x-android-package", Constants.GMS_PACKAGE_NAME)
         setRequestProperty("x-android-cert", CERTIFICATE)
         setRequestProperty("Authorization", "Bearer $authToken")
-        setRequestProperty("Content-Type", "application/json")
+        setRequestProperty("Content-Type", contentType)
+        setRequestProperty("Accept", contentType)
+        instanceFollowRedirects = false
+        connectTimeout = 20_000
+        readTimeout = 20_000
+        setFixedLengthStreamingMode(body.size)
     }
-
-    Log.d(TAG, "-- Request --\n$requestBody")
-    val os = connection.outputStream
-    os.write(requestBody.toString().toByteArray())
-    os.close()
-
-    if (connection.getResponseCode() != 200) {
-        var error = connection.getResponseMessage()
-        try {
-            error = String(Utils.readStreamToEnd(connection.errorStream))
-        } catch (e: IOException) {
-            // Ignore
-        }
-        throw IOException(error)
-    }
-
-    val result = String(Utils.readStreamToEnd(connection.inputStream))
-    Log.d(TAG, "-- Response --\n$result")
     try {
-        JSONObject(result)
-
-    } catch (e: Exception) {
-        null
-    }
+        connection.outputStream.use { it.write(body) }
+        val status = connection.responseCode
+        // Do not expose response bodies, registration tokens or account details through exceptions/logs.
+        if (status != HttpURLConnection.HTTP_OK) throw IOException("CryptAuth HTTP status $status")
+        val bytes = connection.inputStream.use { input ->
+            val result = ByteArrayOutputStream()
+            val buffer = ByteArray(8192)
+            while (true) {
+                currentCoroutineContext().ensureActive()
+                val count = input.read(buffer)
+                if (count < 0) break
+                if (result.size() + count > 1024 * 1024) throw IOException("CryptAuth response exceeds limit")
+                result.write(buffer, 0, count)
+            }
+            result.toByteArray()
+        }
+        currentCoroutineContext().ensureActive()
+        bytes
+    } finally { connection.disconnect() }
 }
 
 fun <K, V> jsonObjectOf(vararg pairs: Pair<K, V>): JSONObject = JSONObject(mapOf(*pairs))

@@ -1,0 +1,27 @@
+/* SPDX-FileCopyrightText: 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// P-256 subset of https://github.com/google/ukey2/blob/master/src/main/proto/securemessage.proto.
+// Field numbers and signed, big-endian coordinate encoding are unchanged.
+syntax = "proto2";
+package securemessage;
+option java_package = "org.microg.gms.cryptauth.proto";
+
+enum PublicKeyType {
+  EC_P256 = 1;
+  RSA2048 = 2;
+  DH2048_MODP = 3;
+}
+
+message EcP256PublicKey {
+  required bytes x = 1;
+  required bytes y = 2;
+}
+
+message GenericPublicKey {
+  required PublicKeyType type = 1;
+  optional EcP256PublicKey ec_p256_public_key = 2;
+  // RSA and finite-field DH are not supported by this enrollment client.
+  reserved 3, 4;
+}

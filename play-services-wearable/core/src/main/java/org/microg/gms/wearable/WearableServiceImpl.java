@@ -26,8 +26,13 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.MessageOptions;
+import org.microg.gms.common.PackageUtils;
+import org.microg.gms.wearable.consent.WearableConsentStore;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
@@ -43,6 +48,19 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final WearableImpl wearable;
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
+
+    @Override
+    public void sendRequest(IWearableCallbacks callbacks, String node, String path, byte[] data) throws RemoteException {
+        sendRequestWithOptions(callbacks, node, path, data, new MessageOptions());
+    }
+
+    @Override
+    public void sendRequestWithOptions(IWearableCallbacks callbacks, String node, String path, byte[] data,
+                                       MessageOptions options) throws RemoteException {
+        // This must run on the Binder thread, before asynchronous dispatch loses the calling UID.
+        PackageUtils.getAndCheckCallingPackage(context, packageName);
+        wearable.requests.send(packageName, node, path, data, options, callbacks);
+    }
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -76,26 +94,28 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
-        postMain(callbacks, () -> {
-            wearable.createConnection(config);
-            callbacks.onStatus(Status.SUCCESS);
-        });
+        ConnectionConfiguration snapshot = copyConfiguration(config);
+        postConfiguration(callbacks, () -> wearable.createConnection(snapshot));
+    }
+
+    @Override
+    public void updateConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
+        ConnectionConfiguration snapshot = copyConfiguration(config);
+        postConfiguration(callbacks, () -> wearable.updateConnection(snapshot));
     }
 
     @Override
     public void deleteConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
-        postMain(callbacks, () -> {
-            wearable.deleteConnection(name);
-            callbacks.onStatus(Status.SUCCESS);
-        });
+        postConfiguration(callbacks, () -> wearable.deleteConnection(name));
     }
 
     @Override
     public void getConfigs(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfigs");
+        boolean manager = isConfigurationManager();
         postMain(callbacks, () -> {
             try {
-                callbacks.onGetConfigsResponse(new GetConfigsResponse(0, wearable.getConfigurations()));
+                callbacks.onGetConfigsResponse(new GetConfigsResponse(0, forCaller(wearable.getConfigurations(), manager)));
             } catch (Exception e) {
                 callbacks.onGetConfigsResponse(new GetConfigsResponse(8, new ConnectionConfiguration[0]));
             }
@@ -105,20 +125,79 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void enableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
-        Log.d(TAG, "enableConfig: " + name);
-        postMain(callbacks, () -> {
-            wearable.enableConnection(name);
-            callbacks.onStatus(Status.SUCCESS);
-        });
+        postConfiguration(callbacks, () -> wearable.enableConnection(name));
     }
 
     @Override
     public void disableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
-        Log.d(TAG, "disableConfig: " + name);
-        postMain(callbacks, () -> {
-            wearable.disableConnection(name);
-            callbacks.onStatus(Status.SUCCESS);
+        postConfiguration(callbacks, () -> wearable.disableConnection(name));
+    }
+
+    private static ConnectionConfiguration copyConfiguration(ConnectionConfiguration config) {
+        if (config == null) return null;
+        Parcel parcel = Parcel.obtain();
+        try {
+            config.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            ConnectionConfiguration copy = ConnectionConfiguration.CREATOR.createFromParcel(parcel);
+            copy.hasUnsupportedConnectionPolicies |= config.hasUnsupportedConnectionPolicies;
+            return copy;
+        } finally {
+            parcel.recycle();
+        }
+    }
+
+    /** Must run on the Binder thread, which carries the caller's UID. */
+    private boolean isConfigurationManager() {
+        try {
+            ConfigurationCaller.capture(context, packageName);
+            return true;
+        } catch (SecurityException e) {
+            return false;
+        }
+    }
+
+    /** Only the verified companion sees Bluetooth addresses, which identify the paired watch. */
+    private static ConnectionConfiguration[] forCaller(ConnectionConfiguration[] configurations, boolean manager) {
+        if (manager || configurations == null) return configurations;
+        ConnectionConfiguration[] redacted = new ConnectionConfiguration[configurations.length];
+        for (int i = 0; i < configurations.length; i++) {
+            ConnectionConfiguration config = configurations[i];
+            ConnectionConfiguration copy = new ConnectionConfiguration(config.name, null, config.type,
+                    config.role, config.enabled, config.nodeId);
+            copy.connected = config.connected;
+            copy.peerNodeId = config.peerNodeId;
+            redacted[i] = copy;
+        }
+        return redacted;
+    }
+
+    private void postConfiguration(IWearableCallbacks callbacks, Runnable operation) throws RemoteException {
+        if (callbacks == null) throw new IllegalArgumentException("Missing configuration callback");
+        final ConfigurationCaller caller;
+        try {
+            caller = ConfigurationCaller.capture(context, packageName);
+        } catch (SecurityException e) {
+            callbacks.onStatus(new Status(CommonStatusCodes.DEVELOPER_ERROR));
+            return;
+        }
+        boolean posted = mainHandler.post(() -> {
+            int status = CommonStatusCodes.SUCCESS;
+            try {
+                caller.enforceInstalled(context);
+                operation.run();
+            } catch (SecurityException | IllegalArgumentException e) {
+                status = CommonStatusCodes.DEVELOPER_ERROR;
+            } catch (RuntimeException e) {
+                status = CommonStatusCodes.INTERNAL_ERROR;
+            }
+            try {
+                callbacks.onStatus(new Status(status));
+            } catch (RemoteException ignored) {
+                // The callback is terminal; a dead client must not trigger a second delivery.
+            }
         });
+        if (!posted) callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
     }
 
     /*
@@ -127,7 +206,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void putData(IWearableCallbacks callbacks, final PutDataRequest request) throws RemoteException {
-        Log.d(TAG, "putData: " + request.toString(true));
+        Log.d(TAG, "putData");
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -167,7 +246,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void getDataItemsByUriWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
         Log.d(TAG, "getDataItemsByUri: " + uri);
         postMain(callbacks, () -> {
-            callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName));
+            try {
+                callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName, typeFilter));
+            } catch (IllegalArgumentException e) {
+                callbacks.onDataItemChanged(DataHolder.empty(CommonStatusCodes.DEVELOPER_ERROR));
+            }
         });
     }
 
@@ -182,14 +265,18 @@ public class WearableServiceImpl extends IWearableService.Stub {
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
+                try {
+                    callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName, typeFilter)));
+                } catch (IllegalArgumentException e) {
+                    callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(CommonStatusCodes.DEVELOPER_ERROR, 0));
+                }
             }
         });
     }
 
     @Override
     public void sendMessage(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
-        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
+        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -228,7 +315,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void optInCloudSync(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
-        callbacks.onStatus(Status.SUCCESS);
+        completeCloudSyncSetting(callbacks, enable);
     }
 
     @Override
@@ -239,7 +326,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
+        completeCloudSyncSetting(callbacks, enable);
+    }
+
+    private void completeCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
+        // Cloud synchronization is unavailable; disabling preserves the existing disabled state.
+        callbacks.onStatus(enable
+                ? new Status(CommonStatusCodes.API_NOT_CONNECTED, "Cloud synchronization is not supported.")
+                : Status.SUCCESS);
     }
 
     @Override
@@ -249,7 +343,42 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getCloudSyncOptInStatus(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInStatus");
+        // Completing this read does not grant consent or enable cloud synchronization.
+        callbacks.onGetCloudSyncOptInStatusResponse(new GetCloudSyncOptInStatusResponse(0, false, false));
+    }
+
+    @Override
+    public void getConsent(IWearableCallbacks callbacks) throws RemoteException {
+        ConsentResponse response;
+        try {
+            ConfigurationCaller caller = ConfigurationCaller.capture(context, packageName);
+            boolean accepted;
+            try (WearableConsentStore store = new WearableConsentStore(context)) {
+                accepted = store.read() != null;
+            }
+            caller.enforceInstalled(context);
+            response = new ConsentResponse(0, accepted);
+        } catch (SecurityException e) {
+            response = new ConsentResponse(CommonStatusCodes.DEVELOPER_ERROR, false);
+        } catch (RuntimeException e) {
+            response = new ConsentResponse(CommonStatusCodes.INTERNAL_ERROR, false);
+        }
+        callbacks.onConsentResponse(response);
+    }
+
+    @Override
+    public void addAccountToConsent(IWearableCallbacks callbacks, AddAccountToConsentRequest request) throws RemoteException {
+        Status status;
+        try {
+            ConfigurationCaller.capture(context, packageName);
+            // Global terms consent does not authorize associating a Google account.
+            status = new Status(CommonStatusCodes.API_NOT_CONNECTED, "Account consent association is not supported.");
+        } catch (SecurityException e) {
+            status = new Status(CommonStatusCodes.DEVELOPER_ERROR);
+        } catch (RuntimeException e) {
+            status = new Status(CommonStatusCodes.INTERNAL_ERROR);
+        }
+        callbacks.onStatus(status);
     }
 
     @Override
@@ -281,41 +410,58 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
-        postMain(callbacks, () -> {
-            List<NodeParcelable> nodes = new ArrayList<>();
-            for (String host : capabilities.getNodesForCapability(capability)) {
-                nodes.add(new NodeParcelable(host, host));
+        postNetwork(callbacks, () -> {
+            try {
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilities.get(capability, nodeFilter)));
+            } catch (IllegalArgumentException e) {
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(10, null));
             }
-            CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
-            callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
         });
     }
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        postNetwork(callbacks, () -> {
+            GetAllCapabilitiesResponse response = new GetAllCapabilitiesResponse();
+            try {
+                response.capabilities = capabilities.getAll(nodeFilter);
+                response.statusCode = 0;
+            } catch (IllegalArgumentException e) {
+                response.capabilities = new ArrayList<>();
+                response.statusCode = 10;
+            }
+            callbacks.onGetAllCapabilitiesResponse(response);
+        });
     }
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(capabilities.add(capability)));
+                int status;
+                try {
+                    status = capabilities.add(capability);
+                } catch (IllegalArgumentException e) {
+                    status = 10;
+                }
+                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(status));
             }
         });
     }
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(capabilities.remove(capability)));
+                int status;
+                try {
+                    status = capabilities.remove(capability);
+                } catch (IllegalArgumentException e) {
+                    status = 10;
+                }
+                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(status));
             }
         });
     }
@@ -379,8 +525,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
+    public void openChannel(IWearableCallbacks callbacks, String nodeId, String path) throws RemoteException {
+        postNetwork(callbacks, () -> wearable.channels.open(packageName, nodeId, path, callbacks));
     }
 
     /*
@@ -389,23 +535,22 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannel: " + s);
+        closeChannelWithError(callbacks, s, 0);
     }
 
     @Override
     public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannelWithError:" + s + ", " + errorCode);
-
+        postNetwork(callbacks, () -> wearable.channels.close(packageName, s, errorCode, callbacks));
     }
 
     @Override
     public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelInputStream: " + s);
+        postNetwork(callbacks, () -> wearable.channels.input(packageName, s, channelCallbacks, callbacks));
     }
 
     @Override
     public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelOutputStream: " + s);
+        postNetwork(callbacks, () -> wearable.channels.output(packageName, s, channelCallbacks, callbacks));
     }
 
     @Override
@@ -420,7 +565,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void syncWifiCredentials(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: syncWifiCredentials");
+        callbacks.onStatus(new Status(CommonStatusCodes.API_NOT_CONNECTED,
+                "Wi-Fi credential synchronization is not supported."));
     }
 
     /*
@@ -430,15 +576,16 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     @Deprecated
     public void putConnection(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: putConnection");
+        putConfig(callbacks, config);
     }
 
     @Override
     @Deprecated
     public void getConnection(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfig");
+        boolean manager = isConfigurationManager();
         postMain(callbacks, () -> {
-            ConnectionConfiguration[] configurations = wearable.getConfigurations();
+            ConnectionConfiguration[] configurations = forCaller(wearable.getConfigurations(), manager);
             if (configurations == null || configurations.length == 0) {
                 callbacks.onGetConfigResponse(new GetConfigResponse(1, new ConnectionConfiguration(null, null, 0, 0, false)));
             } else {
@@ -450,29 +597,27 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     @Deprecated
     public void enableConnection(IWearableCallbacks callbacks) throws RemoteException {
-        postMain(callbacks, () -> {
+        postConfiguration(callbacks, () -> {
             ConnectionConfiguration[] configurations = wearable.getConfigurations();
-            if (configurations.length > 0) {
-                enableConfig(callbacks, configurations[0].name);
-            }
+            if (configurations.length == 0) throw new IllegalArgumentException("Unknown connection configuration");
+            wearable.enableConnection(configurations[0].name);
         });
     }
 
     @Override
     @Deprecated
     public void disableConnection(IWearableCallbacks callbacks) throws RemoteException {
-        postMain(callbacks, () -> {
+        postConfiguration(callbacks, () -> {
             ConnectionConfiguration[] configurations = wearable.getConfigurations();
-            if (configurations.length > 0) {
-                disableConfig(callbacks, configurations[0].name);
-            }
+            if (configurations.length == 0) throw new IllegalArgumentException("Unknown connection configuration");
+            wearable.disableConnection(configurations[0].name);
         });
     }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
         if (super.onTransact(code, data, reply, flags)) return true;
-        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        Log.d(TAG, "onTransact [unknown]: " + code + ", flags=" + flags);
         return false;
     }
 

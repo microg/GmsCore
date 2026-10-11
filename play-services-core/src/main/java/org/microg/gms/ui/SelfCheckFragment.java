@@ -73,6 +73,9 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             permissions.add(READ_EXTERNAL_STORAGE);
             permissions.add(WRITE_EXTERNAL_STORAGE);
             permissions.add(GET_ACCOUNTS);
+            if (SDK_INT >= 31) {
+                permissions.add(android.Manifest.permission.BLUETOOTH_CONNECT);
+            }
             if (SDK_INT >= 33) {
                 permissions.add(POST_NOTIFICATIONS);
             }

@@ -9,6 +9,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 dependencies {
+    testImplementation 'junit:junit:4.13.2'
     api project(':play-services-basement-ktx')
 
     implementation "androidx.annotation:annotation:$annotationVersion"

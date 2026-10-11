@@ -61,6 +61,8 @@ public class AccountContentProvider extends ContentProvider {
         }
         String packageName = PackageUtils.getAndCheckCallingPackage(getContext(), suggestedPackageName);
         boolean hasGooglePackagePermission = PackageUtils.callerHasGooglePackagePermission(getContext(), GooglePackagePermission.ACCOUNT);
+        boolean canManageAuthentication = hasGooglePackagePermission &&
+                PackageUtils.callerHasGooglePackagePermission(getContext(), GooglePackagePermission.AUTH);
         if (!hasGooglePackagePermission) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
@@ -76,16 +78,23 @@ public class AccountContentProvider extends ContentProvider {
                 Account[] accounts = null;
                 if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
                     AccountManager am = AccountManager.get(getContext());
-                    accounts = am.getAccountsByTypeForPackage(arg, packageName);
-                    if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
-                        for (Account account : accounts) {
-                            if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED &&
-                                    (hasGooglePackagePermission || AuthPrefs.isAuthVisible(getContext()))) {
-                                Log.d(TAG, "Make account " + account + " visible to " + packageName);
+                    // A package-filtered query can omit accounts whose visibility
+                    // has not yet been defined. Apply the existing discovery policy
+                    // first, without overriding an explicit user visibility choice.
+                    if (SDK_INT >= 26 && arg.equals(DEFAULT_ACCOUNT_TYPE) &&
+                            (hasGooglePackagePermission || AuthPrefs.isAuthVisible(getContext()))) {
+                        for (Account account : am.getAccountsByType(arg)) {
+                            // getAccountVisibility() returns a resolved default,
+                            // even when this package has no explicit entry. Inspect
+                            // the stored entries to preserve an actual user choice.
+                            Integer explicitVisibility = am.getPackagesAndVisibilityForAccount(account).get(packageName);
+                            if (explicitVisibility == null || explicitVisibility == AccountManager.VISIBILITY_UNDEFINED) {
+                                Log.d(TAG, "Grant account discovery to " + packageName);
                                 am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
                             }
                         }
                     }
+                    accounts = am.getAccountsByTypeForPackage(arg, packageName);
                 }
                 if (accounts == null) {
                     accounts = new Account[0];
@@ -93,7 +102,7 @@ public class AccountContentProvider extends ContentProvider {
 
                 result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
                 return result;
-            } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && hasGooglePackagePermission) {
+            } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && canManageAuthentication) {
                 Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
                 AccountManager.get(getContext()).clearPassword(a);
                 return null;

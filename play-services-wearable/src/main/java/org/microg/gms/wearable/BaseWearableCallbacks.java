@@ -45,9 +45,21 @@ import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
+import com.google.android.gms.wearable.internal.RpcResponse;
+import com.google.android.gms.wearable.internal.ConsentResponse;
 
 public class BaseWearableCallbacks extends IWearableCallbacks.Stub {
     private static final String TAG = "GmsWearBaseCallback";
+
+    @Override
+    public void onConsentResponse(ConsentResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onConsentResponse");
+    }
+
+    @Override
+    public void onRpcResponse(RpcResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onRpcResponse");
+    }
 
     @Override
     public void onGetConfigResponse(GetConfigResponse response) throws RemoteException {
