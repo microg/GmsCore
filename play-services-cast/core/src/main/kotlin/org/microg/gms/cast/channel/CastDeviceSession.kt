@@ -19,7 +19,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 /** An application running on the receiver, as reported in RECEIVER_STATUS. */
-data class ReceiverApplication(
+data class ReceiverApplication @JvmOverloads constructor(
     val appId: String,
     val displayName: String?,
     val sessionId: String,
@@ -27,7 +27,20 @@ data class ReceiverApplication(
     val statusText: String?,
     val iconUrl: String?,
     val namespaces: List<String>,
-)
+    /**
+     * Application id the sender asked for when the receiver runs a platform-specific build of it, e.g. an Android TV
+     * receiver reports its own `appId` and the sender's id as `universalAppId`.
+     */
+    val universalAppId: String? = null,
+    /** "WEB", "ANDROID_TV", ... as reported by the receiver, null if absent. */
+    val appType: String? = null,
+) {
+    /** The id the client knows this application by. */
+    val clientAppId: String get() = universalAppId ?: appId
+
+    /** True if this application is the one a client requested as [requestedAppId]. */
+    fun matches(requestedAppId: String): Boolean = appId == requestedAppId || universalAppId == requestedAppId
+}
 
 data class ReceiverStatus(
     val volumeLevel: Double,
@@ -154,7 +167,7 @@ class CastDeviceSession(
                 callbacks.onApplicationConnectionFailed(STATUS_INVALID_REQUEST)
                 return@requestReceiver
             }
-            val running = receiverStatus?.applications?.firstOrNull { it.appId == appId }
+            val running = receiverStatus?.applications?.firstOrNull { it.matches(appId) }
             if (running != null) attachApplication(running, false)
             else sendLaunch(appId, language, androidReceiverCompatible, credentials, credentialsType)
         }
@@ -184,7 +197,7 @@ class CastDeviceSession(
                         callbacks.onApplicationConnectionFailed(STATUS_INVALID_REQUEST)
                         return@requestReceiver
                     }
-                    val launched = receiverStatus?.applications?.firstOrNull { it.appId == appId }
+                    val launched = receiverStatus?.applications?.firstOrNull { it.matches(appId) }
                     if (launched != null) attachApplication(launched, true)
                     else callbacks.onApplicationConnectionFailed(STATUS_APPLICATION_NOT_RUNNING)
                 }
@@ -211,7 +224,7 @@ class CastDeviceSession(
                 return@requestReceiver
             }
             val running = receiverStatus?.applications?.firstOrNull {
-                (appId.isNullOrEmpty() || it.appId == appId) && (sessionId.isNullOrEmpty() || it.sessionId == sessionId)
+                (appId.isNullOrEmpty() || it.matches(appId)) && (sessionId.isNullOrEmpty() || it.sessionId == sessionId)
             }
             if (running != null) attachApplication(running, false, connectionType)
             else callbacks.onApplicationConnectionFailed(STATUS_APPLICATION_NOT_RUNNING)
@@ -492,6 +505,8 @@ class CastDeviceSession(
                         statusText = app.optString("statusText").takeIf { it.isNotEmpty() },
                         iconUrl = app.optString("iconUrl").takeIf { it.isNotEmpty() },
                         namespaces = namespaces,
+                        universalAppId = app.optString("universalAppId").takeIf { it.isNotEmpty() },
+                        appType = app.optString("appType").takeIf { it.isNotEmpty() },
                     )
                 )
             }
