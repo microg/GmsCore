@@ -229,17 +229,18 @@ public class SessionManagerImpl extends ISessionManager.Stub {
     }
 
     /**
-     * Called when a media route got unselected, e.g. because the user tapped "Stop casting" or selected another route.
+     * Called when a media route got unselected, e.g. because the user tapped "Stop casting", "Disconnect" or selected
+     * another route. All of these end the session: a lost connection is reported through
+     * {@link #onRouteConnectionLost(String, int)} instead. Treating {@code UNSELECT_REASON_DISCONNECTED} as a loss
+     * left the session suspended when a client switched receivers, so the newly selected route never got a session.
      */
     public void onRouteUnselected(String routeId, int reason) {
         if (currentSession == null || !TextUtils.equals(currentSession.getRouteId(), routeId)) return;
         if (currentSession.isDisconnecting() || currentSession.isDisconnected()) return;
-        if (reason == MediaRouter.UNSELECT_REASON_DISCONNECTED) {
-            onRouteConnectionLost(routeId, reason);
-            return;
-        }
+        // Only "Stop casting" stops the receiver application, "Disconnect" and switching routes leave it running.
         boolean stopCasting = reason == MediaRouter.UNSELECT_REASON_STOPPED ||
-                castContext.getOptions().getStopReceiverApplicationWhenEndingSession();
+                (reason != MediaRouter.UNSELECT_REASON_DISCONNECTED &&
+                        castContext.getOptions().getStopReceiverApplicationWhenEndingSession());
         endCurrentSessionInternal(stopCasting);
     }
 
