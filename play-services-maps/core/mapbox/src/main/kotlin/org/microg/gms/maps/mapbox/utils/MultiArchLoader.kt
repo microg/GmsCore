@@ -45,6 +45,8 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
                 val mapVersion = PackageUtils.versionName(mapContext, Constants.GMS_PACKAGE_NAME)
                 val apkFile = File(mapContext.packageCodePath)
                 if (!cacheFile.exists() || cacheVersion == null || cacheVersion != mapVersion) {
+                    // Previous copy is read-only, remove it before writing the new one
+                    cacheFile.delete()
                     val zipFile = ZipFile(apkFile)
                     val entry = zipFile.getEntry(path)
                     if (entry != null) {
@@ -54,6 +56,8 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
                     }
                     cacheFileStamp.writeText(mapVersion.toString())
                 }
+                // Android 17 refuses to load writable native libraries for apps targeting SDK 37+
+                if (cacheFile.canWrite()) cacheFile.setReadOnly()
                 Log.d(TAG, "Loading $name from ${cacheFile.getPath()}")
                 System.load(cacheFile.absolutePath)
                 return
