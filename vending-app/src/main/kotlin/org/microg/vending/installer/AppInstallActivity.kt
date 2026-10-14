@@ -29,6 +29,7 @@ import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.vending.AllowType
 import org.microg.gms.vending.InstallerData
+import org.microg.signature.fake.FakeSignatureManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -55,6 +56,10 @@ class AppInstallActivity : AppCompatActivity() {
             }
             if (streamUri != null) return listOf(streamUri)
             return listOfNotNull(intent.data)
+        }
+    private val fakeSignature: Boolean
+        get() {
+            return intent.getBooleanExtra("fake_signature", false)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,6 +155,18 @@ class AppInstallActivity : AppCompatActivity() {
             }.isSuccess
             Log.d(TAG, "handleInstallRequest: installPackages<$installPackageName> isSuccess: $isSuccess")
             if (isSuccess) {
+                if (fakeSignature) {
+                    val signatureResult = runCatching {
+                        withContext(Dispatchers.IO) {
+                            FakeSignatureManager.enableForPackage(this@AppInstallActivity, installPackageName)
+                        }
+                    }
+                    if (signatureResult.isFailure) {
+                        Log.w(TAG, "Failed to enable fake signature for $installPackageName", signatureResult.exceptionOrNull())
+                        onResult(RESULT_CANCELED, "Package installed, but failed to update fake signature policy", installPackageName)
+                        return@launch
+                    }
+                }
                 onResult(RESULT_OK, installPackageName = installPackageName)
             } else {
                 onResult(RESULT_CANCELED, "Install failed")

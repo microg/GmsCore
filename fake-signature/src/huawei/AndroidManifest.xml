@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application>
+        <provider
+            android:name="org.microg.signature.fake.FakeSignatureProvider"
+            android:authorities="${applicationId}.signature.fake"
+            android:exported="true"
+            android:grantUriPermissions="false"
+            android:permission="${applicationId}.permission.WRITE_SETTINGS" />
+
         <receiver
             android:name="com.huawei.signature.diff.InitReceiver"
             android:enabled="true"
