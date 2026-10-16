@@ -223,6 +223,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         setOf(ACCOUNT, AUTH, OWNER, CREDENTIALS)
     ),
 
+    // Google Read Along
+    Pair(
+        PackageAndCertHash("com.google.android.apps.seekh", SHA256, "91cee23760826348d2d4ba19d1cf0e4dd611df52f65893aa9b1f0576647d1848"),
+        setOf(ACCOUNT, AUTH, OWNER, APP_CERT)
+    ),
+
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
