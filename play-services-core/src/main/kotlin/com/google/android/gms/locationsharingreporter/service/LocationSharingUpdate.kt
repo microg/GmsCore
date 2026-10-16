@@ -70,9 +70,9 @@ class LocationSharingUpdate {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult ?: return
-                    val location = locationResult.lastLocation
+                    val location = locationResult.lastLocation ?: return
                     Log.d(TAG, "Location update: ${location.latitude}, ${location.longitude}}")
-                    if (accountInfo != null && location != null && appContext != null) {
+                    if (accountInfo != null && appContext != null) {
                         val locationSharingEnabled = isLocationSharingEnabled(appContext!!, accountInfo!!.name)
                         if (locationSharingEnabled) {
                             CoroutineScope(Dispatchers.IO).launch {
