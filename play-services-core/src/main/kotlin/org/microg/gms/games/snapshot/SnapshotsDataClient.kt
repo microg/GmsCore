@@ -40,7 +40,9 @@ class SnapshotsDataClient(val context: Context) {
 
     suspend fun loadSnapshotData(oauthToken: String) = withContext(Dispatchers.IO) {
         val snapshots = arrayListOf<Snapshot>()
-        val snapshotsResponse = runCatching { SnapshotsApiClient.requestSnapshotList(context, oauthToken) }.getOrNull()
+        val snapshotsResponse = runCatching { SnapshotsApiClient.requestSnapshotList(context, oauthToken) }
+            .onFailure { Log.w(TAG, "requestSnapshotList failed", it) }
+            .getOrNull()
         snapshotsResponse?.gameSnapshot?.forEach {
             snapshots.add(it.toSnapshot())
         }
@@ -52,36 +54,49 @@ class SnapshotsDataClient(val context: Context) {
     }
 
     suspend fun getDataFromDrive(oauthToken: String, url: String) = withContext(Dispatchers.IO) {
-        runCatching { SnapshotsApiClient.getDataFromDrive(oauthToken, url, requestQueue) }.getOrNull()
+        runCatching { SnapshotsApiClient.getDataFromDrive(oauthToken, url, requestQueue) }
+            .onFailure { Log.w(TAG, "getDataFromDrive failed", it) }
+            .getOrNull()
     }
 
     private suspend fun getRealUploadUrl(oauthToken: String, url: String) = withContext(Dispatchers.IO) {
-        runCatching { SnapshotsApiClient.getRealUploadUrl(oauthToken, url, requestQueue) }.getOrNull()
+        runCatching { SnapshotsApiClient.getRealUploadUrl(oauthToken, url, requestQueue) }
+            .onFailure { Log.w(TAG, "getRealUploadUrl failed", it) }
+            .getOrNull()
     }
 
     suspend fun resolveSnapshotHead(oauthToken: String, resolveSnapshotHeadRequest: ResolveSnapshotHeadRequest) = withContext(Dispatchers.IO) {
-        runCatching { SnapshotsApiClient.resolveSnapshotHead(context, oauthToken, resolveSnapshotHeadRequest) }.getOrNull()
+        runCatching { SnapshotsApiClient.resolveSnapshotHead(context, oauthToken, resolveSnapshotHeadRequest) }
+            .onFailure { Log.w(TAG, "resolveSnapshotHead failed", it) }
+            .getOrNull()
     }
 
     private suspend fun prepareSnapshotRevision(oauthToken: String, prepareSnapshotRevisionRequest: PrepareSnapshotRevisionRequest) =
         withContext(Dispatchers.IO) {
-            runCatching { SnapshotsApiClient.prepareSnapshotRevision(context, oauthToken, prepareSnapshotRevisionRequest) }.getOrNull()
+            runCatching { SnapshotsApiClient.prepareSnapshotRevision(context, oauthToken, prepareSnapshotRevisionRequest) }
+                .onFailure { Log.w(TAG, "prepareSnapshotRevision failed", it) }
+                .getOrNull()
         }
 
     private suspend fun commitSnapshotRevision(oauthToken: String, commitSnapshotRevisionRequest: CommitSnapshotRevisionRequest) = withContext(Dispatchers.IO) {
-        runCatching { SnapshotsApiClient.commitSnapshotRevision(context, oauthToken, commitSnapshotRevisionRequest) }.getOrNull()
+        runCatching { SnapshotsApiClient.commitSnapshotRevision(context, oauthToken, commitSnapshotRevisionRequest) }
+            .onFailure { Log.w(TAG, "commitSnapshotRevision failed", it) }
+            .getOrNull()
     }
 
     suspend fun deleteSnapshotData(oauthToken: String, snapshot: Snapshot) = withContext(Dispatchers.IO) {
-        runCatching { SnapshotsApiClient.deleteSnapshot(context, oauthToken, snapshot) }.getOrNull()
+        runCatching { SnapshotsApiClient.deleteSnapshot(context, oauthToken, snapshot) }
+            .onFailure { Log.w(TAG, "deleteSnapshot failed", it) }
+            .getOrNull()
     }
 
     suspend fun commitSnapshot(
-        oauthToken: String, snapshotTitle: String?, change: SnapshotMetadataChangeEntity, contents: Contents, maxCoverImageSize: Int
+        oauthToken: String, snapshotTitle: String?, baseSnapshotId: String?, resolvedSnapshotIds: List<String>,
+        change: SnapshotMetadataChangeEntity, contents: Contents, maxCoverImageSize: Int
     ) = withContext(Dispatchers.IO) {
         runCatching {
             if (TextUtils.isEmpty(snapshotTitle)) {
-                return@runCatching false
+                return@runCatching null
             }
 
             //Get data upload link
@@ -93,7 +108,7 @@ class SnapshotsDataClient(val context: Context) {
                 val snapshotDataUploadTempUrl = ret.uploadLinkInfos.firstOrNull { it.id == SNAPSHOT_UPLOAD_LINK_DATA }?.url
                 if (snapshotDataUploadTempUrl == null) {
                     Log.w(TAG, "commitSnapshot data upload temp url is null")
-                    return@runCatching false
+                    return@runCatching null
                 }
 
                 val deferredGetImageRealUploadUrl = async {
@@ -135,19 +150,26 @@ class SnapshotsDataClient(val context: Context) {
                     val (imageWidth, imageHeight, snapShotImageResourceId: String?) = deferredUploadSnapshotImage.await()
                     val snapshotDataResourceId = deferredUploadSnapshotData.await()
                     if (snapshotDataResourceId != null) {
-                        commitSnapshotRevision(
-                            oauthToken, createCommitSnapshotRequest(
-                                change, snapshotDataResourceId, snapShotImageResourceId, imageWidth, imageHeight, snapshotTitle
-                            )
+                        val request = createCommitSnapshotRequest(
+                            change, snapshotDataResourceId, snapShotImageResourceId, imageWidth, imageHeight, snapshotTitle,
+                            getSnapshotTimeInfo(), baseSnapshotId, resolvedSnapshotIds
                         )
+                        commitSnapshotRevision(oauthToken, request)?.let { response ->
+                            response.snapshotMetadata?.snapshot
+                                ?: request.snapshot?.newBuilder()?.apply { snapshotId = response.snapshotId }?.build()
+                        }
                     } else {
-                        return@async false
+                        null
                     }
                 }
-                deferredCommit.await()
-                return@runCatching true
+                val committedSnapshot = deferredCommit.await()
+                if (committedSnapshot == null) {
+                    Log.w(TAG, "commitSnapshot: commit failed")
+                    return@runCatching null
+                }
+                return@runCatching committedSnapshot
             } else {
-                return@runCatching false
+                return@runCatching null
             }
         }.getOrNull()
     }
@@ -178,16 +200,18 @@ class SnapshotsDataClient(val context: Context) {
         snapShotImageResourceId: String?,
         imageWidth: Int,
         imageHeight: Int,
-        snapshotTitle: String
+        snapshotTitle: String,
+        snapshotTimeInfo: SnapshotTimeInfo,
+        baseSnapshotId: String?,
+        resolvedSnapshotIds: List<String>
     ): CommitSnapshotRevisionRequest {
         Log.d(TAG, "createCommitSnapshotRequest: ")
-        val snapshotTimeInfo = getSnapshotTimeInfo()
         val snapshotContent = SnapshotContent.Builder().apply {
             description = change.description
             this.snapshotTimeInfo = snapshotTimeInfo
             progressValue = change.progressValue ?: -1
             this.deviceName = Build.DEVICE
-            duration = change.progressValue ?: -1
+            duration = change.playedTimeMillis ?: -1
         }.build()
         val snapshotContentInfo = SnapshotContentInfo.Builder().apply {
             token = snapshotDataResourceId
@@ -215,6 +239,8 @@ class SnapshotsDataClient(val context: Context) {
             this.snapshot = snapshotBuilder.build()
             this.randomUUID = UUID.randomUUID().toString()
             this.unknownFileInt7 = 3
+            this.unknownFileString2 = baseSnapshotId
+            this.unknownFileString4 = resolvedSnapshotIds
         }.build()
         return commitSnapshotRevisionRequest
     }

@@ -8,6 +8,8 @@ package org.microg.gms.games.snapshot
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.games.GameSnapshot
+import org.microg.gms.games.SnapshotMetadata
+import org.microg.gms.games.SnapshotTimeInfo
 
 data class SnapshotsResponse(
     val kind: String?, val nextPageToken: String?, val items: List<Snapshot>?
@@ -95,16 +97,33 @@ fun JSONObject.toSnapshotImage() = SnapshotImage(
     optString("kind")
 )
 
-fun GameSnapshot.toSnapshot() = Snapshot(
-    metadata?.snapshot?.snapshotId,
-    metadata?.snapshotName,
-    metadata?.snapshot?.content?.description,
-    metadata?.snapshot?.content?.snapshotTimeInfo?.timestamp?.toString(),
-    SnapshotImage(
-        metadata?.snapshot?.coverImage?.width,
-        metadata?.snapshot?.coverImage?.height,
-        metadata?.snapshot?.coverImage?.mimeType,
-        metadata?.snapshot?.coverImage?.imageUrl,
-        null
+fun SnapshotTimeInfo.toMillis() = timestamp * 1000 + playedTime / 1000000
+
+/**
+ * The head revision and any unresolved conflicting revisions, most recently modified one wins.
+ */
+fun SnapshotMetadata.mostRecentSnapshot() = (listOfNotNull(snapshot) + snapshots)
+    .maxByOrNull { it.content?.snapshotTimeInfo?.toMillis() ?: 0L }
+
+fun GameSnapshot.toSnapshot(): Snapshot {
+    val snapshot = metadata?.mostRecentSnapshot()
+    return Snapshot(
+        id = metadata?.snapshot?.snapshotId ?: snapshot?.snapshotId,
+        driveId = null,
+        kind = null,
+        type = null,
+        title = metadata?.snapshotName,
+        description = snapshot?.content?.description,
+        lastModifiedMillis = snapshot?.content?.snapshotTimeInfo?.toMillis()?.toString(),
+        durationMillis = snapshot?.content?.duration?.toString(),
+        coverImage = SnapshotImage(
+            snapshot?.coverImage?.width,
+            snapshot?.coverImage?.height,
+            snapshot?.coverImage?.mimeType,
+            snapshot?.coverImage?.imageUrl,
+            null
+        ),
+        uniqueName = metadata?.snapshotName,
+        progressValue = snapshot?.content?.progressValue?.toString(),
     )
-)
+}
