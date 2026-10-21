@@ -26,13 +26,19 @@ import org.microg.gms.common.PublicApi;
 public class SourceDirectTransferResult extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "getStatus")
     private Status status;
+    @Field(value = 2, getterName = "getAuthenticationType")
+    private int authenticationType;
 
     private SourceDirectTransferResult() {
     }
 
     @Constructor
-    public SourceDirectTransferResult(@Param(1) Status status) {
+    public SourceDirectTransferResult(
+            @Param(1) Status status,
+            @Param(2) int authenticationType
+    ) {
         this.status = status;
+        this.authenticationType = authenticationType;
     }
 
     /**
@@ -40,6 +46,10 @@ public class SourceDirectTransferResult extends AbstractSafeParcelable {
      */
     public Status getStatus() {
         return status;
+    }
+
+    public int getAuthenticationType() {
+        return authenticationType;
     }
 
     @Override

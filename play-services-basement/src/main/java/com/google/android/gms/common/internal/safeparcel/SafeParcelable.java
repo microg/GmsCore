@@ -29,6 +29,10 @@ public interface SafeParcelable extends Parcelable {
         int value();
     }
 
+    @Target({ElementType.FIELD, ElementType.PARAMETER})
+    @interface Indicator {
+    }
+
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Field {

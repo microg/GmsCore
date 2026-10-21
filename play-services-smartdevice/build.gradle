@@ -1,0 +1,42 @@
+/*
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.android.gms.smartdevice.d2d"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-smartdevice (D2D source device API)'
+
+dependencies {
+    api project(':play-services-base')
+    api project(':play-services-basement-ktx')
+
+    annotationProcessor project(':safe-parcel-processor')
+}
