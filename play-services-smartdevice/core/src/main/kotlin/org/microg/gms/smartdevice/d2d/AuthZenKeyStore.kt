@@ -6,12 +6,13 @@
 package org.microg.gms.smartdevice.d2d
 
 import android.content.Context
-import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.AtomicFile
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import org.microg.gms.auth.cryptauth.CryptAuthKeyRecord
 import org.microg.gms.auth.cryptauth.CryptAuthKeyOperations
 import org.microg.gms.auth.cryptauth.CryptAuthKeyStore
@@ -331,19 +332,23 @@ class AuthZenKeyStore(context: Context) {
         userVerificationRequired: Boolean,
         userAuthenticationValidityDurationSeconds: Int,
     ): KeyPair {
+        if (android.os.Build.VERSION.SDK_INT < 23) {
+            throw IllegalStateException(
+                "AuthZen P-256 AndroidKeyStore requires Android 6.0 or newer"
+            )
+        }
         if (softwareBacked) {
             val keyPair = CryptAuthKeyOperations.generateKeyPair(CryptAuthKeyType.P256)
             writeSoftwareKeyPair(keyPair)
             return keyPair
         }
-        check(Build.VERSION.SDK_INT >= 23) { "AuthZen P-256 AndroidKeyStore requires Android 6.0 or newer" }
         return KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, ANDROID_KEY_STORE).run {
             val builder = KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_SIGN)
                 .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
                 .setDigests(KeyProperties.DIGEST_SHA256)
                 .setUserAuthenticationRequired(userVerificationRequired)
                 .setUserAuthenticationValidityDurationSeconds(userAuthenticationValidityDurationSeconds)
-            if (Build.VERSION.SDK_INT >= 24) {
+            if (android.os.Build.VERSION.SDK_INT >= 24) {
                 builder.setAttestationChallenge(attestationChallenge?.let(AuthZenWire::sha256))
                 builder.setInvalidatedByBiometricEnrollment(false)
             } else {
@@ -351,7 +356,7 @@ class AuthZenKeyStore(context: Context) {
                     "CryptAuth PublicKey attestation requires Android 7.0 or newer"
                 }
             }
-            if (Build.VERSION.SDK_INT >= 28) {
+            if (android.os.Build.VERSION.SDK_INT >= 28) {
                 builder.setUserPresenceRequired(hardwareUserPresenceRequired)
             } else {
                 check(!hardwareUserPresenceRequired) {
@@ -359,24 +364,42 @@ class AuthZenKeyStore(context: Context) {
                 }
             }
             if (strongBoxBacked) {
-                check(Build.VERSION.SDK_INT >= 28) { "StrongBox requires Android 9.0 or newer" }
-                builder.setIsStrongBoxBacked(true)
+                if (android.os.Build.VERSION.SDK_INT >= 28) {
+                    builder.setIsStrongBoxBacked(true)
+                }
             }
             initialize(builder.build())
             generateKeyPair()
         }
     }
 
-    private fun authZenKeyFile(accountHash: String): File =
-        File(applicationContext.noBackupFilesDir, "$AUTHZEN_KEY_FILE_PREFIX$accountHash")
+    private fun authZenKeyFile(accountHash: String): File {
+        val directory = checkNotNull(
+            ContextCompat.getNoBackupFilesDir(applicationContext)
+        ) {
+            "Unable to access AuthZen storage directory"
+        }
+        return File(directory, "$AUTHZEN_KEY_FILE_PREFIX$accountHash")
+    }
 
-    private fun softwarePublicKeyFile(): File =
-        File(applicationContext.noBackupFilesDir, SOFTWARE_PUBLIC_KEY_FILE)
+    private fun softwarePublicKeyFile(): File {
+        val directory = checkNotNull(
+            ContextCompat.getNoBackupFilesDir(applicationContext)
+        ) {
+            "Unable to access AuthZen storage directory"
+        }
+        return File(directory, SOFTWARE_PUBLIC_KEY_FILE)
+    }
 
     private fun getSoftwareKeyPair(): KeyPair? {
         val file = softwarePublicKeyFile()
         if (!file.exists()) return null
         return runCatching {
+            if (android.os.Build.VERSION.SDK_INT < 23) {
+                throw IllegalStateException(
+                    "AuthZen AndroidKeyStore requires Android 6.0 or newer"
+                )
+            }
             val buffer = ByteBuffer.wrap(decryptStoredBlob(AtomicFile(file).readFully()))
             require(buffer.get() == SOFTWARE_KEY_BLOB_VERSION) { "Unsupported software key version" }
             val publicKeySize = buffer.int
@@ -388,6 +411,7 @@ class AuthZenKeyStore(context: Context) {
         }.onFailure { Log.w(TAG, "Unable to read encrypted software AuthZen key", it) }.getOrNull()
     }
 
+    @RequiresApi(23)
     private fun writeSoftwareKeyPair(keyPair: KeyPair) {
         val publicKey = keyPair.public.encoded
         val privateKey = keyPair.private.encoded
@@ -465,7 +489,13 @@ class AuthZenKeyStore(context: Context) {
         val file = authZenKeyFile(hash)
         if (file.exists()) {
             return runCatching {
-                decryptStoredBlob(AtomicFile(file).readFully()).also { authZenKeyType(it) }
+                if (android.os.Build.VERSION.SDK_INT >= 23) {
+                    decryptStoredBlob(AtomicFile(file).readFully()).also { authZenKeyType(it) }
+                } else {
+                    throw UnsupportedOperationException(
+                        "AuthZen encrypted storage requires Android 6.0 or newer"
+                    )
+                }
             }.onFailure { Log.w(TAG, "Unable to read encrypted AuthZen key", it) }.getOrNull()
         }
 
@@ -498,6 +528,7 @@ class AuthZenKeyStore(context: Context) {
         else -> throw IllegalArgumentException("Invalid AuthZen key length")
     }
 
+    @RequiresApi(23)
     private fun writeEncryptedBlob(file: File, value: ByteArray) {
         val atomicFile = AtomicFile(file)
         val output = atomicFile.startWrite()
@@ -510,6 +541,7 @@ class AuthZenKeyStore(context: Context) {
         }
     }
 
+    @RequiresApi(23)
     private fun encryptStoredBlob(value: ByteArray): ByteArray {
         val cipher = Cipher.getInstance(AUTHZEN_STORAGE_CIPHER)
         cipher.init(Cipher.ENCRYPT_MODE, getOrCreateAuthZenStorageKey())
@@ -523,6 +555,7 @@ class AuthZenKeyStore(context: Context) {
             .array()
     }
 
+    @RequiresApi(23)
     private fun decryptStoredBlob(blob: ByteArray): ByteArray {
         require(blob.size > 2) { "Encrypted AuthZen key is truncated" }
         val buffer = ByteBuffer.wrap(blob)
@@ -537,6 +570,7 @@ class AuthZenKeyStore(context: Context) {
         }
     }
 
+    @RequiresApi(23)
     private fun getOrCreateAuthZenStorageKey(): SecretKey {
         val keyStore = loadKeyStore()
         (keyStore.getKey(AUTHZEN_STORAGE_KEY_ALIAS, null) as? SecretKey)?.let { return it }

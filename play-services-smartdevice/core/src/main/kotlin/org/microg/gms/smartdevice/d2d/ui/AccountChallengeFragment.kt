@@ -8,7 +8,6 @@ package org.microg.gms.smartdevice.d2d.ui
 import android.content.Context
 import android.content.res.ColorStateList
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.util.Log
@@ -24,6 +23,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import org.microg.gms.smartdevice.d2d.R
 import java.util.Locale
@@ -203,7 +203,7 @@ class AccountChallengeFragment : Fragment() {
         webView.settings.saveFormData = false
         webView.settings.allowFileAccess = false
         webView.settings.allowContentAccess = false
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
         }
         webView.isFocusableInTouchMode = true
@@ -246,10 +246,10 @@ class AccountChallengeFragment : Fragment() {
 
             @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
-                if (Build.VERSION.SDK_INT < 23) handleMainFrameError(errorCode)
+                if (android.os.Build.VERSION.SDK_INT < 23) handleMainFrameError(errorCode)
             }
 
-            @android.annotation.TargetApi(Build.VERSION_CODES.M)
+            @RequiresApi(23)
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 if (request.isForMainFrame) handleMainFrameError(error.errorCode)
             }
@@ -405,7 +405,7 @@ class AccountChallengeFragment : Fragment() {
 
     private fun clearCookies(onComplete: () -> Unit) {
         val cookies = CookieManager.getInstance()
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             cookies.removeAllCookies { onComplete() }
         } else {
             @Suppress("DEPRECATION")
@@ -424,7 +424,7 @@ class AccountChallengeFragment : Fragment() {
     }
 
     private fun tintProgressBar(target: ProgressBar) {
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             val tint = ColorStateList.valueOf(resources.getColor(R.color.d2d_primary))
             target.indeterminateTintList = tint
             target.progressTintList = tint
@@ -509,7 +509,7 @@ private object ChallengeCookieReader {
             url,
             "$name=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Secure",
         )
-        if (Build.VERSION.SDK_INT >= 21) CookieManager.getInstance().flush()
+        if (android.os.Build.VERSION.SDK_INT >= 21) CookieManager.getInstance().flush()
     }
 
     private const val OAUTH_TOKEN_COOKIE = "oauth_token"
