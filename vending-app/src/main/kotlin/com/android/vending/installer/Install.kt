@@ -119,7 +119,7 @@ private suspend fun Context.installPackagesInternal(
     val key = computeUniqueKey(packageName, componentNames)
     params.setAppLabel(key)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
-    // Lets the installer of record update without user confirmation (also skips EMUI InstallDistActivity)
+    // Lets the installer of record update without user confirmation
     if (SDK_INT >= 31) {
         params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
     }

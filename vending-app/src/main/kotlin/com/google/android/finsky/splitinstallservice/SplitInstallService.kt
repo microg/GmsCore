@@ -91,22 +91,8 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
 
     override fun splitDeferred(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
-        Log.d(TAG, "splitDeferred(${splits.joinToString()}) called for $packageName")
-        if (VendingPreferences.isSplitInstallEnabled(context)) {
-            lifecycleScope.launch {
-                runCatching {
-                    installManager.splitInstallFlow(packageName, splits)
-                    Log.d(TAG, "splitDeferred install complete for $packageName")
-                }.onFailure { e ->
-                    Log.w(TAG, "splitDeferred install failed for $packageName: ${e.message}")
-                }
-                // Always ACK so the app is not left waiting.
-                runCatching { callback.onDeferredInstall(Bundle()) }
-            }
-        } else {
-            Log.w(TAG, "splitDeferred rejected for $packageName, service is disabled")
-            runCatching { callback.onDeferredInstall(Bundle()) }
-        }
+        Log.w(TAG, "splitDeferred(${splits.joinToString()}) called for $packageName, but is not implemented")
+        runCatching { callback.onDeferredInstall(Bundle()) }
     }
 
     override fun getSessionState2(targetPackage: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
