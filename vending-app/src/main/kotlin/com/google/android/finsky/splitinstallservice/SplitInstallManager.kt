@@ -6,11 +6,13 @@
 package com.google.android.finsky.splitinstallservice
 
 import android.accounts.AccountManager
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
@@ -25,6 +27,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -40,6 +43,7 @@ import org.microg.vending.splitinstall.STATUS_INSTALLED
 import org.microg.vending.splitinstall.STATUS_INSTALLING
 import org.microg.vending.splitinstall.STATUS_PENDING
 import org.microg.vending.splitinstall.SplitInstallSessionManager
+import org.microg.vending.splitinstall.SplitInstallCompletionService
 import org.microg.vending.splitinstall.SplitInstallSessionManager.Session
 import org.microg.vending.splitinstall.SplitInstallTaskService
 import org.xmlpull.v1.XmlPullParser
@@ -94,23 +98,17 @@ class SplitInstallManager(private val context: Context) {
                 return
             }
             // TODO: The criteria for using SplitCompat need to be defined more clearly here.
-            val useSplitCompat = withContext(Dispatchers.IO) {
-                playCoreVersion >= MIN_SPLITCOMPAT_VERSION && !canInstallPackages(packageName) &&
-                    languages.isEmpty()
-            }
-            val downloadedSession = withContext(Dispatchers.IO) {
-                sessionManager.findDownloadedSession(packageName, version, requested, useSplitCompat)
-            }
-            if (downloadedSession != null) {
-                clearPendingRemovals()
-                // Renew URI grants in case the app was reinstalled.
-                val state = withContext(Dispatchers.IO) {
-                    Bundle(downloadedSession.state).apply {
-                        putParcelableArrayList("split_file_intents", sessionManager.fileIntents(downloadedSession))
-                    }
+            val useSplitCompat = playCoreVersion >= MIN_SPLITCOMPAT_VERSION && languages.isEmpty()
+            val downloadedState = withContext(Dispatchers.IO) {
+                sessionManager.findDownloadedSession(packageName, version, requested, useSplitCompat)?.let {
+                    // Renew URI grants in case the app was reinstalled.
+                    sessionManager.reuseDownloadedSession(it)
                 }
-                onStarted(state.getInt("session_id"), state)
-                sessionManager.sendUpdate(packageName, state)
+            }
+            if (downloadedState != null) {
+                clearPendingRemovals()
+                onStarted(downloadedState.getInt("session_id"), downloadedState)
+                sessionManager.sendUpdate(packageName, downloadedState)
                 return
             }
             sessionManager.checkActiveSession(packageName, version, requested)
@@ -133,6 +131,10 @@ class SplitInstallManager(private val context: Context) {
         val job = currentCoroutineContext()[Job]
         synchronized(session) {
             if (!sessionManager.isCurrent(session) || session.state.getInt("status") != STATUS_PENDING || session.job != null) return
+            if (!sessionManager.isCurrentInstallation(session)) {
+                sessionManager.removeSession(session)
+                return
+            }
             if (!VendingPreferences.isSplitInstallEnabled(context)) {
                 sessionManager.update(session, STATUS_FAILED) { putInt("error_code", ERROR_API_NOT_AVAILABLE) }
                 return
@@ -194,8 +196,9 @@ class SplitInstallManager(private val context: Context) {
                     downloaded += file.length()
                     file
                 }
-                if (PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(packageName, 0)) != version) {
-                    throw SplitInstallException(-2)
+                if (!sessionManager.isCurrentInstallation(session)) {
+                    sessionManager.removeSession(session)
+                    return@withContext
                 }
                 if (!session.useSplitCompat) {
                     installNative(session, files)
@@ -235,24 +238,19 @@ class SplitInstallManager(private val context: Context) {
             sessionManager.update(session, STATUS_FAILED) { putInt("error_code", error) }
         } finally {
             synchronized(session) {
-                session.job = null
+                if (session.job === job) session.job = null
                 if (session.state.getInt("status") == STATUS_CANCELING) sessionManager.update(session, STATUS_CANCELED)
             }
             enqueuePending(packageName, !session.state.getBoolean("uninstall"))
         }
     }
 
-    private fun canInstallPackages(packageName: String): Boolean {
-        if (context.checkCallingOrSelfPermission(android.Manifest.permission.INSTALL_PACKAGES) == PackageManager.PERMISSION_GRANTED) return true
-        return SDK_INT >= 31 && context.packageManager.getInstallSourceInfo(packageName).installingPackageName == context.packageName &&
-            context.checkCallingOrSelfPermission(android.Manifest.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION) == PackageManager.PERMISSION_GRANTED
-    }
-
     internal fun failInstall(sessionId: Int) = sessionManager.failInstall(sessionId)
 
     @RequiresApi(21)
-    private suspend fun installNative(session: Session, files: List<File>) {
+    private suspend fun installNative(session: Session, files: List<File>, completion: Boolean = false) {
         currentCoroutineContext().ensureActive()
+        val job = currentCoroutineContext()[Job]
         val info = context.packageManager.getPackageInfo(session.packageName, 0)
         val toRemove = removals.getStringSet(session.packageName, emptySet()).orEmpty().filter { it in info.splitNames.orEmpty() }
         val fullInstall = context.canKeepAppAliveDuringFullInstall()
@@ -268,9 +266,14 @@ class SplitInstallManager(private val context: Context) {
             splitSessionId = session.state.getInt("session_id"), removedSplits = toRemove,
             onSessionCreated = { id ->
                 synchronized(session) {
+                    job?.ensureActive()
                     session.job?.ensureActive()
-                    session.installerSessionId = id
-                    sessionManager.update(session, STATUS_INSTALLING) { putLong("bytes_downloaded", getLong("total_bytes_to_download")) }
+                    if (completion) {
+                        sessionManager.startCompletion(session, id)
+                    } else {
+                        session.installerSessionId = id
+                        sessionManager.update(session, STATUS_INSTALLING) { putLong("bytes_downloaded", getLong("total_bytes_to_download")) }
+                    }
                 }
             })
     }
@@ -322,12 +325,79 @@ class SplitInstallManager(private val context: Context) {
 
     private fun enqueuePending(packageName: String, includeRemovals: Boolean = true) {
         if (SDK_INT < 21) return
+        scheduleCompletion()
         if (!deferred.getStringSet(packageName, emptySet()).isNullOrEmpty()) SplitInstallTaskService.enqueueDeferred(context, packageName)
         if (includeRemovals && !removals.getStringSet(packageName, emptySet()).isNullOrEmpty()) SplitInstallTaskService.enqueueRemoval(context, packageName)
     }
 
-    internal fun restoreSessions() = sessionManager.restoreSessions {
-        for (packageName in deferred.all.keys + removals.all.keys) enqueuePending(packageName)
+    internal fun restoreSessions() {
+        sessionManager.restoreSessions {
+            for (packageName in deferred.all.keys + removals.all.keys) enqueuePending(packageName)
+        }
+        scheduleCompletion()
+    }
+
+    private fun scheduleCompletion() {
+        if (SDK_INT < 21 || sessionManager.downloadedSessions().isEmpty()) return
+        try {
+            SplitInstallCompletionService.schedule(context)
+        } catch (e: RuntimeException) {
+            Log.w(TAG, "Unable to schedule split completion (${e.javaClass.simpleName})")
+        }
+    }
+
+    @RequiresApi(21)
+    internal suspend fun completeDownloadedSessions(): Boolean = requestMutex.withLock {
+        if (!VendingPreferences.isSplitInstallEnabled(context) || !SplitInstallCompletionService.canInstallSilently(context)) return@withLock false
+        sessionManager.removeExpiredSessions()
+        val pending = sessionManager.downloadedSessions()
+        if (pending.isEmpty()) return@withLock false
+        val power = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        // A restricted process list cannot establish that another app is safe to update.
+        if (power.isInteractive || context.packageManager.checkPermission("android.permission.REAL_GET_TASKS", context.packageName) != PackageManager.PERMISSION_GRANTED) {
+            return@withLock true
+        }
+        val activity = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val processes = activity.runningAppProcesses ?: return@withLock true
+        val job = currentCoroutineContext().job
+        for (session in pending) {
+            currentCoroutineContext().ensureActive()
+            val pendingRemovals = removals.getStringSet(session.packageName, emptySet()).orEmpty()
+            if (session.requested.any { split -> pendingRemovals.any { split == it || split.startsWith("$it.config.") } }) continue
+            if (sessionManager.hasActiveSession(session.packageName) || processes.any {
+                    it.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE &&
+                        (it.processName == session.packageName || session.packageName in it.pkgList.orEmpty())
+                }) continue
+            val claimed = synchronized(session) {
+                if (session.job != null) false
+                else {
+                    session.job = job
+                    true
+                }
+            }
+            if (!claimed) continue
+            try {
+                val info = context.packageManager.getPackageInfo(session.packageName, 0)
+                if (!sessionManager.isCurrent(session) || PackageInfoCompat.getLongVersionCode(info) != session.version ||
+                    session.clientInstallTime != info.firstInstallTime) continue
+                if (session.requested.all { it in info.splitNames.orEmpty() }) sessionManager.finishCompletion(session)
+                else {
+                    val files = sessionManager.downloadedFiles(session)
+                    Log.d(TAG, "Completing downloaded splits for ${session.packageName}, session ${session.state.getInt("session_id")}")
+                    installNative(session, files, completion = true)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w(TAG, "Split completion failed (${e.javaClass.simpleName})")
+                sessionManager.finishCompletion(session, (e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL)
+            } finally {
+                synchronized(session) {
+                    if (session.job === job) session.job = null
+                }
+            }
+        }
+        sessionManager.downloadedSessions().isNotEmpty()
     }
 
     internal suspend fun recoverSession(sessionId: Int) = sessionManager.recoverSession(sessionId)

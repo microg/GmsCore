@@ -9,6 +9,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
@@ -67,12 +68,101 @@ internal class SplitInstallSessionManager(
 
     fun isCurrent(session: Session): Boolean = sessions[session.state.getInt("session_id")] === session
 
+    fun isCurrentInstallation(session: Session): Boolean = installedPackage(session.packageName)?.let {
+        PackageInfoCompat.getLongVersionCode(it) == session.version && (!session.useSplitCompat || session.clientInstallTime == it.firstInstallTime)
+    } == true
+
     fun hasActiveSession(packageName: String): Boolean =
-        sessions.values.any { it.packageName == packageName && it.state.getInt("status") in ACTIVE_STATUSES }
+        sessions.values.any { it.packageName == packageName && isActive(it) }
+
+    private fun isInstallerActive(session: Session): Boolean = session.state.getInt("status") in INSTALLER_ACTIVE_STATUSES ||
+        (session.useSplitCompat && session.state.getInt("status") == STATUS_DOWNLOADED && session.installerSessionId != -1 && !session.completionBlocked)
+
+    private fun isActive(session: Session): Boolean = session.state.getInt("status") in ACTIVE_STATUSES || isInstallerActive(session)
+
+    fun downloadedSessions(): List<Session> = sessions.values.filter {
+        it.useSplitCompat && it.state.getInt("status") == STATUS_DOWNLOADED && !it.completionBlocked
+    }
+
+    fun downloadedFiles(session: Session): List<File> {
+        val files = directory(session).listFiles().orEmpty().filter { it.extension == "apk" }
+        if (files.isEmpty() || files.any { it.length() == 0L } ||
+            files.sumOf { it.length() } != session.state.getLong("total_bytes_to_download")) throw SplitInstallException(-6)
+        return files
+    }
+
+    fun reuseDownloadedSession(session: Session): Bundle? = synchronized(session) {
+        if (!isCurrent(session) || session.state.getInt("status") != STATUS_DOWNLOADED ||
+            (session.installerSessionId != -1 && !session.completionBlocked)) return@synchronized null
+        try {
+            downloadedFiles(session)
+        } catch (e: SplitInstallException) {
+            return@synchronized null
+        }
+        val info = context.packageManager.getPackageInfo(session.packageName, 0)
+        if (PackageInfoCompat.getLongVersionCode(info) != session.version) return@synchronized null
+        val state = Bundle(session.state).apply { putParcelableArrayList("split_file_intents", fileIntents(session)) }
+        val previous = session.clientInstallTime
+        val previousInstallerId = session.installerSessionId
+        val previousDeadline = session.installerResultDeadline
+        val previousBlocked = session.completionBlocked
+        val previousDeliveredAt = session.lastDeliveredAt
+        session.clientInstallTime = info.firstInstallTime
+        session.lastDeliveredAt = System.currentTimeMillis()
+        // An explicit delivery supersedes the previous background installation attempt.
+        session.installerSessionId = -1
+        session.installerResultDeadline = 0
+        if (session.clientInstallTime != previous) {
+            session.completionBlocked = false
+        }
+        try {
+            saveSession(session)
+        } catch (e: Exception) {
+            session.clientInstallTime = previous
+            session.installerSessionId = previousInstallerId
+            session.installerResultDeadline = previousDeadline
+            session.completionBlocked = previousBlocked
+            session.lastDeliveredAt = previousDeliveredAt
+            runCatching { saveSession(session) }
+                .onFailure { Log.w(TAG, "Unable to restore split session after a failed reuse") }
+            throw e
+        }
+        state
+    }
+
+    fun startCompletion(session: Session, installerId: Int) = synchronized(session) {
+        check(isCurrent(session) && session.state.getInt("status") == STATUS_DOWNLOADED && session.installerSessionId == -1 && !session.completionBlocked)
+        session.installerSessionId = installerId
+        try {
+            saveSession(session)
+        } catch (e: Exception) {
+            session.installerSessionId = -1
+            throw e
+        }
+    }
+
+    fun finishCompletion(session: Session, error: Int = 0) = synchronized(session) {
+        if (!isCurrent(session)) return@synchronized
+        update(session, if (error == 0) STATUS_INSTALLED else STATUS_FAILED, notifyClient = false) { putInt("error_code", error) }
+        directory(session).deleteRecursively()
+        onSessionFinished(session.packageName, true)
+    }
+
+    @RequiresApi(21)
+    private fun blockCompletion(session: Session, inferred: Boolean = false) {
+        session.completionBlocked = true
+        if (!inferred) session.installerResultDeadline = 0
+        try {
+            saveSession(session)
+        } catch (e: SplitInstallException) {
+            Log.w(TAG, "Unable to persist blocked split completion (error ${e.errorCode})")
+        }
+        abandonInstallerSession(session)
+    }
 
     fun checkActiveSession(packageName: String, version: Long, requested: List<String>) {
         sessions.values.firstOrNull {
-            it.packageName == packageName && it.version == version && it.state.getInt("status") in ACTIVE_STATUSES
+            it.packageName == packageName && it.version == version && isActive(it)
         }?.let {
             throw SplitInstallException(if (it.requested.intersect(requested.toSet()).isNotEmpty()) -8 else -1)
         }
@@ -81,7 +171,8 @@ internal class SplitInstallSessionManager(
     fun findDownloadedSession(packageName: String, version: Long, requested: List<String>, useSplitCompat: Boolean): Session? =
         sessions.values.firstOrNull { session ->
             useSplitCompat && session.useSplitCompat && session.packageName == packageName && session.version == version &&
-                session.state.getInt("status") == STATUS_DOWNLOADED && requested.all { it in session.requested } &&
+                session.state.getInt("status") == STATUS_DOWNLOADED && (session.installerSessionId == -1 || session.completionBlocked) &&
+                requested.all { it in session.requested } &&
                 directory(session).listFiles()?.sumOf { it.length() } == session.state.getLong("total_bytes_to_download")
         }
 
@@ -97,6 +188,7 @@ internal class SplitInstallSessionManager(
         val id = nextSessionId.incrementAndGet()
         val state = newState(id, modules, languages).apply { if (uninstall) putBoolean("uninstall", true) }
         val session = Session(packageName, version, requested, state, useSplitCompat = useSplitCompat)
+        session.clientInstallTime = context.packageManager.getPackageInfo(packageName, 0).firstInstallTime
         sessions[id] = session
         try {
             saveSession(session)
@@ -139,6 +231,30 @@ internal class SplitInstallSessionManager(
             val installerId = intent.getIntExtra(PackageInstaller.EXTRA_SESSION_ID, -1)
             if (session.installerSessionId != installerId || session.packageName != intent.getStringExtra(SessionResultReceiver.KEY_PACKAGE_NAME)) return
             val notifyId = intent.getIntExtra(SessionResultReceiver.KEY_NOTIFY_ID, -1)
+            if (session.useSplitCompat) {
+                val info = installedPackage(session.packageName)
+                if (info == null || PackageInfoCompat.getLongVersionCode(info) != session.version) {
+                    removeSession(session)
+                    return
+                }
+                if (session.clientInstallTime != info.firstInstallTime) return
+                val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)
+                if (status == PackageInstaller.STATUS_SUCCESS) {
+                    finishCompletion(session)
+                    return
+                }
+                if (session.state.getInt("status") != STATUS_DOWNLOADED) return
+                when (status) {
+                    // Background completion must never ask the user to install the same module again.
+                    PackageInstaller.STATUS_PENDING_USER_ACTION -> blockCompletion(session)
+                    PackageInstaller.STATUS_FAILURE_ABORTED -> if (!session.completionBlocked || session.installerResultDeadline != 0L) {
+                        finishCompletion(session, ERROR_INTERNAL)
+                    }
+                    else -> finishCompletion(session,
+                        if (intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1) == PackageInstaller.STATUS_FAILURE_STORAGE) -10 else ERROR_INTERNAL)
+                }
+                return
+            }
             if (session.state.getInt("status") == STATUS_INSTALLED) {
                 cancelNotification(notifyId)
                 return
@@ -190,7 +306,9 @@ internal class SplitInstallSessionManager(
     private fun restoreSessions(onRestored: () -> Unit, notificationsToCancel: MutableSet<Int>) {
         if (restored) {
             sessions.values.forEach {
-                if (installedVersion(it.packageName) != it.version) removeSession(it, notificationsToCancel)
+                if (installedVersion(it.packageName) != it.version ||
+                    (it.useSplitCompat && it.state.getInt("status") != STATUS_DOWNLOADED && !isCurrentInstallation(it))) removeSession(it, notificationsToCancel)
+                else if (it.useSplitCompat && it.state.getInt("status") == STATUS_DOWNLOADED) restoreDownloadedSession(it, notificationsToCancel)
                 else restoreInstallerSession(it, notificationsToCancel = notificationsToCancel)
             }
             return
@@ -210,10 +328,18 @@ internal class SplitInstallSessionManager(
                 restoredSession = session
                 session.installerSessionId = json.optInt("installer_session_id", -1)
                 session.installerResultDeadline = json.optLong("installer_result_deadline")
+                session.lastDeliveredAt = json.optLong("last_delivered_at", session.createdAt)
+                session.completionBlocked = json.optBoolean("completion_blocked")
                 session.confirmationIntent = json.optString("confirmation_intent").takeIf { it.isNotEmpty() }
                 sessions[id] = session
                 nextSessionId.set(maxOf(nextSessionId.get(), id))
                 if (installedVersion(session.packageName) != session.version) {
+                    removeSession(session, notificationsToCancel)
+                    continue
+                }
+                val installTime = context.packageManager.getPackageInfo(session.packageName, 0).firstInstallTime
+                session.clientInstallTime = json.optLong("client_install_time", if (installTime <= session.createdAt) installTime else 0L)
+                if (session.useSplitCompat && session.clientInstallTime != installTime && state.getInt("status") != STATUS_DOWNLOADED) {
                     removeSession(session, notificationsToCancel)
                     continue
                 }
@@ -224,9 +350,7 @@ internal class SplitInstallSessionManager(
                         SplitInstallTaskService.enqueueInstall(context, id, session.packageName)
                     }
                     STATUS_DOWNLOADED -> {
-                        if (directory(session).listFiles()?.sumOf { it.length() } == state.getLong("total_bytes_to_download")) {
-                            state.putParcelableArrayList("split_file_intents", fileIntents(session))
-                        } else update(session, STATUS_FAILED) { putInt("error_code", -6) }
+                        restoreDownloadedSession(session, notificationsToCancel, restoring = true)
                     }
                     STATUS_INSTALLING, STATUS_REQUIRES_USER_CONFIRMATION ->
                         restoreInstallerSession(session, restoring = true, notificationsToCancel = notificationsToCancel)
@@ -241,7 +365,7 @@ internal class SplitInstallSessionManager(
                 if (session == null) {
                     savedSessions.edit(commit = true) { remove(key) }
                 } else {
-                    update(session, STATUS_FAILED) {
+                    update(session, STATUS_FAILED, notifyClient = !session.useSplitCompat || session.state.getInt("status") != STATUS_DOWNLOADED) {
                         putInt("error_code", (e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL)
                     }
                 }
@@ -250,6 +374,36 @@ internal class SplitInstallSessionManager(
         restored = true
         removeExpiredSessions(notificationsToCancel)
         onRestored()
+    }
+
+    @RequiresApi(21)
+    private fun restoreDownloadedSession(session: Session, notificationsToCancel: MutableSet<Int>, restoring: Boolean = false) = synchronized(session) {
+        val info = installedPackage(session.packageName)
+        if (info == null || PackageInfoCompat.getLongVersionCode(info) != session.version) {
+            removeSession(session, notificationsToCancel)
+            return@synchronized
+        }
+        if (session.clientInstallTime != info.firstInstallTime) {
+            if (session.installerSessionId != -1 && !session.completionBlocked) blockCompletion(session)
+            return@synchronized
+        }
+        if (session.requested.all { it in info.splitNames.orEmpty() } && (session.installerSessionId == -1 || session.completionBlocked)) {
+            finishCompletion(session)
+        } else {
+            if (session.installerSessionId != -1 && !session.completionBlocked) {
+                restoreInstallerSession(session, restoring = restoring, notificationsToCancel = notificationsToCancel)
+                if (isInstallerActive(session)) return@synchronized
+            }
+            if (restoring && session.state.getInt("status") == STATUS_DOWNLOADED) {
+                try {
+                    downloadedFiles(session)
+                    session.state = Bundle(session.state).apply { putParcelableArrayList("split_file_intents", fileIntents(session)) }
+                } catch (e: SplitInstallException) {
+                    finishCompletion(session, e.errorCode)
+                    abandonInstallerSession(session)
+                }
+            }
+        }
     }
 
     private fun cancelRestoredNotifications(notificationIds: Set<Int>) = synchronized(notificationLock) {
@@ -302,7 +456,7 @@ internal class SplitInstallSessionManager(
         notificationsToCancel: MutableSet<Int>? = null
     ) = synchronized(session) {
         if (sessions[session.state.getInt("session_id")] !== session) return@synchronized
-        if (session.state.getInt("status") !in INSTALLER_ACTIVE_STATUSES) return@synchronized
+        if (!isInstallerActive(session)) return@synchronized
         try {
             if (installedVersion(session.packageName) != session.version) {
                 removeSession(session, notificationsToCancel)
@@ -322,6 +476,8 @@ internal class SplitInstallSessionManager(
                 }
                 return@synchronized
             }
+            // A local installer may still be preparing to commit this session.
+            if (info != null && session.job != null) return@synchronized
             if (info != null) installer.openSession(info.sessionId).use { it.abandon() }
             val installed = context.packageManager.getPackageInfo(session.packageName, 0)
             val names = installed.splitNames.orEmpty().toSet()
@@ -349,16 +505,18 @@ internal class SplitInstallSessionManager(
                 }
                 if (recoveryScheduled && session.installerResultDeadline != expiredDeadline &&
                     System.currentTimeMillis() < session.installerResultDeadline) return@synchronized
-                update(session, STATUS_FAILED, inferredFailure = true) { putInt("error_code", ERROR_INTERNAL) }
+                if (session.useSplitCompat) blockCompletion(session, inferred = true)
+                else update(session, STATUS_FAILED, inferredFailure = true) { putInt("error_code", ERROR_INTERNAL) }
             } else {
-                update(session, if (completed) STATUS_INSTALLED else STATUS_FAILED) {
+                update(session, if (completed) STATUS_INSTALLED else STATUS_FAILED, notifyClient = !session.useSplitCompat) {
                     if (!completed) putInt("error_code", ERROR_INTERNAL)
                 }
             }
+            if (session.useSplitCompat && session.state.getInt("status") != STATUS_DOWNLOADED) directory(session).deleteRecursively()
             onSessionFinished(session.packageName, !session.state.getBoolean("uninstall"))
         } catch (e: Exception) {
             Log.w(TAG, "Unable to restore split installer session (${e.javaClass.simpleName})")
-            update(session, STATUS_FAILED, inferredFailure = session.installerResultDeadline != 0L) {
+            update(session, STATUS_FAILED, inferredFailure = session.installerResultDeadline != 0L, notifyClient = !session.useSplitCompat) {
                 putInt("error_code", (e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL)
             }
         }
@@ -368,7 +526,7 @@ internal class SplitInstallSessionManager(
         if (SDK_INT < 21) return
         val session = sessions[sessionId] ?: return
         val deadline = synchronized(session) {
-            if (session.state.getInt("status") !in INSTALLER_ACTIVE_STATUSES) return
+            if (!isInstallerActive(session)) return
             session.installerResultDeadline
         }
         if (deadline == 0L) return
@@ -376,7 +534,7 @@ internal class SplitInstallSessionManager(
         val waitUntil = SystemClock.elapsedRealtime() + remaining
         while (remaining > 0) {
             delay(minOf(remaining, 1_000L))
-            if (synchronized(session) { session.installerResultDeadline != deadline || session.state.getInt("status") !in INSTALLER_ACTIVE_STATUSES }) return
+            if (synchronized(session) { session.installerResultDeadline != deadline || !isInstallerActive(session) }) return
             remaining = waitUntil - SystemClock.elapsedRealtime()
         }
         restoreInstallerSession(session, deadline)
@@ -392,7 +550,10 @@ internal class SplitInstallSessionManager(
         if (sessions[state.getInt("session_id")] !== session) return@synchronized
         val json = JSONObject().put("package_name", session.packageName).put("version", session.version)
             .put("requested", JSONArray(session.requested)).put("created_at", session.createdAt)
+            .put("last_delivered_at", session.lastDeliveredAt)
             .put("use_splitcompat", session.useSplitCompat)
+            .put("completion_blocked", session.completionBlocked)
+            .put("client_install_time", session.clientInstallTime)
             .put("module_names", JSONArray(state.getStringArrayList("module_names").orEmpty()))
             .put("languages", JSONArray(state.getStringArrayList("languages").orEmpty()))
             .put("installer_session_id", session.installerSessionId).put("confirmation_intent", session.confirmationIntent)
@@ -409,13 +570,24 @@ internal class SplitInstallSessionManager(
 
     private fun directory(session: Session) = File(context.cacheDir, "split-install/${session.packageName}/${session.version}/${session.state.getInt("session_id")}")
 
-    internal fun getSessionState(packageName: String, sessionId: Int): Bundle = Bundle(findSession(packageName, sessionId).state)
+    private fun clientState(session: Session): Bundle = synchronized(session) {
+        Bundle(session.state).apply {
+            if (getInt("status") == STATUS_DOWNLOADED) {
+                downloadedFiles(session)
+                putParcelableArrayList("split_file_intents", fileIntents(session))
+            }
+        }
+    }
+
+    internal fun getSessionState(packageName: String, sessionId: Int): Bundle = clientState(findSession(packageName, sessionId))
 
     internal fun getSessionStates(packageName: String): List<Bundle> {
-        val version = installedVersion(packageName)
+        val info = installedPackage(packageName) ?: return emptyList()
+        val version = PackageInfoCompat.getLongVersionCode(info)
         return sessions.values.filter {
-            it.packageName == packageName && it.version == version && !it.state.getBoolean("uninstall")
-        }.map { Bundle(it.state) }
+            it.packageName == packageName && it.version == version && !it.state.getBoolean("uninstall") &&
+                (!it.useSplitCompat || it.clientInstallTime == info.firstInstallTime)
+        }.map { clientState(it) }
     }
 
     internal fun cancelInstall(packageName: String, sessionId: Int) {
@@ -446,17 +618,23 @@ internal class SplitInstallSessionManager(
         else cancelNotification(id)
     }
 
-    private fun findSession(packageName: String, sessionId: Int): Session = sessions[sessionId]
-        ?.takeIf { it.packageName == packageName && it.version == installedVersion(packageName) && !it.state.getBoolean("uninstall") }
-        ?: throw SplitInstallException(ERROR_SESSION_NOT_FOUND)
+    private fun findSession(packageName: String, sessionId: Int): Session {
+        val info = installedPackage(packageName) ?: throw SplitInstallException(ERROR_SESSION_NOT_FOUND)
+        return sessions[sessionId]?.takeIf {
+            it.packageName == packageName && it.version == PackageInfoCompat.getLongVersionCode(info) && !it.state.getBoolean("uninstall") &&
+                (!it.useSplitCompat || it.clientInstallTime == info.firstInstallTime)
+        } ?: throw SplitInstallException(ERROR_SESSION_NOT_FOUND)
+    }
 
-    private fun installedVersion(packageName: String): Long? = try {
-        PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(packageName, 0))
+    private fun installedVersion(packageName: String): Long? = installedPackage(packageName)?.let { PackageInfoCompat.getLongVersionCode(it) }
+
+    private fun installedPackage(packageName: String): PackageInfo? = try {
+        context.packageManager.getPackageInfo(packageName, 0)
     } catch (e: PackageManager.NameNotFoundException) {
         null
     }
 
-    fun update(session: Session, status: Int, inferredFailure: Boolean = false, edit: Bundle.() -> Unit = {}) {
+    fun update(session: Session, status: Int, inferredFailure: Boolean = false, notifyClient: Boolean = true, edit: Bundle.() -> Unit = {}) {
         synchronized(session) {
             if (sessions[session.state.getInt("session_id")] !== session) return
             if (status == STATUS_FAILED && session.state.getInt("status") in listOf(STATUS_INSTALLED, STATUS_CANCELED, STATUS_CANCELING)) return
@@ -481,7 +659,7 @@ internal class SplitInstallSessionManager(
                 Log.w(TAG, "Unable to persist split session ${session.state.getInt("session_id")} (error ${e.errorCode})")
             }
             Log.d(TAG, "Session ${session.state.getInt("session_id")} for ${session.packageName}: status=$status")
-            sendUpdate(session.packageName, session.state)
+            if (notifyClient) sendUpdate(session.packageName, session.state)
             if (status == STATUS_DOWNLOADING) {
                 context.notifySplitInstallProgress(session.packageName, session.state.getInt("session_id"),
                     Downloading(session.state.getLong("bytes_downloaded"), session.state.getLong("total_bytes_to_download")))
@@ -522,8 +700,11 @@ internal class SplitInstallSessionManager(
     private fun removeExpiredSessions(notificationsToCancel: MutableSet<Int>) {
         val cutoff = System.currentTimeMillis() - 24 * 60 * 60 * 1000L
         for (session in sessions.values) {
-            if (session.job == null && session.state.getInt("status") !in ACTIVE_STATUSES && maxOf(session.createdAt, session.installerResultDeadline) < cutoff) {
-                removeSession(session, notificationsToCancel)
+            synchronized(session) {
+                if (session.job == null && !isActive(session) &&
+                    maxOf(session.createdAt, session.lastDeliveredAt, session.installerResultDeadline) < cutoff) {
+                    removeSession(session, notificationsToCancel)
+                }
             }
         }
         File(context.cacheDir, "split-install").listFiles().orEmpty().forEach { packageDir ->
@@ -534,7 +715,7 @@ internal class SplitInstallSessionManager(
         }
     }
 
-    private fun removeSession(session: Session, notificationsToCancel: MutableSet<Int>? = null) = synchronized(session) {
+    fun removeSession(session: Session, notificationsToCancel: MutableSet<Int>? = null) = synchronized(session) {
         val id = session.state.getInt("session_id")
         if (!sessions.remove(id, session)) return@synchronized
         session.job?.cancel()
@@ -557,6 +738,9 @@ internal class SplitInstallSessionManager(
         @Volatile var job: Job? = null
         @Volatile var installerSessionId = -1
         @Volatile var installerResultDeadline = 0L
+        @Volatile var completionBlocked = false
+        @Volatile var clientInstallTime = 0L
+        @Volatile var lastDeliveredAt = createdAt
         var confirmationIntent: String? = null
     }
 
