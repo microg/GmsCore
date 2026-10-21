@@ -1,7 +1,5 @@
 package org.microg.vending.billing.core
 
-import android.content.Context
-import android.net.Uri
 import android.util.Log
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
@@ -33,6 +31,7 @@ import java.io.IOException
 import java.io.OutputStream
 
 private const val POST_TIMEOUT = 8000L
+private const val DOWNLOAD_TIMEOUT = 30_000L
 private const val TAG = "HttpClient"
 
 class HttpClient {
@@ -71,6 +70,10 @@ class HttpClient {
         try {
             Log.d(TAG, "download downloadedBytes:$downloadedBytes")
             client.prepareGet(url.asUrl(params)){
+                timeout {
+                    connectTimeoutMillis = DOWNLOAD_TIMEOUT
+                    socketTimeoutMillis = DOWNLOAD_TIMEOUT
+                }
                 if (downloadedBytes > 0) {
                     headers {
                         append(HttpHeaders.Range, "bytes=$downloadedBytes-")
@@ -98,7 +101,7 @@ class HttpClient {
                 // don't close `downloadTo` yet
             }
         } catch (e: Exception) {
-            Log.w(TAG, "download error : $e")
+            Log.w(TAG, "Download failed (${e.javaClass.simpleName})")
             throw e
         }
     }

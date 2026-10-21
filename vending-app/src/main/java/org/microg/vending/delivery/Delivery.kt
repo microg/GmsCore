@@ -38,6 +38,7 @@ suspend fun HttpClient.requestDownloadUrls(
         auth: AuthData,
         requestSplitPackages: List<String>? = null,
         deliveryToken: String? = null,
+        languages: List<String>? = null,
 ): List<PackageComponent> {
 
     val requestUrl = StringBuilder("$URL_DELIVERY?doc=$packageName&ot=1&vc=$versionCode")
@@ -54,16 +55,16 @@ suspend fun HttpClient.requestDownloadUrls(
     }
 
     Log.v(TAG, "requestDownloadUrls start")
-    val languages = requestSplitPackages?.filter { it.startsWith(SPLIT_LANGUAGE_TAG) }?.map {
+    val requestedLanguages = languages?.takeIf { it.isNotEmpty() } ?: requestSplitPackages?.filter { it.startsWith(SPLIT_LANGUAGE_TAG) }?.map {
         it.replace(SPLIT_LANGUAGE_TAG, "")
     }
-    Log.d(TAG, "requestDownloadUrls languages: $languages")
+    Log.d(TAG, "requestDownloadUrls languages: $requestedLanguages")
 
     val androidId = auth.gsfId.toLong(16)
     val headers = buildRequestHeaders(
         auth = auth.authToken,
         androidId = androidId,
-        languages
+        requestedLanguages
     ).minus(
         // TODO: understand behavior. According to tests, these headers break split install queries but may be needed for normal ones
         (if (requestSplitPackages != null) listOf("X-DFE-Encoded-Targets", "X-DFE-Phenotype", "X-DFE-Device-Id", "X-DFE-Client-Id") else emptyList()).toSet()
@@ -89,21 +90,22 @@ suspend fun HttpClient.requestDownloadUrls(
         headers = headers,
         adapter = GoogleApiResponse.ADAPTER
     )
-    Log.d(TAG, "requestDownloadUrls end response -> $response")
+    Log.d(TAG, "Split delivery response received for $packageName")
 
-    val basePackage = response.payload!!.deliveryResponse!!.deliveryData?.let {
+    val deliveryData = response.payload?.deliveryResponse?.deliveryData ?: return emptyList()
+    val basePackage = deliveryData.let {
         if (it.baseUrl != null && it.baseBytes != null) {
             PackageComponent(packageName, "base", it.baseUrl, it.baseBytes.toLong())
         } else null
     }
-    val splitComponents = response.payload.deliveryResponse!!.deliveryData!!.splitPackages.filter {
-        !it.splitPackageName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
+    val splitComponents = deliveryData.splitPackages.filter {
+        !it.splitPackageName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty() && it.size != null
     }.map {
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                (it.splitPackageName?.contains(requestComponent) == true || requestComponent.contains(it.splitPackageName!!))
-            }?.let { requestComponent ->
+                it.splitPackageName == requestComponent || it.splitPackageName!!.startsWith("$requestComponent.config.")
+            }?.let { _ ->
                 PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
             }
         } else {
@@ -115,10 +117,14 @@ suspend fun HttpClient.requestDownloadUrls(
     val components = if (requestSplitPackages != null) {
         splitComponents
     } else {
-        listOf(basePackage) + splitComponents
+        val removed = context.getSharedPreferences("split-install-removals", Context.MODE_PRIVATE)
+            .getStringSet(packageName, emptySet()).orEmpty()
+        (listOf(basePackage) + splitComponents).filterNot { component ->
+            component != null && removed.any { component.componentName == it || component.componentName.startsWith("$it.config.") }
+        }
     }.filterNotNull()
 
-    Log.d(TAG, "requestDownloadUrls end -> $components")
+    Log.d(TAG, "Delivery components for $packageName: ${components.map { it.componentName }}")
 
     return components
 }
