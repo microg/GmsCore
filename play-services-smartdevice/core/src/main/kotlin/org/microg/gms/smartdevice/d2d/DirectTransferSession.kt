@@ -7,6 +7,7 @@ package org.microg.gms.smartdevice.d2d
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.KeyguardManager
 import android.app.PendingIntent
@@ -1038,6 +1039,7 @@ class DirectTransferSession(
         destroyInternal()
     }
 
+    @SuppressLint("MissingPermission")
     private fun populateDeviceDetails() {
 
         val androidId = LastCheckinInfo.read(context).androidId
