@@ -13,7 +13,6 @@ import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import android.util.Log
 import java.net.HttpURLConnection
-import java.net.URL
 
 private const val TAG = "RemoteGuardImpl"
 
@@ -35,7 +34,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
             request?.bundle?.getString(key)?.let { paramsMap["x-request-$key"] = it }
         }
         val params = paramsMap.map { Uri.encode(it.key) + "=" + Uri.encode(it.value) }.joinToString("&")
-        val connection = URL("$url?$params").openConnection() as HttpURLConnection
+        val connection = RemoteDroidGuardUrl.appendQuery(url, params).openConnection() as HttpURLConnection
         val payload = map.orEmpty().map { Uri.encode(it.key as String) + "=" + Uri.encode(it.value as String) }.joinToString("&")
         Log.d(TAG, "POST ${connection.url}: $payload")
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
