@@ -19,8 +19,12 @@ package org.microg.gms.wearable;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.RemoteException;
+import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
 
@@ -33,6 +37,9 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class WearableService extends BaseService {
 
@@ -74,6 +81,12 @@ public class WearableService extends BaseService {
             new Feature("wear_notify_channel_flushed", 1L)
     };
 
+    private static final long INIT_TIMEOUT_SECONDS = 10;
+
+    private final CountDownLatch ready = new CountDownLatch(1);
+    private HandlerThread initThread;
+    private Handler initHandler;
+
     private static final String CHANNEL_ID = "wearable_service";
 
     public WearableService() {
@@ -84,9 +97,21 @@ public class WearableService extends BaseService {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
-        NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
-        wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        initThread = new HandlerThread("WearableServiceInit");
+        initThread.start();
+        initHandler = new Handler(initThread.getLooper());
+        initHandler.post(() -> {
+            try {
+                Context ctx = getApplicationContext();
+                wearable = new WearableImpl(ctx,
+                        new NodeDatabaseHelper(ctx),
+                        new ConfigurationDatabaseHelper(ctx));
+            } catch (Throwable t) {
+                Log.e("GmsWearSvc", "Wearable service init failed", t);
+            } finally {
+                ready.countDown();
+            }
+        });
     }
 
     private void createNotificationChannel() {
@@ -106,14 +131,34 @@ public class WearableService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        wearable.stop();
+        initHandler.post(() -> {
+            WearableImpl impl = wearable;
+            if (impl != null) impl.stop();
+            initThread.quitSafely();
+        });
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName);
+
+        boolean done;
+        try {
+            done = ready.await(INIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            callback.onPostInitComplete(CommonStatusCodes.INTERNAL_ERROR, null, null);
+            return;
+        }
+        WearableImpl impl = wearable;
+        if (!done || impl == null) {
+            callback.onPostInitComplete(CommonStatusCodes.INTERNAL_ERROR, null, null);
+            return;
+        }
+
         ConnectionInfo connectionInfo = new ConnectionInfo();
         connectionInfo.features = FEATURES;
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, new WearableServiceImpl(this, wearable, request.packageName), connectionInfo);
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS,
+                new WearableServiceImpl(this, impl, request.packageName), connectionInfo);
     }
 }
