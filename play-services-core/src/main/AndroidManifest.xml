@@ -138,6 +138,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -195,6 +196,12 @@
         androidx.compose.animation,androidx.startup,
         coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
         androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
+
+    <queries>
+        <intent>
+            <action android:name="com.google.android.libraries.phenotype.registration.PhenotypeMetadataHolderService" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -1014,7 +1021,26 @@
         <provider
             android:name="org.microg.gms.phenotype.ConfigurationProvider"
             android:authorities="com.google.android.gms.phenotype"
+            android:directBootAware="true"
             android:exported="true" />
+
+        <provider android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup" android:exported="false"
+            tools:node="merge">
+            <meta-data android:name="org.microg.gms.phenotype.PhenotypeInitializer" android:value="androidx.startup" />
+        </provider>
+
+        <receiver android:name="org.microg.gms.phenotype.PhenotypePackageReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
 
         <service android:name="org.microg.gms.phenotype.PhenotypeService">
             <intent-filter>
