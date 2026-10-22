@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
@@ -118,6 +119,10 @@ private suspend fun Context.installPackagesInternal(
     val key = computeUniqueKey(packageName, componentNames)
     params.setAppLabel(key)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
+    // Lets the installer of record update without user confirmation
+    if (SDK_INT >= 31) {
+        params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
+    }
     try {
         @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
                 "setDontKillApp", Boolean::class.javaPrimitiveType
