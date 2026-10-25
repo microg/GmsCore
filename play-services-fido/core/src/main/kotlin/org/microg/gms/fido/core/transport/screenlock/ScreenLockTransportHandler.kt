@@ -5,13 +5,13 @@
 
 package org.microg.gms.fido.core.transport.screenlock
 
-import android.app.KeyguardManager
 import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.safetynet.SafetyNet
@@ -39,7 +39,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     private val database by lazy { Database(activity) }
 
     override val isSupported: Boolean
-        get() = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
+        get() = BiometricManager.from(activity).canAuthenticate(BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
 
     suspend fun showBiometricPrompt(applicationName: String, signature: Signature?) {
         suspendCancellableCoroutine<BiometricPrompt.AuthenticationResult> { continuation ->
