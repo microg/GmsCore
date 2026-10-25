@@ -14,6 +14,8 @@ public class SignInWithPhoneNumberAidlRequest extends AutoSafeParcelable {
     public PhoneAuthCredential credential;
     @Field(2)
     public String tenantId;
+    @Field(3)
+    public String phoneNumber;
 
     public static final Creator<SignInWithPhoneNumberAidlRequest> CREATOR = new AutoCreator<>(SignInWithPhoneNumberAidlRequest.class);
 }
