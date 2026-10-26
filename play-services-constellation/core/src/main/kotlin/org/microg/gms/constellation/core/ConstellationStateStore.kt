@@ -109,6 +109,8 @@ object ConstellationStateStore {
     }
 
     fun isPublicKeyAcked(context: Context): Boolean {
+        // Regeneration invalidates acknowledgement before it is read.
+        context.authManager.getOrCreateKeyPair()
         return statePrefs(context).getBoolean(KEY_PUBLIC_KEY_ACKED, false)
     }
 

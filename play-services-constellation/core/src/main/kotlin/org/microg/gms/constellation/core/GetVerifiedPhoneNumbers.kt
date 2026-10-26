@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.constellation.PhoneNumberInfo
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
+import com.squareup.wire.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest
+import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersResponse
 import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest.PhoneNumberSelection
 import org.microg.gms.constellation.core.proto.IIDTokenAuth
 import org.microg.gms.constellation.core.proto.TokenOption
@@ -24,17 +26,26 @@ private const val TAG = "GetVerifiedPhoneNumbers"
 internal suspend fun fetchVerifiedPhoneNumbers(
     context: Context,
     bundle: Bundle,
-    callingPackage: String = bundle.getString("calling_package") ?: Constants.GMS_PACKAGE_NAME
+    callingPackage: String = bundle.getString("calling_package") ?: Constants.GMS_PACKAGE_NAME,
+    getIidToken: () -> String = {
+        context.authManager.getIidToken(IidTokenPhenotypes.READ_ONLY_PROJECT_NUMBER)
+    },
+    signIidToken: (String) -> Pair<ByteArray, Instant> = {
+        context.authManager.signIidToken(it)
+    },
+    execute: suspend (GetVerifiedPhoneNumbersRequest) -> GetVerifiedPhoneNumbersResponse = {
+        RpcClient.phoneNumberClient.GetVerifiedPhoneNumbers().execute(it)
+    }
 ): List<VerifiedPhoneNumber> = withContext(Dispatchers.IO) {
-    val authManager = context.authManager
     val sessionId = UUID.randomUUID().toString()
     val selections = extractPhoneNumberSelections(bundle)
     val certificateHash = bundle.getString("certificate_hash") ?: ""
     val tokenNonce = bundle.getString("token_nonce") ?: ""
 
-    val iidToken = authManager.getIidToken(IidTokenPhenotypes.READ_ONLY_PROJECT_NUMBER)
+    val iidToken = getIidToken()
+    require(iidToken.isNotEmpty()) { "Instance ID token is empty" }
     val iidTokenAuth = if (VerifyPhoneNumberApiPhenotypes.ENABLE_CLIENT_SIGNATURE) {
-        val (signatureBytes, signTimestamp) = authManager.signIidToken(iidToken)
+        val (signatureBytes, signTimestamp) = signIidToken(iidToken)
         IIDTokenAuth(
             iid_token = iidToken,
             client_sign = signatureBytes.toByteString(),
@@ -56,9 +67,7 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     )
 
     Log.d(TAG, "Calling GetVerifiedPhoneNumbers RPC (read-only mode)...")
-    val response = RpcClient.phoneNumberClient
-        .GetVerifiedPhoneNumbers()
-        .execute(getRequest)
+    val response = execute(getRequest)
     Log.d(TAG, "GetVerifiedPhoneNumbers response: ${response.phone_numbers.size} numbers")
     response.phone_numbers
 }

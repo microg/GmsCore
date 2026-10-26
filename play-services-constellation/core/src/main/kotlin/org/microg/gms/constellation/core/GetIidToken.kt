@@ -12,16 +12,44 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "GetIidToken"
 
+internal interface IidCredentialProvider {
+    fun getIidToken(projectNumber: String?): String
+    fun getFid(): String
+    fun signIidToken(iidToken: String): Pair<ByteArray, Long>
+}
+
+private class AuthManagerIidCredentialProvider(
+    private val authManager: AuthManager
+) : IidCredentialProvider {
+    override fun getIidToken(projectNumber: String?): String =
+        authManager.getIidToken(projectNumber)
+
+    override fun getFid(): String = authManager.getFid()
+
+    override fun signIidToken(iidToken: String): Pair<ByteArray, Long> =
+        authManager.signIidTokenCompat(iidToken)
+}
+
 suspend fun handleGetIidToken(
     context: Context,
     callbacks: IConstellationCallbacks,
     request: GetIidTokenRequest
+) = handleGetIidToken(
+    callbacks,
+    request,
+    AuthManagerIidCredentialProvider(context.authManager)
+)
+
+internal suspend fun handleGetIidToken(
+    callbacks: IConstellationCallbacks,
+    request: GetIidTokenRequest,
+    credentialProvider: IidCredentialProvider
 ) = withContext(Dispatchers.IO) {
     try {
-        val authManager = context.authManager
-        val iidToken = authManager.getIidToken(request.projectNumber?.toString())
-        val fid = authManager.getFid()
-        val (signature, timestamp) = authManager.signIidTokenCompat(iidToken)
+        val iidToken = credentialProvider.getIidToken(request.projectNumber?.toString())
+        require(iidToken.isNotEmpty()) { "Instance ID token is empty" }
+        val fid = credentialProvider.getFid()
+        val (signature, timestamp) = credentialProvider.signIidToken(iidToken)
 
         callbacks.onIidTokenGenerated(
             Status.SUCCESS,
