@@ -5,6 +5,7 @@
 
 package org.microg.vending.billing.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -116,9 +117,11 @@ fun Modifier.applyViewInfo(viewInfo: BViewInfo?): Modifier {
                 UIType.BILLING_PROFILE_OPTION_ADD_PLAY_CREDIT,
                 UIType.BILLING_PROFILE_OPTION_CREATE_INSTRUMENT -> {
                     val viewState = LocalBillingUiViewState.current
-                    newModifier = newModifier.clickable {
-                        viewState.onClickAction(action)
+                    val onAction = { viewState.onClickAction(action) }
+                    if (action.uiInfo?.uiType == UIType.BILLING_PROFILE_SCREEN_ABANDON) {
+                        BackHandler(onBack = onAction)
                     }
+                    newModifier = newModifier.clickable(onClick = onAction)
                 }
 
                 else -> {}
