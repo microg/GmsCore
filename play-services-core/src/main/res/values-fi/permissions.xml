@@ -7,4 +7,19 @@
     <string name="permission_service_adsense_label">AdSense</string>
     <string name="permission_service_adsense_description">Sallii ohjelmalle pääsyn AdSenseen minkä tahansa Google-tilin kautta.</string>
     <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Salli sovellukselle pääsy AdWords:iin minkä tahansa liittetyn Google-tilin kautta.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">Salli sovellukselle pääsy Google App Engineen minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Salli sovellukselle pääsy Bloggeriin minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_cl_label">Google Kalenteri</string>
+    <string name="permission_service_cl_description">Salli sovellukselle pääsy Google Kalenteriin minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_cp_label">Yhteystiedot</string>
+    <string name="permission_service_cp_description">Salli sovellukselle pääsy Yhteystietoihin minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Salli sovellukselle pääsy Dodgeball:iin minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">Salli sovellukselle pääsy Google Financeen minkä tahansa liitetyn Google-tilin kautta.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">Salli sovellukselle pääsy Google Baseen minkä tahansa liitetyn Google-tilin kautta.</string>
 </resources>

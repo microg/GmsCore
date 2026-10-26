@@ -113,9 +113,8 @@
             android:name="org.microg.vending.ui.MainActivity"
             android:theme="@style/Theme.Dialog.NoActionBar"
             android:exported="true">
-            <intent-filter>
+            <intent-filter android:priority="-1">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
@@ -194,6 +193,14 @@
         </service>
 
         <service
+            android:name="com.google.android.finsky.ageverification.service.AgeSignalsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.finsky.ageverification.BIND" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name="com.google.android.finsky.appcontentservice.engage.AppEngageServiceV2"
             android:exported="true"
             android:process=":background">
@@ -254,6 +261,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
 

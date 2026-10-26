@@ -11,4 +11,7 @@
     <string name="service_status_disabled_short">Pois päältä</string>
     <string name="foreground_service_notification_title">Käynnissä taustalla</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> on käynnissä taustalla.</string>
+    <string name="foreground_service_notification_big_text">Sulje <xliff:g example="microG Services">%1$s</xliff:g> pois akun optimoinnista tai muuta ilmoitusasetuksia piilottaaksesi tämän ilmoituksen.</string>
+    <string name="menu_advanced">Lisäasetukset</string>
+    <string name="menu_game_managed">Käsitellyt pelitilit</string>
 </resources>

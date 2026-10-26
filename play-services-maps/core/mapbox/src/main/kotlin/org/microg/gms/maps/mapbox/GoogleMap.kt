@@ -119,6 +119,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     var groundId = 0L
     var tileId = 0L
+    val tileOverlays = mutableMapOf<String, TileOverlayImpl>()
 
     var storedMapType: Int = options.mapType
     var mapStyle: MapStyleOptions? = null
@@ -354,8 +355,11 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun addTileOverlay(options: TileOverlayOptions): ITileOverlayDelegate? {
-        Log.d(TAG, "unimplemented Method: addTileOverlay")
-        return TileOverlayImpl(this, "t${tileId++}", options)
+        val id = "t${tileId++}"
+        val tileOverlay = TileOverlayImpl(this, id, options)
+        tileOverlays[id] = tileOverlay
+        map?.getStyle { tileOverlay.addToStyle(it) }
+        return tileOverlay
     }
 
     override fun addCircle(options: CircleOptions): ICircleDelegate {
@@ -417,6 +421,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             lines?.let { runCatching { lineManager?.update(it) } }
             fills?.let { runCatching { fillManager?.update(it) } }
             symbols?.let { runCatching { symbolManager?.update(it) } }
+            tileOverlays.values.forEach { overlay -> overlay.addToStyle(it) }
         }
 
         map?.setStyle(
@@ -811,6 +816,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
                 pendingBitmaps.forEach { map -> it.addImage(map.key, map.value) }
                 pendingBitmaps.clear()
+
+                tileOverlays.values.forEach { overlay -> overlay.addToStyle(it) }
 
                 map.locationComponent.apply {
                     activateLocationComponent(LocationComponentActivationOptions.builder(mapContext, it)

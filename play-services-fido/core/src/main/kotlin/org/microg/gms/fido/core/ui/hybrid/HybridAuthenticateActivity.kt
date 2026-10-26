@@ -117,7 +117,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
     private fun startHybridConnectionFlow() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenCreated {
             hybridAuthenticatorController = hybridAuthenticatorController ?: HybridAuthenticatorController(this@HybridAuthenticateActivity)
             try {
                 hybridAuthenticatorController?.startAuth(qrCodeData!!, handleAuthenticator = {

@@ -76,7 +76,7 @@ object ServiceCallProxy {
                             null
                         }
 
-                        else -> method.invoke(originalService, args)
+                        else -> method.invoke(originalService, *(args ?: emptyArray()))
                     }
                 }) as IBinder
             originalServices[systemServiceName] = originalService

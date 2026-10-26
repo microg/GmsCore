@@ -45,4 +45,9 @@
     <string name="pref_location_custom_url_summary">Ceci permet de modifier l\'URL du service. Une valeur incorrecte peut causer une perte de réactivité des services de localisation, voire leur indisponibilité totale.</string>
     <string name="pref_location_custom_url_input_hint">URL personnalisée du service</string>
     <string name="prefcat_app_last_location">Dernière localisation reportée</string>
+    <string name="prefcat_location_timeline_title">Vos trajets Google Maps</string>
+    <string name="pref_location_timeline_title">Activer l’historique de localisation</string>
+    <string name="pref_location_timeline_summary">Enregistrer périodiquement votre localisation et la rendre disponible dans Vos trajets Google Maps.</string>
+    <string name="pref_location_timeline_upload_title">Synchroniser avec compte Google</string>
+    <string name="pref_location_timeline_upload_summary">Synchroniser l’historique de localisation avec les serveurs Google pour la rendre visible sur d’autres appareils.</string>
 </resources>
