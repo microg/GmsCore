@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:key="pref_phone_number_verification_enabled"
+        android:persistent="false"
+        android:title="@string/phone_number_verification_enable" />
+
+    <PreferenceCategory
+        android:key="prefcat_phone_number_verification_last_use"
+        android:title="@string/phone_number_verification_last_use_title"
+        app:isPreferenceVisible="false">
+
+        <org.microg.gms.constellation.core.ui.PhoneNumberVerificationAppPreference
+            android:key="pref_phone_number_verification_last_use"
+            android:selectable="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.FooterPreference
+            android:selectable="false"
+            android:title="@string/phone_number_verification_carrier_notice" />
+    </PreferenceCategory>
+</PreferenceScreen>
