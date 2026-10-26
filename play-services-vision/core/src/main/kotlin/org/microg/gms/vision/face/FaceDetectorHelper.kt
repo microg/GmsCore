@@ -28,7 +28,10 @@ import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 import org.opencv.objdetect.FaceDetectorYN
 import java.io.ByteArrayOutputStream
+import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.hypot
+import kotlin.math.sin
 
 const val TAG = "FaceDetection"
 
@@ -54,19 +57,31 @@ class FaceDetectorHelper(context: Context) {
     fun detectFaces(bitmap: Bitmap, rotation: Int): List<FaceParcel> {
         Log.d(TAG, "detectFaces: source is bitmap")
         val rootMat = bitmapToMat(bitmap) ?: return emptyList()
-        return processMat(rootMat, rotation)
+        try {
+            return processMat(rootMat, rotation)
+        } finally {
+            rootMat.release()
+        }
     }
 
     fun detectFaces(nv21ByteArray: ByteArray, width: Int, height: Int, rotation: Int): List<FaceParcel> {
         Log.d(TAG, "detectFaces: source is nv21Buffer")
         val rootMat = nv21ToMat(nv21ByteArray, width, height) ?: return emptyList()
-        return processMat(rootMat, rotation)
+        try {
+            return processMat(rootMat, rotation)
+        } finally {
+            rootMat.release()
+        }
     }
 
     fun detectFaces(image: Image, rotation: Int): List<FaceParcel> {
         Log.d(TAG, "detectFaces: source is image")
         val rootMat = imageToMat(image) ?: return emptyList()
-        return processMat(rootMat, rotation)
+        try {
+            return processMat(rootMat, rotation)
+        } finally {
+            rootMat.release()
+        }
     }
 
     fun release() {
@@ -80,25 +95,67 @@ class FaceDetectorHelper(context: Context) {
     private fun processMat(mat: Mat, rotation: Int): List<FaceParcel> {
         val faceDetector = faceDetectorYN ?: return emptyList()
         val facesMat = Mat()
-        val degree = degree(rotation)
-        Log.d(TAG, "processMat: degree: $degree")
-        when (degree) {
-            2 -> Core.rotate(mat, facesMat, Core.ROTATE_90_COUNTERCLOCKWISE)
-            3 -> Core.rotate(mat, facesMat, Core.ROTATE_180)
-            4 -> Core.rotate(mat, facesMat, Core.ROTATE_90_CLOCKWISE)
-            else -> mat.copyTo(facesMat)
-        }
-        val matSize = Size(facesMat.cols().toDouble(), facesMat.rows().toDouble())
-        Log.d(TAG, "processMat: inputSize: $inputSize")
-        if (inputSize != matSize) {
-            inputSize = matSize
-            faceDetector.inputSize = matSize
-        }
-        Log.d(TAG, "processMat: matSize: $matSize")
         val result = Mat()
-        val status = faceDetectorYN!!.detect(facesMat, result)
-        Log.d(TAG, "processMat: detect: $status facesMat: ${result.size()}")
-        return parseDetections(result)
+        try {
+            val degree = degree(rotation)
+            Log.d(TAG, "processMat: degree: $degree")
+            when (degree) {
+                2 -> Core.rotate(mat, facesMat, Core.ROTATE_90_COUNTERCLOCKWISE)
+                3 -> Core.rotate(mat, facesMat, Core.ROTATE_180)
+                4 -> Core.rotate(mat, facesMat, Core.ROTATE_90_CLOCKWISE)
+                else -> mat.copyTo(facesMat)
+            }
+            val matSize = Size(facesMat.cols().toDouble(), facesMat.rows().toDouble())
+            Log.d(TAG, "processMat: inputSize: $inputSize")
+            if (inputSize != matSize) {
+                inputSize = matSize
+                faceDetector.inputSize = matSize
+            }
+            Log.d(TAG, "processMat: matSize: $matSize")
+            val status = faceDetector.detect(facesMat, result)
+            Log.d(TAG, "processMat: detect: $status facesMat: ${result.size()}")
+            return parseDetections(result)
+        } finally {
+            facesMat.release()
+            result.release()
+        }
+    }
+
+    /**
+     * Generates [n] points on an ellipse, starting at the top and going clockwise
+     * (screen coordinates, y grows downwards).
+     */
+    private fun ellipsePoints(cx: Float, cy: Float, rx: Float, ry: Float, n: Int): ArrayList<PointF> {
+        val pts = ArrayList<PointF>(n)
+        for (i in 0 until n) {
+            val t = 2.0 * PI * i / n
+            pts.add(PointF(cx + rx * sin(t).toFloat(), cy - ry * cos(t).toFloat()))
+        }
+        return pts
+    }
+
+    /**
+     * Generates [n] (>= 2) points on a line from [from] to [to], bent by [bulge] pixels in the
+     * middle (negative = upwards on screen).
+     */
+    private fun curvePoints(from: PointF, to: PointF, n: Int, bulge: Float): ArrayList<PointF> {
+        val pts = ArrayList<PointF>(n)
+        for (i in 0 until n) {
+            val t = if (n > 1) i / (n - 1f) else 0f
+            pts.add(
+                PointF(
+                    from.x + (to.x - from.x) * t,
+                    from.y + (to.y - from.y) * t + bulge * sin(PI * t).toFloat()
+                )
+            )
+        }
+        return pts
+    }
+
+    private fun eyebrowPoints(eye: PointF, eyeDist: Float, rise: Float): ArrayList<PointF> {
+        val half = eyeDist * 0.2f
+        val y = eye.y - eyeDist * rise
+        return curvePoints(PointF(eye.x - half, y), PointF(eye.x + half, y), 5, -eyeDist * 0.04f)
     }
 
     /**
@@ -111,9 +168,18 @@ class FaceDetectorHelper(context: Context) {
      * 10-11: x, y of right corner of mouth (pink point in the example image)
      * 12-13: x, y of left corner of mouth (yellow point in the example image)
      * 14: face score
+     *
+     * The model only provides 5 landmarks. All other contour points are interpolated, but the
+     * number of points per contour matches what ML Kit returns (face 36, eyebrow 5, eye 16,
+     * upper lip top 11, other lip contours 9, nose bridge 2, nose bottom 3, cheek 1), because
+     * clients may index into these lists.
      */
     private fun parseDetections(detections: Mat): List<FaceParcel> {
         val faces = mutableListOf<FaceParcel>()
+        if (detections.rows() <= 0 || detections.cols() < 15) {
+            Log.d(TAG, "parseDetections: no usable detections (rows=${detections.rows()}, cols=${detections.cols()})")
+            return faces
+        }
         val faceData = FloatArray(detections.cols() * detections.channels())
         for (i in 0 until detections.rows()) {
             detections.get(i, 0, faceData)
@@ -137,24 +203,65 @@ class FaceDetectorHelper(context: Context) {
             val leftEyeOpenProbability = calculateEyeOpenProbability(rightEyeMark, mouthRightMark)
             val rightEyeOpenProbability = calculateEyeOpenProbability(leftEyeMark, mouthLeftMark)
 
-            val faceContour = ContourParcel(FaceContour.FACE, arrayListOf(
-                PointF(boundingBox.left.toFloat(), boundingBox.top.toFloat()),
-                PointF(boundingBox.left.toFloat(), boundingBox.bottom.toFloat()),
-                PointF(boundingBox.right.toFloat(), boundingBox.bottom.toFloat()),
-                PointF(boundingBox.right.toFloat(), boundingBox.top.toFloat()),
-            ))
-            val leftEyebrowTopContour = ContourParcel(FaceContour.LEFT_EYEBROW_TOP, arrayListOf(leftEyeMark.position))
-            val leftEyebrowBottomContour = ContourParcel(FaceContour.LEFT_EYEBROW_BOTTOM, arrayListOf(leftEyeMark.position))
-            val rightEyebrowTopContour = ContourParcel(FaceContour.RIGHT_EYEBROW_TOP, arrayListOf(rightEyeMark.position))
-            val rightEyebrowBottomContour = ContourParcel(FaceContour.RIGHT_EYEBROW_BOTTOM, arrayListOf(rightEyeMark.position))
-            val leftEyeContour = ContourParcel(FaceContour.LEFT_EYE, arrayListOf(leftEyeMark.position))
-            val rightEyeContour = ContourParcel(FaceContour.RIGHT_EYE, arrayListOf(rightEyeMark.position))
-            val upperLipTopContour = ContourParcel(FaceContour.UPPER_LIP_TOP, arrayListOf(mouthLeftMark.position, mouthBottomMark.position, mouthRightMark.position, mouthBottomMark.position))
-            val upperLipBottomContour = ContourParcel(FaceContour.UPPER_LIP_BOTTOM, arrayListOf(mouthLeftMark.position, mouthBottomMark.position, mouthRightMark.position, mouthBottomMark.position))
-            val lowerLipTopContour = ContourParcel(FaceContour.LOWER_LIP_TOP, arrayListOf(mouthLeftMark.position, mouthBottomMark.position, mouthRightMark.position, mouthBottomMark.position))
-            val lowerLipBottomContour = ContourParcel(FaceContour.LOWER_LIP_BOTTOM, arrayListOf(mouthLeftMark.position, mouthBottomMark.position, mouthRightMark.position, mouthBottomMark.position))
-            val noseBridgeContour = ContourParcel(FaceContour.NOSE_BRIDGE, arrayListOf(noseBaseMark.position))
-            val noseBottomContour = ContourParcel(FaceContour.NOSE_BOTTOM, arrayListOf(noseBaseMark.position))
+            val eyeDist = hypot(
+                (leftEyeMark.position.x - rightEyeMark.position.x).toDouble(),
+                (leftEyeMark.position.y - rightEyeMark.position.y).toDouble()
+            ).toFloat()
+            val mouthWidth = hypot(
+                (mouthLeftMark.position.x - mouthRightMark.position.x).toDouble(),
+                (mouthLeftMark.position.y - mouthRightMark.position.y).toDouble()
+            ).toFloat()
+
+            val faceContour = ContourParcel(
+                FaceContour.FACE,
+                ellipsePoints(
+                    boundingBox.exactCenterX(), boundingBox.exactCenterY(),
+                    boundingBox.width() / 2f, boundingBox.height() / 2f, 36
+                )
+            )
+
+            val leftEyebrowTopContour = ContourParcel(FaceContour.LEFT_EYEBROW_TOP, eyebrowPoints(leftEyeMark.position, eyeDist, 0.32f))
+            val leftEyebrowBottomContour = ContourParcel(FaceContour.LEFT_EYEBROW_BOTTOM, eyebrowPoints(leftEyeMark.position, eyeDist, 0.24f))
+            val rightEyebrowTopContour = ContourParcel(FaceContour.RIGHT_EYEBROW_TOP, eyebrowPoints(rightEyeMark.position, eyeDist, 0.32f))
+            val rightEyebrowBottomContour = ContourParcel(FaceContour.RIGHT_EYEBROW_BOTTOM, eyebrowPoints(rightEyeMark.position, eyeDist, 0.24f))
+
+            val leftEyeContour = ContourParcel(
+                FaceContour.LEFT_EYE,
+                ellipsePoints(leftEyeMark.position.x, leftEyeMark.position.y, eyeDist * 0.16f, eyeDist * 0.07f, 16)
+            )
+            val rightEyeContour = ContourParcel(
+                FaceContour.RIGHT_EYE,
+                ellipsePoints(rightEyeMark.position.x, rightEyeMark.position.y, eyeDist * 0.16f, eyeDist * 0.07f, 16)
+            )
+
+            val upperLipTopContour = ContourParcel(
+                FaceContour.UPPER_LIP_TOP,
+                curvePoints(mouthLeftMark.position, mouthRightMark.position, 11, -mouthWidth * 0.12f)
+            )
+            val upperLipBottomContour = ContourParcel(
+                FaceContour.UPPER_LIP_BOTTOM,
+                curvePoints(mouthLeftMark.position, mouthRightMark.position, 9, -mouthWidth * 0.03f)
+            )
+            val lowerLipTopContour = ContourParcel(
+                FaceContour.LOWER_LIP_TOP,
+                curvePoints(mouthLeftMark.position, mouthRightMark.position, 9, mouthWidth * 0.03f)
+            )
+            val lowerLipBottomContour = ContourParcel(
+                FaceContour.LOWER_LIP_BOTTOM,
+                curvePoints(mouthLeftMark.position, mouthRightMark.position, 9, mouthWidth * 0.15f)
+            )
+
+            val eyeMid = calculateMidPoint(leftEyeMark, rightEyeMark)
+            val noseTip = noseBaseMark.position
+            val noseBridgeContour = ContourParcel(FaceContour.NOSE_BRIDGE, arrayListOf(eyeMid, PointF(noseTip.x, noseTip.y)))
+            val noseBottomContour = ContourParcel(
+                FaceContour.NOSE_BOTTOM, arrayListOf(
+                    PointF(noseTip.x - eyeDist * 0.15f, noseTip.y),
+                    PointF(noseTip.x, noseTip.y + eyeDist * 0.04f),
+                    PointF(noseTip.x + eyeDist * 0.15f, noseTip.y)
+                )
+            )
+
             val leftCheekContour = ContourParcel(FaceContour.LEFT_CHEEK, arrayListOf(leftCheekMark.position))
             val rightCheekContour = ContourParcel(FaceContour.RIGHT_CHEEK, arrayListOf(rightCheekMark.position))
 
@@ -194,6 +301,10 @@ class FaceDetectorHelper(context: Context) {
 
     private fun calculateMidPoint(eye: LandmarkParcel, mouth: LandmarkParcel): PointF {
         return PointF((eye.position.x + mouth.position.x) / 2, (eye.position.y + mouth.position.y) / 2)
+    }
+
+    private fun calculateMidPoint(a: PointF, b: PointF): PointF {
+        return PointF((a.x + b.x) / 2, (a.y + b.y) / 2)
     }
 
     private fun yuv420ToBitmap(image: Image): Bitmap? {
@@ -275,4 +386,3 @@ class FaceDetectorHelper(context: Context) {
     }
 
 }
-
