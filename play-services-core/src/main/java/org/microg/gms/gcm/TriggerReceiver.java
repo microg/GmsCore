@@ -23,7 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import org.microg.gms.checkin.CheckinPreferences;
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -34,7 +34,7 @@ import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
-public class TriggerReceiver extends WakefulBroadcastReceiver {
+public class TriggerReceiver extends BroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
     public static final String FORCE_TRY_RECONNECT = "org.microg.gms.gcm.FORCE_TRY_RECONNECT";
     private static boolean registered = false;
@@ -95,7 +95,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
             if (!McsService.isConnected(context) || force) {
                 Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
-                startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_CONNECT, null, context, McsService.class)
+                new ForegroundServiceContext(context).startService(new Intent(ACTION_CONNECT, null, context, McsService.class)
                         .putExtra(EXTRA_REASON, intent));
             } else {
                 if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
@@ -103,7 +103,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                     McsService.scheduleReconnect(context);
                 } else {
                     Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
-                    startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
+                    new ForegroundServiceContext(context).startService(new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
                             .putExtra(EXTRA_REASON, intent));
                 }
             }

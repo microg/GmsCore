@@ -43,7 +43,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.PendingIntentCompat;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+
 
 import com.squareup.wire.Message;
 
@@ -164,7 +164,7 @@ public class McsService extends Service implements Handler.Callback {
                 rootHandler = new Handler(Looper.myLooper(), McsService.this);
                 if (connectIntent != null) {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_CONNECT, connectIntent));
-                    WakefulBroadcastReceiver.completeWakefulIntent(connectIntent);
+
                 }
             }
             Looper.loop();
@@ -331,11 +331,11 @@ public class McsService extends Service implements Handler.Callback {
                 } else if (ACTION_ACK.equals(intent.getAction())) {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_ACK, reason));
                 }
-                WakefulBroadcastReceiver.completeWakefulIntent(intent);
+
             } else if (connectIntent == null) {
                 connectIntent = intent;
             } else if (intent != null) {
-                WakefulBroadcastReceiver.completeWakefulIntent(intent);
+                // completeWakefulIntent(intent) removed
             }
         }
         return START_REDELIVER_INTENT;

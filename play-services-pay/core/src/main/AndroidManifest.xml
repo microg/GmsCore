@@ -22,7 +22,8 @@
             android:exported="true"
             android:process=":ui" />
 
-        <service android:name="org.microg.gms.pay.PayService">
+        <service android:exported="true"
+            android:name="org.microg.gms.pay.PayService">
             <intent-filter>
                 <action android:name="com.google.android.gms.pay.service.BIND" />
             </intent-filter>

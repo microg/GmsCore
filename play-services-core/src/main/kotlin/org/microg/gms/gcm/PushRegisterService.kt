@@ -11,7 +11,7 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import androidx.core.app.PendingIntentCompat
-import androidx.legacy.content.WakefulBroadcastReceiver
+import android.content.BroadcastReceiver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
@@ -127,7 +127,7 @@ class PushRegisterService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent)
+
             Log.d(TAG, "onStartCommand: $intent")
             lifecycleScope.launchWhenStarted {
                 handleIntent(intent)
@@ -363,7 +363,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
     }
 }
 
-class PushRegisterReceiver : WakefulBroadcastReceiver() {
+class PushRegisterReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val intent2 = Intent(context, PushRegisterService::class.java)
         if (intent.extras!!.get("delete") != null) {
@@ -372,6 +372,6 @@ class PushRegisterReceiver : WakefulBroadcastReceiver() {
             intent2.action = ACTION_C2DM_REGISTER
         }
         intent2.putExtras(intent.extras!!)
-        startWakefulService(context, intent2)
+        context.startService(intent2)
     }
 }
