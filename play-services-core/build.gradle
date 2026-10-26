@@ -65,6 +65,7 @@ dependencies {
     implementation project(':play-services-games')
     implementation project(':play-services-maps')
     implementation project(':play-services-measurement-base')
+    implementation project(':play-services-mlkit-document-scanner')
     implementation project(':play-services-places')
     implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
