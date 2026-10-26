@@ -13,6 +13,7 @@ import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensions
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsClientOutputs
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsCredPropsOutputs
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfOutputs
+import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfValues
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorErrorResponse
@@ -123,10 +124,14 @@ fun AuthenticationExtensionsCredPropsOutputs.toJsonObject() = JSONObject().apply
 }
 
 fun AuthenticationExtensionsPrfOutputs.toJsonObject() = JSONObject().apply {
+    val results = results
+    if (isEnabled) put("enabled", true)
+    if (results != null) put("results", results.toJsonObject())
+}
+
+fun AuthenticationExtensionsPrfValues.toJsonObject() = JSONObject().apply {
     val first = first
     val second = second
-
-    if (isEnabled) put("enabled", true)
     if (first != null) put("first", first.encodeBase64Url())
     if (second != null) put("second", second.encodeBase64Url())
 }

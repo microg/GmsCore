@@ -299,7 +299,12 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         }
 
         val prfFirst = rawId?.let { java.security.MessageDigest.getInstance("SHA-256").digest(it) }?.copyOf(32)
-        val prfOutputs = prfFirst?.let { AuthenticationExtensionsPrfOutputs(true, it, null) }
+        val prfOutputs = prfFirst?.let {
+            AuthenticationExtensionsPrfOutputs(
+                true,
+                AuthenticationExtensionsPrfValues(it, null)
+            )
+        }
 
         val clientExtResults = AuthenticationExtensionsClientOutputs(
             null,
