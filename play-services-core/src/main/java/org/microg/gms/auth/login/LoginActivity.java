@@ -291,6 +291,11 @@ public class LoginActivity extends AssistantActivity {
 
     private void start() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            Log.w(TAG, "ConnectivityManager is null");
+            showError(R.string.no_network_error_desc);
+            return;
+        }
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             if (LastCheckinInfo.read(this).getAndroidId() == 0) {
@@ -346,6 +351,11 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void retrieveRtToken(String oAuthToken) {
+        if (oAuthToken == null || oAuthToken.isEmpty()) {
+            Log.w(TAG, "OAuth token is null or empty");
+            showError(R.string.auth_general_error_desc);
+            return;
+        }
         new AuthRequest().fromContext(this)
                 .appIsGms()
                 .callerIsGms()
@@ -357,6 +367,11 @@ public class LoginActivity extends AssistantActivity {
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
+                        if (response == null || response.email == null) {
+                            Log.w(TAG, "AuthResponse or email is null");
+                            showError(R.string.auth_general_error_desc);
+                            return;
+                        }
                         Account account = new Account(response.email, accountType);
                         if (isReAuth && reAuthAccount != null && reAuthAccount.name.equals(account.name)) {
                             accountManager.removeAccount(account, future -> saveAccount(account, response), null);
