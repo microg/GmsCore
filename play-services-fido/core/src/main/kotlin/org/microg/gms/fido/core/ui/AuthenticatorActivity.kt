@@ -298,23 +298,45 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             database.insertKnownRegistration(rpId, id, transport, user?.toJson())
         }
 
-        val prfFirst = rawId?.let { java.security.MessageDigest.getInstance("SHA-256").digest(it) }?.copyOf(32)
-        val prfOutputs = prfFirst?.let { AuthenticationExtensionsPrfOutputs(true, it, null) }
+        // TODO - PRF is not supported yet
+        // eval is prfResults.first or prfResults.second,
+        // salt = SHA256("WebAuthn PRF".toByteArray(Charsets.UTF_8) + 0x00 + eval)
+        // output = HMAC(salt, secret-key)
+        // https://w3c.github.io/webauthn/#prf-extension
+        // second may be null
+        val prfResults: Pair<ByteArray, ByteArray?>? = null
 
-        val clientExtResults = AuthenticationExtensionsClientOutputs(
-            null,
-            null,
-            AuthenticationExtensionsCredPropsOutputs(true),
-            prfOutputs,
-            null
-        )
+        val prfOutputs = prfResults?.let { results ->
+            AuthenticationExtensionsPrfOutputs(
+                true,
+                AuthenticationExtensionsPrfValues(results.first, results.second)
+            )
+        }
+
+        val clientExtResults = if (response is AuthenticatorAttestationResponse) {
+            AuthenticationExtensionsClientOutputs(
+                null,
+                null,
+                AuthenticationExtensionsCredPropsOutputs(true),
+                prfOutputs,
+                null
+            )
+        } else {
+            AuthenticationExtensionsClientOutputs(
+                null,
+                null,
+                null,
+                prfOutputs,
+                null
+            )
+        }
 
         val pkc = PublicKeyCredential.Builder()
             .setResponse(response)
             .setRawId(rawId ?: ByteArray(0).also { Log.w(TAG, "rawId was null") })
             .setId(id ?: "".also { Log.w(TAG, "id was null") })
             .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
-            .setAuthenticationExtensionsClientOutputs(if (response is AuthenticatorAttestationResponse) clientExtResults else null)
+            .setAuthenticationExtensionsClientOutputs(clientExtResults)
             .build()
 
         finishWithCredential(pkc, user)

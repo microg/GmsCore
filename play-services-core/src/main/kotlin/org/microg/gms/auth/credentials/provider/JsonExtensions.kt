@@ -13,11 +13,13 @@ import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensions
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsClientOutputs
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsCredPropsOutputs
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfOutputs
+import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfValues
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorErrorResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorSelectionCriteria
 import com.google.android.gms.fido.fido2.api.common.FidoAppIdExtension
+import com.google.android.gms.fido.fido2.api.common.PrfExtension
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredential
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
@@ -123,10 +125,14 @@ fun AuthenticationExtensionsCredPropsOutputs.toJsonObject() = JSONObject().apply
 }
 
 fun AuthenticationExtensionsPrfOutputs.toJsonObject() = JSONObject().apply {
+    val results = results
+    if (isEnabled) put("enabled", true)
+    if (results != null) put("results", results.toJsonObject())
+}
+
+fun AuthenticationExtensionsPrfValues.toJsonObject() = JSONObject().apply {
     val first = first
     val second = second
-
-    if (isEnabled) put("enabled", true)
     if (first != null) put("first", first.encodeBase64Url())
     if (second != null) put("second", second.encodeBase64Url())
 }
@@ -162,10 +168,11 @@ fun JSONObject.parsePublicKeyCredentialRequestOptions(): PublicKeyCredentialRequ
     if (has("userVerification")) {
         builder.setRequireUserVerification(UserVerificationRequirement.fromString(getString("userVerification")))
     }
+    val hasAllowCredentials = allowCredentials != null && allowCredentials.length() > 0
     if (has("authenticationExtensions")) {
-        builder.setAuthenticationExtensions(getJSONObject("authenticationExtensions").parseAuthenticationExtensions())
+        builder.setAuthenticationExtensions(getJSONObject("authenticationExtensions").parseAuthenticationExtensions(hasAllowCredentials))
     } else if (has("extensions")) {
-        builder.setAuthenticationExtensions(getJSONObject("extensions").parseAuthenticationExtensions())
+        builder.setAuthenticationExtensions(getJSONObject("extensions").parseAuthenticationExtensions(hasAllowCredentials))
     }
     if (has("longRequestId")) {
         builder.setLongRequestId(getLong("longRequestId"))
@@ -179,12 +186,53 @@ fun JSONObject.parseTokenBinding() = when (TokenBindingStatus.fromString(getStri
     TokenBindingStatus.PRESENT -> TokenBinding(getString("id"))
 }
 
-fun JSONObject.parseAuthenticationExtensions(): AuthenticationExtensions {
+/**
+ * @param hasAllowCredentials The PRF extension is allowed to use `evalByCredential`
+ *     only during authentication and with a non-empty allowCredential list.
+ */
+fun JSONObject.parseAuthenticationExtensions(hasAllowCredentials: Boolean): AuthenticationExtensions {
     val builder = AuthenticationExtensions.Builder()
     if (has("fidoAppIdExtension")) builder.setFido2Extension(FidoAppIdExtension(getJSONObject("fidoAppIdExtension").getString("appid")))
     if (has("appid")) builder.setFido2Extension(FidoAppIdExtension(getString("appid")))
+    if (has("prf")) parsePrfAuthenticationExtension(hasAllowCredentials)?.let {
+        builder.setPrfExtension(it)
+    }
     // TODO: Add support for other extensions
     return builder.build()
+}
+
+fun JSONObject.parsePrfAuthenticationExtension(hasAllowCredentials: Boolean): PrfExtension? {
+    val entries = mutableMapOf<String, Array<ByteArray>>()
+    if (has("evalByCredential")) {
+        if (!hasAllowCredentials) return null
+        val evalByCredential = getJSONObject("evalByCredential")
+        evalByCredential.keys().forEach { keyId ->
+            runCatching {
+                val record = evalByCredential.getJSONObject(keyId)
+                val first = record.getString("first").decodeBase64Url()
+                val second = runCatching { record.getString("second").decodeBase64Url() }.getOrNull()
+                entries[keyId] = arrayOf(first, second).filterNotNull().toTypedArray()
+            }
+        }
+    }
+    if (has("eval")) {
+        val eval = getJSONObject("eval")
+        runCatching {
+            val first = eval.getString("first").decodeBase64Url()
+            val second = runCatching { eval.getString("second").decodeBase64Url() }.getOrNull()
+            entries[PrfExtension.DEFAULT] = arrayOf(first, second).filterNotNull().toTypedArray()
+        }
+    }
+    if (entries.isEmpty()) return null
+    return PrfExtension(entries)
+}
+
+fun JSONArray.toByteArray(): ByteArray {
+    val byteArr = ByteArray(length())
+    for (i in 0 until length()) {
+        byteArr[i] = (get(i) as Int and 0xFF).toByte()
+    }
+    return byteArr
 }
 
 fun JSONObject.parsePublicKeyCredentialDescriptor() = PublicKeyCredentialDescriptor(
@@ -219,7 +267,7 @@ fun JSONObject.parsePublicKeyCredentialCreationOptions(): PublicKeyCredentialCre
         builder.setAuthenticatorSelection(getJSONObject("authenticatorSelection").parseAuthenticatorSelectionCriteria())
     }
     if (has("extensions")) {
-        builder.setAuthenticationExtensions(getJSONObject("extensions").parseAuthenticationExtensions())
+        builder.setAuthenticationExtensions(getJSONObject("extensions").parseAuthenticationExtensions(false))
     }
     if (has("attestation")) {
         try {
