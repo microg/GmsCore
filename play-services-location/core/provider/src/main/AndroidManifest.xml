@@ -51,8 +51,7 @@
         </provider>
         <service
             android:name="org.microg.gms.location.provider.NetworkLocationProviderService"
-            android:exported="true"
-            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.android.location.service.v2.NetworkLocationProvider" />
                 <action android:name="com.android.location.service.v3.NetworkLocationProvider" />
@@ -63,8 +62,7 @@
         </service>
         <service
             android:name="org.microg.gms.location.provider.FusedLocationProviderService"
-            android:exported="true"
-            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.android.location.service.FusedLocationProvider" />
             </intent-filter>
@@ -74,8 +72,7 @@
         </service>
         <service
             android:name="org.microg.gms.location.provider.GeocodeProviderService"
-            android:exported="true"
-            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.android.location.service.GeocodeProvider" />
                 <action android:name="com.google.android.location.GeocodeProvider" />

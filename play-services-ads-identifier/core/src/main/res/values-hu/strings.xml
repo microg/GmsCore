@@ -3,4 +3,5 @@
     <string name="perm_ad_id_label">Hirdetésazonosító engedély</string>
     <string name="perm_ad_id_description">Engedélyezi a kiadói alkalmazás számára, hogy közvetlenül vagy közvetve hozzáférjen egy érvényes hirdetési azonosítóhoz.</string>
     <string name="perm_ad_id_notification_label">Hírdetésazonosító értesítés</string>
+    <string name="perm_ad_id_notification_description">Engedélyezi egy alkalmazás számára az értesítést, amikor az hirdetésazonosító vagy a reklámkövetés beállítás frissítésre kerül.</string>
 </resources>
