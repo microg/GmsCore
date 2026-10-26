@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
+import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.safetynet.SafetyNetPreferences
@@ -40,6 +41,10 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
         findPreference<Preference>(PREF_SNET)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
+            true
+        }
+        findPreference<Preference>(PREF_PHONE_NUMBER_VERIFICATION)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openPhoneNumberVerificationSettings)
             true
         }
         findPreference<Preference>(PREF_LOCATION)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -116,6 +121,13 @@ class SettingsFragment : ResourceSettingsFragment() {
 
         findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_PHONE_NUMBER_VERIFICATION)!!.setSummary(
+            if (ConstellationStateStore.isPhoneNumberVerificationEnabled(requireContext())) {
+                org.microg.gms.base.core.R.string.service_status_enabled_short
+            } else {
+                org.microg.gms.base.core.R.string.service_status_disabled_short
+            }
+        )
 
         lifecycleScope.launchWhenResumed {
             val entries = getAllSettingsProviders(requireContext()).flatMap { it.getEntriesDynamic(requireContext()) }
@@ -134,6 +146,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_ABOUT = "pref_about"
         const val PREF_GCM = "pref_gcm"
         const val PREF_SNET = "pref_snet"
+        const val PREF_PHONE_NUMBER_VERIFICATION = "pref_phone_number_verification"
         const val PREF_LOCATION = "pref_location"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"
