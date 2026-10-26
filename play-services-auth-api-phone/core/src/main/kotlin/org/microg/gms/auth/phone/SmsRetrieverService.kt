@@ -32,7 +32,7 @@ private val FEATURES = arrayOf(
     Feature("user_consent", 3)
 )
 
-class SmsRetrieverService : BaseService(TAG, GmsService.SMS_RETRIEVER) {
+class SmsRetrieverService : BaseService(TAG, GmsService.SMS_RETRIEVER, GmsService.SMS_RETRIEVER_INTERNAL) {
     private val smsRetriever = SmsRetrieverCore(this, lifecycle)
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
