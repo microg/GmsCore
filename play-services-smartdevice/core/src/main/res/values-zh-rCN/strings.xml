@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 microG Project Team
+  SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <string name="d2d_copy_accounts_title">复制 Google 账号</string>
+    <string name="d2d_copy_accounts_subtitle">选择要复制到 Google TV 的账号。</string>
+    <plurals name="d2d_copying_accounts">
+        <item quantity="other">正在复制账号</item>
+    </plurals>
+    <string name="d2d_google_account">Google 账号</string>
+    <string name="d2d_unknown_account">未知账号</string>
+    <string name="d2d_continue">继续</string>
+    <string name="d2d_skip">跳过</string>
+    <string name="d2d_cancel">取消</string>
+    <string name="d2d_cancel_setup_title">要取消设置吗？</string>
+    <string name="d2d_cancel_setup_message">如果现在取消，当前进度将丢失，你需要重新开始。</string>
+    <string name="d2d_go_back">返回</string>
+    <string name="d2d_cancel_setup_action">取消设置</string>
+    <string name="d2d_verify_title">验证 Google 账号</string>
+    <string name="d2d_verify_account">第 %1$d/%2$d 个账号 · %3$s</string>
+    <string name="d2d_verify_message">请在下方完成 Google 登录，然后继续复制此账号。</string>
+    <string name="d2d_loading_sign_in">正在加载 Google 登录页面</string>
+    <string name="d2d_transfer_in_progress">正在传输账号</string>
+    <string name="d2d_copy_confirmation_title">复制到新设备？</string>
+    <string name="d2d_copy_confirmation_message">复制你的 Google 账号，并恢复可用的 Google 备份。</string>
+    <string name="d2d_copy_confirmation_action">复制</string>
+    <string name="d2d_try_again">重试</string>
+    <string name="d2d_done">完成</string>
+</resources>

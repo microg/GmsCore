@@ -22,6 +22,7 @@ const val SafeParcelable = "com.google.android.gms.common.internal.safeparcel.Sa
 const val SafeParcelReader = "com.google.android.gms.common.internal.safeparcel.SafeParcelReader"
 const val SafeParcelWriter = "com.google.android.gms.common.internal.safeparcel.SafeParcelWriter"
 const val SafeParcelableCreatorAndWriter = "com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter"
+const val SafeParcelableIndicator = "$SafeParcelable.Indicator"
 
 const val Field = "java.lang.reflect.Field"
 const val Constructor = "java.lang.reflect.Constructor"
@@ -77,6 +78,12 @@ class ClassInfo(val classElement: Element) {
         .filterIsInstance<VariableElement>()
         .filter { it.annotationMirrors.any { it.annotationType.toString() == "$SafeParcelable.Field" } }
         .map { FieldInfo(this, it) }
+    val indicator = classElement.enclosedElements
+        .filter { it.kind == ElementKind.FIELD && !it.modifiers.contains(Modifier.STATIC) }
+        .filterIsInstance<VariableElement>()
+        .filter { it.annotationMirrors.any { annotation -> annotation.annotationType.toString() == SafeParcelableIndicator } }
+        .singleOrNull()
+        ?.let { IndicatorInfo(it) }
     val constructor = classElement.enclosedElements
         .filter { it.kind == ElementKind.CONSTRUCTOR }
         .filterIsInstance<ExecutableElement>()
@@ -91,8 +98,25 @@ class ClassInfo(val classElement: Element) {
             error("No suitable constructor found for $fullName")
             return false
         }
-        if (constructor.parameters.any { it.annotationMirrors.none { it.annotationType.toString() == "$SafeParcelable.Param" } }) {
-            error("Tagged constructor for $fullName has parameters without @Param.")
+        if (constructor.parameters.any { parameter -> parameter.annotationMirrors.none {
+                    it.annotationType.toString() == "$SafeParcelable.Param" || it.annotationType.toString() == SafeParcelableIndicator
+                } }) {
+            error("Tagged constructor for $fullName has parameters without @Param or @Indicator.")
+            return false
+        }
+        val constructorIndicatorCount = constructor.parameters.count { parameter ->
+            parameter.annotationMirrors.any { it.annotationType.toString() == SafeParcelableIndicator }
+        }
+        if ((indicator == null) != (constructorIndicatorCount == 0) || constructorIndicatorCount > 1) {
+            error("$fullName must declare @Indicator on exactly one field and one constructor parameter, or not use it.")
+            return false
+        }
+        if (indicator != null && indicator.type != "java.util.Set<java.lang.Integer>") {
+            error("@Indicator field in $fullName must have type java.util.Set<java.lang.Integer>.")
+            return false
+        }
+        if (indicator?.isPrivate == true) {
+            error("@Indicator field in $fullName must be package-visible or public so the generated creator can access it without reflection.")
             return false
         }
         if (constructor.fieldIds.any { id -> fields.none { it.id == id } }) {
@@ -132,12 +156,15 @@ class ClassInfo(val classElement: Element) {
         if (constructor == null) throw IllegalStateException("Can't create Creator for class without constructor")
         fun List<String>.linesToString(prefix: String = "") = joinToString("\n                            $prefix")
         val variableDeclarations = fields.map { it.variableDeclaration }.linesToString()
+        val indicatorReadDeclaration = indicator?.let { "java.util.Set<java.lang.Integer> ${it.variableName} = new java.util.HashSet<>();" }.orEmpty()
+        val indicatorWriteDeclaration = indicator?.let { "java.util.Set<java.lang.Integer> ${it.variableName};" }.orEmpty()
         val setVariablesDefault = fields.map { it.setVariableDefault }.linesToString()
         val readVariablesFromParcel = fields.map { it.readVariableFromParcelCase }.linesToString("        ")
         val writeVariableToParcel = fields.map { it.writeVariableToParcel }.linesToString()
         val setFieldsFromVariables = fields.filter { it.id !in constructor.fieldIds }.flatMap { it.setFieldFromVariable }.linesToString()
         val invokeConstructor = constructor.invocation.linesToString()
         val setVariablesFromFields = fields.flatMap { it.setVariableFromField }.linesToString()
+        val setIndicatorFromField = indicator?.let { "${it.variableName} = object.${it.name};" }.orEmpty()
         val file = """
                 package $packageName;
 
@@ -151,6 +178,7 @@ class ClassInfo(val classElement: Element) {
                         $fullName object;
                         try {
                             $variableDeclarations
+                            $indicatorReadDeclaration
                             $setVariablesDefault
                             while (parcel.dataPosition() < end) {
                                 int header = $SafeParcelReader.readHeader(parcel);
@@ -178,7 +206,9 @@ class ClassInfo(val classElement: Element) {
                         int start = $SafeParcelWriter.writeObjectHeader(parcel);
                         try {
                             $variableDeclarations
+                            $indicatorWriteDeclaration
                             $setVariablesFromFields
+                            $setIndicatorFromField
                             $writeVariableToParcel
                         } catch (Exception e) {
                             throw new RuntimeException(String.format("Error writing %s", "$fullName"), e);
@@ -200,17 +230,38 @@ class ConstructorInfo(val clazz: ClassInfo, val constructorElement: ExecutableEl
     val isPrivate by lazy { constructorElement.modifiers.contains(Modifier.PRIVATE) }
     val parameters by lazy { constructorElement.parameters }
     val fieldIds by lazy {
-        parameters.map {
+        parameters.mapNotNull {
             it.annotationMirrors
-                .first { it.annotationType.toString() == "$SafeParcelable.Param" }
+                .firstOrNull { it.annotationType.toString() == "$SafeParcelable.Param" }
+                ?: return@mapNotNull null
+        }.map {
+            it
                 .elementValues
                 .filter { it.key.simpleName.toString() == "value" }
                 .firstNotNullOfOrNull { it.value }
                 .toString()
         }
     }
-    val argTypes by lazy { fieldIds.map { id -> clazz.fields.first { it.id == id }.type } }
-    val args by lazy { fieldIds.map { id -> clazz.fields.first { it.id == id }.variableName } }
+    val argTypes by lazy { parameters.map { parameter ->
+        if (parameter.annotationMirrors.any { it.annotationType.toString() == SafeParcelableIndicator }) {
+            "java.util.Set"
+        } else {
+            val id = parameter.annotationMirrors.first { it.annotationType.toString() == "$SafeParcelable.Param" }
+                .elementValues.filter { it.key.simpleName.toString() == "value" }
+                .firstNotNullOf { it.value }.toString()
+            clazz.fields.first { it.id == id }.type
+        }
+    } }
+    val args by lazy { parameters.map { parameter ->
+        if (parameter.annotationMirrors.any { it.annotationType.toString() == SafeParcelableIndicator }) {
+            clazz.indicator!!.variableName
+        } else {
+            val id = parameter.annotationMirrors.first { it.annotationType.toString() == "$SafeParcelable.Param" }
+                .elementValues.filter { it.key.simpleName.toString() == "value" }
+                .firstNotNullOf { it.value }.toString()
+            clazz.fields.first { it.id == id }.variableName
+        }
+    } }
     val invocation by lazy {
         if (isPrivate) {
             listOf(
@@ -222,6 +273,13 @@ class ConstructorInfo(val clazz: ClassInfo, val constructorElement: ExecutableEl
             listOf("object = new ${clazz.fullName}(${args.joinToString(", ")});")
         }
     }
+}
+
+class IndicatorInfo(val fieldElement: VariableElement) {
+    val name by lazy { fieldElement.simpleName.toString() }
+    val type by lazy { fieldElement.asType().toString() }
+    val isPrivate by lazy { fieldElement.modifiers.contains(Modifier.PRIVATE) }
+    val variableName = "_indicator\$000"
 }
 
 class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
@@ -369,9 +427,12 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             }
         }
     }
-    val readVariableFromParcelCase by lazy { "case $id: $readVariableFromParcel; break;" }
+    val readVariableFromParcelCase by lazy {
+        val markPresent = if (clazz.indicator != null) " ${clazz.indicator.variableName}.add($id);" else ""
+        "case $id: $readVariableFromParcel;$markPresent break;"
+    }
     val writeVariableToParcel by lazy {
-        when (type) {
+        val write = when (type) {
             "boolean", "byte", "char", "short", "int", "long", "float", "double",
             "java.lang.Boolean", "java.lang.Byte", "java.lang.Char", "java.lang.Short", "java.lang.Integer", "java.lang.Long", "java.lang.Float", "java.lang.Double" ->
                 "$SafeParcelWriter.write(parcel, $id, $variableName);"
@@ -412,6 +473,7 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
                 else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
             }
         }
+        if (clazz.indicator != null) "if (${clazz.indicator.variableName}.contains($id)) { $write }" else write
     }
 
     val reflectionFieldName by lazy { "_${name}\$field" }

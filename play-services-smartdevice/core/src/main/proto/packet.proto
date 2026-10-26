@@ -1,0 +1,17 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+package smartdevice;
+
+option java_package = "org.microg.gms.smartdevice.d2d.proto";
+
+message Packet {
+  optional int32 messageId = 1;
+  optional int32 packetIndex = 2;
+  optional int32 totalLength = 3;
+  optional bytes payload = 4;
+}

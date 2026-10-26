@@ -1,7 +1,11 @@
 /*
- * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-FileCopyrightText: 2025-2026 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
+
+syntax = "proto2";
+
+package footprints.oneplatform;
 
 option java_outer_classname = "ControlsSettings";
 
@@ -15,12 +19,12 @@ message ActivityControlsSettings {
 
 message ActivityControlItem {
     optional int32 id = 1;
-    optional int32 enabled = 2;
-    optional int32 allowed = 3;
-    optional int32 forced = 4;
+    optional bool enabled = 2;
+    optional bool allowed = 3;
+    optional bool eligible = 4;
 }
 
 message GlobalSettings {
-    optional int32 enabled = 1;
-    optional int32 allowed = 2;
+    optional bool supplementalWebAndAppActivityEnabled = 1;
+    optional bool deviceInformationEnabled = 2;
 }
