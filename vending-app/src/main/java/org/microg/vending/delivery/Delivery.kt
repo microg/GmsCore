@@ -22,9 +22,12 @@ import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
+import org.microg.vending.delivery.proto.DeliveryStatus
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
 
 private const val TAG = "GmsVendingDelivery"
+
+internal class DeliveryException(val status: DeliveryStatus) : Exception()
 
 /**
  * Call the FDFE delivery endpoint to retrieve download URLs for the
@@ -88,11 +91,17 @@ suspend fun HttpClient.requestDownloadUrls(
     val response = get(
         url = requestUrl.toString(),
         headers = headers,
-        adapter = GoogleApiResponse.ADAPTER
+        adapter = GoogleApiResponse.ADAPTER,
+        // Each account must receive its own split availability and download URLs.
+        cache = requestSplitPackages == null
     )
-    Log.d(TAG, "Split delivery response received for $packageName")
+    val deliveryResponse = response.payload?.deliveryResponse
+    Log.d(TAG, "Split delivery response received for $packageName: status=${deliveryResponse?.status}, splits=${deliveryResponse?.deliveryData?.splitPackages?.size ?: 0}")
+    if (requestSplitPackages != null && deliveryResponse?.status == DeliveryStatus.NOT_PURCHASED) {
+        throw DeliveryException(DeliveryStatus.NOT_PURCHASED)
+    }
 
-    val deliveryData = response.payload?.deliveryResponse?.deliveryData ?: return emptyList()
+    val deliveryData = deliveryResponse?.deliveryData ?: return emptyList()
     val basePackage = deliveryData.let {
         if (it.baseUrl != null && it.baseBytes != null) {
             PackageComponent(packageName, "base", it.baseUrl, it.baseBytes.toLong())

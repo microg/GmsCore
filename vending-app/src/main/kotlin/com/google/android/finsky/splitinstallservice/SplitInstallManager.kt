@@ -6,6 +6,8 @@
 package com.google.android.finsky.splitinstallservice
 
 import android.accounts.AccountManager
+import android.accounts.AuthenticatorException
+import android.accounts.OperationCanceledException
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -32,7 +34,10 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.microg.vending.billing.AuthManager
+import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.billing.core.HttpClient
+import org.microg.vending.delivery.DeliveryException
+import org.microg.vending.delivery.proto.DeliveryStatus
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.splitinstall.STATUS_CANCELED
 import org.microg.vending.splitinstall.STATUS_CANCELING
@@ -46,6 +51,9 @@ import org.microg.vending.splitinstall.SplitInstallSessionManager
 import org.microg.vending.splitinstall.SplitInstallCompletionService
 import org.microg.vending.splitinstall.SplitInstallSessionManager.Session
 import org.microg.vending.splitinstall.SplitInstallTaskService
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import org.xmlpull.v1.XmlPullParser
 import java.io.File
 import java.io.IOException
@@ -65,23 +73,39 @@ internal class SplitInstallException(val errorCode: Int) : Exception()
 class SplitInstallManager(private val context: Context) {
     private val httpClient = HttpClient()
     private val removals = context.getSharedPreferences("split-install-removals", Context.MODE_PRIVATE)
-    private val sessionManager = SplitInstallSessionManager(context, ::enqueuePending)
+    private val sessionManager = SplitInstallSessionManager(context, ::enqueuePending, ::blockDeferredInstall)
     private val deferred = context.getSharedPreferences("split-install-deferred", Context.MODE_PRIVATE)
 
-    internal suspend fun startInstall(packageName: String, splits: List<Bundle>, playCoreVersion: Int = 0, onStarted: (Int, Bundle) -> Unit) {
+    internal suspend fun startInstall(
+        packageName: String, splits: List<Bundle>, playCoreVersion: Int = 0,
+        deferredRequest: DeferredRequest? = null, onStarted: (Int, Bundle) -> Unit
+    ) {
         if (SDK_INT < 21) throw SplitInstallException(ERROR_API_NOT_AVAILABLE)
         validateRequest(splits)
         val modules = splits.mapNotNull { it.getString("module_name") }.distinct()
         val languages = splits.mapNotNull { it.getString("language") }.distinct()
         requestMutex.withLock {
+            sessionManager.removeStaleSessions(packageName)
             val packageInfo = context.packageManager.getPackageInfo(packageName, 0)
             val version = PackageInfoCompat.getLongVersionCode(packageInfo)
+            if (deferredRequest != null && (deferredRequest.version != version || deferredRequest.clientInstallTime != packageInfo.firstInstallTime)) {
+                throw SplitInstallException(ERROR_SESSION_NOT_FOUND)
+            }
+            if (deferredRequest != null && deferredRequest != readDeferredRequest(packageName)) return
             val installed = packageInfo.splitNames?.toSet().orEmpty()
             val requestedSplits = withContext(Dispatchers.IO) {
                 sessionManager.removeExpiredSessions()
                 modules + languageSplits(packageName, modules, installed, languages)
             }.distinct()
-            fun clearPendingRemovals() {
+
+            fun clearPendingRequests() {
+                synchronized(deferredLock) {
+                    val pending = readDeferredRequest(packageName)
+                    if (pending != null && pending.version == version && pending.clientInstallTime == packageInfo.firstInstallTime) {
+                        val delivered = modules.map { "module_name:$it" } + languages.map { "language:$it" }
+                        saveDeferredRequest(packageName, pending.copy(splits = pending.splits - delivered.toSet(), blocked = pending.blocked - delivered.toSet()))
+                    }
+                }
                 val pendingRemoval = removals.getStringSet(packageName, emptySet()).orEmpty()
                 removals.edit {
                     putStringSet(packageName, pendingRemoval.filterNot { split ->
@@ -89,32 +113,43 @@ class SplitInstallManager(private val context: Context) {
                     }.toSet())
                 }
             }
+
             val requested = requestedSplits.filterNot { it in installed }
             if (requested.isEmpty()) {
-                clearPendingRemovals()
+                clearPendingRequests()
                 val state = sessionManager.newState(0, modules, languages).apply { putInt("status", STATUS_INSTALLED) }
                 onStarted(0, state)
                 sessionManager.sendUpdate(packageName, state)
                 return
             }
             // TODO: The criteria for using SplitCompat need to be defined more clearly here.
-            val useSplitCompat = playCoreVersion >= MIN_SPLITCOMPAT_VERSION && languages.isEmpty()
+            val useSplitCompat = deferredRequest == null && playCoreVersion >= MIN_SPLITCOMPAT_VERSION && languages.isEmpty()
             val downloadedState = withContext(Dispatchers.IO) {
-                sessionManager.findDownloadedSession(packageName, version, requested, useSplitCompat)?.let {
+                sessionManager.findDownloadedSession(packageName, version, requested, modules, languages, useSplitCompat)?.let {
                     // Renew URI grants in case the app was reinstalled.
                     sessionManager.reuseDownloadedSession(it)
                 }
             }
             if (downloadedState != null) {
-                clearPendingRemovals()
+                clearPendingRequests()
                 onStarted(downloadedState.getInt("session_id"), downloadedState)
                 sessionManager.sendUpdate(packageName, downloadedState)
+                scheduleCompletion()
                 return
             }
             sessionManager.checkActiveSession(packageName, version, requested)
-            val newSession = sessionManager.createSession(packageName, version, requested, modules, languages, useSplitCompat = useSplitCompat)
+            if (deferredRequest != null && sessionManager.hasPendingDeferredRetry(packageName)) return
+            val newSession = sessionManager.createSession(
+                packageName, version, requested, modules, languages, useSplitCompat = useSplitCompat,
+                clientInstallTime = packageInfo.firstInstallTime, isDeferred = deferredRequest != null, playCoreVersion = playCoreVersion
+            )
             val sessionId = newSession.state.getInt("session_id")
-            clearPendingRemovals()
+            try {
+                clearPendingRequests()
+            } catch (e: Exception) {
+                sessionManager.removeSession(newSession)
+                throw e
+            }
             onStarted(sessionId, Bundle(newSession.state))
             sessionManager.sendUpdate(packageName, newSession.state)
             try {
@@ -150,20 +185,7 @@ class SplitInstallManager(private val context: Context) {
                     installNative(session, emptyList())
                     return@withContext
                 }
-                val auth = AuthManager.getAuthData(context)
-                if (auth?.authToken.isNullOrEmpty()) throw SplitInstallException(-15)
-                auth!!
-                AccountManager.get(context).accounts.firstOrNull { it.name == auth.email }?.let { account ->
-                    try {
-                        syncDeviceInfo(context, account, auth.authToken, auth.gsfId.toLong(16))
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Device sync failed for split delivery")
-                    }
-                }
-                val components = httpClient.requestDownloadUrls(context, packageName, version, auth, session.requested, languages = languages)
-                if (!session.requested.all { name -> components.any { it.componentName == name } }) throw SplitInstallException(-2)
+                val components = requestComponents(packageName, version, session.requested, languages)
                 val total = components.sumOf { it.size }
                 val directory = File(context.cacheDir, "split-install/$packageName/$version/$sessionId")
                 if (!directory.mkdirs() && !directory.isDirectory) throw IOException("Cannot create split directory")
@@ -203,7 +225,7 @@ class SplitInstallManager(private val context: Context) {
                 if (!session.useSplitCompat) {
                     installNative(session, files)
                 } else {
-                    // SplitCompat reports completion after verifying and loading the APKs itself.
+                    // The client handles the downloaded APKs; native completion is scheduled separately.
                     sessionManager.update(session, STATUS_DOWNLOADED) {
                         putLong("bytes_downloaded", total)
                         putParcelableArrayList("split_file_intents", sessionManager.fileIntents(session))
@@ -220,6 +242,7 @@ class SplitInstallManager(private val context: Context) {
                         } catch (failure: SplitInstallException) {
                             sessionManager.update(session, STATUS_FAILED) { putInt("error_code", failure.errorCode) }
                         }
+
                         else -> Unit
                     }
                 }
@@ -247,6 +270,65 @@ class SplitInstallManager(private val context: Context) {
 
     internal fun failInstall(sessionId: Int) = sessionManager.failInstall(sessionId)
 
+    private suspend fun requestComponents(packageName: String, version: Long, requested: List<String>, languages: List<String>): List<PackageComponent> {
+        val accounts = AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE)
+        var errorCode = -15
+        for ((index, account) in accounts.withIndex()) {
+            currentCoroutineContext().ensureActive()
+            val candidate = "${index + 1}/${accounts.size}"
+            val auth = try {
+                AuthManager.getAuthData(context, account)
+            } catch (e: AuthenticatorException) {
+                currentCoroutineContext().ensureActive()
+                Log.w(TAG, "Split delivery account $candidate authentication failed")
+                continue
+            } catch (e: OperationCanceledException) {
+                currentCoroutineContext().ensureActive()
+                Log.w(TAG, "Split delivery account $candidate token request canceled or timed out")
+                continue
+            }
+            currentCoroutineContext().ensureActive()
+            if (auth == null || auth.authToken.isEmpty()) {
+                Log.w(TAG, "Split delivery account $candidate has no auth token")
+                continue
+            }
+            try {
+                syncDeviceInfo(context, account, auth.authToken, auth.gsfId.toLong(16))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                currentCoroutineContext().ensureActive()
+                Log.w(TAG, "Device sync failed for split delivery")
+            }
+            currentCoroutineContext().ensureActive()
+            val components = try {
+                httpClient.requestDownloadUrls(context, packageName, version, auth, requested, languages = languages)
+            } catch (e: DeliveryException) {
+                currentCoroutineContext().ensureActive()
+                if (e.status != DeliveryStatus.NOT_PURCHASED) throw e
+                Log.d(TAG, "Split delivery account $candidate failed with ${e.status}")
+                continue
+            } catch (e: ResponseException) {
+                currentCoroutineContext().ensureActive()
+                val httpStatus = e.response.status.value
+                when (httpStatus) {
+                    400, 404, 410 -> errorCode = -2
+                    401, 403 -> Unit
+                    else -> throw e
+                }
+                Log.w(TAG, "Split delivery account $candidate failed with HTTP $httpStatus")
+                continue
+            }
+            currentCoroutineContext().ensureActive()
+            val available = requested.count { name -> components.any { it.componentName == name } }
+            Log.d(TAG, "Split delivery account $candidate provides $available/${requested.size} requested splits")
+            if (available == requested.size) return components
+            errorCode = -2
+        }
+        currentCoroutineContext().ensureActive()
+        throw SplitInstallException(errorCode)
+    }
+
     @RequiresApi(21)
     private suspend fun installNative(session: Session, files: List<File>, completion: Boolean = false) {
         currentCoroutineContext().ensureActive()
@@ -261,13 +343,24 @@ class SplitInstallManager(private val context: Context) {
                 .filterNot { (name, _) -> name in replaced || name in toRemove }.map { (_, path) -> File(path) }
             files + File(app.sourceDir) + retained
         } else files
-        context.installPackages(session.packageName, components,
+        context.installPackages(
+            session.packageName, components,
             isUpdate = fullInstall, splitInstall = true, keepFiles = true,
             splitSessionId = session.state.getInt("session_id"), removedSplits = toRemove,
             onSessionCreated = { id ->
                 synchronized(session) {
                     job?.ensureActive()
                     session.job?.ensureActive()
+                    if (!sessionManager.isCurrent(session) || !sessionManager.isCurrentInstallation(session)) {
+                        sessionManager.removeSession(session)
+                        throw CancellationException("Split install target changed")
+                    }
+                    val expectedStatus = when {
+                        completion -> STATUS_DOWNLOADED
+                        session.state.getBoolean("uninstall") -> STATUS_PENDING
+                        else -> STATUS_DOWNLOADING
+                    }
+                    check(session.state.getInt("status") == expectedStatus)
                     if (completion) {
                         sessionManager.startCompletion(session, id)
                     } else {
@@ -288,8 +381,10 @@ class SplitInstallManager(private val context: Context) {
         val info = context.packageManager.getPackageInfo(packageName, 0)
         val toRemove = removals.getStringSet(packageName, emptySet()).orEmpty().filter { it in info.splitNames.orEmpty() }
         if (toRemove.isEmpty()) return
-        val session = sessionManager.createSession(packageName, PackageInfoCompat.getLongVersionCode(info), toRemove,
-            emptyList(), emptyList(), uninstall = true)
+        val session = sessionManager.createSession(
+            packageName, PackageInfoCompat.getLongVersionCode(info), toRemove,
+            emptyList(), emptyList(), uninstall = true, clientInstallTime = info.firstInstallTime
+        )
         val id = session.state.getInt("session_id")
         try {
             SplitInstallTaskService.enqueueInstall(context, id, packageName)
@@ -298,14 +393,22 @@ class SplitInstallManager(private val context: Context) {
         }
     }
 
-    internal suspend fun deferredInstall(packageName: String, splits: List<Bundle>, onAccepted: () -> Unit) {
+    internal suspend fun deferredInstall(packageName: String, splits: List<Bundle>, playCoreVersion: Int, onAccepted: () -> Unit) {
         if (SDK_INT < 21) throw SplitInstallException(ERROR_API_NOT_AVAILABLE)
         if (splits.isNotEmpty()) validateRequest(splits)
         if (splits.isNotEmpty()) {
             requestMutex.withLock {
-                val wanted = splits.map { bundle -> bundle.getString("module_name")?.let { "module_name:$it" } ?: "language:${bundle.getString("language")}" }
-                if (!deferred.edit().putStringSet(packageName, deferred.getStringSet(packageName, emptySet()).orEmpty() + wanted).commit()) {
-                    throw SplitInstallException(-10)
+                synchronized(deferredLock) {
+                    val info = context.packageManager.getPackageInfo(packageName, 0)
+                    val version = PackageInfoCompat.getLongVersionCode(info)
+                    val previous = readDeferredRequest(packageName)?.takeIf { it.version == version && it.clientInstallTime == info.firstInstallTime }
+                    val wanted = splits.map { bundle -> bundle.getString("module_name")?.let { "module_name:$it" } ?: "language:${bundle.getString("language")}" }.toSet()
+                    saveDeferredRequest(
+                        packageName, DeferredRequest(
+                            version, info.firstInstallTime, playCoreVersion,
+                            previous?.splits.orEmpty() + wanted, previous?.blocked.orEmpty()
+                        )
+                    )
                 }
             }
             SplitInstallTaskService.enqueueDeferred(context, packageName)
@@ -315,18 +418,86 @@ class SplitInstallManager(private val context: Context) {
 
     internal suspend fun installDeferred(packageName: String) {
         if (sessionManager.hasActiveSession(packageName)) return
-        val wanted = deferred.getStringSet(packageName, emptySet()).orEmpty().toSet()
+        val request = readDeferredRequest(packageName) ?: return
+        val wanted = request.splits - request.blocked
         if (wanted.isEmpty()) return
         val splits = wanted.map { value -> Bundle().apply { putString(value.substringBefore(':'), value.substringAfter(':')) } }
-        startInstall(packageName, splits) { _, _ ->
-            deferred.edit().putStringSet(packageName, deferred.getStringSet(packageName, emptySet()).orEmpty() - wanted).commit()
+        startInstall(packageName, splits, request.playCoreVersion, request) { _, _ -> }
+    }
+
+    private fun blockDeferredInstall(session: Session): Boolean = synchronized(deferredLock) {
+        if (!sessionManager.isCurrentInstallation(session)) return@synchronized false
+        val previous = readDeferredRequest(session.packageName)
+        if (previous != null && (previous.version != session.version || previous.clientInstallTime != session.clientInstallTime)) return@synchronized false
+        val wanted = session.state.getStringArrayList("module_names").orEmpty().map { "module_name:$it" } +
+                session.state.getStringArrayList("languages").orEmpty().map { "language:$it" }
+        saveDeferredRequest(
+            session.packageName, DeferredRequest(
+                session.version, session.clientInstallTime,
+                previous?.playCoreVersion ?: session.playCoreVersion, previous?.splits.orEmpty() + wanted, previous?.blocked.orEmpty() + wanted
+            )
+        )
+        true
+    }
+
+    private fun readDeferredRequest(packageName: String): DeferredRequest? = synchronized(deferredLock) {
+        val saved = deferred.all[packageName] ?: return@synchronized null
+        val request = try {
+            (saved as? String)?.let { value ->
+                val json = JSONObject(value)
+                fun strings(name: String): Set<String> = json.optJSONArray(name)?.let { values ->
+                    (0 until values.length()).map { values.getString(it) }.toSet()
+                }.orEmpty()
+                DeferredRequest(
+                    json.getLong("version"), json.getLong("client_install_time"), json.getInt("playcore_version_code"),
+                    strings("requested"), strings("blocked")
+                )
+            }
+        } catch (e: JSONException) {
+            Log.w(TAG, "Unable to read deferred split metadata")
+            null
+        }
+        val info = try {
+            context.packageManager.getPackageInfo(packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
+        if (request == null || info == null || request.version != PackageInfoCompat.getLongVersionCode(info) || request.clientInstallTime != info.firstInstallTime) {
+            // Requests without an installation identity cannot be assigned to a reinstalled app.
+            saveDeferredRequest(packageName, null)
+            return@synchronized null
+        }
+        request
+    }
+
+    private fun saveDeferredRequest(packageName: String, request: DeferredRequest?) = synchronized(deferredLock) {
+        val previous = deferred.all[packageName]
+        val editor = deferred.edit()
+        if (request == null || request.splits.isEmpty()) editor.remove(packageName)
+        else editor.putString(
+            packageName, JSONObject().put("version", request.version).put("client_install_time", request.clientInstallTime)
+                .put("playcore_version_code", request.playCoreVersion).put("requested", JSONArray(request.splits)).put("blocked", JSONArray(request.blocked)).toString()
+        )
+        if (!editor.commit()) {
+            val rollback = deferred.edit()
+            when (previous) {
+                is String -> rollback.putString(packageName, previous)
+                is Set<*> -> rollback.putStringSet(packageName, previous.filterIsInstance<String>().toSet())
+                else -> rollback.remove(packageName)
+            }
+            if (!rollback.commit()) Log.w(TAG, "Unable to restore deferred split metadata")
+            throw SplitInstallException(-10)
         }
     }
 
     private fun enqueuePending(packageName: String, includeRemovals: Boolean = true) {
         if (SDK_INT < 21) return
         scheduleCompletion()
-        if (!deferred.getStringSet(packageName, emptySet()).isNullOrEmpty()) SplitInstallTaskService.enqueueDeferred(context, packageName)
+        if (!sessionManager.hasPendingDeferredRetry(packageName)) {
+            readDeferredRequest(packageName)?.let { request ->
+                if ((request.splits - request.blocked).isNotEmpty()) SplitInstallTaskService.enqueueDeferred(context, packageName)
+            }
+        }
         if (includeRemovals && !removals.getStringSet(packageName, emptySet()).isNullOrEmpty()) SplitInstallTaskService.enqueueRemoval(context, packageName)
     }
 
@@ -366,7 +537,7 @@ class SplitInstallManager(private val context: Context) {
             if (session.requested.any { split -> pendingRemovals.any { split == it || split.startsWith("$it.config.") } }) continue
             if (sessionManager.hasActiveSession(session.packageName) || processes.any {
                     it.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE &&
-                        (it.processName == session.packageName || session.packageName in it.pkgList.orEmpty())
+                            (it.processName == session.packageName || session.packageName in it.pkgList.orEmpty())
                 }) continue
             val claimed = synchronized(session) {
                 if (session.job != null) false
@@ -379,7 +550,8 @@ class SplitInstallManager(private val context: Context) {
             try {
                 val info = context.packageManager.getPackageInfo(session.packageName, 0)
                 if (!sessionManager.isCurrent(session) || PackageInfoCompat.getLongVersionCode(info) != session.version ||
-                    session.clientInstallTime != info.firstInstallTime) continue
+                    session.clientInstallTime != info.firstInstallTime
+                ) continue
                 if (session.requested.all { it in info.splitNames.orEmpty() }) sessionManager.finishCompletion(session)
                 else {
                     val files = sessionManager.downloadedFiles(session)
@@ -407,8 +579,8 @@ class SplitInstallManager(private val context: Context) {
                 val module = it.getString("module_name")
                 val language = it.getString("language")
                 (module == null) == (language == null) ||
-                    (module != null && !module.matches(Regex("[A-Za-z0-9_]+"))) ||
-                    (language != null && !language.matches(Regex("[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*")))
+                        (module != null && !module.matches(Regex("[A-Za-z0-9_]+"))) ||
+                        (language != null && !language.matches(Regex("[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*")))
             }) throw SplitInstallException(ERROR_INVALID_REQUEST)
     }
 
@@ -463,5 +635,11 @@ class SplitInstallManager(private val context: Context) {
 
     companion object {
         private val requestMutex = Mutex()
+        private val deferredLock = Any()
     }
+
+    internal data class DeferredRequest(
+        val version: Long, val clientInstallTime: Long, val playCoreVersion: Int,
+        val splits: Set<String>, val blocked: Set<String> = emptySet()
+    )
 }

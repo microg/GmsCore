@@ -122,7 +122,7 @@ class SplitInstallServiceImpl(
     override fun splitDeferred(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) =
         execute("splitDeferred(splitCount=${splits.size})", targetPackage, callback) { packageName ->
             if (splits.any { it.getString("module_name") == null }) throw SplitInstallException(ERROR_INVALID_REQUEST)
-            installManager.deferredInstall(packageName, splits) {
+            installManager.deferredInstall(packageName, splits, bundle0.getInt("playcore_version_code", 0)) {
                 runCatching { callback.onDeferredInstall(Bundle()) }
             }
         }
@@ -148,7 +148,7 @@ class SplitInstallServiceImpl(
     override fun languageSplitInstall(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) =
         execute("languageSplitInstall(splitCount=${splits.size})", targetPackage, callback) { packageName ->
             if (splits.isEmpty() || splits.any { it.getString("language") == null }) throw SplitInstallException(ERROR_INVALID_REQUEST)
-            installManager.deferredInstall(packageName, splits) {
+            installManager.deferredInstall(packageName, splits, bundle0.getInt("playcore_version_code", 0)) {
                 runCatching { callback.onDeferredLanguageInstall(Bundle()) }
             }
         }
