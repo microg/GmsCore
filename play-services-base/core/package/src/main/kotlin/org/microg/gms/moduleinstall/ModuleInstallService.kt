@@ -5,8 +5,6 @@
 
 package org.microg.gms.moduleinstall
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.common.Feature
@@ -29,32 +27,24 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "ModuleInstall"
 
-private const val ACTION_SCAN_DOCUMENT = "com.google.android.gms.mlkit.ACTION_SCAN_DOCUMENT"
-private const val FEATURE_PREFIX_DOCUMENT_SCANNER = "mlkit.docscan."
-
 class ModuleInstallService : BaseService(TAG, GmsService.MODULE_INSTALL) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        val binder = ModuleInstallServiceImpl(this).asBinder()
+        val binder = ModuleInstallServiceImpl().asBinder()
         callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, binder, ConnectionInfo().apply {
             features = arrayOf(Feature("moduleinstall", 7))
         })
     }
 }
 
-class ModuleInstallServiceImpl(private val context: Context) : IModuleInstallService.Stub() {
+class ModuleInstallServiceImpl : IModuleInstallService.Stub() {
     override fun areModulesAvailable(callbacks: IModuleInstallCallbacks?, request: ApiFeatureRequest?) {
         Log.d(TAG, "Not yet implemented: areModulesAvailable $request")
         runCatching { callbacks?.onModuleAvailabilityResponse(Status.SUCCESS, ModuleAvailabilityResponse(true, STATUS_ALREADY_AVAILABLE)) }
     }
 
     override fun installModules(callbacks: IModuleInstallCallbacks?, request: ApiFeatureRequest?, listener: IModuleInstallStatusListener?) {
-        if (isProvidedLocally(request)) {
-            Log.d(TAG, "installModules: provided locally $request")
-            runCatching { callbacks?.onModuleInstallResponse(Status.SUCCESS, ModuleInstallResponse(0, true)) }
-            return
-        }
         Log.d(TAG, "Not yet implemented: installModules $request")
-        runCatching { callbacks?.onModuleInstallResponse(Status.CANCELED, ModuleInstallResponse(0, true)) }
+        runCatching { callbacks?.onModuleInstallResponse(Status.SUCCESS, ModuleInstallResponse(0, true)) }
     }
 
     override fun getInstallModulesIntent(callbacks: IModuleInstallCallbacks?, request: ApiFeatureRequest?) {
@@ -72,13 +62,4 @@ class ModuleInstallServiceImpl(private val context: Context) : IModuleInstallSer
         runCatching { callback?.onResult(Status.SUCCESS) }
     }
 
-    private fun isProvidedLocally(request: ApiFeatureRequest?): Boolean {
-        val features = request?.features.orEmpty()
-        if (features.isEmpty()) return false
-        if (features.all { it.name.startsWith(FEATURE_PREFIX_DOCUMENT_SCANNER) }) {
-            val intent = Intent(ACTION_SCAN_DOCUMENT).setPackage(context.packageName)
-            return context.packageManager.resolveActivity(intent, 0) != null
-        }
-        return false
-    }
 }
