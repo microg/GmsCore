@@ -6,7 +6,7 @@
     <string name="pay_disabled">Bezahlung derzeit nicht möglich</string>
     <string name="confirm_purchase">Kauf bestätigen</string>
     <string name="error_passwd">Das eingegebene Passwort ist falsch.</string>
-    <string name="error_network">Keine Verbindung zum Internet. Bitte stelle sicher, dass WLAN oder mobile Daten eingeschaltet sind und probiere es dann erneut.</string>
+    <string name="error_network">Keine Verbindung zum Internet. Bitte stelle sicher, dass WLAN oder mobile Daten eingeschaltet ist und versuche es erneut.</string>
     <string name="error_unknown">Unbekannter Fehler, bitte beenden und erneut versuchen.</string>
     <string name="tips_input_passwd">Passwort eingeben</string>
     <string name="tips_remember_login_info">Passwort auf diesem Gerät speichern</string>

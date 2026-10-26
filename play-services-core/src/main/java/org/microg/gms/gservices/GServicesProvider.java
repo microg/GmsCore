@@ -16,20 +16,29 @@
 
 package org.microg.gms.gservices;
 
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.app.admin.DevicePolicyManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Process;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static android.os.Build.VERSION.SDK_INT;
+import org.microg.gms.utils.ExtendedPackageInfo;
 
 /**
  * Originally found in Google Services Framework (com.google.android.gsf), this provides a generic
@@ -56,16 +65,61 @@ public class GServicesProvider extends ContentProvider {
         return true;
     }
 
-    private String getCallingPackageName() {
-        if (SDK_INT >= 19) {
-            return getCallingPackage();
-        } else {
-            return "unknown";
+    private boolean callerIsGoogle() {
+        try {
+            String packageName = getCallingPackage();
+            if (packageName == null) return false;
+            PackageManager packageManager = getContext().getPackageManager();
+            return new ExtendedPackageInfo(packageManager, packageName).isGooglePackage();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean callerIsOwner() {
+        try {
+            String packageName = getCallingPackage();
+            if (packageName == null) return false;
+            DevicePolicyManager devicePolicyManager = ContextCompat.getSystemService(getContext(), DevicePolicyManager.class);
+            return devicePolicyManager.isDeviceOwnerApp(packageName) || (SDK_INT >= 21 && devicePolicyManager.isProfileOwnerApp(packageName));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Instead of checking if the permissions is granted, we only check if it was requested.
+     * <p>
+     * This is because:
+     * <ul>
+     *     <li>
+     *         this is a permission with protectionLevel normal and requesting should usually
+     *         silently grant it, as Android no longer asks users to confirm install-time
+     *         permissions on installation
+     *     </li>
+     *     <li>
+     *         on some Android versions, requesting a permission that is not declared yet will not
+     *         grant that permission if the declaring app is installed later
+     *     </li>
+     * </ul>
+     */
+    private boolean callerHasReadPermissionRequested() {
+        String packageName = getCallingPackage();
+        if (packageName == null) return false;
+        try {
+            String[] requestedPermissions = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions;
+            return requestedPermissions != null && Arrays.asList(requestedPermissions).contains("com.google.android.providers.gsf.permission.READ_GSERVICES");
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        if (Binder.getCallingUid() != Process.myUid() && !callerIsGoogle() && !callerHasReadPermissionRequested()) {
+            Log.w(TAG, "Rejected read access for package " + getCallingPackage());
+            return null;
+        }
         MatrixCursor cursor = new MatrixCursor(new String[]{"name", "value"});
         if (PREFIX_URI.equals(uri)) {
             for (String prefix : selectionArgs) {
@@ -91,6 +145,15 @@ public class GServicesProvider extends ContentProvider {
                 } else {
                     value = databaseHelper.get(name);
                     cache.put(name, value);
+                }
+                if ("android_id".equals(name)) {
+                    // Only Google and device/profile owner can access android_id
+                    if (Binder.getCallingUid() != Process.myUid() && !callerIsGoogle() && !callerIsOwner()) {
+                        Log.w(TAG, "Rejected access to android_id for package " + getCallingPackage());
+                        value = null;
+                    } else {
+                        Log.d(TAG, "Granted access to android_id for package " + getCallingPackage());
+                    }
                 }
                 if (value != null) {
                     cursor.addRow(new String[]{name, value});
@@ -118,7 +181,11 @@ public class GServicesProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.d(TAG, "update caller=" + getCallingPackageName() + " table=" + uri.getLastPathSegment()
+        if (Binder.getCallingUid() != Process.myUid() && !callerIsGoogle()) {
+            Log.w(TAG, "Rejected write access for package " + getCallingPackage());
+            return 0;
+        }
+        Log.d(TAG, "update caller=" + getCallingPackage() + " table=" + uri.getLastPathSegment()
                 + " name=" + values.getAsString("name") + " value=" + values.getAsString("value"));
         if (uri.equals(MAIN_URI)) {
             databaseHelper.put("main", values);

@@ -74,7 +74,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
 
 import okio.ByteString;
 
@@ -437,6 +441,20 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
+    private void startHandshake(SSLSocket sslSocket) throws Exception {
+        if (SDK_INT >= 24) {
+            SSLParameters params = sslSocket.getSSLParameters();
+            params.setEndpointIdentificationAlgorithm("HTTPS");
+            sslSocket.setSSLParameters(params);
+        }
+        sslSocket.startHandshake();
+        if (SDK_INT < 24) {
+            if (!HttpsURLConnection.getDefaultHostnameVerifier().verify(SERVICE_HOST, sslSocket.getSession())) {
+                throw new SSLException("Hostname verification failed for " + SERVICE_HOST);
+            }
+        }
+    }
+
     private void connect(int port) throws Exception {
         this.wasTornDown = false;
 
@@ -444,6 +462,7 @@ public class McsService extends Service implements Handler.Callback {
         Socket socket = new Socket(SERVICE_HOST, port);
         logd(this, "Connected to " + SERVICE_HOST + ":" + port);
         sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, port, true);
+        startHandshake((SSLSocket) sslSocket);
         logd(this, "Activated SSL with " + SERVICE_HOST + ":" + port);
         inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
         outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);

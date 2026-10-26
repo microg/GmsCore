@@ -410,4 +410,20 @@
     <string name="prefcat_device_attestation_apps_title">デバイス認証を使用するアプリ</string>
     <string name="pref_device_attestation_app_allow_requests_title">リクエストを許可</string>
     <string name="pref_device_attestation_app_allow_requests_summary">アプリにデバイス認証のリクエストを許可する</string>
+    <string name="pref_auth_allow_find_devices_title">Google Device Finderへの応答を許可する</string>
+    <string name="pref_auth_allow_find_devices_summary">有効にすると、デバイスがGoogleからのFind My Device通知に応答できるようになります（Cloud Messagingが必要）。</string>
+    <string name="credentials_service_sign_in_with_google_label">Googleでサインイン</string>
+    <string name="credentials_service_remote_custom_subtitle">セキュリティキー、スマートフォン、またはタブレット</string>
+    <string name="pref_passkey_manager_title">パスキーを管理</string>
+    <string name="pref_passkey_manager_empty_title">保存されたパスキーはありません</string>
+    <string name="pref_passkey_manager_description">サードパーティアプリがパスキーを登録すると、microGはローカルレコードを保持します。アプリがmicroGに通知せずにパスキーを削除すると、レコードはデバイスに残ったままになります。そのような残ったエントリーをここで削除できます。</string>
+    <string name="pref_passkey_manager_delete_dialog_title">パスキーを削除</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">削除する</string>
+    <string name="pref_passkey_manager_unknown_user">不明なユーザー</string>
+    <string name="pref_passkey_manager_transport_screen_lock">スクリーンロック</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">ハイブリッド</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

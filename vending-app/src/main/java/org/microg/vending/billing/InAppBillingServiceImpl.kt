@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.toHexString
 import org.microg.gms.utils.warnOnTransactionIssues
 import org.microg.vending.billing.core.*
@@ -281,7 +282,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
 
     override fun getBuyIntentExtraParams(
         apiVersion: Int,
-        packageName: String,
+        packageName: String?,
         sku: String,
         type: String,
         developerPayload: String?,
@@ -291,6 +292,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "getBuyIntentExtraParams: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
         Log.d(TAG, "getBuyIntentExtraParams(apiVersion=$apiVersion, packageName=$packageName, sku=$sku, type=$type, developerPayload=$developerPayload, extraParams=$extraParams)")
 
@@ -373,6 +375,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "getPurchaseHistory: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)
         extraParams?.size()
         Log.d(TAG, "getPurchaseHistory(apiVersion=$apiVersion, packageName=$packageName, type=$type, continuationToken=$continuationToken, extraParams=$extraParams)")
         val account = try {
@@ -426,8 +429,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         type: String?,
         extraParams: Bundle?
     ): Int {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
-        val result = isBillingSupported(apiVersion, type, packageName!!, extraParams)
+        val result = isBillingSupported(apiVersion, type, packageName, extraParams)
         Log.d(TAG, "isBillingSupportedExtraParams(apiVersion=$apiVersion, packageName=$packageName, type=$type, extraParams=$extraParams)=$result")
         return result.getInt("RESPONSE_CODE")
     }
@@ -443,6 +447,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "getPurchasesExtraParams: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
         Log.d(TAG, "getPurchasesExtraParams(apiVersion=$apiVersion, packageName=$packageName, type=$type, continuationToken=$continuationToken, extraParams=$extraParams)")
         if (apiVersion < 7 && extraParams != null) {
@@ -457,7 +462,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         val itemList = ArrayList<String>()
         val dataList = ArrayList<String>()
         val signatureList = ArrayList<String>()
-        PurchaseManager.queryPurchases(account, packageName!!, type!!).filter {
+        PurchaseManager.queryPurchases(account, packageName, type!!).filter {
             if (it.type == "subs" && it.expireAt < System.currentTimeMillis()) return@filter false
             true
         }.forEach {
@@ -484,6 +489,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "consumePurchaseExtraParams: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
         Log.d(TAG, "consumePurchaseExtraParams(apiVersion=$apiVersion, packageName=$packageName, purchaseToken=$purchaseToken, extraParams=$extraParams)")
         val account = try {
@@ -498,7 +504,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         )
         val coreResult = try {
             val deferred = CoroutineScope(Dispatchers.IO).async {
-                val coreResult = createIAPCore(context, account, packageName!!).consumePurchase(params)
+                val coreResult = createIAPCore(context, account, packageName).consumePurchase(params)
                 if (coreResult.getCode() == BillingResponseCode.OK) {
                     PurchaseManager.removePurchase(purchaseToken)
                 }
@@ -538,6 +544,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "getSkuDetailsExtraParams: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
         skuBundle?.size()
         Log.d(TAG, "getSkuDetailsExtraParams(apiVersion=$apiVersion, packageName=$packageName, type=$type, skusBundle=$skuBundle, extraParams=$extraParams)")
@@ -573,7 +580,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
 
         val coreResult = try {
             val deferred = CoroutineScope(Dispatchers.IO).async {
-                createIAPCore(context, account, packageName!!).getSkuDetails(params)
+                createIAPCore(context, account, packageName).getSkuDetails(params)
             }
             runBlocking { deferred.await() }
         } catch (e: RuntimeException) {
@@ -604,6 +611,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "acknowledgePurchase: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         extraParams?.size()
         Log.d(TAG, "acknowledgePurchase(apiVersion=$apiVersion, packageName=$packageName, purchaseToken=$purchaseToken, extraParams=$extraParams)")
         val account = try {
@@ -618,7 +626,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         )
         val coreResult = try {
             val deferred = CoroutineScope(Dispatchers.IO).async {
-                val coreResult = createIAPCore(context, account, packageName!!).acknowledgePurchase(params)
+                val coreResult = createIAPCore(context, account, packageName).acknowledgePurchase(params)
                 if (coreResult.getCode() == BillingResponseCode.OK && coreResult.purchaseItem != null) {
                     PurchaseManager.updatePurchase(coreResult.purchaseItem)
                 }
@@ -647,6 +655,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     }
 
     override fun showInAppMessages(apiVersion: Int, packageName: String?, extraParams: Bundle?, callback: IInAppBillingServiceCallback?) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         Log.d(TAG, "showInAppMessages $apiVersion packageName:$packageName bundle:${bundleToMap(extraParams)}")
         try {
             callback?.callback(null)
@@ -656,6 +665,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     }
 
     override fun getBillingConfig(apiVersion: Int, packageName: String?, bundle: Bundle?, callback: IInAppBillingGetBillingConfigCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         Log.d(TAG, "getBillingConfig apiVersion:$apiVersion packageName:$packageName bundle:$bundle")
         val result = resultBundle(BillingResponseCode.OK, "", bundleOf(
             "BILLING_CONFIG" to JSONObject().apply { put("countryCode", Locale.getDefault().country) }.toString()
