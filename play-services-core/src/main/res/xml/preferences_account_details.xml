@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="pref_account_details_header"
+        app:selectable="false" />
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/prefcat_account_timeline_title">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="pref_account_timeline"
+            app:persistent="false"
+            app:summary="@string/pref_account_timeline_summary"
+            app:title="@string/pref_account_timeline_title" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="pref_account_timeline_upload"
+            app:persistent="false"
+            app:summary="@string/pref_account_timeline_upload_summary"
+            app:title="@string/pref_account_timeline_upload_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:selectable="false"
+            app:summary="@string/pref_account_timeline_cloud_notice" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/prefcat_account_settings_title">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="pref_account_system_sync"
+            app:title="@string/pref_account_system_sync_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

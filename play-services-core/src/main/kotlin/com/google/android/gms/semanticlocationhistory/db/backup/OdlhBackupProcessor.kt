@@ -5,6 +5,7 @@
 
 package com.google.android.gms.semanticlocationhistory.db.backup
 
+import android.accounts.Account
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -27,7 +28,8 @@ import com.google.android.gms.semanticlocationhistory.getObfuscatedGaiaId
 import com.google.android.gms.semanticlocationhistory.loadKeyMaterials
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
-import org.microg.gms.location.LocationSettings
+import org.microg.gms.location.reporting.fetchEffectiveAccountLocationSettings
+import org.microg.gms.location.reporting.isLocalAccountReportingEnabled
 import java.security.SecureRandom
 import java.util.TimeZone
 import javax.crypto.Cipher
@@ -55,15 +57,21 @@ private const val TAG = "OdlhBackupProcessor"
 
 object OdlhBackupProcessor {
 
+    private fun isBackupEnabled(context: Context, account: Account): Boolean {
+        if (!isLocalAccountReportingEnabled(context, account)) return false
+        val settings = fetchEffectiveAccountLocationSettings(context, account)
+        return settings.allowed && settings.uploadAllowed
+    }
+
     /**
      * Performs a full backup of all location history data.
      */
-    suspend fun performBackup(context: Context, accountName: String): BackupResult {
-        val allowedUpload = LocationSettings(context).mapsTimelineUpload
-        if (!allowedUpload) {
+    suspend fun performBackup(context: Context, account: Account): BackupResult {
+        if (!isBackupEnabled(context, account)) {
             Log.w(TAG, "<performBackup> user not allowed report")
             return BackupResult(false, "Upload Not allowed!")
         }
+        val accountName = account.name
         Log.d(TAG, "performBackup: starting for account=$accountName")
         val gaiaId = context.getObfuscatedGaiaId(accountName)
         val storageManager = OdlhStorageManager.getInstance(context)
@@ -149,10 +157,10 @@ object OdlhBackupProcessor {
      * 4. Upload changed shards, delete removed shards
      * 5. Update shard sync snapshot + sync_token
      */
-    suspend fun performIncrementalBackup(context: Context, accountName: String): BackupResult {
+    suspend fun performIncrementalBackup(context: Context, account: Account): BackupResult {
+        val accountName = account.name
         Log.d(TAG, "performIncrementalBackup: starting for account=$accountName")
-        val allowedUpload = LocationSettings(context).mapsTimelineUpload
-        if (!allowedUpload) {
+        if (!isBackupEnabled(context, account)) {
             Log.w(TAG, "<performIncrementalBackup> user not allowed report")
             return BackupResult(false, "Upload Not allowed!")
         }
