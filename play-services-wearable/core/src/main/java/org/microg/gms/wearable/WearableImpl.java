@@ -16,6 +16,8 @@
 
 package org.microg.gms.wearable;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -87,12 +89,14 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionThread bluetoothServer;
+    private final Map<String, BluetoothConnectionThread> bluetoothClients = new HashMap<>();
+    private WearableBluetoothReceiver bluetoothReceiver;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
-
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
         this.nodeDatabase = nodeDatabase;
@@ -105,6 +109,17 @@ public class WearableImpl {
             networkHandlerLock.countDown();
             Looper.loop();
         }).start();
+        this.bluetoothReceiver = new WearableBluetoothReceiver(this);
+        IntentFilter btFilter = new IntentFilter();
+        btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        btFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        btFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        try {
+            context.registerReceiver(bluetoothReceiver, btFilter);
+            bluetoothReceiver.discoverAndConnectBondedWearables();
+        } catch (Exception e) {
+            Log.w(TAG, "Failed registering Bluetooth receiver", e);
+        }
     }
 
     public String getLocalNodeId() {
@@ -508,21 +523,73 @@ public class WearableImpl {
     public void enableConnection(String name) {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+        if (config == null) return;
+
         if (name.equals("server") && sct == null) {
             Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
-            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, config))).start();
+        }
+
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null && adapter.isEnabled()) {
+            if (config.role == 2 && bluetoothServer == null) {
+                Log.d(TAG, "Starting Bluetooth RFCOMM server");
+                (bluetoothServer = BluetoothConnectionThread.serverListen(adapter, new MessageHandler(context, this, config))).start();
+            }
+
+            if (config.address != null && config.type == 0 && !bluetoothClients.containsKey(config.address)) {
+                Log.d(TAG, "Starting Bluetooth RFCOMM client to " + config.address);
+                BluetoothConnectionThread client = BluetoothConnectionThread.clientConnect(adapter, config.address, new MessageHandler(context, this, config));
+                bluetoothClients.put(config.address, client);
+                client.start();
+            }
         }
     }
 
     public void disableConnection(String name) {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+        if (config == null) return;
+
         if (name.equals("server") && sct != null) {
             activeConnections.remove(sct.getWearableConnection());
             sct.close();
             sct.interrupt();
             sct = null;
         }
+
+        if (config.role == 2 && bluetoothServer != null) {
+            activeConnections.remove(bluetoothServer.getWearableConnection());
+            bluetoothServer.close();
+            bluetoothServer.interrupt();
+            bluetoothServer = null;
+        }
+
+        if (config.address != null && bluetoothClients.containsKey(config.address)) {
+            BluetoothConnectionThread client = bluetoothClients.remove(config.address);
+            if (client != null) {
+                activeConnections.remove(client.getWearableConnection());
+                client.close();
+                client.interrupt();
+            }
+        }
+    }
+
+    public void stopBluetooth() {
+        if (bluetoothServer != null) {
+            activeConnections.remove(bluetoothServer.getWearableConnection());
+            bluetoothServer.close();
+            bluetoothServer.interrupt();
+            bluetoothServer = null;
+        }
+        for (BluetoothConnectionThread client : new ArrayList<BluetoothConnectionThread>(bluetoothClients.values())) {
+            activeConnections.remove(client.getWearableConnection());
+            client.close();
+            client.interrupt();
+        }
+        bluetoothClients.clear();
     }
 
     public void deleteConnection(String name) {
@@ -581,9 +648,20 @@ public class WearableImpl {
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
+        }
+        if (bluetoothServer != null && connection == bluetoothServer.getWearableConnection()) {
+            bluetoothServer.close();
+            bluetoothServer = null;
+        }
+        for (Map.Entry<String, BluetoothConnectionThread> entry : new ArrayList<>(bluetoothClients.entrySet())) {
+            if (entry.getValue() != null && connection == entry.getValue().getWearableConnection()) {
+                entry.getValue().close();
+                bluetoothClients.remove(entry.getKey());
+                break;
+            }
         }
         activeConnections.remove(nodeId);
         for (ConnectionConfiguration config : getConfigurations()) {
@@ -622,6 +700,13 @@ public class WearableImpl {
     }
 
     public void stop() {
+        stopBluetooth();
+        if (bluetoothReceiver != null) {
+            try {
+                context.unregisterReceiver(bluetoothReceiver);
+            } catch (Exception ignored) {
+            }
+        }
         try {
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
