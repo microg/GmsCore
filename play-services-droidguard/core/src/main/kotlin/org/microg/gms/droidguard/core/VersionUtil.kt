@@ -56,7 +56,7 @@ class VersionUtil(private val context: Context) {
         val v3 = type.substring(4, 6)
         val i1 = BUILD_MAP.indexOfFirst { it.first == v1 }.takeIf { it >= 0 } ?: return null
         val i2 = BUILD_MAP[i1].second.indexOfFirst { it.first == v2 }.takeIf { it >= 0 } ?: return null
-        val i3 = BUILD_MAP[i1].second[i2].second.indexOf(v3).takeIf { it > 0 } ?: return null
+        val i3 = BUILD_MAP[i1].second[i2].second.indexOf(v3).takeIf { it >= 0 } ?: return null
         val o1 = BUILD_MAP.subList(0, i1).map { it.second.map { it.second.size }.sum() }.sum()
         val o2 = BUILD_MAP[i1].second.subList(0, i2).map { it.second.size }.sum()
         return o1 + o2 + i3

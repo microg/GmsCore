@@ -591,6 +591,7 @@
         <service android:name="org.microg.gms.auth.appcert.AppCertService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.be.appcert.AppCertService" />
+                <action android:name="com.google.android.gms.auth.APP_CERT" />
             </intent-filter>
         </service>
 
@@ -1406,7 +1407,6 @@
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
-                <action android:name="com.google.android.gms.asterism.service.START" />
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
                 <action android:name="com.google.android.gms.auth.account.authapi.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
@@ -1432,7 +1432,6 @@
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />
