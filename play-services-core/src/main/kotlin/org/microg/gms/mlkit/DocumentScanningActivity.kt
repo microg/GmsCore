@@ -27,6 +27,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.CAPTURE_MODE_AUTO
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,29 +45,23 @@ import org.microg.gms.vision.document.normalizePage
 import org.microg.gms.vision.document.rotatePage
 import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.writePdf
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_CALLING_APP_NAME
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_CAMERA_ID
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_DEFAULT_CAPTURE_MODE
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_ENABLE_AUTO_ENHANCEMENTS
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_FILTER_ALLOWED
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_FLASH_MODE_CHANGE_ALLOWED
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_GALLERY_IMPORT_ALLOWED
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_PAGE_LIMIT_MAX
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_RESULT_FORMATS
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_RESULT_IMAGE_URIS
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_RESULT_PAGE_COUNT
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_RESULT_PDF_URI
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_SHADOW_REMOVAL_ALLOWED
+import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_STAIN_REMOVAL_ALLOWED
 import java.io.File
 
 private const val TAG = "DocumentScanning"
-
-private const val KEY_CALLING_APP_NAME = "string_extra_calling_app_name"
-private const val KEY_PAGE_LIMIT_MAX = "int_extra_page_limit_max"
-private const val KEY_RESULT_FORMATS = "int_array_extra_result_formats"
-private const val KEY_GALLERY_IMPORT_ALLOWED = "boolean_extra_gallery_import_allowed"
-private const val KEY_FLASH_MODE_CHANGE_ALLOWED = "boolean_extra_flash_mode_change_allowed"
-private const val KEY_DEFAULT_CAPTURE_MODE = "int_extra_default_capture_mode"
-private const val KEY_CAMERA_ID = "string_extra_camera_id"
-private const val KEY_FILTER_ALLOWED = "boolean_extra_filter_allowed"
-private const val KEY_AUTO_ENHANCEMENTS = "boolean_extra_enable_auto_enhancements"
-private const val KEY_SHADOW_REMOVAL_ALLOWED = "boolean_extra_shadow_removal_allowed"
-private const val KEY_STAIN_REMOVAL_ALLOWED = "boolean_extra_stain_removal_allowed"
-private const val KEY_RESULT_IMAGE_URIS = "uri_array_extra_result_image_uris"
-private const val KEY_RESULT_PDF_URI = "uri_extra_result_pdf_uri"
-private const val KEY_RESULT_PAGE_COUNT = "int_extra_result_page_count"
-
-private const val RESULT_FORMAT_JPEG = 101
-private const val RESULT_FORMAT_PDF = 102
-
-private const val CAPTURE_MODE_AUTO = 1
 
 private const val SCAN_DIR = "mlkit_docscan"
 private const val PREVIEW_SIZE = 1280
@@ -89,19 +86,19 @@ class DocumentScanningActivity : AppCompatActivity() {
     private lateinit var scanDir: File
 
     private val callingAppName: String?
-        get() = runCatching { intent?.getStringExtra(KEY_CALLING_APP_NAME) }.getOrNull()
+        get() = runCatching { intent?.getStringExtra(EXTRA_CALLING_APP_NAME) }.getOrNull()
 
     private val pageLimit: Int
-        get() = runCatching { intent?.getIntExtra(KEY_PAGE_LIMIT_MAX, -1) }.getOrNull() ?: -1
+        get() = runCatching { intent?.getIntExtra(EXTRA_PAGE_LIMIT_MAX, -1) }.getOrNull() ?: -1
 
     private val removeShadows: Boolean
-        get() = intent.getBooleanExtra(KEY_SHADOW_REMOVAL_ALLOWED, true) || intent.getBooleanExtra(KEY_STAIN_REMOVAL_ALLOWED, true)
+        get() = intent.getBooleanExtra(EXTRA_SHADOW_REMOVAL_ALLOWED, true) || intent.getBooleanExtra(EXTRA_STAIN_REMOVAL_ALLOWED, true)
 
     private val defaultFilter: DocumentFilter
-        get() = if (intent.getBooleanExtra(KEY_AUTO_ENHANCEMENTS, false)) DocumentFilter.AUTO else DocumentFilter.ORIGINAL
+        get() = if (intent.getBooleanExtra(EXTRA_ENABLE_AUTO_ENHANCEMENTS, false)) DocumentFilter.AUTO else DocumentFilter.ORIGINAL
 
     private val resultFormats: IntArray
-        get() = runCatching { intent?.getIntArrayExtra(KEY_RESULT_FORMATS) }.getOrNull()?.takeIf { it.isNotEmpty() }
+        get() = runCatching { intent?.getIntArrayExtra(EXTRA_RESULT_FORMATS) }.getOrNull()?.takeIf { it.isNotEmpty() }
             ?: intArrayOf(RESULT_FORMAT_JPEG, RESULT_FORMAT_PDF)
 
     private val requestPermissionLauncher =
@@ -147,12 +144,12 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<Button>(R.id.document_scanning_preview_retake).setOnClickListener { retakeSelectedPage() }
         findViewById<Button>(R.id.document_scanning_preview_delete).setOnClickListener { deleteSelectedPage() }
         findViewById<Button>(R.id.document_scanning_preview_filter).apply {
-            visibility = if (intent.getBooleanExtra(KEY_FILTER_ALLOWED, true)) View.VISIBLE else View.GONE
+            visibility = if (intent.getBooleanExtra(EXTRA_FILTER_ALLOWED, true)) View.VISIBLE else View.GONE
             setOnClickListener { chooseFilter() }
         }
-        setAutoCapture(intent.getIntExtra(KEY_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
+        setAutoCapture(intent.getIntExtra(EXTRA_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
         findViewById<Button>(R.id.document_scanning_import).apply {
-            visibility = if (intent.getBooleanExtra(KEY_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
+            visibility = if (intent.getBooleanExtra(EXTRA_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
         }
         callingAppName?.let {
@@ -171,8 +168,8 @@ class DocumentScanningActivity : AppCompatActivity() {
         if (SDK_INT >= 21) {
             val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
             camera.onDocumentStable = { if (autoCapture && discardDialog?.isShowing != true) capturePage() }
-            camera.startCamera(this, intent.getStringExtra(KEY_CAMERA_ID)) {
-                if (intent.getBooleanExtra(KEY_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
+            camera.startCamera(this, intent.getStringExtra(EXTRA_CAMERA_ID)) {
+                if (intent.getBooleanExtra(EXTRA_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
                     findViewById<ImageView>(R.id.document_scanning_flash).apply {
                         visibility = View.VISIBLE
                         setOnClickListener { toggleTorch() }
@@ -507,15 +504,15 @@ class DocumentScanningActivity : AppCompatActivity() {
         val result = Intent()
         if (RESULT_FORMAT_JPEG in resultFormats) {
             outputs.mapTo(uris) { FileProvider.getUriForFile(this, authority, it) }
-            result.putParcelableArrayListExtra(KEY_RESULT_IMAGE_URIS, ArrayList(uris))
+            result.putParcelableArrayListExtra(EXTRA_RESULT_IMAGE_URIS, ArrayList(uris))
         }
         if (RESULT_FORMAT_PDF in resultFormats) {
             val pdf = File(scanDir, "scan.pdf")
             writePdf(outputs, pdf)
             val pdfUri = FileProvider.getUriForFile(this, authority, pdf)
             uris.add(pdfUri)
-            result.putExtra(KEY_RESULT_PDF_URI, pdfUri)
-            result.putExtra(KEY_RESULT_PAGE_COUNT, outputs.size)
+            result.putExtra(EXTRA_RESULT_PDF_URI, pdfUri)
+            result.putExtra(EXTRA_RESULT_PAGE_COUNT, outputs.size)
         }
         // URI permissions are only granted for data and clip data, not extras
         if (uris.isNotEmpty()) {
