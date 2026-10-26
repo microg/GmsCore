@@ -33,7 +33,7 @@ public class ReconnectionService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (delegate != null) {
             try {
-                delegate.onStartCommand(intent, flags, startId);
+                return delegate.onStartCommand(intent, flags, startId);
             } catch (RemoteException e) {
                 // Ignore
             }

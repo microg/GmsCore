@@ -1,0 +1,55 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Messages exchanged with a Cast receiver on its TLS control port (CastV2).
+// Each frame on the socket is a 4 byte big endian length followed by a serialized CastMessage.
+
+syntax = "proto2";
+
+option java_package = "org.microg.gms.cast.proto";
+
+message CastMessage {
+  enum ProtocolVersion {
+    CASTV2_1_0 = 0;
+  }
+  required ProtocolVersion protocol_version = 1;
+  required string source_id = 2;
+  required string destination_id = 3;
+  required string namespace = 4;
+
+  enum PayloadType {
+    STRING = 0;
+    BINARY = 1;
+  }
+  required PayloadType payload_type = 5;
+  optional string payload_utf8 = 6;
+  optional bytes payload_binary = 7;
+}
+
+// Payloads of the urn:x-cast:com.google.cast.tp.deviceauth namespace (always BINARY)
+
+message AuthChallenge {
+}
+
+message AuthResponse {
+  required bytes signature = 1;
+  required bytes client_auth_certificate = 2;
+  repeated bytes intermediate_certificate = 3;
+}
+
+message AuthError {
+  enum ErrorType {
+    INTERNAL_ERROR = 0;
+    NO_TLS = 1;
+    SIGNATURE_ALGORITHM_UNAVAILABLE = 2;
+  }
+  required ErrorType error_type = 1;
+}
+
+message DeviceAuthMessage {
+  optional AuthChallenge challenge = 1;
+  optional AuthResponse response = 2;
+  optional AuthError error = 3;
+}
