@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2019 microG Project Team
- *
+ *ChannelReceiveFileResponse
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,5 +22,14 @@ import org.microg.safeparcel.SafeParceled;
 public class ChannelSendFileResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
+    @SafeParceled(2)
+    public int status = 1;
+
+    private ChannelSendFileResponse() {}
+
+    public ChannelSendFileResponse(int status) {
+        this.status = status;
+    }
+
     public static final Creator<ChannelSendFileResponse> CREATOR = new AutoCreator<ChannelSendFileResponse>(ChannelSendFileResponse.class);
 }
