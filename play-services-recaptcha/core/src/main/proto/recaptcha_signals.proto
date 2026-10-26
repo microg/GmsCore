@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+syntax = "proto3";
+
+option java_package = "org.microg.gms.recaptcha.qr";
+
+message RecaptchaSignals {
+  string action = 1;
+  reserved 7, 10;
+  DroidGuardSignals droidGuardSignals = 11;
+}
+
+message DroidGuardSignals {
+  EncodedSignalBundle signals = 1;
+}
+
+message EncodedSignalBundle {
+  repeated EncodedSignal signals = 1;
+  string action = 2;
+}
+
+message EncodedSignal {
+  reserved 1, 7, 8;
+  optional SignalEncryption encryption = 4;
+  optional bytes payload = 6;
+}
+
+enum SignalEncryption {
+  reserved 2, 3;
+  UNKNOWN = 0;
+  NONE = 1;
+}
+
+message SignalValueList {
+  repeated SignalValue values = 1;
+  uint32 formatCode = 2;
+}
+
+message SignalValue {
+  reserved 2 to 10;
+  oneof value {
+    bool booleanValue = 1;
+    string textValue = 11;
+  }
+}
