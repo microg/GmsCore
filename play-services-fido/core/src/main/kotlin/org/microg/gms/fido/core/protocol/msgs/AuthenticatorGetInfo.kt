@@ -177,7 +177,9 @@ class AuthenticatorGetInfoResponse(
             maxCredentialCountInList = obj.get(7)?.AsInt32Value(),
             maxCredentialIdLength = obj.get(8)?.AsInt32Value(),
             transports = obj.get(9)?.AsStringSequence()?.toList(),
-            algorithms = runCatching { obj.get(10)?.values?.map { it.decodeAsPublicKeyCredentialParameters() } }.getOrNull(),
+            algorithms = obj.get(10)?.values?.mapNotNull {
+                runCatching { it.decodeAsPublicKeyCredentialParameters() }.getOrNull()
+            },
             maxSerializedLargeBlobArray = obj.get(11)?.AsInt32Value(),
             forcePINChange = obj.get(12)?.AsBoolean() == true,
             minPINLength = obj.get(13)?.AsInt32Value(),
