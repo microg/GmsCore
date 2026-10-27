@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wearable_terms_title">Wear OS terms</string>
+    <string name="wearable_terms_description">Review the Google Terms of Service and Privacy Policy before continuing. microG will save your choice on this phone and share the consent status with your watch companion app.</string>
+    <string name="wearable_terms_google_terms">Google Terms of Service</string>
+    <string name="wearable_terms_google_privacy">Google Privacy Policy</string>
+    <string name="wearable_terms_optional_services">Optional usage reporting, cloud sync and location sharing remain off. This choice does not authorize copying a Google account to your watch.</string>
+    <string name="wearable_terms_choice">I accept the Google Terms of Service and acknowledge the Google Privacy Policy.</string>
+    <string name="wearable_terms_accept">Accept and continue</string>
+    <string name="wearable_terms_save_error">Your choice could not be saved. Please try again.</string>
+    <string name="wearable_terms_link_error">No browser is available to open this document.</string>
+</resources>

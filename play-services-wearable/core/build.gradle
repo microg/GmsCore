@@ -7,14 +7,18 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'com.squareup.wire'
 
 dependencies {
     implementation project(':play-services-base-core')
 
     implementation project(':play-services-location')
     implementation project(':play-services-wearable')
-
-    implementation "org.microg:wearable:$wearableVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    testImplementation 'junit:junit:4.13.2'
+    androidTestCompileOnly files("${android.sdkDirectory}/platforms/android-${androidCompileSdk}/optional/android.test.base.jar",
+            "${android.sdkDirectory}/platforms/android-${androidCompileSdk}/optional/android.test.runner.jar",
+            "${android.sdkDirectory}/platforms/android-${androidCompileSdk}/optional/android.test.mock.jar")
 }
 
 android {
@@ -27,6 +31,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
     }
 
     buildFeatures {
@@ -48,6 +53,17 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().all()) { variant ->
+        variant.androidTest?.enableMultiDex = true
+    }
+}
+
+wire {
+    java {
     }
 }
 
