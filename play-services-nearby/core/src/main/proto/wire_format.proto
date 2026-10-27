@@ -1,0 +1,408 @@
+// Copyright 2023 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+//package nearby.sharing.service.proto;
+package sharing.nearby;
+
+// import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "sharing_enums.proto";
+
+option java_package = "com.google.android.gms.nearby.sharing";
+option java_outer_classname = "Protocol";
+option objc_class_prefix = "GNSHP";
+option optimize_for = LITE_RUNTIME;
+
+// File metadata. Does not include the actual bytes of the file.
+// NEXT_ID=10
+message FileMetadata {
+  enum Type {
+    UNKNOWN = 0;
+    IMAGE = 1;
+    VIDEO = 2;
+    ANDROID_APP = 3;
+    AUDIO = 4;
+    DOCUMENT = 5;
+    CONTACT_CARD = 6;
+  }
+
+  // The human readable name of this file (eg. 'Cookbook.pdf').
+  optional string name = 1;
+
+  // The type of file (eg. 'IMAGE' from 'dog.jpg'). Specifying a type helps
+  // provide a richer experience on the receiving side.
+  optional Type type = 2 [default = UNKNOWN];
+
+  // The FILE payload id that will be sent as a follow up containing the actual
+  // bytes of the file.
+  optional int64 payload_id = 3;
+
+  // The total size of the file.
+  optional int64 size = 4;
+
+  // The mimeType of file (eg. 'image/jpeg' from 'dog.jpg'). Specifying a
+  // mimeType helps provide a richer experience on receiving side.
+  optional string mime_type = 5 [default = "application/octet-stream"];
+
+  // A uuid for the attachment. Should be unique across all attachments.
+  optional int64 id = 6;
+
+  // The parent folder.
+  optional string parent_folder = 7;
+
+  // A stable identifier for the attachment. Used for receiver to identify same
+  // attachment from different transfers.
+  optional int64 attachment_hash = 8;
+
+  // True, if image in file attachment is sensitive
+  optional bool is_sensitive_content = 9;
+}
+
+// NEXT_ID=8
+message TextMetadata {
+  enum Type {
+    UNKNOWN = 0;
+    TEXT = 1;
+    // Open with browsers.
+    URL = 2;
+    // Open with map apps.
+    ADDRESS = 3;
+    // Dial.
+    PHONE_NUMBER = 4;
+  }
+
+  // The title of the text content.
+  optional string text_title = 2;
+
+  // The type of text (phone number, url, address, or plain text).
+  optional Type type = 3 [default = UNKNOWN];
+
+  // The BYTE payload id that will be sent as a follow up containing the actual
+  // bytes of the text.
+  optional int64 payload_id = 4;
+
+  // The size of the text content.
+  optional int64 size = 5;
+
+  // A uuid for the attachment. Should be unique across all attachments.
+  optional int64 id = 6;
+
+  // True if text is sensitive, e.g. password
+  optional bool is_sensitive_text = 7;
+}
+
+// NEXT_ID=6
+message WifiCredentialsMetadata {
+  enum SecurityType {
+    UNKNOWN_SECURITY_TYPE = 0;
+    OPEN = 1;
+    WPA_PSK = 2;
+    WEP = 3;
+    SAE = 4;
+  }
+
+  // The Wifi network name. This will be sent in introduction.
+  optional string ssid = 2;
+
+  // The security type of network (OPEN, WPA_PSK, WEP).
+  optional SecurityType security_type = 3 [default = UNKNOWN_SECURITY_TYPE];
+
+  // The BYTE payload id that will be sent as a follow up containing the
+  // password.
+  optional int64 payload_id = 4;
+
+  // A uuid for the attachment. Should be unique across all attachments.
+  optional int64 id = 5;
+}
+
+// NEXT_ID=8
+message AppMetadata {
+  // The app name. This will be sent in introduction.
+  optional string app_name = 1;
+
+  // The size of the all split of apks.
+  optional int64 size = 2;
+
+  // The File payload id that will be sent as a follow up containing the
+  // apk paths.
+  repeated int64 payload_id = 3 [packed = true];
+
+  // A uuid for the attachment. Should be unique across all attachments.
+  optional int64 id = 4;
+
+  // The name of apk file. This will be sent in introduction.
+  repeated string file_name = 5;
+
+  // The size of apk file. This will be sent in introduction.
+  repeated int64 file_size = 6 [packed = true];
+
+  // The package name. This will be sent in introduction.
+  optional string package_name = 7;
+}
+
+// NEXT_ID=5
+message StreamMetadata {
+  // A human readable description for the stream.
+  optional string description = 1;
+
+  // The package name of the sending application.
+  optional string package_name = 2;
+
+  // The <TYPE> payload id that will be send as a followup containing the
+  // ParcelFileDescriptor.
+  optional int64 payload_id = 3;
+
+  // The human-readable name of the package that should be displayed as
+  // attribution if no other information is available (i.e. the package is not
+  // installed locally yet).
+  optional string attributed_app_name = 4;
+}
+
+// A frame used when sending messages over the wire.
+// NEXT_ID=3
+message Frame {
+  enum Version {
+    UNKNOWN_VERSION = 0;
+    V1 = 1;
+  }
+  optional Version version = 1;
+
+  // Right now there's only 1 version, but if there are more, exactly one of
+  // the following fields will be set.
+  optional V1Frame v1 = 2;
+}
+
+// NEXT_ID=8
+message V1Frame {
+  enum FrameType {
+    UNKNOWN_FRAME_TYPE = 0;
+    INTRODUCTION = 1;
+    RESPONSE = 2;
+    PAIRED_KEY_ENCRYPTION = 3;
+    PAIRED_KEY_RESULT = 4;
+    // No longer used.
+    CERTIFICATE_INFO = 5;
+    CANCEL = 6;
+    // No longer used.
+    PROGRESS_UPDATE = 7;
+  }
+
+  optional FrameType type = 1;
+
+  // At most one of the following fields will be set.
+  optional IntroductionFrame introduction = 2;
+  optional ConnectionResponseFrame connection_response = 3;
+  optional PairedKeyEncryptionFrame paired_key_encryption = 4;
+  optional PairedKeyResultFrame paired_key_result = 5;
+  optional CertificateInfoFrame certificate_info = 6 [deprecated = true];
+  optional ProgressUpdateFrame progress_update = 7 [deprecated = true];
+}
+
+// An introduction packet sent by the sending side. Contains a list of files
+// they'd like to share.
+// NEXT_ID=10
+message IntroductionFrame {
+  enum SharingUseCase {
+    UNKNOWN = 0;
+    NEARBY_SHARE = 1;
+    REMOTE_COPY = 2;
+  }
+
+  repeated FileMetadata file_metadata = 1;
+  repeated TextMetadata text_metadata = 2;
+  // The required app package to open the content. May be null.
+  optional string required_package = 3;
+  repeated WifiCredentialsMetadata wifi_credentials_metadata = 4;
+  repeated AppMetadata app_metadata = 5;
+  optional bool start_transfer = 6;
+  repeated StreamMetadata stream_metadata = 7;
+  optional SharingUseCase use_case = 8;
+  repeated int64 preview_payload_ids = 9;
+}
+
+// A progress update packet sent by the sending side. Contains transfer progress
+// value. NEXT_ID=3
+message ProgressUpdateFrame {
+  optional float progress = 1;
+
+  // True, if the receiver should start bandwidth upgrade and receiving the
+  // payloads.
+  optional bool start_transfer = 2;
+}
+
+// A response packet sent by the receiving side. Accepts or rejects the list of
+// files.
+// NEXT_ID=4
+message ConnectionResponseFrame {
+  enum Status {
+    UNKNOWN = 0;
+    ACCEPT = 1;
+    REJECT = 2;
+    NOT_ENOUGH_SPACE = 3;
+    UNSUPPORTED_ATTACHMENT_TYPE = 4;
+    TIMED_OUT = 5;
+  }
+
+  // The receiving side's response.
+  optional Status status = 1;
+
+  // Key is attachment hash, value is the details of attachment.
+  map<int64, AttachmentDetails> attachment_details = 2;
+
+  // In the case of a stream attachments, the other side of the pipe.
+  // Both sender and receiver should validate matching counts.
+  repeated StreamMetadata stream_metadata = 3;
+}
+
+// Attachment details that sent in ConnectionResponseFrame.
+// NEXT_ID=3
+message AttachmentDetails {
+  // LINT.IfChange
+  enum Type {
+    UNKNOWN = 0;
+    // Represents FileAttachment.
+    FILE = 1;
+    // Represents TextAttachment.
+    TEXT = 2;
+    // Represents WifiCredentialsAttachment.
+    WIFI_CREDENTIALS = 3;
+    // Represents AppAttachment.
+    APP = 4;
+    // Represents StreamAttachment.
+    STREAM = 5;
+  }
+  // LINT.ThenChange(//depot/google3/java/com/google/android/gmscore/integ/client/nearby/src/com/google/android/gms/nearby/sharing/Attachment.java)
+
+  // The attachment family type.
+  optional Type type = 1;
+
+  // This field is only for FILE type.
+  optional FileAttachmentDetails file_attachment_details = 2;
+}
+
+// File attachment details included in ConnectionResponseFrame.
+// NEXT_ID=3
+message FileAttachmentDetails {
+  // Existing local file size on receiver side.
+  optional int64 receiver_existing_file_size = 1;
+
+  // The key is attachment hash, a stable identifier for the attachment.
+  // Value is list of payload details transferred for the attachment.
+  map<int64, PayloadsDetails> attachment_hash_payloads = 2;
+}
+
+// NEXT_ID=2
+message PayloadsDetails {
+  // The list should be sorted by creation timestamp.
+  repeated PayloadDetails payload_details = 1;
+}
+
+// Metadata of a payload file created by Nearby Connections.
+// NEXT_ID=4
+message PayloadDetails {
+  optional int64 id = 1;
+  optional int64 creation_timestamp_millis = 2;
+  optional int64 size = 3;
+}
+
+// A paired key encryption packet sent between devices, contains signed data.
+// NEXT_ID=5
+message PairedKeyEncryptionFrame {
+  // The encrypted data in byte array format.
+  optional bytes signed_data = 1;
+
+  // The hash of a certificate id.
+  optional bytes secret_id_hash = 2;
+
+  // An optional encrypted data in byte array format.
+  optional bytes optional_signed_data = 3;
+
+  // An optional QR code handshake data in a byte array format.
+  // For incoming connection contains a signature of the UKEY2
+  // token, created with the sender's private key.
+  // For outgoing connection contains an HKDF of the connection token and of the
+  // UKEY2 token
+  optional bytes qr_code_handshake_data = 4;
+}
+
+// A paired key verification result packet sent between devices.
+// NEXT_ID=3
+message PairedKeyResultFrame {
+  enum Status {
+    UNKNOWN = 0;
+    SUCCESS = 1;
+    FAIL = 2;
+    UNABLE = 3;
+  }
+
+  // The verification result.
+  optional Status status = 1;
+
+  // OS type.
+  optional location.nearby.proto.sharing.OSType os_type = 2;
+}
+
+// A package containing certificate info to be shared to remote device offline.
+// NEXT_ID=2
+message CertificateInfoFrame {
+  // The public certificates to be shared with remote devices.
+  repeated PublicCertificate public_certificate = 1;
+}
+
+// A public certificate from the local device.
+// NEXT_ID=8
+message PublicCertificate {
+  // The unique id of the public certificate.
+  optional bytes secret_id = 1;
+
+  // A bytes representation of a Secret Key owned by contact, to decrypt the
+  // metadata_key stored within the advertisement.
+  optional bytes authenticity_key = 2;
+
+  // A bytes representation a public key of X509Certificate, owned by contact,
+  // to decrypt encrypted UKEY2 (from Nearby Connections API) as a hand shake in
+  // contact verification phase.
+  optional bytes public_key = 3;
+
+  // The time in millis from epoch when this certificate becomes effective.
+  optional int64 start_time = 4;
+
+  // The time in millis from epoch when this certificate expires.
+  optional int64 end_time = 5;
+
+  // The encrypted metadata in bytes, contains personal information of the
+  // device/user who created this certificate. Needs to be decrypted into bytes,
+  // and converted back to EncryptedMetadata object to access fields.
+  optional bytes encrypted_metadata_bytes = 6;
+
+  // The tag for verifying metadata_encryption_key.
+  optional bytes metadata_encryption_key_tag = 7;
+}
+
+// NEXT_ID=3
+message WifiCredentials {
+  // Wi-Fi password.
+  optional string password = 1
+      /* type = ST_ACCOUNT_CREDENTIAL */;
+  // True if the network is a hidden network that is not broadcasting its SSID.
+  // Default is false.
+  optional bool hidden_ssid = 2 [default = false];
+}
+
+// NEXT_ID=2
+message StreamDetails {
+  // Serialized ParcelFileDescriptor for input stream (for the receiver).
+  optional bytes input_stream_parcel_file_descriptor_bytes = 1;
+}
