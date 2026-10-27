@@ -182,6 +182,14 @@
         tools:ignore="ProtectedPermissions" />
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -1396,6 +1404,36 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.nearby.sharing.NearbySharingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
+                <action android:name="com.google.android.gms.nearby.sharing.START_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.nearby.connection.NearbyConnectionService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.nearby.connection.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.nearby.sharing.ShareSheetActivity"
+            android:exported="true"
+            android:label="Quick Share"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.SHARE_NEARBY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1470,11 +1508,8 @@
                 <action android:name="com.google.android.gms.mdm.services.DeviceManagerApiService.START" />
                 <action android:name="com.google.android.gms.mdns.service.START" />
                 <action android:name="com.google.android.gms.nearby.bootstrap.service.NearbyBootstrapService.START" />
-                <action android:name="com.google.android.gms.nearby.connection.service.START" />
                 <action android:name="com.google.android.gms.nearby.fastpair.START" />
                 <action android:name="com.google.android.gms.nearby.messages.service.NearbyMessagesService.START" />
-                <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
-                <action android:name="com.google.android.gms.nearby.sharing.START_SERVICE" />
                 <action android:name="com.google.android.gms.notifications.service.START" />
                 <action android:name="com.google.android.gms.ocr.service.internal.START" />
                 <action android:name="com.google.android.gms.ocr.service.START" />
