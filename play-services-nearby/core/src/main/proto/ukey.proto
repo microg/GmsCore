@@ -1,0 +1,105 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+package securegcm;
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.google.security.cryptauth.lib.securegcm";
+option java_outer_classname = "UkeyProto";
+
+message Ukey2Message {
+  enum Type {
+    UNKNOWN_DO_NOT_USE = 0;
+    ALERT = 1;
+    CLIENT_INIT = 2;
+    SERVER_INIT = 3;
+    CLIENT_FINISH = 4;
+  }
+
+  optional Type message_type = 1;   // Identifies message type
+  optional bytes message_data = 2;  // Actual message, to be parsed according to
+                                    // message_type
+}
+
+message Ukey2Alert {
+  enum AlertType {
+    // Framing errors
+    BAD_MESSAGE = 1;        // The message could not be deserialized
+    BAD_MESSAGE_TYPE = 2;   // message_type has an undefined value
+    INCORRECT_MESSAGE = 3;  // message_type received does not correspond to
+                            // expected type at this stage of the protocol
+    BAD_MESSAGE_DATA = 4;   // Could not deserialize message_data as per
+                            //  value inmessage_type
+
+    // ClientInit and ServerInit errors
+    BAD_VERSION = 100;           // version is invalid; server cannot find
+                                 // suitable version to speak with client.
+    BAD_RANDOM = 101;            // Random data is missing or of incorrect
+                                 // length
+    BAD_HANDSHAKE_CIPHER = 102;  // No suitable handshake ciphers were found
+    BAD_NEXT_PROTOCOL = 103;     // The next protocol is missing, unknown, or
+                                 // unsupported
+    BAD_PUBLIC_KEY = 104;        // The public key could not be parsed
+
+    // Other errors
+    INTERNAL_ERROR = 200;  // An internal error has occurred. error_message
+                           // may contain additional details for logging
+                           // and debugging.
+  }
+
+  optional AlertType type = 1;
+  optional string error_message = 2;
+}
+
+enum Ukey2HandshakeCipher {
+  RESERVED = 0;
+  P256_SHA512 = 100;        // NIST P-256 used for ECDH, SHA512 used for
+                            // commitment
+  CURVE25519_SHA512 = 200;  // Curve 25519 used for ECDH, SHA512 used for
+                            // commitment
+}
+
+message Ukey2ClientInit {
+  optional int32 version = 1;  // highest supported version for rollback
+                               // protection
+  optional bytes random = 2;   // random bytes for replay/reuse protection
+
+  // One commitment (hash of ClientFinished containing public key) per supported
+  // cipher
+  message CipherCommitment {
+    optional Ukey2HandshakeCipher handshake_cipher = 1;
+    optional bytes commitment = 2;
+  }
+  repeated CipherCommitment cipher_commitments = 3;
+
+  // Next protocol that the client wants to speak.
+  optional string next_protocol = 4;
+}
+
+message Ukey2ServerInit {
+  optional int32 version = 1;  // highest supported version for rollback
+                               // protection
+  optional bytes random = 2;   // random bytes for replay/reuse protection
+
+  // Selected Cipher and corresponding public key
+  optional Ukey2HandshakeCipher handshake_cipher = 3;
+  optional bytes public_key = 4;
+}
+
+message Ukey2ClientFinished {
+  optional bytes public_key = 1;  // public key matching selected handshake
+                                  // cipher
+}

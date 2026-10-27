@@ -1,0 +1,596 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+package location.nearby.connections;
+
+// import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option optimize_for = LITE_RUNTIME;
+option java_outer_classname = "OfflineWireFormatsProto";
+option java_package = "com.google.location.nearby.connections.proto";
+option objc_class_prefix = "GNCP";
+
+message OfflineFrame {
+  enum Version {
+    UNKNOWN_VERSION = 0;
+    V1 = 1;
+  }
+  optional Version version = 1;
+
+  // Right now there's only 1 version, but if there are more, exactly one of
+  // the following fields will be set.
+  optional V1Frame v1 = 2;
+}
+
+message V1Frame {
+  enum FrameType {
+    UNKNOWN_FRAME_TYPE = 0;
+    CONNECTION_REQUEST = 1;
+    CONNECTION_RESPONSE = 2;
+    PAYLOAD_TRANSFER = 3;
+    BANDWIDTH_UPGRADE_NEGOTIATION = 4;
+    KEEP_ALIVE = 5;
+    DISCONNECTION = 6;
+    PAIRED_KEY_ENCRYPTION = 7;
+    AUTHENTICATION_MESSAGE = 8;
+    AUTHENTICATION_RESULT = 9;
+    AUTO_RESUME = 10;
+    AUTO_RECONNECT = 11;
+    BANDWIDTH_UPGRADE_RETRY = 12;
+  }
+  optional FrameType type = 1;
+
+  // Exactly one of the following fields will be set.
+  optional ConnectionRequestFrame connection_request = 2;
+  optional ConnectionResponseFrame connection_response = 3;
+  optional PayloadTransferFrame payload_transfer = 4;
+  optional BandwidthUpgradeNegotiationFrame bandwidth_upgrade_negotiation = 5;
+  optional KeepAliveFrame keep_alive = 6;
+  optional DisconnectionFrame disconnection = 7;
+  optional PairedKeyEncryptionFrame paired_key_encryption = 8;
+  optional AuthenticationMessageFrame authentication_message = 9;
+  optional AuthenticationResultFrame authentication_result = 10;
+  optional AutoResumeFrame auto_resume = 11;
+  optional AutoReconnectFrame auto_reconnect = 12;
+  optional BandwidthUpgradeRetryFrame bandwidth_upgrade_retry = 13;
+}
+
+message ConnectionRequestFrame {
+  // Should always match cs/symbol:location.nearby.proto.connections.Medium
+  // LINT.IfChange
+  enum Medium {
+    UNKNOWN_MEDIUM = 0;
+    MDNS = 1 [deprecated = true];
+    BLUETOOTH = 2;
+    WIFI_HOTSPOT = 3;
+    BLE = 4;
+    WIFI_LAN = 5;
+    WIFI_AWARE = 6;
+    NFC = 7;
+    WIFI_DIRECT = 8;
+    WEB_RTC = 9;
+    BLE_L2CAP = 10;
+    USB = 11;
+    WEB_RTC_NON_CELLULAR = 12;
+    AWDL = 13;
+  }
+  // LINT.ThenChange(//depot/google3/third_party/nearby/proto/connections_enums.proto)
+
+  // LINT.IfChange
+  enum ConnectionMode {
+    LEGACY = 0;
+    INSTANT = 1;
+  }
+  // LINT.ThenChange(//depot/google3/third_party/nearby/proto/connections_enums.proto)
+
+  optional string endpoint_id = 1;
+  optional string endpoint_name = 2;
+  optional bytes handshake_data = 3;
+  // A random number generated for each outgoing connection that is presently
+  // used to act as a tiebreaker when 2 devices connect to each other
+  // simultaneously; this can also be used for other initialization-scoped
+  // things in the future.
+  optional int32 nonce = 4;
+  // The mediums this device supports upgrading to. This list should be filtered
+  // by both the strategy and this device's individual limitations.
+  repeated Medium mediums = 5;
+  optional bytes endpoint_info = 6;
+  optional MediumMetadata medium_metadata = 7;
+  optional int32 keep_alive_interval_millis = 8;
+  optional int32 keep_alive_timeout_millis = 9;
+  // The type of {@link Device} object.
+  optional int32 device_type = 10 [default = 0, deprecated = true];
+  // The bytes of serialized {@link Device} object.
+  optional bytes device_info = 11 [deprecated = true];
+  // Represents the {@link Device} that invokes the request.
+  oneof Device {
+    ConnectionsDevice connections_device = 12;
+    PresenceDevice presence_device = 13;
+  }
+  optional ConnectionMode connection_mode = 14;
+  optional LocationHint location_hint = 15;
+}
+
+message ConnectionResponseFrame {
+  // This doesn't need to send back endpoint_id and endpoint_name (like
+  // the ConnectionRequestFrame does) because those have already been
+  // transmitted out-of-band, at the time this endpoint was discovered.
+
+  // One of:
+  //
+  // - ConnectionsStatusCodes.STATUS_OK
+  // - ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED.
+  optional int32 status = 1 [deprecated = true];
+  optional bytes handshake_data = 2;
+
+  // Used to replace the status integer parameter with a meaningful enum item.
+  // Map ConnectionsStatusCodes.STATUS_OK to ACCEPT and
+  // ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED to REJECT.
+  // Flag: connection_replace_status_with_response_connectionResponseFrame
+  enum ResponseStatus {
+    UNKNOWN_RESPONSE_STATUS = 0;
+    ACCEPT = 1;
+    REJECT = 2;
+  }
+  optional ResponseStatus response = 3;
+  optional OsInfo os_info = 4;
+  // A bitmask value to indicate which medium supports Multiplex transmission
+  // feature. Each supporting medium could utilize one bit starting from the
+  // least significant bit in this field. eq. BT utilizes the LSB bit which 0x01
+  // means bt supports multiplex while 0x00 means not. Refer to ClientProxy.java
+  // for the bit usages.
+  optional int32 multiplex_socket_bitmask = 5;
+  optional int32 nearby_connections_version = 6 [deprecated = true];
+  optional int32 safe_to_disconnect_version = 7;
+  optional LocationHint location_hint = 8;
+  optional int32 keep_alive_timeout_millis = 9;
+}
+
+message PayloadTransferFrame {
+  enum PacketType {
+    UNKNOWN_PACKET_TYPE = 0;
+    DATA = 1;
+    CONTROL = 2;
+    PAYLOAD_ACK = 3;
+  }
+
+  message PayloadHeader {
+    enum PayloadType {
+      UNKNOWN_PAYLOAD_TYPE = 0;
+      BYTES = 1;
+      FILE = 2;
+      STREAM = 3;
+    }
+    optional int64 id = 1;
+    optional PayloadType type = 2;
+    optional int64 total_size = 3;
+    optional bool is_sensitive = 4;
+    optional string file_name = 5;
+    optional string parent_folder = 6;
+    // Time since the epoch in milliseconds.
+    optional int64 last_modified_timestamp_millis = 7;
+  }
+
+  // Accompanies DATA packets.
+  message PayloadChunk {
+    enum Flags {
+      LAST_CHUNK = 0x1;
+    }
+    optional int32 flags = 1;
+    optional int64 offset = 2;
+    optional bytes body = 3;
+    optional int32 index = 4;
+  }
+
+  // Accompanies CONTROL packets.
+  message ControlMessage {
+    enum EventType {
+      UNKNOWN_EVENT_TYPE = 0;
+      PAYLOAD_ERROR = 1;
+      PAYLOAD_CANCELED = 2;
+      // Use PacketType.PAYLOAD_ACK instead
+      PAYLOAD_RECEIVED_ACK = 3 [deprecated = true];
+    }
+
+    optional EventType event = 1;
+    optional int64 offset = 2;
+  }
+
+  optional PacketType packet_type = 1;
+  optional PayloadHeader payload_header = 2;
+
+  // Exactly one of the following fields will be set, depending on the type.
+  optional PayloadChunk payload_chunk = 3;
+  optional ControlMessage control_message = 4;
+}
+
+message BandwidthUpgradeNegotiationFrame {
+  enum EventType {
+    UNKNOWN_EVENT_TYPE = 0;
+    UPGRADE_PATH_AVAILABLE = 1;
+    LAST_WRITE_TO_PRIOR_CHANNEL = 2;
+    SAFE_TO_CLOSE_PRIOR_CHANNEL = 3;
+    CLIENT_INTRODUCTION = 4;
+    UPGRADE_FAILURE = 5;
+    CLIENT_INTRODUCTION_ACK = 6;
+    // The event type that requires the remote device to send the available
+    // upgrade path.
+    UPGRADE_PATH_REQUEST = 7;
+  }
+
+  // Accompanies UPGRADE_PATH_AVAILABLE and UPGRADE_FAILURE events.
+  message UpgradePathInfo {
+    // Should always match cs/symbol:location.nearby.proto.connections.Medium
+    enum Medium {
+      UNKNOWN_MEDIUM = 0;
+      MDNS = 1 [deprecated = true];
+      BLUETOOTH = 2;
+      WIFI_HOTSPOT = 3;
+      BLE = 4;
+      WIFI_LAN = 5;
+      WIFI_AWARE = 6;
+      NFC = 7;
+      WIFI_DIRECT = 8;
+      WEB_RTC = 9;
+      // 10 is reserved.
+      USB = 11;
+      WEB_RTC_NON_CELLULAR = 12;
+      AWDL = 13;
+    }
+
+    // Accompanies Medium.WIFI_HOTSPOT.
+    message WifiHotspotCredentials {
+      optional string ssid = 1;
+      optional string password = 2
+          /* type = ST_ACCOUNT_CREDENTIAL */;
+      optional int32 port = 3;
+      optional string gateway = 4 [default = "0.0.0.0"];
+      // This field can be a band or frequency
+      optional int32 frequency = 5 [default = -1];
+    }
+
+    // Accompanies Medium.WIFI_LAN.
+    message WifiLanSocket {
+      optional bytes ip_address = 1;
+      optional int32 wifi_port = 2;
+    }
+
+    // Accompanies Medium.BLUETOOTH.
+    message BluetoothCredentials {
+      optional string service_name = 1;
+      optional string mac_address = 2;
+    }
+
+    // Accompanies Medium.WIFI_AWARE.
+    message WifiAwareCredentials {
+      optional string service_id = 1;
+      optional bytes service_info = 2;
+      optional string password = 3
+          /* type = ST_ACCOUNT_CREDENTIAL */;
+    }
+
+    // Accompanies Medium.WIFI_DIRECT.
+    message WifiDirectCredentials {
+      optional string ssid = 1;
+      optional string password = 2
+          /* type = ST_ACCOUNT_CREDENTIAL */;
+      optional int32 port = 3;
+      optional int32 frequency = 4;
+      optional string gateway = 5 [default = "0.0.0.0"];
+      // IPv6 link-local address, network order (128bits).
+      // The GO should listen on both IPv4 and IPv6 addresses.
+      // https://en.wikipedia.org/wiki/Link-local_address#IPv6
+      optional bytes ip_v6_address = 6;
+    }
+
+    // Accompanies Medium.WEB_RTC
+    message WebRtcCredentials {
+      optional string peer_id = 1;
+      optional LocationHint location_hint = 2;
+    }
+
+    // Accompanies Medium.AWDL.
+    message AwdlCredentials {
+      optional string service_name = 1;
+      optional string service_type = 2;
+      optional string password = 3
+          /* type = ST_ACCOUNT_CREDENTIAL */;
+    }
+
+    message UpgradePathRequest {
+      // Supported mediums on the advertiser device.
+      repeated Medium mediums = 1 [packed = true];
+      optional MediumMetadata medium_meta_data = 2;
+    }
+
+    optional Medium medium = 1;
+
+    // Exactly one of the following fields will be set.
+    optional WifiHotspotCredentials wifi_hotspot_credentials = 2;
+    optional WifiLanSocket wifi_lan_socket = 3;
+    optional BluetoothCredentials bluetooth_credentials = 4;
+    optional WifiAwareCredentials wifi_aware_credentials = 5;
+    optional WifiDirectCredentials wifi_direct_credentials = 6;
+    optional WebRtcCredentials web_rtc_credentials = 8;
+    optional AwdlCredentials awdl_credentials = 11;
+
+    // Disable Encryption for this upgrade medium to improve throughput.
+    optional bool supports_disabling_encryption = 7;
+
+    // An ack will be sent after the CLIENT_INTRODUCTION frame.
+    optional bool supports_client_introduction_ack = 9;
+
+    optional UpgradePathRequest upgrade_path_request = 10;
+  }
+
+  // Accompanies SAFE_TO_CLOSE_PRIOR_CHANNEL events.
+  message SafeToClosePriorChannel {
+    optional int32 sta_frequency = 1;
+  }
+
+  // Accompanies CLIENT_INTRODUCTION events.
+  message ClientIntroduction {
+    optional string endpoint_id = 1;
+    optional bool supports_disabling_encryption = 2;
+    optional string last_endpoint_id = 3;
+  }
+
+  // Accompanies CLIENT_INTRODUCTION_ACK events.
+  message ClientIntroductionAck {}
+
+  optional EventType event_type = 1;
+
+  // Exactly one of the following fields will be set.
+  optional UpgradePathInfo upgrade_path_info = 2;
+  optional ClientIntroduction client_introduction = 3;
+  optional ClientIntroductionAck client_introduction_ack = 4;
+  optional SafeToClosePriorChannel safe_to_close_prior_channel = 5;
+}
+
+message BandwidthUpgradeRetryFrame {
+  // Should always match cs/symbol:location.nearby.proto.connections.Medium
+  // LINT.IfChange
+  enum Medium {
+    UNKNOWN_MEDIUM = 0;
+    // 1 is reserved.
+    BLUETOOTH = 2;
+    WIFI_HOTSPOT = 3;
+    BLE = 4;
+    WIFI_LAN = 5;
+    WIFI_AWARE = 6;
+    NFC = 7;
+    WIFI_DIRECT = 8;
+    WEB_RTC = 9;
+    BLE_L2CAP = 10;
+    USB = 11;
+    WEB_RTC_NON_CELLULAR = 12;
+    AWDL = 13;
+  }
+  // LINT.ThenChange(//depot/google3/third_party/nearby/proto/connections_enums.proto)
+
+  // The mediums this device supports upgrading to. This list should be filtered
+  // by both the strategy and this device's individual limitations.
+  repeated Medium supported_medium = 1;
+
+  // If true, expect the remote endpoint to send back the latest
+  // supported_medium.
+  optional bool is_request = 2;
+}
+
+message KeepAliveFrame {
+  // And ack will be sent after receiving KEEP_ALIVE frame.
+  optional bool ack = 1;
+  // The sequence number
+  optional uint32 seq_num = 2;
+}
+
+// Informs the remote side to immediately severe the socket connection.
+// Used in bandwidth upgrades to get around a race condition, but may be used
+// in other situations to trigger a faster disconnection event than waiting for
+// socket closed on the remote side.
+message DisconnectionFrame {
+  // Apply safe-to-disconnect protocol if true.
+  optional bool request_safe_to_disconnect = 1;
+
+  // Ack of receiving Disconnection frame will be sent to the sender
+  // frame.
+  optional bool ack_safe_to_disconnect = 2;
+}
+
+// A paired key encryption packet sent between devices, contains signed data.
+message PairedKeyEncryptionFrame {
+  // The encrypted data (raw authentication token for the established
+  // connection) in byte array format.
+  optional bytes signed_data = 1;
+}
+
+// Nearby Connections authentication frame, contains the bytes format of a
+// DeviceProvider's authentication message.
+message AuthenticationMessageFrame {
+  // An auth message generated by DeviceProvider.
+  // To be sent to the remote device for verification during connection setups.
+  optional bytes auth_message = 1;
+}
+
+// Nearby Connections authentication result frame.
+message AuthenticationResultFrame {
+  // The authentication result. Non null if this frame is used to exchange
+  // authentication result.
+  optional int32 result = 1;
+}
+
+message AutoResumeFrame {
+  enum EventType {
+    UNKNOWN_AUTO_RESUME_EVENT_TYPE = 0;
+    PAYLOAD_RESUME_TRANSFER_START = 1;
+    PAYLOAD_RESUME_TRANSFER_ACK = 2;
+  }
+
+  optional EventType event_type = 1;
+  optional int64 pending_payload_id = 2;
+  optional int32 next_payload_chunk_index = 3;
+  optional int32 version = 4;
+}
+
+message AutoReconnectFrame {
+  enum EventType {
+    UNKNOWN_EVENT_TYPE = 0;
+    CLIENT_INTRODUCTION = 1;
+    CLIENT_INTRODUCTION_ACK = 2;
+  }
+  optional string endpoint_id = 1;
+  optional EventType event_type = 2;
+  optional string last_endpoint_id = 3;
+}
+
+message MediumMetadata {
+  // True if local device supports 5GHz.
+  optional bool supports_5_ghz = 1;
+  // WiFi LAN BSSID, in the form of a six-byte MAC address: XX:XX:XX:XX:XX:XX
+  optional string bssid = 2;
+  // IP address, in network byte order: the highest order byte of the address is
+  // in byte[0].
+  optional bytes ip_address = 3;
+  // True if local device supports 6GHz.
+  optional bool supports_6_ghz = 4;
+  // True if local device has mobile radio.
+  optional bool mobile_radio = 5;
+  // The frequency of the WiFi LAN AP(in MHz). Or -1 is not associated with an
+  // AP over WiFi, -2 represents the active network uses an Ethernet transport.
+  optional int32 ap_frequency = 6 [default = -1];
+  // Available channels on the local device.
+  optional AvailableChannels available_channels = 7;
+  // Usable WiFi Direct client channels on the local device.
+  optional WifiDirectCliUsableChannels wifi_direct_cli_usable_channels = 8;
+  // Usable WiFi LAN channels on the local device.
+  optional WifiLanUsableChannels wifi_lan_usable_channels = 9;
+  // Usable WiFi Aware channels on the local device.
+  optional WifiAwareUsableChannels wifi_aware_usable_channels = 10;
+  // Usable WiFi Hotspot STA channels on the local device.
+  optional WifiHotspotStaUsableChannels wifi_hotspot_sta_usable_channels = 11;
+  // The supported medium roles.
+  optional MediumRole medium_role = 12;
+}
+
+// Available channels on the local device.
+message AvailableChannels {
+  repeated int32 channels = 1 [packed = true];
+}
+
+// Usable WiFi Direct client channels on the local device.
+message WifiDirectCliUsableChannels {
+  repeated int32 channels = 1 [packed = true];
+}
+
+// Usable WiFi LAN channels on the local device.
+message WifiLanUsableChannels {
+  repeated int32 channels = 1 [packed = true];
+}
+
+// Usable WiFi Aware channels on the local device.
+message WifiAwareUsableChannels {
+  repeated int32 channels = 1 [packed = true];
+}
+
+// Usable WiFi Hotspot STA channels on the local device.
+message WifiHotspotStaUsableChannels {
+  repeated int32 channels = 1 [packed = true];
+}
+
+// The medium roles.
+message MediumRole {
+  optional bool support_wifi_direct_group_owner = 1;
+  optional bool support_wifi_direct_group_client = 2;
+  optional bool support_wifi_hotspot_host = 3;
+  optional bool support_wifi_hotspot_client = 4;
+  optional bool support_wifi_aware_publisher = 5;
+  optional bool support_wifi_aware_subscriber = 6;
+  optional bool support_awdl_publisher = 7;
+  optional bool support_awdl_subscriber = 8;
+}
+
+// LocationHint is used to specify a location as well as format.
+message LocationHint {
+  // Location is the location, provided in the format specified by format.
+  optional string location = 1;
+
+  // the format of location.
+  optional LocationStandard.Format format = 2;
+}
+
+message LocationStandard {
+  enum Format {
+    UNKNOWN = 0;
+    // E164 country codes:
+    // https://en.wikipedia.org/wiki/List_of_country_calling_codes
+    // e.g. +1 for USA
+    E164_CALLING = 1;
+
+    // ISO 3166-1 alpha-2 country codes:
+    // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+    ISO_3166_1_ALPHA_2 = 2;
+  }
+}
+
+// Device capability for OS information.
+message OsInfo {
+  enum OsType {
+    UNKNOWN_OS_TYPE = 0;
+    ANDROID = 1;
+    CHROME_OS = 2;
+    WINDOWS = 3;
+    APPLE = 4;
+    LINUX = 100;  // g3 test environment
+  }
+
+  optional OsType type = 1;
+}
+
+enum EndpointType {
+  UNKNOWN_ENDPOINT = 0;
+  CONNECTIONS_ENDPOINT = 1;
+  PRESENCE_ENDPOINT = 2;
+}
+
+message ConnectionsDevice {
+  optional string endpoint_id = 1;
+  optional EndpointType endpoint_type = 2;
+  optional bytes connectivity_info_list = 3;  // Data Elements.
+  optional bytes endpoint_info = 4;
+}
+
+message PresenceDevice {
+  enum DeviceType {
+    UNKNOWN = 0;
+    PHONE = 1;
+    TABLET = 2;
+    DISPLAY = 3;
+    LAPTOP = 4;
+    TV = 5;
+    WATCH = 6;
+  }
+
+  optional string endpoint_id = 1;
+  optional EndpointType endpoint_type = 2;
+  optional bytes connectivity_info_list = 3;  // Data Elements.
+  optional int64 device_id = 4;
+  optional string device_name = 5;
+  optional DeviceType device_type = 6;
+  optional string device_image_url = 7;
+  repeated ConnectionRequestFrame.Medium discovery_medium = 8 [packed = true];
+  repeated int32 actions = 9 [packed = true];
+  repeated int64 identity_type = 10 [packed = true];
+}
