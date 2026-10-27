@@ -16,25 +16,25 @@
 
 package org.microg.gms.maps.mapbox.model
 
-import android.util.Log
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Options
 
 interface Markup<T : Annotation<*>, S : Options<T>> {
-    var annotation: T?
-    val annotationOptions: S
+    var annotations: List<AnnotationTracker<T, S>>
     var removed: Boolean
 
     fun update(manager: AnnotationManager<*, T, S, *, *, *>) {
         synchronized(this) {
-            if (removed && annotation != null) {
-                manager.delete(annotation)
-                annotation = null
-            } else if (annotation != null) {
-                manager.update(annotation)
-            } else if (!removed) {
-                annotation = manager.create(annotationOptions)
+            for (tracker in annotations) {
+                if (removed && tracker.annotation != null) {
+                    manager.delete(tracker.annotation)
+                    tracker.annotation = null
+                } else if (tracker.annotation != null) {
+                    manager.update(tracker.annotation)
+                } else if (!removed) {
+                    tracker.annotation = manager.create(tracker.options)
+                }
             }
         }
     }
