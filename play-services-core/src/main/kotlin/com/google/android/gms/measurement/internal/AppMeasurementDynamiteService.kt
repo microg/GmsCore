@@ -42,9 +42,17 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
         initialized = true
     }
 
+    override fun initializeWithElapsedTime(context: IObjectWrapper?, params: InitializationParams?, eventTimeMillis: Long, eventElapsedRealtime: Long) {
+        initialize(context, params, eventTimeMillis)
+    }
+
     override fun logEvent(origin: String?, name: String?, params: Bundle?, z: Boolean, z2: Boolean, eventTimeMillis: Long) {
         requireInitialized()
         Log.d(TAG, "Not yet implemented: logEvent")
+    }
+
+    override fun logEventWithElapsedTime(origin: String?, name: String?, params: Bundle?, isInternalEvent: Boolean, allowInterceptor: Boolean, eventTimeMillis: Long, eventElapsedRealtime: Long) {
+        logEvent(origin, name, params, isInternalEvent, allowInterceptor, eventTimeMillis)
     }
 
     override fun logEventAndBundle(origin: String?, name: String?, params: Bundle?, receiver: IBundleReceiver?, eventTimeMillis: Long) {
@@ -112,6 +120,10 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun resetAnalyticsData(eventTimeMillis: Long) {
         Log.d(TAG, "Not yet implemented: resetAnalyticsData")
+    }
+
+    override fun resetAnalyticsDataWithElapsedTime(eventTimeMillis: Long, eventElapsedRealtime: Long) {
+        resetAnalyticsData(eventTimeMillis)
     }
 
     override fun setMinimumSessionDuration(minimumSessionDuration: Long) {
