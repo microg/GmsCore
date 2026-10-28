@@ -17,15 +17,14 @@
 package org.microg.gms.cast;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.cast.ApplicationMetadata;
@@ -37,28 +36,24 @@ import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.internal.ICastDeviceController;
 import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.common.internal.BinderWrapper;
-import com.google.android.gms.common.internal.GetServiceRequest;
 
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.Namespace;
-import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
 import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
-import su.litvak.chromecast.api.v2.AppEvent;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
+import su.litvak.chromecast.api.v2.Namespace;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
-    ChromeCastConnectionEventListener,
-    ChromeCastSpontaneousEventListener,
-    ChromeCastRawMessageListener,
-    ICastDeviceControllerListener
-{
+        ChromeCastConnectionEventListener,
+        ChromeCastSpontaneousEventListener,
+        ChromeCastRawMessageListener {
+
     private static final String TAG = "GmsCastDeviceController";
 
     private Context context;
@@ -80,10 +75,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.castDevice = CastDevice.getFromBundle(extras);
         this.notificationEnabled = extras.getBoolean("com.google.android.gms.cast.EXTRA_CAST_FRAMEWORK_NOTIFICATION_ENABLED");
         this.castFlags = extras.getLong("com.google.android.gms.cast.EXTRA_CAST_FLAGS");
-        BinderWrapper listenerWrapper = (BinderWrapper)extras.get("listener");
-        if (listenerWrapper != null) {
-            this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
-        }
 
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
         this.chromecast.registerListener(this);
@@ -93,7 +84,9 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
     @Override
     public void connectionEventReceived(ChromeCastConnectionEvent event) {
-        if (!event.isConnected()) {
+        if (event.isConnected()) {
+            this.onConnected(CommonStatusCodes.SUCCESS);
+        } else {
             this.onDisconnected(CommonStatusCodes.SUCCESS);
         }
     }
@@ -109,7 +102,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
         metadata.images = new ArrayList<WebImage>();
         metadata.namespaces = new ArrayList<String>();
-        for(Namespace namespace : app.namespaces) {
+        for (Namespace namespace : app.namespaces) {
             metadata.namespaces.add(namespace.name);
         }
         metadata.senderAppIdentifier = this.context.getPackageName();
@@ -122,7 +115,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             case MEDIA_STATUS:
                 break;
             case STATUS:
-                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
+                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status) event.getData();
                 Application app = status.getRunningApp();
                 ApplicationMetadata metadata = this.createMetadataFromApplication(app);
                 if (app != null) {
@@ -225,6 +218,28 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.launchApplication(applicationId, new LaunchOptions());
     }
 
+    @Override
+    public void addListener(ICastDeviceControllerListener listener) throws RemoteException {
+        this.listener = listener;
+    }
+
+    @Override
+    public void connect() {
+        try {
+            chromecast.connect();
+        } catch (IOException | GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void onConnected(int reason) {
+        try {
+            listener.onConnected(reason);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void onDisconnected(int reason) {
         if (this.listener != null) {
             try {
@@ -238,6 +253,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
         if (this.listener != null) {
             try {
+                Log.d(TAG, "Calling onApplicationConnectionSuccess");
                 this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + ex.getMessage());
