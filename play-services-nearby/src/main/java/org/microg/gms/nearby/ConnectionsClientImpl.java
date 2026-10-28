@@ -199,108 +199,85 @@ public class ConnectionsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> i
      * through the GoogleApi task machinery, translating AIDL callbacks
      * back into app callbacks and Task outcomes.
      *
-     * Known edge case: if the service process dies after a call was
-     * dispatched but before it reports, the Task stays pending (the
-     * dispatch TaskCompletionSource is completed at dispatch, so the
-     * manager has nothing left to fail). A follow-up should complete the
-     * dispatch source from the result callback itself, as the Exposure
-     * Notification client does, so a manager disconnect fails the Task.
+     * Dispatch lifecycle, following the Exposure Notification client:
+     * the dispatch source is completed from the result callback itself,
+     * never at dispatch, so a call stays pending in the manager until
+     * the service reports. A manager failure of the call (for example a
+     * connection failure while the call was queued) is translated to
+     * the method's failure status, so the app Task fails instead of
+     * hanging. Residual gap, deliberately not bundled here: if the
+     * service process dies after a successful dispatch but before
+     * reporting, the app Task can still hang in this manager snapshot,
+     * because GoogleApiManager does not track executed calls and its
+     * onInstanceSuspended is empty; fixing that needs a manager-level
+     * change to shared machinery.
      */
     private class ServiceTransport implements ConnectionsTransport {
+        private interface ResultCall {
+            void execute(ConnectionsApiClient client, IConnectionsResultCallback result) throws Exception;
+        }
+
+        private void scheduleResultCall(ResultCall call, ResultCallback result, int failureStatus) {
+            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
+                AtomicBoolean reported = new AtomicBoolean(false);
+                IConnectionsResultCallback callback = new IConnectionsResultCallback.Stub() {
+                    @Override
+                    public void onResult(int statusCode) throws RemoteException {
+                        if (reported.compareAndSet(false, true)) {
+                            completionSource.setResult(null);
+                        }
+                        result.onResult(statusCode);
+                    }
+                };
+                try {
+                    call.execute(client, callback);
+                } catch (Exception e) {
+                    if (reported.compareAndSet(false, true)) {
+                        completionSource.setException(e);
+                    }
+                    result.onResult(failureStatus);
+                }
+            }).addOnFailureListener(e -> result.onResult(failureStatus));
+        }
+
         @Override
         public void startAdvertising(String userNickName, String serviceId, ConnectionLifecycleCallback lifecycle, AdvertisingOptions options, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.startAdvertising(userNickName, serviceId, wrapLifecycle(lifecycle), wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.startAdvertising(userNickName, serviceId, wrapLifecycle(lifecycle), callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void stopAdvertising(ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.stopAdvertising(wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.stopAdvertising(callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void startDiscovery(String serviceId, EndpointDiscoveryCallback discovery, DiscoveryOptions options, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.startDiscovery(serviceId, wrapDiscovery(discovery), wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.startDiscovery(serviceId, wrapDiscovery(discovery), callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void stopDiscovery(ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.stopDiscovery(wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.stopDiscovery(callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void requestConnection(String userNickName, String endpointId, byte[] endpointInfo, ConnectionLifecycleCallback lifecycle, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.requestConnection(userNickName, endpointId, endpointInfo, wrapLifecycle(lifecycle), wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.requestConnection(userNickName, endpointId, endpointInfo, wrapLifecycle(lifecycle), callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void acceptConnection(String endpointId, PayloadCallback payload, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.acceptConnection(endpointId, wrapPayload(payload), wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.acceptConnection(endpointId, wrapPayload(payload), callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void rejectConnection(String endpointId, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.rejectConnection(endpointId, wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.rejectConnection(endpointId, callback), result, ConnectionsStatusCodes.STATUS_ENDPOINT_IO_ERROR);
         }
 
         @Override
         public void sendPayload(String endpointId, Payload payload, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
+            scheduleResultCall((client, callback) -> {
                 ParcelFileDescriptor pfdToClose = null;
                 try {
                     byte[] bytes = null;
@@ -318,11 +295,7 @@ public class ConnectionsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> i
                             pfdToClose = pfd;
                         }
                     }
-                    client.sendPayload(endpointId, payload.getId(), payload.getType(), bytes, pfd, wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_PAYLOAD_IO_ERROR);
+                    client.sendPayload(endpointId, payload.getId(), payload.getType(), bytes, pfd, callback);
                 } finally {
                     if (pfdToClose != null) {
                         try {
@@ -331,7 +304,7 @@ public class ConnectionsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> i
                         }
                     }
                 }
-            });
+            }, result, ConnectionsStatusCodes.STATUS_PAYLOAD_IO_ERROR);
         }
 
         @Override
@@ -343,15 +316,7 @@ public class ConnectionsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> i
 
         @Override
         public void cancelPayload(long payloadId, ResultCallback result) {
-            scheduleTask((PendingGoogleApiCall<Void, ConnectionsApiClient>) (client, completionSource) -> {
-                try {
-                    client.cancelPayload(payloadId, wrapResult(result));
-                    completionSource.setResult(null);
-                } catch (Exception e) {
-                    completionSource.setException(e);
-                    result.onResult(ConnectionsStatusCodes.STATUS_PAYLOAD_IO_ERROR);
-                }
-            });
+            scheduleResultCall((client, callback) -> client.cancelPayload(payloadId, callback), result, ConnectionsStatusCodes.STATUS_PAYLOAD_IO_ERROR);
         }
 
         @Override
@@ -376,15 +341,6 @@ public class ConnectionsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> i
                     completionSource.setException(e);
                 }
             });
-        }
-
-        private IConnectionsResultCallback wrapResult(final ResultCallback result) {
-            return new IConnectionsResultCallback.Stub() {
-                @Override
-                public void onResult(int statusCode) throws RemoteException {
-                    result.onResult(statusCode);
-                }
-            };
         }
 
         private IConnectionLifecycleCallback wrapLifecycle(final ConnectionLifecycleCallback lifecycle) {
