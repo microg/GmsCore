@@ -97,6 +97,7 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.nearby.sharing.START_SERVICE" />
                 <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
+                <action android:name="com.google.android.gms.nearby.connection.service.START" />
             </intent-filter>
         </service>
 

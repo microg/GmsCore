@@ -68,6 +68,14 @@ class NearbySharingServer(
     private var acceptJob: Job? = null
     private var isRunning = false
 
+    /**
+     * When set, accepted sockets are handed to this handler instead of the
+     * Nearby Share flow (handleClient). Used by the Connections API service
+     * so incoming Connections sessions run their own handshake and payload
+     * loop, while the Share UI keeps its existing behavior untouched.
+     */
+    var connectionsHandler: ((Socket) -> Unit)? = null
+
     fun start() {
         if (isRunning) return
         isRunning = true
@@ -90,7 +98,12 @@ class NearbySharingServer(
                 while (isRunning) {
                     try {
                         val clientSocket = ss.accept()
-                        handleClient(clientSocket)
+                        val handler = connectionsHandler
+                        if (handler != null) {
+                            handler(clientSocket)
+                        } else {
+                            handleClient(clientSocket)
+                        }
                     } catch (e: Exception) {
                         if (isRunning) {
                             Log.e(NearbySharingConstants.TAG, "Server accept error", e)

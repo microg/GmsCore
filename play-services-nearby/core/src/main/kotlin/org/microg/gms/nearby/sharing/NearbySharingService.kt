@@ -6,7 +6,6 @@
 package org.microg.gms.nearby.sharing
 
 import android.os.Binder
-import android.os.IBinder
 import android.util.Log
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -20,8 +19,11 @@ import org.microg.gms.common.PackageUtils
 class NearbySharingService : BaseService(
     NearbySharingConstants.TAG,
     GmsService.NEARBY,
-    GmsService.NEARBY_SHARING
+    GmsService.NEARBY_SHARING,
+    GmsService.NEARBY_CONNECTIONS
 ) {
+    private var connectionsService: ConnectionsServiceImpl? = null
+
     override fun handleServiceRequest(
         callback: IGmsCallbacks,
         request: GetServiceRequest,
@@ -29,6 +31,20 @@ class NearbySharingService : BaseService(
     ) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         Log.d(NearbySharingConstants.TAG, "handleServiceRequest: ${request.packageName} for $service")
+
+        if (service == GmsService.NEARBY_CONNECTIONS) {
+            // Real Connections binding: the AIDL service that drives the
+            // mDNS/TCP/crypto engine, replacing the previous empty Binder
+            // for this service id. The Share path below is unchanged.
+            val impl = connectionsService ?: ConnectionsServiceImpl(this).also { connectionsService = it }
+            val info = ConnectionInfo().apply {
+                features = arrayOf(
+                    Feature("nearby_connections", 1)
+                )
+            }
+            callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, impl, info)
+            return
+        }
 
         val binder = object : Binder() {}
         val info = ConnectionInfo().apply {
@@ -38,5 +54,11 @@ class NearbySharingService : BaseService(
             )
         }
         callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, binder, info)
+    }
+
+    override fun onDestroy() {
+        connectionsService?.shutdown()
+        connectionsService = null
+        super.onDestroy()
     }
 }
