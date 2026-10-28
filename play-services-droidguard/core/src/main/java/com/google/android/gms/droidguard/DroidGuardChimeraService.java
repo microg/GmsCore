@@ -27,6 +27,7 @@ import org.microg.gms.droidguard.core.ServiceCallProxy;
 
 import java.util.Collections;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -132,7 +133,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.g = new Object();
         this.h = new Handler();
         this.c = new Object();
-        this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
+        this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.AbortPolicy());
         HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));
         SerialUnflaky.INSTANCE.fetch();
         ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "SurfaceFlinger");
@@ -143,6 +144,9 @@ public class DroidGuardChimeraService extends TracingIntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (d instanceof ExecutorService) {
+            ((ExecutorService) d).shutdown();
+        }
         this.e = null;
         this.b = null;
         this.g = null;

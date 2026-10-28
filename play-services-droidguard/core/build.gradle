@@ -9,6 +9,41 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+// Android unit-test compilation needs the HTTP server API outside android.jar.
+// Keep generated JDK API classes compile-only; the unit-test JVM uses its module.
+def httpServerTestModule = new File(System.getProperty('java.home'), 'jmods/jdk.httpserver.jmod')
+def httpServerTestTool = new File(System.getProperty('java.home'),
+        'bin/jmod' + (System.getProperty('os.name').startsWith('Windows') ? '.exe' : ''))
+def httpServerTestModuleDir = layout.buildDirectory.dir('jdk-httpserver-test/module')
+def httpServerTestApiDir = layout.buildDirectory.dir('jdk-httpserver-test/api')
+
+def extractHttpServerTestModule = tasks.register('extractHttpServerTestModule', Exec) {
+    inputs.file(httpServerTestModule)
+    outputs.dir(httpServerTestModuleDir)
+    commandLine httpServerTestTool.absolutePath, 'extract', '--dir',
+            httpServerTestModuleDir.get().asFile.absolutePath, httpServerTestModule.absolutePath
+    doFirst {
+        if (!httpServerTestTool.isFile() || !httpServerTestModule.isFile()) {
+            throw new GradleException('DroidGuard unit tests require a full JDK with jdk.httpserver')
+        }
+    }
+}
+
+def prepareHttpServerTestApi = tasks.register('prepareHttpServerTestApi', Sync) {
+    dependsOn extractHttpServerTestModule
+    from(httpServerTestModuleDir.map { it.dir('classes') }) {
+        include 'com/sun/net/httpserver/**/*.class'
+    }
+    into(httpServerTestApiDir)
+}
+
+def packageHttpServerTestApi = tasks.register('packageHttpServerTestApi', Jar) {
+    dependsOn prepareHttpServerTestApi
+    from(httpServerTestApiDir)
+    archiveFileName = 'jdk-httpserver-test-api.jar'
+    destinationDirectory = layout.buildDirectory.dir('jdk-httpserver-test')
+}
+
 dependencies {
     api project(':play-services-droidguard')
 
@@ -24,6 +59,9 @@ dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    testCompileOnly files(packageHttpServerTestApi.flatMap { it.archiveFile }).builtBy(packageHttpServerTestApi)
+    testImplementation "junit:junit:4.13.2"
 }
 
 wire {
@@ -60,6 +98,12 @@ android {
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    testOptions {
+        unitTests.all {
+            jvmArgs '--add-modules=jdk.httpserver'
+        }
     }
 
     kotlinOptions {
