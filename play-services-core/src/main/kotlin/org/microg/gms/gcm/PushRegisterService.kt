@@ -29,6 +29,8 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "GmsGcmRegister"
 
+internal fun newUnregisterRequest(): RegisterRequest = RegisterRequest().delete(true)
+
 private suspend fun ensureCheckinIsUpToDate(context: Context) {
     if (!CheckinPreferences.isEnabled(context)) throw RuntimeException("Checkin disabled")
     val lastCheckin = LastCheckinInfo.read(context).lastCheckin
@@ -177,7 +179,7 @@ class PushRegisterService : LifecycleService() {
     private suspend fun unregister(intent: Intent) {
         val packageName = intent.appPackageName ?: throw RuntimeException("No package provided")
         Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.extras)
-        val bundle = completeRegisterRequest(this, database, RegisterRequest()
+        val bundle = completeRegisterRequest(this, database, newUnregisterRequest()
                 .build(this)
                 .sender(intent.getStringExtra(EXTRA_SENDER))
                 .checkin(LastCheckinInfo.read(this))
