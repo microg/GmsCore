@@ -10,8 +10,10 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -25,14 +27,19 @@ import org.microg.gms.auth.login.LoginActivity;
 import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.ui.UnpackingRedirectActivity;
 import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static android.accounts.AccountManager.*;
 import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.auth.AskPermissionActivity.EXTRA_FROM_ACCOUNT_MANAGER;
+
+import androidx.core.app.PendingIntentCompat;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";
@@ -91,7 +98,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public boolean isPackageOverrideAllowed(Account account, String requestingPackage, String overridePackage, CertData overrideCertificate) {
         // Always allow for self package
         if (requestingPackage.equals(context.getPackageName())) return true;
-//        if (requestingPackage.equals("org.microg.example.authwithoverride")) return true;
         String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(PackageManagerUtilsKt.getCertificates(context.getPackageManager(), requestingPackage).get(0), "SHA-256"), "");
         String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCertificate, "SHA-256"), "");
         String overrideUserDataKey = "override." + requestingPackage + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
@@ -130,9 +136,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                i.putExtra(KEY_AUTHTOKEN, authTokenType);
+                i.putExtra(KEY_CALLER_UID, options.getInt(KEY_CALLER_UID));
+                i.putExtra(KEY_CALLER_PID, options.getInt(KEY_CALLER_PID));
                 i.putExtra(KEY_OVERRIDE_PACKAGE, overridePackage);
                 i.putExtra(KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
-                result.putParcelable(KEY_INTENT, i);
+                result.putParcelable(KEY_INTENT, UnpackingRedirectActivity.exposeUniqueIntent(context, i));
                 return result;
             }
         } else {
@@ -151,19 +160,22 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             } else {
                 Bundle result = new Bundle();
                 Intent i = new Intent(context, AskPermissionActivity.class);
-                i.putExtras(options);
                 i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, authTokenType);
+                i.putExtra(KEY_CALLER_UID, options.getInt(KEY_CALLER_UID));
+                i.putExtra(KEY_CALLER_PID, options.getInt(KEY_CALLER_PID));
+                i.putExtra(EXTRA_FROM_ACCOUNT_MANAGER, true);
+                i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, (byte[]) null);
                 try {
                     if (res.consentDataBase64 != null)
                         i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
-                result.putParcelable(KEY_INTENT, i);
+                result.putParcelable(KEY_INTENT, UnpackingRedirectActivity.exposeUniqueIntent(context, i));
                 return result;
             }
         } catch (ReauthenticationRequiredException e) {
