@@ -49,6 +49,8 @@ import org.microg.vending.splitinstall.STATUS_INSTALLING
 import org.microg.vending.splitinstall.STATUS_PENDING
 import org.microg.vending.splitinstall.SplitInstallSessionManager
 import org.microg.vending.splitinstall.SplitInstallCompletionService
+import org.microg.vending.splitinstall.SplitInstallRemovalStore
+import org.microg.vending.splitinstall.SplitInstallRemovalStore.RemovalRequest
 import org.microg.vending.splitinstall.SplitInstallSessionManager.Session
 import org.microg.vending.splitinstall.SplitInstallTaskService
 import org.json.JSONArray
@@ -58,10 +60,11 @@ import org.xmlpull.v1.XmlPullParser
 import java.io.File
 import java.io.IOException
 import java.util.Locale
-import androidx.core.content.edit
 
 private const val TAG = "SplitInstallManager"
 private const val MIN_SPLITCOMPAT_VERSION = 10300
+private const val SCHEDULE_INSTALL = "install"
+private const val SCHEDULE_UNINSTALL = "uninstall"
 
 internal const val ERROR_API_NOT_AVAILABLE = -5
 internal const val ERROR_INVALID_REQUEST = -3
@@ -72,9 +75,10 @@ internal class SplitInstallException(val errorCode: Int) : Exception()
 
 class SplitInstallManager(private val context: Context) {
     private val httpClient = HttpClient()
-    private val removals = context.getSharedPreferences("split-install-removals", Context.MODE_PRIVATE)
-    private val sessionManager = SplitInstallSessionManager(context, ::enqueuePending, ::blockDeferredInstall)
+    private val removals = SplitInstallRemovalStore(context)
+    private val sessionManager = SplitInstallSessionManager(context, ::enqueuePending) { saveDeferredInstall(it, blocked = true) }
     private val deferred = context.getSharedPreferences("split-install-deferred", Context.MODE_PRIVATE)
+    private val pendingScheduling = context.getSharedPreferences("split-install-scheduling", Context.MODE_PRIVATE)
 
     internal suspend fun startInstall(
         packageName: String, splits: List<Bundle>, playCoreVersion: Int = 0,
@@ -100,17 +104,18 @@ class SplitInstallManager(private val context: Context) {
 
             fun clearPendingRequests() {
                 synchronized(deferredLock) {
+                    removals.read(packageName)?.takeIf {
+                        it.version == version && it.clientInstallTime == packageInfo.firstInstallTime
+                    }?.let { removal ->
+                        removals.save(packageName, removal.copy(splits = removal.splits.filterNot { split ->
+                            split in requestedSplits || modules.any { split.startsWith("$it.config.") }
+                        }.toSet()))
+                    }
                     val pending = readDeferredRequest(packageName)
                     if (pending != null && pending.version == version && pending.clientInstallTime == packageInfo.firstInstallTime) {
                         val delivered = modules.map { "module_name:$it" } + languages.map { "language:$it" }
                         saveDeferredRequest(packageName, pending.copy(splits = pending.splits - delivered.toSet(), blocked = pending.blocked - delivered.toSet()))
                     }
-                }
-                val pendingRemoval = removals.getStringSet(packageName, emptySet()).orEmpty()
-                removals.edit {
-                    putStringSet(packageName, pendingRemoval.filterNot { split ->
-                        split in requestedSplits || modules.any { split.startsWith("$it.config.") }
-                    }.toSet())
                 }
             }
 
@@ -136,6 +141,9 @@ class SplitInstallManager(private val context: Context) {
                 sessionManager.sendUpdate(packageName, downloadedState)
                 scheduleCompletion()
                 return
+            }
+            if (deferredRequest == null) {
+                sessionManager.cancelPendingDeferredInstalls(packageName) { saveDeferredInstall(it, blocked = false) }
             }
             sessionManager.checkActiveSession(packageName, version, requested)
             if (deferredRequest != null && sessionManager.hasPendingDeferredRetry(packageName)) return
@@ -334,7 +342,7 @@ class SplitInstallManager(private val context: Context) {
         currentCoroutineContext().ensureActive()
         val job = currentCoroutineContext()[Job]
         val info = context.packageManager.getPackageInfo(session.packageName, 0)
-        val toRemove = removals.getStringSet(session.packageName, emptySet()).orEmpty().filter { it in info.splitNames.orEmpty() }
+        val toRemove = removals.read(session.packageName)?.splits.orEmpty().filter { it in info.splitNames.orEmpty() }
         val fullInstall = context.canKeepAppAliveDuringFullInstall()
         val components = if (fullInstall) {
             val replaced = files.map { it.nameWithoutExtension }.toSet()
@@ -375,11 +383,14 @@ class SplitInstallManager(private val context: Context) {
     internal fun onInstallerResult(intent: Intent) = sessionManager.onInstallerResult(intent)
 
     @RequiresApi(21)
-    internal suspend fun uninstall(packageName: String) = requestMutex.withLock {
+    internal suspend fun uninstall(packageName: String, version: Long, clientInstallTime: Long) = requestMutex.withLock {
         if (SDK_INT < 24) return
         if (sessionManager.hasActiveSession(packageName)) return
         val info = context.packageManager.getPackageInfo(packageName, 0)
-        val toRemove = removals.getStringSet(packageName, emptySet()).orEmpty().filter { it in info.splitNames.orEmpty() }
+        if (PackageInfoCompat.getLongVersionCode(info) != version || info.firstInstallTime != clientInstallTime) return
+        val toRemove = removals.read(packageName)?.takeIf {
+            it.version == version && it.clientInstallTime == clientInstallTime
+        }?.splits.orEmpty().filter { it in info.splitNames.orEmpty() }
         if (toRemove.isEmpty()) return
         val session = sessionManager.createSession(
             packageName, PackageInfoCompat.getLongVersionCode(info), toRemove,
@@ -411,21 +422,22 @@ class SplitInstallManager(private val context: Context) {
                     )
                 }
             }
-            SplitInstallTaskService.enqueueDeferred(context, packageName)
+            enqueuePending(packageName, includeRemovals = false)
         }
         onAccepted()
     }
 
-    internal suspend fun installDeferred(packageName: String) {
+    internal suspend fun installDeferred(packageName: String, version: Long, clientInstallTime: Long) {
         if (sessionManager.hasActiveSession(packageName)) return
         val request = readDeferredRequest(packageName) ?: return
+        if (request.version != version || request.clientInstallTime != clientInstallTime) return
         val wanted = request.splits - request.blocked
         if (wanted.isEmpty()) return
         val splits = wanted.map { value -> Bundle().apply { putString(value.substringBefore(':'), value.substringAfter(':')) } }
         startInstall(packageName, splits, request.playCoreVersion, request) { _, _ -> }
     }
 
-    private fun blockDeferredInstall(session: Session): Boolean = synchronized(deferredLock) {
+    private fun saveDeferredInstall(session: Session, blocked: Boolean): Boolean = synchronized(deferredLock) {
         if (!sessionManager.isCurrentInstallation(session)) return@synchronized false
         val previous = readDeferredRequest(session.packageName)
         if (previous != null && (previous.version != session.version || previous.clientInstallTime != session.clientInstallTime)) return@synchronized false
@@ -434,7 +446,8 @@ class SplitInstallManager(private val context: Context) {
         saveDeferredRequest(
             session.packageName, DeferredRequest(
                 session.version, session.clientInstallTime,
-                previous?.playCoreVersion ?: session.playCoreVersion, previous?.splits.orEmpty() + wanted, previous?.blocked.orEmpty() + wanted
+                previous?.playCoreVersion ?: session.playCoreVersion, previous?.splits.orEmpty() + wanted,
+                if (blocked) previous?.blocked.orEmpty() + wanted else previous?.blocked.orEmpty()
             )
         )
         true
@@ -490,20 +503,154 @@ class SplitInstallManager(private val context: Context) {
         }
     }
 
-    private fun enqueuePending(packageName: String, includeRemovals: Boolean = true) {
+    private fun enqueuePending(packageName: String, includeRemovals: Boolean = true) =
+        enqueuePending(packageName, includeRemovals, includeInstall = true)
+
+    private fun enqueuePending(packageName: String, includeRemovals: Boolean, includeInstall: Boolean, excludedWork: SchedulingRequest? = null) {
         if (SDK_INT < 21) return
         scheduleCompletion()
-        if (!sessionManager.hasPendingDeferredRetry(packageName)) {
-            readDeferredRequest(packageName)?.let { request ->
-                if ((request.splits - request.blocked).isNotEmpty()) SplitInstallTaskService.enqueueDeferred(context, packageName)
+        synchronized(deferredLock) {
+            try {
+                val info = context.packageManager.getPackageInfo(packageName, 0)
+                val excludedActions = excludedWork?.takeIf {
+                    it.version == PackageInfoCompat.getLongVersionCode(info) && it.clientInstallTime == info.firstInstallTime
+                }?.actions.orEmpty()
+                var pending = readPendingScheduling(packageName, discardObsolete = false)?.actions.orEmpty()
+                if (includeInstall && SCHEDULE_INSTALL !in excludedActions && !sessionManager.hasPendingDeferredRetry(packageName)) {
+                    readDeferredRequest(packageName)?.let { request ->
+                        if ((request.splits - request.blocked).isNotEmpty()) pending = pending + SCHEDULE_INSTALL
+                    }
+                }
+                if (includeRemovals && SCHEDULE_UNINSTALL !in excludedActions && !removals.read(packageName)?.splits.isNullOrEmpty()) pending = pending + SCHEDULE_UNINSTALL
+                if (pending.isNotEmpty()) {
+                    savePendingScheduling(packageName, SchedulingRequest(PackageInfoCompat.getLongVersionCode(info), info.firstInstallTime, pending))
+                    retryPendingScheduling(packageName, when {
+                        !includeInstall -> SCHEDULE_INSTALL
+                        !includeRemovals -> SCHEDULE_UNINSTALL
+                        else -> null
+                    }, excludedWork)
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Unable to schedule pending splits for $packageName (${e.javaClass.simpleName})")
             }
         }
-        if (includeRemovals && !removals.getStringSet(packageName, emptySet()).isNullOrEmpty()) SplitInstallTaskService.enqueueRemoval(context, packageName)
     }
 
-    internal fun restoreSessions() {
+    private fun readPendingScheduling(packageName: String, discardObsolete: Boolean = true): SchedulingRequest? {
+        val value = pendingScheduling.getString(packageName, null) ?: return null
+        val request = try {
+            parseSchedulingRequest(value)
+        } catch (e: JSONException) {
+            null
+        }
+        val info = try {
+            context.packageManager.getPackageInfo(packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
+        if (request == null || info == null || request.version != PackageInfoCompat.getLongVersionCode(info) || request.clientInstallTime != info.firstInstallTime) {
+            if (discardObsolete) savePendingScheduling(packageName, null)
+            return null
+        }
+        return request
+    }
+
+    private fun parseSchedulingRequest(value: String): SchedulingRequest {
+        val json = JSONObject(value)
+        val actions = json.getJSONArray("actions")
+        return SchedulingRequest(json.getLong("version"), json.getLong("client_install_time"),
+            (0 until actions.length()).map { actions.getString(it) }.toSet())
+    }
+
+    private fun savePendingScheduling(packageName: String, request: SchedulingRequest?) {
+        val previous = pendingScheduling.getString(packageName, null)
+        val editor = pendingScheduling.edit()
+        if (request == null || request.actions.isEmpty()) editor.remove(packageName)
+        else editor.putString(packageName, request.serialize())
+        if (!editor.commit()) {
+            // Keep both newly requested work and unacknowledged work available for recovery.
+            val old = runCatching { previous?.let(::parseSchedulingRequest) }.getOrNull()
+            val retry = request?.let { pending ->
+                val retained = old?.takeIf { it.version == pending.version && it.clientInstallTime == pending.clientInstallTime }?.actions.orEmpty()
+                pending.copy(actions = pending.actions + retained).serialize()
+            } ?: previous
+            val rollback = pendingScheduling.edit()
+            if (retry == null) rollback.remove(packageName) else rollback.putString(packageName, retry)
+            if (!rollback.commit()) {
+                Log.w(TAG, "Unable to persist split scheduling retry")
+            }
+            throw SplitInstallException(-10)
+        }
+    }
+
+    private fun consumePendingScheduling(packageName: String, action: String, version: Long? = null, clientInstallTime: Long? = null) = synchronized(deferredLock) {
+        val pending = readPendingScheduling(packageName) ?: return@synchronized
+        if (version != null && (pending.version != version || pending.clientInstallTime != clientInstallTime)) return@synchronized
+        if (action in pending.actions) savePendingScheduling(packageName, pending.copy(actions = pending.actions - action))
+    }
+
+    private fun retryPendingScheduling(packageName: String, excludedAction: String? = null, excludedWork: SchedulingRequest? = null) = synchronized(deferredLock) {
+        if (SDK_INT < 21) return@synchronized
+        val pending = try {
+            readPendingScheduling(packageName) ?: return@synchronized
+        } catch (e: Exception) {
+            Log.w(TAG, "Unable to restore split scheduling for $packageName (${e.javaClass.simpleName})")
+            return@synchronized
+        }
+        for (action in pending.actions) {
+            try {
+                val current = readPendingScheduling(packageName) ?: return@synchronized
+                if (current.version != pending.version || current.clientInstallTime != pending.clientInstallTime) return@synchronized
+                if (action !in current.actions) continue
+                if (action == excludedAction || excludedWork?.let {
+                    it.version == current.version && it.clientInstallTime == current.clientInstallTime && action in it.actions
+                } == true) continue
+                when (action) {
+                    SCHEDULE_INSTALL -> {
+                        if (sessionManager.hasPendingDeferredRetry(packageName)) continue
+                        readDeferredRequest(packageName)?.let { request ->
+                            if ((request.splits - request.blocked).isNotEmpty()) {
+                                SplitInstallTaskService.enqueueDeferred(context, packageName, current.version, current.clientInstallTime)
+                            }
+                        }
+                    }
+
+                    SCHEDULE_UNINSTALL -> if (!removals.read(packageName)?.splits.isNullOrEmpty()) {
+                        SplitInstallTaskService.enqueueRemoval(context, packageName, current.version, current.clientInstallTime)
+                    }
+                }
+                consumePendingScheduling(packageName, action)
+            } catch (e: Exception) {
+                Log.w(TAG, "Unable to schedule split $action for $packageName (${e.javaClass.simpleName})")
+            }
+        }
+    }
+
+    internal fun restoreSessions(pendingPackage: String? = null, uninstall: Boolean = false, version: Long? = null, clientInstallTime: Long? = null) {
+        val consumedAction = if (uninstall) SCHEDULE_UNINSTALL else SCHEDULE_INSTALL
+        val excludedWork = if (pendingPackage != null && version != null && clientInstallTime != null) {
+            SchedulingRequest(version, clientInstallTime, setOf(consumedAction))
+        } else null
+        if (pendingPackage != null) {
+            try {
+                consumePendingScheduling(pendingPackage, consumedAction, version, clientInstallTime)
+            } catch (e: SplitInstallException) {
+                // A failed acknowledgement must not prevent valid queued work from running.
+                Log.w(TAG, "Unable to acknowledge split $consumedAction for $pendingPackage (error ${e.errorCode})")
+            }
+        }
+        var restoredPending = false
         sessionManager.restoreSessions {
-            for (packageName in deferred.all.keys + removals.all.keys) enqueuePending(packageName)
+            restoredPending = true
+            for (packageName in deferred.all.keys + removals.packages + pendingScheduling.all.keys) {
+                enqueuePending(packageName, includeRemovals = true, includeInstall = true,
+                    excludedWork = excludedWork.takeIf { packageName == pendingPackage })
+            }
+        }
+        if (!restoredPending) {
+            for (packageName in pendingScheduling.all.keys) {
+                retryPendingScheduling(packageName, excludedWork = excludedWork.takeIf { packageName == pendingPackage })
+            }
         }
         scheduleCompletion()
     }
@@ -533,7 +680,7 @@ class SplitInstallManager(private val context: Context) {
         val job = currentCoroutineContext().job
         for (session in pending) {
             currentCoroutineContext().ensureActive()
-            val pendingRemovals = removals.getStringSet(session.packageName, emptySet()).orEmpty()
+            val pendingRemovals = removals.read(session.packageName)?.splits.orEmpty()
             if (session.requested.any { split -> pendingRemovals.any { split == it || split.startsWith("$it.config.") } }) continue
             if (sessionManager.hasActiveSession(session.packageName) || processes.any {
                     it.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE &&
@@ -597,15 +744,18 @@ class SplitInstallManager(private val context: Context) {
         val names = splits.map { it.getString(key) ?: throw SplitInstallException(ERROR_INVALID_REQUEST) }
         if (names.any { it.isBlank() } || (languages && names.isEmpty())) throw SplitInstallException(ERROR_INVALID_REQUEST)
         if (!languages && "base" in names) throw SplitInstallException(ERROR_INVALID_REQUEST)
-        val installed = context.packageManager.getPackageInfo(packageName, 0).splitNames.orEmpty().toSet()
-        val toRemove = if (languages) languageSplits(packageName, emptyList(), installed, names)
-        else names + installed.filter { split -> names.any { split == it || split.startsWith("$it.config.") } }
         requestMutex.withLock {
-            if (!removals.edit().putStringSet(packageName, removals.getStringSet(packageName, emptySet()).orEmpty() + toRemove).commit()) {
-                throw SplitInstallException(-10)
+            synchronized(deferredLock) {
+                val info = context.packageManager.getPackageInfo(packageName, 0)
+                val installed = info.splitNames.orEmpty().toSet()
+                val toRemove = if (languages) languageSplits(packageName, emptyList(), installed, names)
+                else names + installed.filter { split -> names.any { split == it || split.startsWith("$it.config.") } }
+                val previous = removals.read(packageName)
+                removals.save(packageName, RemovalRequest(PackageInfoCompat.getLongVersionCode(info), info.firstInstallTime,
+                    previous?.splits.orEmpty() + toRemove))
             }
         }
-        SplitInstallTaskService.enqueueRemoval(context, packageName)
+        enqueuePending(packageName)
     }
 
     @RequiresApi(21)
@@ -642,4 +792,10 @@ class SplitInstallManager(private val context: Context) {
         val version: Long, val clientInstallTime: Long, val playCoreVersion: Int,
         val splits: Set<String>, val blocked: Set<String> = emptySet()
     )
+
+    private data class SchedulingRequest(val version: Long, val clientInstallTime: Long, val actions: Set<String>) {
+        fun serialize(): String = JSONObject().put("version", version).put("client_install_time", clientInstallTime)
+            .put("actions", JSONArray(actions)).toString()
+    }
+
 }

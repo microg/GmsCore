@@ -97,8 +97,10 @@ class SplitInstallTaskService : LifecycleService() {
             checkNotNull(if (SDK_INT >= 26) context.startForegroundService(intent) else context.startService(intent))
         }
 
-        internal fun enqueueDeferred(context: Context, packageName: String) = SplitInstallDeferredService.enqueue(context, packageName, false)
+        internal fun enqueueDeferred(context: Context, packageName: String, version: Long, clientInstallTime: Long) =
+            SplitInstallDeferredService.enqueue(context, packageName, false, version, clientInstallTime)
 
-        internal fun enqueueRemoval(context: Context, packageName: String) = SplitInstallDeferredService.enqueue(context, packageName, true)
+        internal fun enqueueRemoval(context: Context, packageName: String, version: Long, clientInstallTime: Long) =
+            SplitInstallDeferredService.enqueue(context, packageName, true, version, clientInstallTime)
     }
 }

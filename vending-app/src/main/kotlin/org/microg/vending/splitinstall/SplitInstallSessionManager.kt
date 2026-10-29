@@ -5,6 +5,7 @@
 
 package org.microg.vending.splitinstall
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -193,6 +194,27 @@ internal class SplitInstallSessionManager(
         }
     }
 
+    suspend fun cancelPendingDeferredInstalls(packageName: String, onCancel: (Session) -> Boolean) {
+        for (session in sessions.values) {
+            val job = synchronized(session) {
+                if (session.packageName != packageName || !session.isDeferred || !isCurrent(session) || !isCurrentInstallation(session) ||
+                    session.installerSessionId != -1 || session.state.getInt("status") !in listOf(STATUS_PENDING, STATUS_DOWNLOADING)
+                ) return@synchronized null
+                if (!onCancel(session)) return@synchronized null
+                update(session, STATUS_CANCELING)
+                session.job.also {
+                    if (it != null) it.cancel()
+                    else {
+                        update(session, STATUS_CANCELED)
+                        onSessionFinished(session.packageName, true)
+                    }
+                }
+            }
+            // Let the old writer close its installer session before accepting another request.
+            job?.join()
+        }
+    }
+
     fun findDownloadedSession(
         packageName: String, version: Long, requested: List<String>, modules: List<String>,
         languages: List<String>, useSplitCompat: Boolean
@@ -302,6 +324,13 @@ internal class SplitInstallSessionManager(
                 blockDeferredSession(session)
                 return
             }
+            if (session.state.getInt("status") == STATUS_CANCELED &&
+                intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1) == PackageInstaller.STATUS_FAILURE_ABORTED
+            ) {
+                update(session, STATUS_CANCELED, notifyClient = false) { putInt("error_code", 0) }
+                cancelNotification(notifyId)
+                return
+            }
             when (intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)) {
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                     if (session.state.getInt("status") in listOf(STATUS_CANCELED, STATUS_CANCELING, STATUS_FAILED)) return
@@ -343,16 +372,19 @@ internal class SplitInstallSessionManager(
                 }
             }
             cancelNotification(notifyId)
+            // A running worker will schedule pending work after cancellation cleanup.
+            if (session.state.getInt("status") == STATUS_CANCELED && session.job != null) return
         }
         onSessionFinished(session.packageName, !session.state.getBoolean("uninstall"))
     }
 
     @RequiresApi(21)
     private fun blockDeferredSession(session: Session) {
+        val wasCanceled = session.state.getInt("status") == STATUS_CANCELED
         val wasActive = isActive(session)
         session.deferredRetryPending = true
         try {
-            update(session, STATUS_REQUIRES_USER_CONFIRMATION, notifyClient = false)
+            if (!wasCanceled) update(session, STATUS_REQUIRES_USER_CONFIRMATION, notifyClient = false)
             if (!onDeferredInstallBlocked(session)) {
                 removeSession(session)
                 return
@@ -362,13 +394,13 @@ internal class SplitInstallSessionManager(
             Log.w(TAG, "Unable to pause deferred split installation (${e.javaClass.simpleName})")
         } finally {
             try {
-                if (isCurrentInstallation(session)) update(session, STATUS_CANCELED)
+                if (isCurrentInstallation(session)) update(session, STATUS_CANCELED, notifyClient = !wasCanceled)
                 else removeSession(session)
             } finally {
                 abandonInstallerSession(session)
             }
         }
-        if (wasActive || !session.deferredRetryPending) onSessionFinished(session.packageName, true)
+        if ((wasActive || !session.deferredRetryPending) && session.job == null) onSessionFinished(session.packageName, true)
     }
 
     internal fun restoreSessions(onRestored: () -> Unit) = synchronized(sessions) {
@@ -571,8 +603,29 @@ internal class SplitInstallSessionManager(
             }
             val installer = context.packageManager.packageInstaller
             val info = installer.getSessionInfo(session.installerSessionId)
-            if (info != null && (SDK_INT < 26 || info.isSealed)) {
-                if (session.installerResultDeadline != 0L) {
+            val isSealed = info?.let(::isInstallerSessionSealed)
+            if (info != null && isSealed != false) {
+                if (isSealed == null && session.job == null) {
+                    if (session.installerStateRecoveryId != info.sessionId || session.installerResultDeadline != 0L) {
+                        if (session.installerStateRecoveryId != info.sessionId) {
+                            Log.w(TAG, "Unable to determine split installer submission state; scheduling a recheck")
+                        }
+                        try {
+                            session.installerStateRecoveryId = -1
+                            val recoveryPending = deferInstallerRecovery(session, expiredDeadline, restoring, throwOnSchedulingFailure = true)
+                            // Only a successfully scheduled or completed recheck consumes this attempt.
+                            session.installerStateRecoveryId = info.sessionId
+                            if (!recoveryPending) {
+                                session.installerResultDeadline = 0
+                                saveSession(session)
+                                Log.w(TAG, "Split installer submission state remains unknown; keeping the native session")
+                            }
+                        } catch (e: Exception) {
+                            session.installerResultDeadline = 0
+                            Log.w(TAG, "Unable to recheck split installer submission state (${e.javaClass.simpleName})")
+                        }
+                    }
+                } else if (session.installerResultDeadline != 0L) {
                     session.installerResultDeadline = 0
                     saveSession(session)
                 }
@@ -591,28 +644,7 @@ internal class SplitInstallSessionManager(
             val completed = info == null && PackageInfoCompat.getLongVersionCode(installed) == session.version &&
                     if (session.state.getBoolean("uninstall")) session.requested.none { it in names } else session.requested.all { it in names }
             if (info == null && session.installerSessionId != -1 && !completed) {
-                val scheduleRecovery = session.installerResultDeadline == 0L || restoring
-                if (session.installerResultDeadline == 0L) {
-                    session.installerResultDeadline = System.currentTimeMillis() + INSTALLER_RESULT_TIMEOUT_MILLIS
-                    try {
-                        saveSession(session)
-                    } catch (e: Exception) {
-                        session.installerResultDeadline = 0
-                        throw e
-                    }
-                }
-                val recoveryScheduled = try {
-                    if (scheduleRecovery) {
-                        SplitInstallDeferredService.enqueueRecovery(context, session.state.getInt("session_id"), session.packageName)
-                    }
-                    true
-                } catch (e: Exception) {
-                    Log.w(TAG, "Unable to schedule split session recovery (${e.javaClass.simpleName})")
-                    false
-                }
-                if (recoveryScheduled && session.installerResultDeadline != expiredDeadline &&
-                    System.currentTimeMillis() < session.installerResultDeadline
-                ) return@synchronized
+                if (deferInstallerRecovery(session, expiredDeadline, restoring)) return@synchronized
                 if (session.useSplitCompat) blockCompletion(session, inferred = true)
                 else update(session, STATUS_FAILED, inferredFailure = true) { putInt("error_code", ERROR_INTERNAL) }
             } else {
@@ -628,6 +660,45 @@ internal class SplitInstallSessionManager(
                 putInt("error_code", (e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL)
             }
         }
+    }
+
+    @RequiresApi(21)
+    @SuppressLint("PrivateApi")
+    private fun isInstallerSessionSealed(info: PackageInstaller.SessionInfo): Boolean? {
+        if (SDK_INT >= 26) return info.isSealed
+        return try {
+            PackageInstaller.SessionInfo::class.java.getField("sealed").getBoolean(info)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    @RequiresApi(21)
+    private fun deferInstallerRecovery(
+        session: Session, expiredDeadline: Long, restoring: Boolean, throwOnSchedulingFailure: Boolean = false
+    ): Boolean {
+        val scheduleRecovery = session.installerResultDeadline == 0L || restoring
+        if (session.installerResultDeadline == 0L) {
+            session.installerResultDeadline = System.currentTimeMillis() + INSTALLER_RESULT_TIMEOUT_MILLIS
+            try {
+                saveSession(session)
+            } catch (e: Exception) {
+                session.installerResultDeadline = 0
+                throw e
+            }
+        }
+        val recoveryScheduled = try {
+            if (scheduleRecovery) {
+                SplitInstallDeferredService.enqueueRecovery(context, session.state.getInt("session_id"), session.packageName)
+            }
+            true
+        } catch (e: Exception) {
+            if (throwOnSchedulingFailure) throw e
+            Log.w(TAG, "Unable to schedule split session recovery (${e.javaClass.simpleName})")
+            false
+        }
+        return recoveryScheduled && session.installerResultDeadline != expiredDeadline &&
+                System.currentTimeMillis() < session.installerResultDeadline
     }
 
     internal suspend fun recoverSession(sessionId: Int) {
@@ -710,8 +781,10 @@ internal class SplitInstallSessionManager(
             }
             if (session.state.getInt("status") !in listOf(STATUS_PENDING, STATUS_DOWNLOADING, STATUS_REQUIRES_USER_CONFIRMATION)) throw SplitInstallException(ERROR_INVALID_REQUEST)
             update(session, STATUS_CANCELING)
-            session.job?.cancel() ?: update(session, STATUS_CANCELED)
+            val job = session.job
+            job?.cancel() ?: update(session, STATUS_CANCELED)
             abandonInstallerSession(session)
+            if (job == null) onSessionFinished(session.packageName, !session.state.getBoolean("uninstall"))
         }
     }
 
@@ -775,7 +848,10 @@ internal class SplitInstallSessionManager(
                     session.packageName, session.state.getInt("session_id"),
                     Downloading(session.state.getLong("bytes_downloaded"), session.state.getLong("total_bytes_to_download"))
                 )
-            } else if (status >= STATUS_DOWNLOADED) {
+            } else if (status >= STATUS_DOWNLOADED &&
+                (status != STATUS_REQUIRES_USER_CONFIRMATION || previousState.getInt("status") != status)
+            ) {
+                // Keep repeated confirmation updates from alerting the user again.
                 cancelNotification(session.state.getInt("session_id"))
             }
         }
@@ -861,6 +937,7 @@ internal class SplitInstallSessionManager(
         var installerSessionId = -1
         @Volatile
         var installerResultDeadline = 0L
+        var installerStateRecoveryId = -1
         @Volatile
         var completionBlocked = false
         @Volatile

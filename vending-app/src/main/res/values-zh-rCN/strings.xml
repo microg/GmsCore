@@ -33,6 +33,8 @@
     <string name="installer_notification_channel_name">应用和组件安装</string>
     <string name="installer_notification_progress_downloading">正在下载“%s”</string>
     <string name="installer_notification_channel_description">显示应用和组件安装进度，成功和失败消息。</string>
+    <string name="installer_notification_prompt_channel_name">安装确认</string>
+    <string name="installer_notification_prompt_channel_description">显示需要你确认的应用和组件安装提示。</string>
     <string name="installer_notification_progress_commiting">正在安装“%s”</string>
     <string name="installer_notification_progress_complete">已安装“%s”</string>
     <string name="installer_notification_progress_failed">未能安装“%s”</string>

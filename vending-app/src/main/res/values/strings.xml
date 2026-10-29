@@ -46,6 +46,8 @@
 
     <string name="installer_notification_channel_name">App and component installation</string>
     <string name="installer_notification_channel_description">Shows app and component installation progress, success and failure messages.</string>
+    <string name="installer_notification_prompt_channel_name">Installation confirmation</string>
+    <string name="installer_notification_prompt_channel_description">Requests confirmation for app and component installations.</string>
     <string name="installer_notification_progress_downloading">Downloading \"%s\"</string>
     <string name="installer_notification_progress_commiting">Installing \"%s\"</string>
     <string name="installer_notification_progress_complete">Installed \"%s\"</string>

@@ -24,6 +24,7 @@ import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.delivery.proto.DeliveryStatus
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
+import org.microg.vending.splitinstall.SplitInstallRemovalStore
 
 private const val TAG = "GmsVendingDelivery"
 
@@ -126,8 +127,7 @@ suspend fun HttpClient.requestDownloadUrls(
     val components = if (requestSplitPackages != null) {
         splitComponents
     } else {
-        val removed = context.getSharedPreferences("split-install-removals", Context.MODE_PRIVATE)
-            .getStringSet(packageName, emptySet()).orEmpty()
+        val removed = SplitInstallRemovalStore(context).read(packageName)?.splits.orEmpty()
         (listOf(basePackage) + splitComponents).filterNot { component ->
             component != null && removed.any { component.componentName == it || component.componentName.startsWith("$it.config.") }
         }
