@@ -170,6 +170,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.videos" to arrayOf(
         Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
     ),
+    "com.google.android.ims.library#com.google.android.apps.messaging" to arrayOf(
+        Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0),
+        Flag("rcs_engine_type", 2L, 0),
+        Flag("asterism_consent_enabled", true, 0),
+        Flag("constellation_enabled", true, 0),
+        Flag("phone_number_verification_enabled", true, 0),
+        Flag("use_sim_carrier_config", true, 0),
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {

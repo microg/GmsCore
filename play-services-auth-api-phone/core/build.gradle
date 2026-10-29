@@ -11,6 +11,7 @@ dependencies {
     implementation project(':play-services-base-core')
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
@@ -25,8 +26,13 @@ android {
         targetSdkVersion androidTargetSdk
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/java'
     }
 
     compileOptions {

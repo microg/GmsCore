@@ -170,12 +170,13 @@ class AppCertManager(private val context: Context) {
             )
         } else {
             Log.d(TAG, "Using fallback spatula header based on Android ID")
-            val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
+            val androidId = runCatching {
+                getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
+            }.getOrNull() ?: 0L
             SpatulaHeaderProto(
                     packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
                     deviceId = androidId
             )
-            return null // TODO
         }
         Log.d(TAG, "Spatula Header: $proto")
         return Base64.encodeToString(proto.encode(), Base64.NO_WRAP)

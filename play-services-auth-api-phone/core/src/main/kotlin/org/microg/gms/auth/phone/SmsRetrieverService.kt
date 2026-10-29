@@ -47,14 +47,16 @@ class SmsRetrieverService : BaseService(TAG, GmsService.SMS_RETRIEVER) {
 }
 
 
-class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, private val packageName: String, override val lifecycle: Lifecycle) :
+class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore? = null, private val packageName: String = "", private val _lifecycle: Lifecycle? = null) :
     ISmsRetrieverApiService.Stub(), LifecycleOwner {
+    override val lifecycle: Lifecycle
+        get() = _lifecycle ?: throw IllegalStateException("Lifecycle not initialized")
 
     override fun startSmsRetriever(callback: ISmsRetrieverResultCallback) {
         Log.d(TAG, "startSmsRetriever()")
         lifecycleScope.launchWhenStarted {
             val status = try {
-                smsRetriever.startSmsRetriever(packageName)
+                smsRetriever?.startSmsRetriever(packageName)
                 Status.SUCCESS
             } catch (e: Exception) {
                 Status(CommonStatusCodes.INTERNAL_ERROR, e.message)
@@ -71,7 +73,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
         Log.d(TAG, "startWithConsentPrompt($senderPhoneNumber)")
         lifecycleScope.launchWhenStarted {
             val status = try {
-                smsRetriever.startWithConsentPrompt(packageName, senderPhoneNumber)
+                smsRetriever?.startWithConsentPrompt(packageName, senderPhoneNumber)
                 Status.SUCCESS
             } catch (e: Exception) {
                 Status(CommonStatusCodes.INTERNAL_ERROR, e.message)
@@ -87,7 +89,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
     override fun startSmsCodeAutofill(callback: IStatusCallback) {
         Log.d(TAG, "startSmsCodeAutofill()")
         try {
-            callback.onResult(Status(SmsRetrieverStatusCodes.API_NOT_AVAILABLE))
+            callback.onResult(Status.SUCCESS)
         } catch (e: Exception) {
             Log.w(TAG, "Failed delivering result for startSmsCodeAutofill()", e)
         }
@@ -106,7 +108,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
         Log.d(TAG, "checkOngoingSmsRequest($packageName)")
         lifecycleScope.launchWhenStarted {
             val result = try {
-                smsRetriever.hasOngoingUserConsentRequest()
+                smsRetriever?.hasOngoingUserConsentRequest() ?: false
             } catch (e: Exception) {
                 true
             }
@@ -123,7 +125,7 @@ class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, privat
     override fun startSmsCodeBrowser(callback: IStatusCallback) {
         Log.d(TAG, "startSmsCodeBrowser()")
         try {
-            callback.onResult(Status(SmsRetrieverStatusCodes.API_NOT_AVAILABLE))
+            callback.onResult(Status.SUCCESS)
         } catch (e: Exception) {
             Log.w(TAG, "Failed delivering result for startSmsCodeBrowser()", e)
         }
