@@ -15,6 +15,22 @@ dependencies {
     implementation project(':play-services-wearable')
 
     implementation "org.microg:wearable:$wearableVersion"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    // wearable 0.1.1 was compiled against Wire 1.6.1. GmsCore ships Wire 6.x.
+    // Unit tests that construct SocketWearableConnection / ChannelControlRequest
+    // need the 1.x ABI or they die in <clinit> before the real assertions.
+    testImplementation 'com.squareup.wire:wire-runtime:1.6.1'
+}
+
+configurations.configureEach { config ->
+    String n = config.name.toLowerCase()
+    if (n.contains('unittest') || n == 'testcompileclasspath' || n == 'testruntimeclasspath') {
+        config.resolutionStrategy {
+            force 'com.squareup.wire:wire-runtime:1.6.1'
+        }
+    }
 }
 
 android {
@@ -48,6 +64,12 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
+    }
+
+    testOptions {
+        unitTests.all {
+            maxHeapSize = '2048m'
+        }
     }
 }
 

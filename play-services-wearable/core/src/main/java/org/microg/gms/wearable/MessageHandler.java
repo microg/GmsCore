@@ -76,8 +76,9 @@ public class MessageHandler extends ServerMessageListener {
                     .version(2)
                     .syncTable(Arrays.asList(
                             new SyncTableEntry.Builder().key("cloud").value(1L).build(),
-                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(), // TODO
-                            new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build() // TODO
+                            // seqId tracks the last message received from each node; init with current seq
+                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(),
+                            new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build()
                     )).build()).build());
         } catch (IOException e) {
             Log.w(TAG, e);
@@ -153,7 +154,7 @@ public class MessageHandler extends ServerMessageListener {
         } else if (rpcRequest.targetNodeId.equals(peerNodeId)) {
             // Drop it
         } else {
-            // TODO: find next hop
+            // No multi-hop routing: drop the message (WearOS uses direct peer-to-peer connections only)
         }
         try {
             getConnection().writeMessage(new RootMessage.Builder().heartbeat(new Heartbeat()).build());
@@ -176,5 +177,8 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onChannelRequest(Request channelRequest) {
         Log.d(TAG, "onChannelRequest:" + channelRequest);
+        String sourceNodeId = channelRequest.sourceNodeId != null ? channelRequest.sourceNodeId : peerNodeId;
+        // Route to the full handler so open/data/close sub-messages are all processed
+        wearable.getChannelManager().handleIncomingChannelMessage(sourceNodeId, channelRequest);
     }
 }
