@@ -104,6 +104,7 @@ class WorkAppsActivity : ComponentActivity() {
             WorkAccountChangedReceiver().onReceive(this, null)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
+            return
         } else if (accounts.size > 1) {
             Log.w(TAG, "Multiple work accounts found. This is unexpected and could point " +
                     "towards misuse of the work account service API by the DPC.")
