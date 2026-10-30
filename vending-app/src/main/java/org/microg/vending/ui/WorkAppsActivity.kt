@@ -29,38 +29,18 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.android.vending.buildRequestHeaders
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
-import org.microg.gms.common.DeviceConfiguration
-import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
-import org.microg.vending.UploadDeviceConfigRequest
 import org.microg.vending.WorkAccountChangedReceiver
-import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.AuthData
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_FDFE
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
-import org.microg.vending.billing.core.HttpClient
-import org.microg.vending.billing.createDeviceEnvInfo
-import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.enterprise.EnterpriseApp
-import org.microg.vending.enterprise.App
+import org.microg.vending.enterprise.EnterpriseAppsRepository
 import org.microg.vending.enterprise.AppState
-import org.microg.vending.enterprise.Installed
-import org.microg.vending.enterprise.NotCompatible
 import org.microg.vending.enterprise.NotInstalled
 import org.microg.vending.enterprise.Pending
-import org.microg.vending.enterprise.UpdateAvailable
-import org.microg.vending.enterprise.proto.AppInstallPolicy
 import com.android.vending.installer.InstallService
-import org.microg.gms.checkin.DeviceConfig
-import org.microg.vending.proto.AppMeta
-import org.microg.vending.proto.GetItemsRequest
-import org.microg.vending.proto.RequestApp
-import org.microg.vending.proto.RequestItem
 import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
@@ -145,124 +125,21 @@ class WorkAppsActivity : ComponentActivity() {
         unbindService(serviceConnection)
     }
 
-    private fun DeviceConfiguration.asProto(): DeviceConfig = DeviceConfig(
-        availableFeature = availableFeatures,
-        densityDpi = densityDpi,
-        glEsVersion = glEsVersion,
-        glExtension = glExtensions,
-        hasFiveWayNavigation = hasFiveWayNavigation,
-        hasHardKeyboard = hasHardKeyboard,
-        heightPixels = heightPixels,
-        keyboardType = keyboardType,
-        locale = locales,
-        nativePlatform = nativePlatforms,
-        navigation = navigation,
-        screenLayout = screenLayout,
-        sharedLibrary = sharedLibraries,
-        touchScreen = touchScreen,
-        widthPixels = widthPixels
-    )
-
     private fun load(account: Account) {
         networkState = NetworkState.ACTIVE
         Thread {
             runBlocking {
                 try {
-                    // Authenticate
-                    auth = AuthManager.getAuthData(this@WorkAppsActivity, account)
-                    val authData = auth
-                    val deviceInfo = createDeviceEnvInfo(this@WorkAppsActivity)
-                    if (deviceInfo == null || authData == null) {
-                        Log.e(TAG, "Unable to open play store when deviceInfo = $deviceInfo and authData = $authData")
+                    val enterpriseApps = EnterpriseAppsRepository(this@WorkAppsActivity).fetchApps(account)
+                    if (enterpriseApps == null) {
                         networkState = NetworkState.ERROR
                         return@runBlocking
                     }
 
-                    val headers = buildRequestHeaders(authData.authToken, authData.gsfId.toLong(16))
-                    val client = HttpClient()
-
-                    // Register device for server-side compatibility checking
-                    val upload = client.post(
-                        url = "$URL_FDFE/uploadDeviceConfig",
-                        headers = headers.minus("X-PS-RH"),
-                        payload = UploadDeviceConfigRequest(
-                            DeviceConfiguration(this@WorkAppsActivity).asProto(),
-                            manufacturer = Build.MANUFACTURER,
-                            //gcmRegistrationId = TODO: looks like remote-triggered app downloads may be announced through GCM?
-                        ),
-                        adapter = GoogleApiResponse.ADAPTER
-                    )
-                    Log.d(TAG, "uploaddc: ${upload.payload!!.uploadDeviceConfigResponse}")
-
-                    // Fetch list of apps available to the scoped enterprise account
-                    val apps = client.post(
-                        url = URL_ENTERPRISE_CLIENT_POLICY,
-                        headers = headers.plus("content-type" to "application/x-protobuf"),
-                        adapter = GoogleApiResponse.ADAPTER
-                    ).payload?.enterpriseClientPolicyResponse?.policy?.apps?.filter { it.packageName != null }
-
-                    if (apps == null) {
-                        Log.e(TAG, "unexpected network response: missing expected fields")
-                        networkState = NetworkState.ERROR
-                        return@runBlocking
-                    }
-
-                    Log.v(TAG, "app policy: ${apps.joinToString { "${it.packageName}: ${it.policy}" }}")
-
-                    if (apps.isEmpty()) {
-                        // Don't fetch details of empty app list (otherwise HTTP 400)
-                        networkState = NetworkState.PASSIVE
-                        this@WorkAppsActivity.apps.clear()
-                        return@runBlocking
-                    }
-
-                    // Fetch details about all available apps
-                    val details = client.post(
-                        url = URL_ITEM_DETAILS,
-                        // TODO: meaning unclear, but returns 400 without. constant? possibly has influence on which fields are returned?
-                        headers = headers.plus("x-dfe-item-field-mask" to "GgWGHay3ByILPP/Avy+4A4YlCRM"),
-                        payload = GetItemsRequest(
-                            apps.map {
-                                RequestItem(RequestApp(AppMeta(it.packageName)))
-                            }
-                        ),
-                        adapter = GoogleApiResponse.ADAPTER
-                    ).getItemsResponses.mapNotNull { it.response }.associate { item ->
-                        val packageName = item.meta!!.packageName!!
-                        val installedDetails = this@WorkAppsActivity.packageManager.getInstalledPackages(0).find {
-                            it.applicationInfo?.packageName == packageName
-                        }
-
-                        val available = item.offer?.delivery != null
-
-                        val versionCode = if (available) {
-                            item.offer!!.version!!.versionCode!!
-                        } else null
-
-                        val state = if (!available && installedDetails == null) NotCompatible
-                        else if (!available && installedDetails != null) Installed
-                        else if (available && installedDetails == null) NotInstalled
-                        else if (available && installedDetails != null && installedDetails.versionCode < versionCode!!) UpdateAvailable
-                        else /* if (available && installedDetails != null) */ Installed
-
-                        EnterpriseApp(
-                            packageName,
-                            versionCode,
-                            item.detail!!.name!!.displayName!!,
-                            item.detail.icon?.icon?.paint?.url,
-                            item.offer?.delivery?.key,
-                            item.offer?.delivery?.dependencies?.map {
-                                App(it.packageName!!, it.versionCode!!, it.packageName, null, emptyList(), null)
-                            } ?: emptyList(),
-                            apps.find { it.packageName!! == item.meta.packageName }!!.policy ?: AppInstallPolicy.OPTIONAL,
-                        ) to state
-                    }.onEach {
-                        Log.v(TAG, "${it.key.packageName} (state: ${it.value}) delivery token: ${it.key.deliveryToken ?: "none acquired"}")
-                    }
-
-                    this@WorkAppsActivity.apps.apply {
+                    auth = enterpriseApps.auth
+                    apps.apply {
                         clear()
-                        putAll(details)
+                        putAll(enterpriseApps.states)
                     }
                     networkState = NetworkState.PASSIVE
                 } catch (e: IOException) {

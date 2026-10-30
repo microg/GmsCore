@@ -24,6 +24,10 @@ message App {
     optional int32 unknownNumber = 9; // = 1
 }
 
+message EnterpriseConsistencyToken {
+    optional int64 timestampMicros = 1;
+}
+
 // TODO: could be inaccurate
 enum AppInstallPolicy {
     UNKNOWN = 0;
