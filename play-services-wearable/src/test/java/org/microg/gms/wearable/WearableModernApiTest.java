@@ -17,6 +17,7 @@
 package org.microg.gms.wearable;
 
 import android.database.CursorWindow;
+import android.net.Uri;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 
@@ -32,6 +33,8 @@ import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.NodeClient;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.google.android.gms.wearable.internal.ChannelParcelable;
@@ -284,6 +287,30 @@ public class WearableModernApiTest {
         Assert.assertEquals(1, nodes.size());
         Assert.assertEquals(localId, nodes.get(0).getId());
         Assert.assertEquals(localId, nodes.get(0).getDisplayName());
+    }
+
+    @Test
+    public void testPutDataRequestUsesPublicTypeAndFluentApi() {
+        PutDataRequest request = PutDataRequest.create((Uri) null);
+        Assert.assertEquals("wear", PutDataRequest.WEAR_URI_SCHEME);
+        Assert.assertFalse(request.isUrgent());
+
+        Assert.assertSame(request, request.setData(new byte[]{1, 2}));
+        Assert.assertSame(request, request.setUrgent());
+        Assert.assertTrue(request.isUrgent());
+        Assert.assertArrayEquals(new byte[]{1, 2}, request.getData());
+    }
+
+    @Test
+    public void testPutDataMapRequestReturnsPublicType() {
+        PutDataRequest request = PutDataMapRequest.create("/path").asPutDataRequest();
+        Assert.assertEquals("com.google.android.gms.wearable.PutDataRequest", request.getClass().getName());
+    }
+
+    @Test
+    public void testDataClientAndDataApiUsePublicPutDataRequest() throws NoSuchMethodException {
+        DataClient.class.getMethod("putDataItem", PutDataRequest.class);
+        DataApi.class.getMethod("putDataItem", com.google.android.gms.common.api.GoogleApiClient.class, PutDataRequest.class);
     }
 
     private static DataHolder newHolder() {

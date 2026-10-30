@@ -26,8 +26,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.Response;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.internal.PutDataRequest;
-
 import org.microg.gms.common.PublicApi;
 
 import java.io.InputStream;

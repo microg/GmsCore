@@ -43,7 +43,7 @@ import com.google.android.gms.wearable.internal.AddListenerRequest;
 import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
 import com.google.android.gms.wearable.internal.GetDataItemResponse;
 import com.google.android.gms.wearable.internal.IWearableListener;
-import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 

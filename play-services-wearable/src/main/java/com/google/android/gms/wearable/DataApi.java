@@ -25,8 +25,6 @@ import com.google.android.gms.common.api.Releasable;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.Freezable;
-import com.google.android.gms.wearable.internal.PutDataRequest;
-
 import org.microg.gms.common.PublicApi;
 
 import java.io.InputStream;

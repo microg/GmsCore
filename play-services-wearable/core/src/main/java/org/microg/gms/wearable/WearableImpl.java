@@ -38,7 +38,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
-import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;

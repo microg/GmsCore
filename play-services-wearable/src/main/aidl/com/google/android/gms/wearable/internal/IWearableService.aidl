@@ -4,7 +4,7 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.AddListenerRequest;
 import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
-import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;

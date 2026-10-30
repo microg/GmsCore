@@ -28,6 +28,7 @@ import android.util.Log;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
