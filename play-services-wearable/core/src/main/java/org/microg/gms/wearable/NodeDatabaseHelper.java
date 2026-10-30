@@ -91,6 +91,11 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
     }
 
+    public synchronized Cursor getDataItemsForDataHolderByHostAndPathPrefix(String packageName, String signatureDigest, String host, String path) {
+        Selection selection = prefixSelection(packageName, signatureDigest, host, path, true);
+        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,'' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection.where, selection.args);
+    }
+
     public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {
         Log.d(TAG, "getDataItemsByHostAndPath: " + packageName + ", " + signatureDigest + ", " + host + ", " + path);
         return getDataItemsByHostAndPath(getReadableDatabase(), packageName, signatureDigest, host, path);
@@ -232,6 +237,62 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         return updated;
+    }
+
+    public synchronized List<DataItemRecord> deleteDataItemsByPrefix(String packageName, String signatureDigest, String host, String path) {
+        List<DataItemRecord> updated = new ArrayList<DataItemRecord>();
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        Cursor cursor = null;
+        try {
+            Selection selection = prefixSelection(packageName, signatureDigest, host, path, false);
+            cursor = db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection.where, selection.args, null, null, "packageName, signatureDigest, host, path");
+            while (cursor.moveToNext()) {
+                DataItemRecord record = DataItemRecord.fromCursor(cursor);
+                record.deleted = true;
+                record.assetsAreReady = true;
+                record.dataItem.data = null;
+                record.seqId = clockworkNodePreferences.getNextSeqId();
+                record.v1SeqId = record.seqId;
+                updateRecord(db, cursor.getString(0), record);
+                updated.add(record);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            if (cursor != null) cursor.close();
+            db.endTransaction();
+        }
+        return updated;
+    }
+
+    private static Selection prefixSelection(String packageName, String signatureDigest, String host, String path, boolean requireAssets) {
+        List<String> args = new ArrayList<String>();
+        StringBuilder selection = new StringBuilder("packageName = ? AND signatureDigest = ?");
+        args.add(packageName);
+        args.add(signatureDigest);
+        if (DataUriMatcher.constrainsHost(host)) {
+            selection.append(" AND host = ?");
+            args.add(host);
+        }
+        if (path != null) {
+            selection.append(" AND path LIKE ? ESCAPE '\\'");
+            args.add(DataUriMatcher.toLikePrefix(path));
+        }
+        selection.append(" AND deleted=0");
+        if (requireAssets) {
+            selection.append(" AND assetsPresent !=0");
+        }
+        return new Selection(selection.toString(), args.toArray(new String[args.size()]));
+    }
+
+    private static final class Selection {
+        final String where;
+        final String[] args;
+
+        Selection(String where, String[] args) {
+            this.where = where;
+            this.args = args;
+        }
     }
 
     public long getCurrentSeqId(String sourceNode) {

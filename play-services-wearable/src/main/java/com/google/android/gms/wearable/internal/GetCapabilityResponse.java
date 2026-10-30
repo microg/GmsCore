@@ -35,5 +35,13 @@ public class GetCapabilityResponse extends AutoSafeParcelable {
         this.capabilityInfo = capabilityInfo;
     }
 
+    public int getStatusCode() {
+        return status;
+    }
+
+    public CapabilityInfoParcelable getCapabilityInfo() {
+        return capabilityInfo;
+    }
+
     public static final Creator<GetCapabilityResponse> CREATOR = new AutoCreator<GetCapabilityResponse>(GetCapabilityResponse.class);
 }

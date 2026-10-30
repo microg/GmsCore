@@ -21,6 +21,7 @@ import android.os.ParcelFileDescriptor;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Releasable;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.Freezable;
@@ -152,7 +153,7 @@ public interface DataApi {
         int getNumDeleted();
     }
 
-    interface GetFdForAssetResult extends Result {
+    interface GetFdForAssetResult extends Result, Releasable {
         /**
          * @return a file descriptor for the requested asset.
          */
