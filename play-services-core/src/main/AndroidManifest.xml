@@ -306,6 +306,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.checkin.CheckinApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.checkin.START" />
+            </intent-filter>
+        </service>
+
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
