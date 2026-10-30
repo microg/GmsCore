@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 microG Project Team
+ * Copyright (C) 2019-2026 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.List;
 
@@ -28,6 +27,14 @@ public class GetAllCapabilitiesResponse extends AutoSafeParcelable {
     public int statusCode;
     @Field(3)
     public List<CapabilityInfoParcelable> capabilities;
+
+    public GetAllCapabilitiesResponse() {
+    }
+
+    public GetAllCapabilitiesResponse(int statusCode, List<CapabilityInfoParcelable> capabilities) {
+        this.statusCode = statusCode;
+        this.capabilities = capabilities;
+    }
 
     public static final Creator<GetAllCapabilitiesResponse> CREATOR = findCreator(GetAllCapabilitiesResponse.class);
 }

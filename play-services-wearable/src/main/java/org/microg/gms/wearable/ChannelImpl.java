@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2026 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Channel;
 import com.google.android.gms.wearable.ChannelApi;
+import com.google.android.gms.wearable.ChannelClient;
 import com.google.android.gms.wearable.internal.ChannelParcelable;
 
-public class ChannelImpl extends ChannelParcelable implements Channel {
+public class ChannelImpl extends ChannelParcelable implements Channel, ChannelClient.Channel {
     private static final String TAG = "GmsWearChannelImpl";
 
     public ChannelImpl(String token, String nodeId, String path) {
@@ -36,7 +37,6 @@ public class ChannelImpl extends ChannelParcelable implements Channel {
     public ChannelImpl(ChannelParcelable wrapped) {
         this(wrapped.token, wrapped.nodeId, wrapped.path);
     }
-
 
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, ChannelApi.ChannelListener listener) {
@@ -68,6 +68,7 @@ public class ChannelImpl extends ChannelParcelable implements Channel {
         return null;
     }
 
+    @Override
     public String getNodeId() {
         return nodeId;
     }

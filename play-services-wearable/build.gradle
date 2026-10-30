@@ -32,6 +32,10 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 wire {
@@ -52,4 +56,6 @@ dependencies {
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')
+
+    testImplementation 'junit:junit:4.13.2'
 }

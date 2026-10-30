@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 microG Project Team
+ * Copyright (C) 2019-2026 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,5 +22,15 @@ import org.microg.safeparcel.SafeParceled;
 public class CloseChannelResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
+    @SafeParceled(2)
+    public int statusCode;
+
+    private CloseChannelResponse() {
+    }
+
+    public CloseChannelResponse(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
     public static final Creator<CloseChannelResponse> CREATOR = new AutoCreator<CloseChannelResponse>(CloseChannelResponse.class);
 }

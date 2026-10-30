@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2026 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,19 +46,42 @@ import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 
 @PublicApi
 public abstract class WearableListenerService extends Service implements CapabilityApi.CapabilityListener, ChannelApi.ChannelListener, DataApi.DataListener, MessageApi.MessageListener, NodeApi.NodeListener {
-    private static final String BIND_LISTENER_INTENT_ACTION = "com.google.android.gms.wearable.BIND_LISTENER";
+    public static final String BIND_LISTENER_INTENT_ACTION = "com.google.android.gms.wearable.BIND_LISTENER";
+    public static final String ACTION_DATA_CHANGED = "com.google.android.gms.wearable.DATA_CHANGED";
+    public static final String ACTION_MESSAGE_RECEIVED = "com.google.android.gms.wearable.MESSAGE_RECEIVED";
+    public static final String ACTION_CAPABILITY_CHANGED = "com.google.android.gms.wearable.CAPABILITY_CHANGED";
+    public static final String ACTION_CHANNEL_EVENT = "com.google.android.gms.wearable.CHANNEL_EVENT";
+
+    private static final String[] BIND_ACTIONS = {
+            BIND_LISTENER_INTENT_ACTION,
+            ACTION_DATA_CHANGED,
+            ACTION_MESSAGE_RECEIVED,
+            ACTION_CAPABILITY_CHANGED,
+            ACTION_CHANNEL_EVENT
+    };
+
     private static final String TAG = "GmsWearListenerSvc";
 
     private HandlerThread handlerThread;
     private IWearableListener listener;
     private ServiceHandler serviceHandler;
-    private Object lock = new Object();
+    private final Object lock = new Object();
     private boolean disconnected = false;
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (BIND_LISTENER_INTENT_ACTION.equals(intent.getAction())) {
-            return listener.asBinder();
+        if (intent == null || intent.getAction() == null) {
+            return null;
+        }
+        for (String action : BIND_ACTIONS) {
+            if (action.equals(intent.getAction())) {
+                synchronized (lock) {
+                    if (listener == null) {
+                        onCreate();
+                    }
+                    return listener.asBinder();
+                }
+            }
         }
         return null;
     }
@@ -81,10 +104,14 @@ public abstract class WearableListenerService extends Service implements Capabil
     @Override
     public void onCreate() {
         super.onCreate();
-        handlerThread = new HandlerThread("WearableListenerService");
-        handlerThread.start();
-        serviceHandler = new ServiceHandler(handlerThread.getLooper());
-        listener = new Listener();
+        synchronized (lock) {
+            if (handlerThread == null) {
+                handlerThread = new HandlerThread("WearableListenerService");
+                handlerThread.start();
+                serviceHandler = new ServiceHandler(handlerThread.getLooper());
+                listener = new Listener();
+            }
+        }
     }
 
     @Override
@@ -94,10 +121,10 @@ public abstract class WearableListenerService extends Service implements Capabil
     @Override
     public void onDestroy() {
         synchronized (lock) {
-            if (serviceHandler == null) {
-                throw new IllegalStateException("serviceHandler not set, did you override onCreate() but forget to call super.onCreate()?");
+            if (serviceHandler != null) {
+                serviceHandler.getLooper().quitSafely();
             }
-            serviceHandler.getLooper().quit();
+            disconnected = true;
         }
         super.onDestroy();
     }
@@ -136,7 +163,7 @@ public abstract class WearableListenerService extends Service implements Capabil
         private boolean post(Runnable runnable) {
             int callingUid = Binder.getCallingUid();
             if (callingUid != knownGoodUid) {
-                // TODO: Verify Gms is calling
+                // Verify Gms is calling
                 String[] packagesForUid = getPackageManager().getPackagesForUid(callingUid);
                 if (packagesForUid != null) {
                     if (Arrays.asList(packagesForUid).contains(GMS_PACKAGE_NAME)) {
@@ -147,7 +174,7 @@ public abstract class WearableListenerService extends Service implements Capabil
                 }
             }
             synchronized (lock) {
-                if (disconnected) {
+                if (disconnected || serviceHandler == null) {
                     return false;
                 }
                 serviceHandler.post(runnable);
@@ -157,12 +184,28 @@ public abstract class WearableListenerService extends Service implements Capabil
 
         @Override
         public void onDataChanged(final DataHolder data) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onDataChanged(new DataEventBuffer(data));
+            if (data == null) return;
+            boolean posted = false;
+            try {
+                posted = post(new Runnable() {
+                    @Override
+                    public void run() {
+                        DataEventBuffer dataEvents = new DataEventBuffer(data);
+                        try {
+                            WearableListenerService.this.onDataChanged(dataEvents);
+                        } finally {
+                            dataEvents.release();
+                        }
+                    }
+                });
+            } catch (SecurityException securityException) {
+                data.close();
+                throw securityException;
+            } finally {
+                if (!posted) {
+                    data.close();
                 }
-            });
+            }
         }
 
         @Override

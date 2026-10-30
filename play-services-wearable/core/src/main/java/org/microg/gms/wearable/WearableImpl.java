@@ -32,12 +32,13 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
-import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
@@ -487,6 +488,22 @@ public class WearableImpl {
         return dataHolder;
     }
 
+    public DataHolder getDataItemsByUriAsHolder(Uri uri, String packageName, int filterType) {
+        if (filterType != DataClient.FILTER_PREFIX) {
+            return getDataItemsByUriAsHolder(uri, packageName);
+        }
+        String firstSignature;
+        try {
+            firstSignature = PackageUtils.firstSignatureDigest(context, packageName);
+        } catch (Exception e) {
+            return null;
+        }
+        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPathPrefix(packageName, firstSignature, fixHost(uri.getHost(), false), uri.getPath());
+        DataHolder dataHolder = new DataHolder(dataHolderItems, 0, null);
+        Log.d(TAG, "Returning data holder of size " + dataHolder.getCount() + " for prefix query " + uri);
+        return dataHolder;
+    }
+
     public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
         if (!listeners.containsKey(packageName)) {
             listeners.put(packageName, new ArrayList<ListenerInfo>());
@@ -538,7 +555,16 @@ public class WearableImpl {
     }
 
     public int deleteDataItems(Uri uri, String packageName) {
-        List<DataItemRecord> records = nodeDatabase.deleteDataItems(packageName, PackageUtils.firstSignatureDigest(context, packageName), fixHost(uri.getHost(), false), uri.getPath());
+        return deleteDataItems(uri, packageName, 0);
+    }
+
+    public int deleteDataItems(Uri uri, String packageName, int filterType) {
+        String signature = PackageUtils.firstSignatureDigest(context, packageName);
+        String host = fixHost(uri.getHost(), false);
+        String path = uri.getPath();
+        List<DataItemRecord> records = filterType == DataClient.FILTER_PREFIX
+                ? nodeDatabase.deleteDataItemsByPrefix(packageName, signature, host, path)
+                : nodeDatabase.deleteDataItems(packageName, signature, host, path);
         for (DataItemRecord record : records) {
             syncRecordToAll(record);
         }
@@ -551,6 +577,14 @@ public class WearableImpl {
         intent.setPackage(packageName);
         intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
         invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
+    }
+
+    public void sendCapabilityChanged(String packageName, com.google.android.gms.wearable.internal.CapabilityInfoParcelable capabilityInfo) {
+        Log.d(TAG, "onCapabilityChanged: " + capabilityInfo);
+        Intent intent = new Intent("com.google.android.gms.wearable.CAPABILITY_CHANGED");
+        if (packageName != null) intent.setPackage(packageName);
+        intent.setData(Uri.parse("wear://*/" + capabilityInfo.getName()));
+        invokeListeners(intent, listener -> listener.onConnectedCapabilityChanged(capabilityInfo));
     }
 
     public DataItemRecord getDataItemByUri(Uri uri, String packageName) {
