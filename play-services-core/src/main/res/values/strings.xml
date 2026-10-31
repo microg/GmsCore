@@ -475,4 +475,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <string name="wearable_tos_title">Wear OS pairing</string>
+    <string name="wearable_tos_message">A companion app wants to pair a Wear OS watch with this phone.\n\nmicroG does not send this consent to Google. You can deny pairing if you did not start it.</string>
 </resources>
