@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.hardware.display.DisplayManager
 import android.os.SystemClock
 import android.util.AttributeSet
 import android.util.Log
@@ -52,8 +53,21 @@ class DocumentCaptureView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val analysisExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+    private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
+    private var imageAnalysis: ImageAnalysis? = null
     private var camera: Camera? = null
+    private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+    private val displayListener = object : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) = Unit
+        override fun onDisplayRemoved(displayId: Int) = Unit
+        override fun onDisplayChanged(displayId: Int) {
+            val rotation = display?.takeIf { it.displayId == displayId }?.rotation ?: return
+            preview?.targetRotation = rotation
+            imageCapture?.targetRotation = rotation
+            imageAnalysis?.targetRotation = rotation
+        }
+    }
     private val previewView: PreviewView = PreviewView(context).apply {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         scaleType = PreviewView.ScaleType.FIT_CENTER
@@ -114,7 +128,9 @@ class DocumentCaptureView @JvmOverloads constructor(
                 try {
                     cameraProvider.unbindAll()
                     camera = cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, capture, analysis)
+                    this.preview = preview
                     imageCapture = capture
+                    imageAnalysis = analysis
                     onReady()
                     break
                 } catch (e: Exception) {
@@ -159,8 +175,14 @@ class DocumentCaptureView @JvmOverloads constructor(
         })
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        displayManager.registerDisplayListener(displayListener, null)
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        displayManager.unregisterDisplayListener(displayListener)
         analysisExecutor.shutdown()
     }
 }
