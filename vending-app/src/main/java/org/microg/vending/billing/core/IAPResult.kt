@@ -6,6 +6,8 @@ open class IAPResult(val resultMap: Map<String, Any>) {
     }
 
     fun getMessage(): String {
-        return resultMap["RESPONSE_MESSAGE"] as String
+        return resultMap["RESPONSE_MESSAGE"] as? String
+            ?: resultMap["DEBUG_MESSAGE"] as? String
+            ?: ""
     }
 }
