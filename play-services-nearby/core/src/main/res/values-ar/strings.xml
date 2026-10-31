@@ -40,4 +40,8 @@
     <string name="exposure_confirm_stop_button">إطفاء</string>
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>، درجة المخاطرة <xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_encounters_suffix">ملاحظة: يتم تحديد درجة المخاطرة بواسطة التطبيق. قد تشير الأرقام المرتفعة إلى مخاطرة منخفضة والعكس صحيح.</string>
+    <string name="exposure_confirm_permission_button">إعطاء</string>
+    <string name="exposure_confirm_keys_button">مشاركة</string>
+    <string name="exposure_confirm_button">تفعيل</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">أذونات جُدد مطلوبة</string>
 </resources>
