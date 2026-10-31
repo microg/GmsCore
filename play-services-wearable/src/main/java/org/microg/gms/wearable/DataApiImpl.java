@@ -16,60 +16,270 @@
 
 package org.microg.gms.wearable;
 
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.DataItemBuffer;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.AddListenerRequest;
+import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
+import com.google.android.gms.wearable.internal.GetDataItemResponse;
+import com.google.android.gms.wearable.internal.GetFdForAssetResponse;
+import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.internal.PutDataResponse;
+import com.google.android.gms.wearable.internal.RemoveListenerRequest;
+
+import org.microg.gms.common.GmsConnector;
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DataApiImpl implements DataApi {
+    private final Map<DataListener, IWearableListener> listenerWrappers = new ConcurrentHashMap<DataListener, IWearableListener>();
+
     @Override
-    public PendingResult<Status> addListener(GoogleApiClient client, DataListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> addListener(GoogleApiClient client, final DataListener listener) {
+        final IWearableListener wrapper = new DataListenerWrapper(listener);
+        listenerWrappers.put(listener, wrapper);
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().addListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new AddListenerRequest(wrapper, new IntentFilter[0], null));
+            }
+        });
     }
 
     @Override
-    public PendingResult<DeleteDataItemsResult> deleteDataItems(GoogleApiClient client, Uri uri) {
-        throw new UnsupportedOperationException();
+    public PendingResult<DeleteDataItemsResult> deleteDataItems(GoogleApiClient client, final Uri uri) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, DeleteDataItemsResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<DeleteDataItemsResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().deleteDataItems(new BaseWearableCallbacks() {
+                    @Override
+                    public void onDeleteDataItemsResponse(DeleteDataItemsResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new DeleteDataItemsResultImpl(response));
+                    }
+                }, uri);
+            }
+        });
     }
 
     @Override
-    public PendingResult<DataItemResult> getDataItem(GoogleApiClient client, Uri uri) {
-        throw new UnsupportedOperationException();
+    public PendingResult<DataItemResult> getDataItem(GoogleApiClient client, final Uri uri) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, DataItemResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<DataItemResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().getDataItem(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetDataItemResponse(GetDataItemResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new DataItemResultImpl(response));
+                    }
+                }, uri);
+            }
+        });
     }
 
     @Override
     public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, DataItemBuffer>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<DataItemBuffer> resultProvider) throws RemoteException {
+                client.getServiceInterface().getDataItems(new BaseWearableCallbacks() {
+                    @Override
+                    public void onDataItemChanged(DataHolder dataHolder) throws RemoteException {
+                        resultProvider.onResultAvailable(new DataItemBuffer(dataHolder));
+                    }
+                });
+            }
+        });
     }
 
     @Override
-    public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client, Uri uri) {
-        throw new UnsupportedOperationException();
+    public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client, final Uri uri) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, DataItemBuffer>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<DataItemBuffer> resultProvider) throws RemoteException {
+                client.getServiceInterface().getDataItemsByUri(new BaseWearableCallbacks() {
+                    @Override
+                    public void onDataItemChanged(DataHolder dataHolder) throws RemoteException {
+                        resultProvider.onResultAvailable(new DataItemBuffer(dataHolder));
+                    }
+                }, uri);
+            }
+        });
     }
 
     @Override
-    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, DataItemAsset asset) {
-        throw new UnsupportedOperationException();
+    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, final DataItemAsset asset) {
+        final Asset assetObj = Asset.createFromRef(asset.getId());
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetFdForAssetResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<GetFdForAssetResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().getFdForAsset(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetFdForAssetResponse(GetFdForAssetResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new GetFdForAssetResultImpl(response));
+                    }
+                }, assetObj);
+            }
+        });
     }
 
     @Override
-    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, Asset asset) {
-        throw new UnsupportedOperationException();
+    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, final Asset asset) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetFdForAssetResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<GetFdForAssetResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().getFdForAsset(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetFdForAssetResponse(GetFdForAssetResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new GetFdForAssetResultImpl(response));
+                    }
+                }, asset);
+            }
+        });
     }
 
     @Override
-    public PendingResult<DataItemResult> putDataItem(GoogleApiClient client, PutDataRequest request) {
-        throw new UnsupportedOperationException();
+    public PendingResult<DataItemResult> putDataItem(GoogleApiClient client, final PutDataRequest request) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, DataItemResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<DataItemResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().putData(new BaseWearableCallbacks() {
+                    @Override
+                    public void onPutDataResponse(PutDataResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new DataItemResultImpl(response));
+                    }
+                }, request);
+            }
+        });
     }
 
     @Override
-    public PendingResult<Status> removeListener(GoogleApiClient client, DataListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> removeListener(GoogleApiClient client, final DataListener listener) {
+        final IWearableListener wrapper = listenerWrappers.remove(listener);
+        if (wrapper == null) {
+            return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+                @Override
+                public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                    resultProvider.onResultAvailable(Status.SUCCESS);
+                }
+            });
+        }
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().removeListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new RemoveListenerRequest(wrapper));
+            }
+        });
+    }
+
+    public static class DataItemResultImpl implements DataItemResult {
+        private final Status status;
+        private final DataItem dataItem;
+
+        public DataItemResultImpl(GetDataItemResponse response) {
+            this.status = new Status(response.statusCode);
+            this.dataItem = response.dataItem;
+        }
+
+        public DataItemResultImpl(PutDataResponse response) {
+            this.status = new Status(response.statusCode);
+            this.dataItem = response.dataItem;
+        }
+
+        @Override
+        public DataItem getDataItem() {
+            return dataItem;
+        }
+
+        @Override
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    public static class DeleteDataItemsResultImpl implements DeleteDataItemsResult {
+        private final Status status;
+        private final int numDeleted;
+
+        public DeleteDataItemsResultImpl(DeleteDataItemsResponse response) {
+            this.status = new Status(response.status);
+            this.numDeleted = response.count;
+        }
+
+        @Override
+        public int getNumDeleted() {
+            return numDeleted;
+        }
+
+        @Override
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    public static class GetFdForAssetResultImpl implements GetFdForAssetResult {
+        private final Status status;
+        private final ParcelFileDescriptor pfd;
+
+        public GetFdForAssetResultImpl(GetFdForAssetResponse response) {
+            this.status = new Status(response.statusCode);
+            this.pfd = response.pfd;
+        }
+
+        @Override
+        public ParcelFileDescriptor getFd() {
+            return pfd;
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            if (pfd != null) {
+                return new ParcelFileDescriptor.AutoCloseInputStream(pfd);
+            }
+            return null;
+        }
+
+        @Override
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    private static class DataListenerWrapper extends BaseWearableListener {
+        private final DataListener listener;
+
+        DataListenerWrapper(DataListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onDataChanged(DataHolder dataHolder) throws RemoteException {
+            listener.onDataChanged(new DataEventBuffer(dataHolder));
+        }
     }
 }
