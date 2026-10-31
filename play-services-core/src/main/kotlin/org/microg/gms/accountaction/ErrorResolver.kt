@@ -46,6 +46,27 @@ const val SERVER_ERROR = "Error 500"
 const val TAG = "GmsAccountErrorResolve"
 
 /**
+ * Limits cryptauth sync keys calls, as apps keep requesting tokens while the server keeps
+ * rejecting them, which would otherwise loop until the server rate limits us.
+ */
+private object CryptAuthAttempts {
+    private const val MAX_ATTEMPTS = 3
+    private const val WINDOW_MILLIS = 60 * 60 * 1000L
+
+    private val attempts = mutableMapOf<String, MutableList<Long>>()
+
+    @Synchronized
+    fun tryAcquire(accountName: String): Boolean {
+        val now = System.currentTimeMillis()
+        val recent = attempts.getOrPut(accountName) { mutableListOf() }
+        recent.removeAll { now - it > WINDOW_MILLIS }
+        if (recent.size >= MAX_ATTEMPTS) return false
+        recent.add(now)
+        return true
+    }
+}
+
+/**
  * @return `null` if it is unknown how to resolve the problem, an
  * appropriate `Resolution` otherwise
  */
@@ -117,6 +138,10 @@ fun Context.isMicrogAppGcmAllowed(): Boolean {
 fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
     when (this) {
         CryptAuthSyncKeys -> {
+            if (!CryptAuthAttempts.tryAcquire(account.name)) {
+                Log.w(TAG, "Not performing cryptauth sync keys call, too many attempts recently.")
+                return null
+            }
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
                 context.sendDeviceScreenlockState(account)
@@ -147,6 +172,10 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
 fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
     when (this) {
         CryptAuthSyncKeys -> {
+            if (!CryptAuthAttempts.tryAcquire(account.name)) {
+                Log.w(TAG, "Not performing cryptauth sync keys call, too many attempts recently.")
+                return null
+            }
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
                 context.sendDeviceScreenlockState(account)

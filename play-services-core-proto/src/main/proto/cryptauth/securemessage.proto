@@ -1,0 +1,29 @@
+/* SPDX-FileCopyrightText: 2014 Google Inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Subset of the SecureMessage public key format, as used by CryptAuth for the
+// key material of enrolled asymmetric keys.
+syntax = "proto2";
+
+package securemessage;
+
+option optimize_for = LITE_RUNTIME;
+
+enum PublicKeyType {
+  EC_P256 = 1;
+  RSA2048 = 2;
+  DH2048_MODP = 3;
+}
+
+message EcP256PublicKey {
+  // x and y are encoded in big-endian two's complement (slightly wasteful)
+  // Client MUST verify (x,y) is a valid point on NIST P256
+  required bytes x = 1;
+  required bytes y = 2;
+}
+
+message GenericPublicKey {
+  required PublicKeyType type = 1;
+  optional EcP256PublicKey ec_p256_public_key = 2;
+}
