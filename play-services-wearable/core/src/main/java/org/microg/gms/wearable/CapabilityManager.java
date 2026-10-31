@@ -82,4 +82,35 @@ public class CapabilityManager {
         capabilities.remove(capability);
         return CommonStatusCodes.SUCCESS;
     }
+
+    public java.util.Map<String, Set<String>> getAllCapabilitiesMap() {
+        java.util.Map<String, Set<String>> map = new java.util.HashMap<>();
+        for (String cap : capabilities) {
+            map.put(cap, getNodesForCapability(cap));
+        }
+        try {
+            Uri capRoot = Uri.parse("wear:/capabilities/" + packageName);
+            DataHolder holder = wearable.getDataItemsByUriAsHolder(capRoot, packageName);
+            if (holder != null) {
+                for (int i = 0; i < holder.getCount(); i++) {
+                    String path = holder.getString("path", i, 0);
+                    String host = holder.getString("host", i, 0);
+                    if (path != null) {
+                        String[] segments = path.split("/");
+                        if (segments.length > 0) {
+                            String capName = Uri.decode(segments[segments.length - 1]);
+                            if (!map.containsKey(capName)) {
+                                map.put(capName, new HashSet<String>());
+                            }
+                            map.get(capName).add(host);
+                        }
+                    }
+                }
+                holder.close();
+            }
+        } catch (Exception e) {
+            android.util.Log.w("GmsWearCapMgr", "Error enumerating capabilities", e);
+        }
+        return map;
+    }
 }
