@@ -80,12 +80,18 @@ public class CheckinService extends IntentService {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG);
             if (CheckinPreferences.isEnabled(this)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
-                if (info != null) {
-                    Log.d(TAG, "Checked in as " + Long.toHexString(info.getAndroidId()));
-                    String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
-                    for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
-                        PeopleManager.loadUserInfo(this, account);
-                    }
+                
+                // Check if info isn't null before pulling out data
+if (info != null) {
+    Log.d(TAG, "Checked in as " + Long.toHexString(info.getAndroidId()));
+    String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
+    for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
+        PeopleManager.loadUserInfo(this, account);
+    }
+}
+
+
+    }
                     McsService.scheduleReconnect(this);
                     if (intent.hasExtra(EXTRA_RESULT_RECEIVER)) {
                         ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
