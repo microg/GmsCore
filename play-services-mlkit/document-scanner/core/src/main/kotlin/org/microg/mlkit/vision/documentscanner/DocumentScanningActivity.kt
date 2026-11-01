@@ -259,8 +259,11 @@ class DocumentScanningActivity : AppCompatActivity() {
         busy = true
         updateControls()
         lifecycleScope.launch {
-            val corners = runCatching { withContext(Dispatchers.IO) { previewCorners?.let { scaleCorners(file, it) } ?: detectDocumentCorners(file) } }
+            val adjustedPreviewCorners = runCatching { withContext(Dispatchers.IO) { previewCorners?.let { scaleCorners(file, it) } } }
+                .onFailure { Log.w(TAG, "Failed to translate preview edges", it) }.getOrNull()
+            val newlyDetectedCorners = runCatching { withContext(Dispatchers.IO) {  detectDocumentCorners(file, adjustedPreviewCorners) } }
                 .onFailure { Log.w(TAG, "Failed to detect document edges", it) }.getOrNull()
+            val corners = newlyDetectedCorners ?: adjustedPreviewCorners
             openReview(Review(file, corners, corners, null))
         }
     }
