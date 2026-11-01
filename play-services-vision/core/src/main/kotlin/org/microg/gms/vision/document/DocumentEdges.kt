@@ -29,6 +29,7 @@ private const val DETECTION_SIZE = 640
 private const val LIVE_DETECTION_SIZE = 320
 private const val MIN_DOCUMENT_AREA = 0.05
 private const val MIN_OUTER_FILL = 0.85
+private const val MAX_HINT_DISTANCE = 0.05
 
 internal val openCvLoaded by lazy { OpenCVLoader.initLocal() }
 
@@ -41,7 +42,7 @@ fun scaleCorners(file: File, relative: FloatArray): FloatArray? {
     return FloatArray(8) { relative[it] * if (it % 2 == 0) bounds.outWidth else bounds.outHeight }
 }
 
-fun detectDocumentCorners(file: File): FloatArray? {
+fun detectDocumentCorners(file: File, hint: FloatArray? = null): FloatArray? {
     if (!openCvLoaded) return null
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeFile(file.absolutePath, bounds)
@@ -56,7 +57,10 @@ fun detectDocumentCorners(file: File): FloatArray? {
     bitmap.recycle()
     val gray = Mat()
     Imgproc.cvtColor(image, gray, Imgproc.COLOR_RGBA2GRAY)
-    val quad = findDocumentQuad(gray) ?: findPaperQuad(image)
+    val hintPoints = hint?.let { h ->
+        Array(4) { Point(h[it * 2] / scale, h[it * 2 + 1] / scale) }
+    }
+    val quad = findDocumentQuad(gray, hintPoints) ?: findPaperQuad(image, hintPoints)
     gray.release()
     image.release()
     return quad?.flatMap { listOf((it.x * scale).toFloat(), (it.y * scale).toFloat()) }?.toFloatArray()
@@ -89,7 +93,7 @@ fun detectLiveCorners(luminance: ByteBuffer, rowStride: Int, width: Int, height:
     return quad?.flatMap { listOf(it.x.toFloat() / frameWidth, it.y.toFloat() / frameHeight) }?.toFloatArray()
 }
 
-private fun findDocumentQuad(gray: Mat): Array<Point>? {
+private fun findDocumentQuad(gray: Mat, hint: Array<Point>? = null): Array<Point>? {
     val edges = Mat()
     Imgproc.GaussianBlur(gray, edges, Size(5.0, 5.0), 0.0)
     Imgproc.Canny(edges, edges, 50.0, 150.0)
@@ -102,25 +106,51 @@ private fun findDocumentQuad(gray: Mat): Array<Point>? {
     val minArea = gray.rows() * gray.cols() * MIN_DOCUMENT_AREA
     var best: Array<Point>? = null
     var bestArea = 0.0
+    val candidates = ArrayList<Array<Point>>()
     for (contour in contours) {
         val curve = MatOfPoint2f(*contour.toArray())
         val approx = MatOfPoint2f()
         Imgproc.approxPolyDP(curve, approx, 0.02 * Imgproc.arcLength(curve, true), true)
         val points = approx.toArray()
         val area = abs(Imgproc.contourArea(approx))
-        if (points.size == 4 && area > minArea && area > bestArea && Imgproc.isContourConvex(MatOfPoint(*points))) {
-            best = points
-            bestArea = area
+        if (points.size == 4 && area > minArea) {
+            val polygon = MatOfPoint(*points)
+            if (Imgproc.isContourConvex(polygon)) {
+                candidates += points
+                if (area > bestArea) {
+                    best = points
+                }
+            }
+            polygon.release()
         }
         curve.release()
         approx.release()
         contour.release()
     }
 
-    val quad = best ?: findOuterQuad(edges, minArea)
+    if (hint != null || best == null) {
+        findOuterQuad(edges, minArea)?.let {
+            best = it
+            candidates += it
+        }
+    }
     edges.release()
-    return quad?.let { orderCorners(it) }
+
+    return if (hint == null) {
+        best?.let { orderCorners(it) }
+    } else {
+        pickClosest(candidates.map { orderCorners(it) }, hint, hypot(gray.cols().toDouble(), gray.rows().toDouble()))
+    }
 }
+
+private fun cornerDistance(a: Array<Point>, b: Array<Point>): Double =
+    a.indices.sumOf { hypot(a[it].x - b[it].x, a[it].y - b[it].y) } / a.size
+
+private fun pickClosest(candidates: List<Array<Point>>, hint: Array<Point>, diagonal: Double): Array<Point>? =
+    candidates.map { it to cornerDistance(it, hint) }
+        .minByOrNull { it.second }
+        ?.takeIf { it.second < MAX_HINT_DISTANCE * diagonal }
+        ?.first
 
 private fun findOuterQuad(edges: Mat, minArea: Double): Array<Point>? {
     val kernelSize = (max(edges.rows(), edges.cols()) / 29.0).roundToInt().coerceAtLeast(3).toDouble()
@@ -152,7 +182,7 @@ private fun largestFilledQuad(contours: List<MatOfPoint>, minArea: Double): Arra
     return quad.takeIf { convex && quadArea > minArea && contourArea / quadArea >= MIN_OUTER_FILL }
 }
 
-private fun findPaperQuad(rgba: Mat): Array<Point>? {
+private fun findPaperQuad(rgba: Mat, hint: Array<Point>? = null): Array<Point>? {
     val hsv = Mat()
     Imgproc.cvtColor(rgba, hsv, Imgproc.COLOR_RGBA2RGB)
     Imgproc.cvtColor(hsv, hsv, Imgproc.COLOR_RGB2HSV)
@@ -172,9 +202,11 @@ private fun findPaperQuad(rgba: Mat): Array<Point>? {
     mask.release()
     hierarchy.release()
 
-    val quad = largestFilledQuad(contours, minArea)
+    val quad = largestFilledQuad(contours, minArea)?.let { orderCorners(it) }
     contours.forEach { it.release() }
-    return quad?.let { orderCorners(it) }
+    if (quad == null || hint == null) return quad
+    val diagonal = hypot(rgba.cols().toDouble(), rgba.rows().toDouble())
+    return quad.takeIf { cornerDistance(it, hint) < MAX_HINT_DISTANCE * diagonal }
 }
 
 private fun quadFromHull(contour: MatOfPoint): Array<Point>? {
