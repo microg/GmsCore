@@ -10,8 +10,6 @@ import android.util.Log;
 
 import java.lang.reflect.Method;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 public class WorkSourceUtil {
     private static final String TAG = "WorkSourceUtil";
 
@@ -42,6 +40,7 @@ public class WorkSourceUtil {
     }
 
     public static int size(WorkSource workSource) {
+        if (workSource == null) return 0;
         try {
             return invokeMethod(workSource, "size");
         } catch (Exception e) {
@@ -50,13 +49,6 @@ public class WorkSourceUtil {
     }
 
     public static boolean isEmpty(WorkSource workSource) {
-        if (SDK_INT >= 28) {
-            try {
-                return invokeMethod(workSource, "isEmpty");
-            } catch (Exception e) {
-                // Ignore and fall-through to size()
-            }
-        }
         return size(workSource) == 0;
     }
 }
