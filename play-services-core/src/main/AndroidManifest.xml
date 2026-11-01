@@ -1334,7 +1334,7 @@
             android:process=":ui"
             android:excludeFromRecents="true"
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|screenLayout|uiMode"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.App">
             <intent-filter>
                 <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_DOCUMENT" />
 

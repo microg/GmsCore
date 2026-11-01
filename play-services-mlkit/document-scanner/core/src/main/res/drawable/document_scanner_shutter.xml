@@ -1,18 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2026 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false">
-        <shape android:shape="oval">
-            <solid android:color="#66FFFFFF" />
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="oval">
-            <solid android:color="@android:color/white" />
-            <stroke android:width="4dp" android:color="#FFBDBDBD" />
-        </shape>
-    </item>
-</selector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/document_scanner_shutter_outer" />
+    <item
+        android:bottom="8dp"
+        android:drawable="@drawable/document_scanner_shutter_inner"
+        android:left="8dp"
+        android:right="8dp"
+        android:top="8dp" />
+</layer-list>
