@@ -26,12 +26,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.tabs.TabLayout
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.CAPTURE_MODE_AUTO
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.microg.gms.utils.getApplicationLabel
 import org.microg.gms.vision.document.DocumentCaptureView
 import org.microg.gms.vision.document.DocumentCropView
 import org.microg.gms.vision.document.DocumentFilter
@@ -83,10 +86,18 @@ class DocumentScanningActivity : AppCompatActivity() {
     private var autoCapture = false
     private var busy = false
     private var discardDialog: AlertDialog? = null
+    private var infoDialog: AlertDialog? = null
     private lateinit var scanDir: File
 
     private val callingAppName: String?
-        get() = runCatching { intent?.getStringExtra(EXTRA_CALLING_APP_NAME) }.getOrNull()
+        get() {
+            val appProvidedName = runCatching { intent?.getStringExtra(EXTRA_CALLING_APP_NAME) }.getOrNull()
+            val callingName = runCatching { callingActivity?.packageName?.let { packageManager.getApplicationLabel(it).toString() } }.getOrNull()
+            if (appProvidedName != null && callingName != null && appProvidedName != callingName) {
+                return "$appProvidedName / $callingName"
+            }
+            return callingName ?: appProvidedName
+        }
 
     private val pageLimit: Int
         get() = runCatching { intent?.getIntExtra(EXTRA_PAGE_LIMIT_MAX, -1) }.getOrNull() ?: -1
@@ -129,15 +140,20 @@ class DocumentScanningActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) { navigateBack() }
         findViewById<ImageView>(R.id.document_scanning_cancel).setOnClickListener { confirmDiscard() }
         findViewById<View>(R.id.document_scanning_capture).setOnClickListener { capturePage() }
-        findViewById<Button>(R.id.document_scanning_done).setOnClickListener { showPreview() }
+        findViewById<View>(R.id.document_scanning_done).setOnClickListener { showPreview() }
         findViewById<Button>(R.id.document_scanning_keep).setOnClickListener { keepReviewedPage() }
-        findViewById<Button>(R.id.document_scanning_retake).setOnClickListener { discardReview() }
+        findViewById<MaterialToolbar>(R.id.document_scanning_crop_rotate_top_bar).setNavigationOnClickListener { discardReview() }
         findViewById<Button>(R.id.document_scanning_auto_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectDetected() }
         findViewById<Button>(R.id.document_scanning_no_crop).setOnClickListener { findViewById<DocumentCropView>(R.id.document_scanning_crop).selectFullPage() }
         findViewById<Button>(R.id.document_scanning_rotate).setOnClickListener { rotateReviewedPage() }
-        findViewById<Button>(R.id.document_scanning_mode_manual).setOnClickListener { setAutoCapture(false) }
-        findViewById<Button>(R.id.document_scanning_mode_auto).setOnClickListener { setAutoCapture(true) }
-        findViewById<ImageView>(R.id.document_scanning_preview_cancel).setOnClickListener { confirmDiscard() }
+        findViewById<TabLayout>(R.id.document_scanning_mode_bar).addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                setAutoCapture(tab.position == 1)
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+        findViewById<MaterialToolbar>(R.id.document_scanning_preview_top_bar).setNavigationOnClickListener { confirmDiscard() }
         findViewById<Button>(R.id.document_scanning_preview_done).setOnClickListener { finishScanning() }
         findViewById<View>(R.id.document_scanning_preview_add).setOnClickListener { showCamera(null) }
         findViewById<Button>(R.id.document_scanning_preview_crop).setOnClickListener { editSelectedPage() }
@@ -148,12 +164,25 @@ class DocumentScanningActivity : AppCompatActivity() {
             setOnClickListener { chooseFilter() }
         }
         setAutoCapture(intent.getIntExtra(EXTRA_DEFAULT_CAPTURE_MODE, -1) == CAPTURE_MODE_AUTO)
+        findViewById<TabLayout>(R.id.document_scanning_mode_bar).getTabAt(if (autoCapture) 1 else 0)?.select()
         findViewById<Button>(R.id.document_scanning_import).apply {
             visibility = if (intent.getBooleanExtra(EXTRA_GALLERY_IMPORT_ALLOWED, false)) View.VISIBLE else View.GONE
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
         }
-        callingAppName?.let {
-            findViewById<TextView>(R.id.document_scanning_tips).text = getString(R.string.document_scanner_brand, it)
+        callingAppName.let { name ->
+            if (name == null) {
+                findViewById<TextView>(R.id.document_scanning_brand).visibility = View.GONE
+                findViewById<ImageView>(R.id.document_scanning_info_button).visibility = View.GONE
+            } else {
+                findViewById<TextView>(R.id.document_scanning_brand).text =
+                    getString(R.string.document_scanner_brand, name)
+                findViewById<ImageView>(R.id.document_scanning_info_button).setOnClickListener {
+                    infoDialog = AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.document_scanner_info_content, name))
+                        .setPositiveButton(android.R.string.ok) { _, _ ->  }
+                        .show()
+                }
+            }
         }
         updateControls()
 
@@ -167,7 +196,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private fun startCamera() {
         if (SDK_INT >= 21) {
             val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
-            camera.onDocumentStable = { if (autoCapture && discardDialog?.isShowing != true) capturePage() }
+            camera.onDocumentStable = { if (autoCapture && discardDialog?.isShowing != true && infoDialog?.isShowing != true) capturePage() }
             camera.startCamera(this, intent.getStringExtra(EXTRA_CAMERA_ID)) {
                 if (intent.getBooleanExtra(EXTRA_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
                     findViewById<ImageView>(R.id.document_scanning_flash).apply {
@@ -181,8 +210,6 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun setAutoCapture(enabled: Boolean) {
         autoCapture = enabled
-        findViewById<Button>(R.id.document_scanning_mode_manual).alpha = if (enabled) 0.5f else 1f
-        findViewById<Button>(R.id.document_scanning_mode_auto).alpha = if (enabled) 1f else 0.5f
         findViewById<View>(R.id.document_scanning_hint).visibility = if (enabled) View.VISIBLE else View.GONE
         if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
     }
@@ -449,13 +476,15 @@ class DocumentScanningActivity : AppCompatActivity() {
         val canAdd = !busy && reviewing == null && !isPageLimitReached
         findViewById<View>(R.id.document_scanning_capture).isEnabled = canAdd
         findViewById<Button>(R.id.document_scanning_import).isEnabled = canAdd
-        findViewById<Button>(R.id.document_scanning_done).apply {
-            visibility = if (pages.isNotEmpty()) View.VISIBLE else View.INVISIBLE
+        findViewById<View>(R.id.document_scanning_done).apply {
             isEnabled = !busy && reviewing == null
-            text = getString(R.string.document_scanner_done, pages.size)
+            visibility = if (pages.isNotEmpty()) View.VISIBLE else View.INVISIBLE
         }
+        findViewById<TextView>(R.id.document_scanning_done_count).text = pages.size.toString()
+        findViewById<ImageView>(R.id.document_scanning_done_thumbnail)
+            .setImageBitmap(pages.firstOrNull()?.output?.let { loadPagePreview(it, PREVIEW_SIZE) })
         val reviewEnabled = !busy && reviewing != null
-        for (id in intArrayOf(R.id.document_scanning_keep, R.id.document_scanning_retake, R.id.document_scanning_auto_crop, R.id.document_scanning_no_crop, R.id.document_scanning_rotate)) {
+        for (id in intArrayOf(R.id.document_scanning_keep, R.id.document_scanning_auto_crop, R.id.document_scanning_no_crop, R.id.document_scanning_rotate)) {
             findViewById<Button>(id).isEnabled = reviewEnabled
         }
         val previewEnabled = !busy && reviewing == null && pages.isNotEmpty()
