@@ -464,6 +464,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="document_scanner_filter_grayscale">Grayscale</string>
     <string name="document_scanner_filter_black_white">Black &amp; white</string>
     <string name="document_scanner_capture_failed">Failed to capture page</string>
+    <string name="document_scanner_discard_title">Discard scan?</string>
+    <string name="document_scanner_discard_message">If you leave now, your progress will be lost</string>
+    <string name="document_scanner_continue_scanning">Continue scanning</string>
+    <string name="document_scanner_discard">Discard</string>
 
     <string name="pref_app_install_settings_title">App Installer Settings</string>
     <string name="pref_app_install_switch_title">Allow App Installation</string>
