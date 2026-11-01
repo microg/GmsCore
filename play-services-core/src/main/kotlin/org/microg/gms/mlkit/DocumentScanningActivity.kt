@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -84,6 +85,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private var torchEnabled = false
     private var autoCapture = false
     private var busy = false
+    private var discardDialog: AlertDialog? = null
     private lateinit var scanDir: File
 
     private val callingAppName: String?
@@ -127,7 +129,8 @@ class DocumentScanningActivity : AppCompatActivity() {
         scanDir.mkdirs()
 
         setContentView(R.layout.activity_document_scanning)
-        findViewById<ImageView>(R.id.document_scanning_cancel).setOnClickListener { finish() }
+        onBackPressedDispatcher.addCallback(this) { navigateBack() }
+        findViewById<ImageView>(R.id.document_scanning_cancel).setOnClickListener { confirmDiscard() }
         findViewById<View>(R.id.document_scanning_capture).setOnClickListener { capturePage() }
         findViewById<Button>(R.id.document_scanning_done).setOnClickListener { showPreview() }
         findViewById<Button>(R.id.document_scanning_keep).setOnClickListener { keepReviewedPage() }
@@ -137,7 +140,7 @@ class DocumentScanningActivity : AppCompatActivity() {
         findViewById<Button>(R.id.document_scanning_rotate).setOnClickListener { rotateReviewedPage() }
         findViewById<Button>(R.id.document_scanning_mode_manual).setOnClickListener { setAutoCapture(false) }
         findViewById<Button>(R.id.document_scanning_mode_auto).setOnClickListener { setAutoCapture(true) }
-        findViewById<ImageView>(R.id.document_scanning_preview_cancel).setOnClickListener { finish() }
+        findViewById<ImageView>(R.id.document_scanning_preview_cancel).setOnClickListener { confirmDiscard() }
         findViewById<Button>(R.id.document_scanning_preview_done).setOnClickListener { finishScanning() }
         findViewById<View>(R.id.document_scanning_preview_add).setOnClickListener { showCamera(null) }
         findViewById<Button>(R.id.document_scanning_preview_crop).setOnClickListener { editSelectedPage() }
@@ -167,7 +170,7 @@ class DocumentScanningActivity : AppCompatActivity() {
     private fun startCamera() {
         if (SDK_INT >= 21) {
             val camera = findViewById<DocumentCaptureView>(R.id.document_scanning_camera)
-            camera.onDocumentStable = { if (autoCapture) capturePage() }
+            camera.onDocumentStable = { if (autoCapture && discardDialog?.isShowing != true) capturePage() }
             camera.startCamera(this, intent.getStringExtra(KEY_CAMERA_ID)) {
                 if (intent.getBooleanExtra(KEY_FLASH_MODE_CHANGE_ALLOWED, true) && camera.hasFlash) {
                     findViewById<ImageView>(R.id.document_scanning_flash).apply {
@@ -459,6 +462,24 @@ class DocumentScanningActivity : AppCompatActivity() {
         for (id in intArrayOf(R.id.document_scanning_preview_done, R.id.document_scanning_preview_crop, R.id.document_scanning_preview_filter, R.id.document_scanning_preview_retake, R.id.document_scanning_preview_delete)) {
             findViewById<Button>(id).isEnabled = previewEnabled
         }
+    }
+
+    private fun navigateBack() {
+        when {
+            reviewing != null -> discardReview()
+            isPreviewVisible -> if (!busy) showCamera(null)
+            else -> confirmDiscard()
+        }
+    }
+
+    private fun confirmDiscard() {
+        if (pages.isEmpty() && pendingReview.isEmpty() && reviewing == null) return finish()
+        discardDialog = AlertDialog.Builder(this)
+            .setTitle(R.string.document_scanner_discard_title)
+            .setMessage(R.string.document_scanner_discard_message)
+            .setNegativeButton(R.string.document_scanner_continue_scanning, null)
+            .setPositiveButton(R.string.document_scanner_discard) { _, _ -> finish() }
+            .show()
     }
 
     private fun finishScanning() {
