@@ -23,6 +23,7 @@ import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.CameraState
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -57,6 +58,7 @@ class DocumentCaptureView @JvmOverloads constructor(
     private var imageCapture: ImageCapture? = null
     private var imageAnalysis: ImageAnalysis? = null
     private var camera: Camera? = null
+    private var torchEnabled = false
     private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     private val displayListener = object : DisplayManager.DisplayListener {
         override fun onDisplayAdded(displayId: Int) = Unit
@@ -95,6 +97,7 @@ class DocumentCaptureView @JvmOverloads constructor(
         get() = camera?.cameraInfo?.hasFlashUnit() == true
 
     fun setTorch(enabled: Boolean) {
+        torchEnabled = enabled
         camera?.cameraControl?.enableTorch(enabled)
     }
 
@@ -127,7 +130,12 @@ class DocumentCaptureView @JvmOverloads constructor(
             for (selector in listOfNotNull(cameraId?.let { cameraSelector(it) }, CameraSelector.DEFAULT_BACK_CAMERA)) {
                 try {
                     cameraProvider.unbindAll()
-                    camera = cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, capture, analysis)
+                    val camera = cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, capture, analysis)
+                    camera.cameraInfo.cameraState.observe(lifecycleOwner) {
+                        // The torch turns off whenever the camera closes, e.g. while the activity is stopped
+                        if (it.type == CameraState.Type.OPEN) camera.cameraControl.enableTorch(torchEnabled)
+                    }
+                    this.camera = camera
                     this.preview = preview
                     imageCapture = capture
                     imageAnalysis = analysis

@@ -190,9 +190,13 @@ class DocumentScanningActivity : AppCompatActivity() {
     private fun toggleTorch() {
         if (SDK_INT < 21) return
         torchEnabled = !torchEnabled
-        findViewById<DocumentCaptureView>(R.id.document_scanning_camera).setTorch(torchEnabled)
+        setCameraTorch(torchEnabled)
         findViewById<ImageView>(R.id.document_scanning_flash)
             .setImageResource(if (torchEnabled) R.drawable.ic_document_scanner_flash_on else R.drawable.ic_document_scanner_flash_off)
+    }
+
+    private fun setCameraTorch(enabled: Boolean) {
+        if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).setTorch(enabled)
     }
 
     private val isPreviewVisible: Boolean
@@ -263,6 +267,7 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun openReview(review: Review) {
         reviewing = review
+        setCameraTorch(false)
         findViewById<DocumentCropView>(R.id.document_scanning_crop).setPage(review.source, review.detected, review.corners)
         findViewById<View>(R.id.document_scanning_review).visibility = View.VISIBLE
         busy = false
@@ -345,12 +350,14 @@ class DocumentScanningActivity : AppCompatActivity() {
         insertIndex = insertAt
         findViewById<View>(R.id.document_scanning_preview).visibility = View.GONE
         if (SDK_INT >= 21) findViewById<DocumentCaptureView>(R.id.document_scanning_camera).resetStability()
+        setCameraTorch(torchEnabled)
         updateControls()
     }
 
     private fun showPreview() {
         if (pages.isEmpty()) return showCamera(null)
         selectedPage = selectedPage.coerceIn(0, pages.size - 1)
+        setCameraTorch(false)
         findViewById<View>(R.id.document_scanning_preview).visibility = View.VISIBLE
         val thumbnails = findViewById<LinearLayout>(R.id.document_scanning_preview_thumbnails)
         val addButton = findViewById<View>(R.id.document_scanning_preview_add)
