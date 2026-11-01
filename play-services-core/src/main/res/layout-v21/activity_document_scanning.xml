@@ -17,7 +17,8 @@
         android:layout_margin="20dp"
         android:contentDescription="@android:string/cancel"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_close_btn" />
+        android:src="@drawable/ic_close_btn"
+        android:tint="@android:color/white" />
 
     <ImageView
         android:id="@+id/document_scanning_flash"
@@ -142,7 +143,8 @@
                 android:layout_margin="8dp"
                 android:contentDescription="@android:string/cancel"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_close_btn" />
+                android:src="@drawable/ic_close_btn"
+                android:tint="@android:color/white" />
 
             <TextView
                 android:layout_width="0dp"
