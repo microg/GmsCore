@@ -1329,7 +1329,7 @@
         </activity>
 
         <activity
-            android:name="org.microg.gms.mlkit.DocumentScanningActivity"
+            android:name="org.microg.mlkit.vision.documentscanner.DocumentScanningActivity"
             android:exported="true"
             android:process=":ui"
             android:excludeFromRecents="true"
