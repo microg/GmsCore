@@ -1,9 +1,9 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2026 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.mlkit
+package org.microg.mlkit.vision.documentscanner
 
 import android.Manifest.permission
 import android.content.ClipData
@@ -26,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.R
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.CAPTURE_MODE_AUTO
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
@@ -45,6 +44,7 @@ import org.microg.gms.vision.document.normalizePage
 import org.microg.gms.vision.document.rotatePage
 import org.microg.gms.vision.document.scaleCorners
 import org.microg.gms.vision.document.writePdf
+import org.microg.mlkit.vision.documentscanner.core.R
 import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_CALLING_APP_NAME
 import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_CAMERA_ID
 import org.microg.mlkit.vision.documentscanner.GmsDocumentScannerConstants.EXTRA_DEFAULT_CAPTURE_MODE
@@ -153,7 +153,7 @@ class DocumentScanningActivity : AppCompatActivity() {
             setOnClickListener { if (!busy) importLauncher.launch("image/*") }
         }
         callingAppName?.let {
-            findViewById<TextView>(R.id.document_scanning_tips).text = getString(R.string.barcode_scanner_brand, it)
+            findViewById<TextView>(R.id.document_scanning_tips).text = getString(R.string.document_scanner_brand, it)
         }
         updateControls()
 
@@ -524,9 +524,9 @@ class DocumentScanningActivity : AppCompatActivity() {
 
     private fun showPermissionDialog() {
         AlertDialog.Builder(this).apply {
-            setTitle(getString(R.string.camera_permission_dialog_title))
+            setTitle(getString(R.string.document_scanner_camera_permission_title))
             setMessage(getString(R.string.document_scanner_camera_permission_message, callingAppName))
-            setPositiveButton(getString(R.string.camera_permission_dialog_button)) { dialog, _ ->
+            setPositiveButton(getString(android.R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
                 finish()
             }
