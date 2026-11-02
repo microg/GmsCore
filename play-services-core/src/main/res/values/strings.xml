@@ -475,4 +475,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="account_settings_search_title">Search Google Account</string>
+    <string name="account_settings_search_hint">Enter a keyword, like “email”</string>
+    <string name="account_settings_search_empty">No results found</string>
+    <string name="account_settings_search_error">Could not search your account. Please try again.</string>
+    <string name="account_settings_search_retry">Retry</string>
+    <string name="account_settings_link_unavailable">This page cannot be opened</string>
 </resources>

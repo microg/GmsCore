@@ -422,4 +422,10 @@
     <string name="pref_passkey_manager_transport_bluetooth">藍牙</string>
     <string name="pref_passkey_manager_transport_hybrid">混合</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="account_settings_search_title">搜尋 Google 帳號</string>
+    <string name="account_settings_search_hint">請輸入關鍵字，如「電子郵件」</string>
+    <string name="account_settings_search_empty">未找到相關結果</string>
+    <string name="account_settings_search_error">暫時無法搜尋帳號，請重試。 </string>
+    <string name="account_settings_search_retry">重試</string>
+    <string name="account_settings_link_unavailable">無法開啟此頁面</string>
 </resources>

@@ -1,0 +1,135 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package google.internal.identity.accountsettings.mobile.v1;
+
+option java_package = "org.microg.gms.accountsettings";
+option java_multiple_files = true;
+
+service AccountSettingsMobile {
+  rpc Search(AccountSearchRequest) returns (AccountSearchResponse);
+}
+
+message AccountSearchRequest {
+  optional AccountRequestContext context = 1;
+  optional AccountSearchQuery query = 2;
+}
+
+message AccountSearchQuery {
+  optional string text = 1;
+}
+
+message AccountRequestContext {
+  optional int32 clientType = 1;
+  optional AccountCapabilities capabilities = 2;
+  optional AccountClientInfo clientInfo = 3;
+  optional string timeZone = 4;
+  optional int32 densityDpi = 6;
+  optional bool rightToLeft = 7;
+  optional string callingPackage = 14;
+}
+
+message AccountCapabilities {
+  repeated AccountCapability nativeActions = 1;
+  repeated AccountCapability renderers = 4;
+  optional bool themedUrls = 20;
+  optional bool categorySearchIcons = 22;
+}
+
+message AccountCapability {
+  optional int32 type = 1;
+}
+
+message AccountClientInfo {
+  optional string androidVersion = 1;
+  optional string androidSdkVersion = 2;
+  optional string gmsVersion = 3;
+}
+
+message AccountSearchResponse {
+  repeated AccountResource additionalResources = 2;
+  repeated AccountSearchSection sections = 7;
+}
+
+message AccountSearchSection {
+  optional string title = 1;
+  repeated AccountSearchItem items = 2;
+  optional AccountSearchItem footer = 3;
+}
+
+message AccountSearchItem {
+  optional AccountSearchImage image = 1;
+  optional string title = 2;
+  optional string description = 3;
+  optional AccountResourceKey resourceKey = 6;
+  optional AccountNavigation navigation = 7;
+}
+
+message AccountSearchImage {
+  optional string url = 2;
+  optional int32 widthDp = 3;
+  optional int32 heightDp = 4;
+  optional AccountSettingsHelpUrls themeUrls = 7;
+}
+
+message AccountNavigation {
+  optional AccountResourceKey resourceKey = 1;
+  optional string ariaLabel = 4;
+}
+
+message AccountResourceKey {
+  optional int32 screenId = 1;
+  map<string, string> parameters = 2;
+}
+
+message AccountResource {
+  optional AccountResourceKey key = 1;
+  optional AccountRepresentations content = 3;
+}
+
+message AccountRepresentations {
+  repeated AccountRepresentation items = 1;
+}
+
+message AccountRepresentation {
+  optional AccountNativeAction nativeAction = 2;
+  optional AccountBrowserUrl browser = 3;
+  optional AccountUrl redirect = 4;
+  optional AccountWebViewUrl webView = 5;
+}
+
+message AccountNativeAction {
+  optional int32 type = 1;
+  optional AccountSettingsHelpParams help = 6;
+}
+
+message AccountBrowserUrl {
+  optional string url = 1;
+  optional AccountSettingsHelpUrls themeUrls = 6;
+}
+
+message AccountUrl {
+  optional string url = 1;
+}
+
+message AccountWebViewUrl {
+  optional string url = 1;
+  optional AccountSettingsHelpUrls themeUrls = 2;
+}
+
+message AccountSettingsHelpParams {
+  optional string appContext = 1;
+  optional string url = 2;
+  optional AccountSettingsHelpUrls themeUrls = 3;
+  optional string fallbackUrl = 4;
+  optional string appPackageName = 6;
+}
+
+message AccountSettingsHelpUrls {
+  optional string defaultUrl = 1;
+  optional string darkThemeUrl = 2;
+}
