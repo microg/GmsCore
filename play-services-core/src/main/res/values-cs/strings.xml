@@ -416,4 +416,7 @@
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybridní</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="in_app_reach_storage_usage">Využito %1$d%% z %2$s</string>
+    <string name="in_app_reach_get_storage">Získat úložiště</string>
+    <string name="in_app_reach_clean_up_storage">Vyčistit úložiště</string>
 </resources>
