@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_title">Daxili</string>
     <string name="pref_droidguard_mode_embedded_summary">Yerli DroidGuard iş vaxtın istifadə et</string>
     <string name="pref_droidguard_mode_network_title">Uzaqdan</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Aparatın təsdiqlənməsin blokla</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Daxili DroidGuard istifadə edərkən, aparat təsdiqinə girişi qapat. Bəzi cihazlarda bütövlük yoxlamalarının keçməsinə kömək edə bilər.</string>
 </resources>

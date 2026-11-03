@@ -12,4 +12,5 @@
     <string name="service_status_enabled_short">Aktiv</string>
     <string name="service_status_disabled_short">Bağlı</string>
     <string name="list_no_item_none">Heç biri</string>
+    <string name="menu_game_managed">İdarə Olunan Oyun Hesabları</string>
 </resources>

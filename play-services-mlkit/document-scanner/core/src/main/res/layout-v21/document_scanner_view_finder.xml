@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.vision.document.DocumentCaptureView
+        android:id="@+id/document_scanning_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/document_scanning_cancel"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="start"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="4dp"
+        android:contentDescription="@android:string/cancel"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_document_scanner_close"
+        app:tint="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/document_scanning_flash"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="4dp"
+        android:contentDescription="@string/document_scanner_flash"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_document_scanner_flash_off"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/document_scanning_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/document_scanner_instruction_background"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="@string/document_scanner_hold_steady"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:background="@color/gm3_ref_palette_neutral6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <View android:layout_weight="1" android:layout_width="0dp" android:layout_height="0dp" />
+
+            <Button
+                android:id="@+id/document_scanning_import"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:inset="0dp"
+                android:contentDescription="@string/document_scanner_import"
+                app:icon="@drawable/ic_document_scanner_import"
+                app:iconSize="24dp"
+                app:iconTint="@android:color/white"
+                app:strokeColor="@android:color/white"
+                app:strokeWidth="2dp" />
+
+            <View android:layout_weight="1" android:layout_width="0dp" android:layout_height="0dp" />
+
+            <ImageButton
+                android:id="@+id/document_scanning_capture"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:background="@drawable/document_scanner_shutter"
+                android:contentDescription="@string/document_scanner_capture" />
+
+            <View android:layout_weight="1" android:layout_width="0dp" android:layout_height="0dp" />
+
+            <FrameLayout
+                android:id="@+id/document_scanning_done"
+                android:layout_width="59dp"
+                android:layout_height="64dp">
+
+                <ImageView
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:id="@+id/document_scanning_done_thumbnail"
+                    android:clipToPadding="true"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    tools:src="@tools:sample/backgrounds/scenic"/>
+
+                <TextView
+                    android:id="@+id/document_scanning_done_count"
+                    android:background="@drawable/document_scanner_done_background"
+                    android:gravity="center"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:singleLine="true"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="?attr/colorOnSecondary"
+                    tools:text="1"/>
+
+            </FrameLayout>
+
+            <View android:layout_weight="1" android:layout_width="0dp" android:layout_height="0dp" />
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/document_scanning_mode_bar"
+            android:background="@drawable/document_scanner_mode_tab_background"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:tabIndicator="@drawable/document_scanner_mode_tab_indicator"
+            app:tabIndicatorColor="@color/gm3_ref_palette_neutral90"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorGravity="stretch"
+            app:tabMinWidth="0dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="16dp"
+            app:tabPaddingStart="16dp"
+            app:tabSelectedTextColor="@color/gm3_ref_palette_neutral6"
+            app:tabTextColor="@color/gm3_ref_palette_neutral90">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/document_scanning_mode_manual"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/document_scanner_manual"
+                android:textColor="@android:color/white" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/document_scanning_mode_auto"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/document_scanner_auto_capture"
+                android:textColor="@android:color/white" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/document_scanning_brand"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/gm3_ref_palette_neutral90"
+                android:textSize="11sp"
+                tools:text="@string/document_scanner_brand" />
+
+            <ImageView
+                android:contentDescription="@string/document_scanner_info_button_description"
+                android:id="@+id/document_scanning_info_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:clickable="true"
+                android:padding="12dp"
+                android:maxWidth="20dp"
+                android:maxHeight="20dp"
+                android:src="@drawable/ic_info_outline"
+                app:tint="@color/gm3_ref_palette_neutral90" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

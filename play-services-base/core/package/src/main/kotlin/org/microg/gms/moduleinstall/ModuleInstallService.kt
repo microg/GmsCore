@@ -44,7 +44,7 @@ class ModuleInstallServiceImpl : IModuleInstallService.Stub() {
 
     override fun installModules(callbacks: IModuleInstallCallbacks?, request: ApiFeatureRequest?, listener: IModuleInstallStatusListener?) {
         Log.d(TAG, "Not yet implemented: installModules $request")
-        runCatching { callbacks?.onModuleInstallResponse(Status.CANCELED, ModuleInstallResponse(0, true)) }
+        runCatching { callbacks?.onModuleInstallResponse(Status.SUCCESS, ModuleInstallResponse(0, true)) }
     }
 
     override fun getInstallModulesIntent(callbacks: IModuleInstallCallbacks?, request: ApiFeatureRequest?) {

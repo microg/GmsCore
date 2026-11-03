@@ -45,4 +45,7 @@
     <string name="pref_location_custom_url_summary">Þetta gerir kleift að setja sérsniðna slóð þjónustu. Ógildar slóðir geta valdi því að staðsetningarþjónustur svari ekki eða verði ekki tiltækar.</string>
     <string name="pref_location_custom_url_details">Slóðinni /v1/geolocate er sjálfkrafa bætt aftanvið. Ef staðsetningarveitan krefst lykils, má bæta honum við aftan við rótarslóðina sem fyrirspurnarviðfangi.</string>
     <string name="prefcat_app_last_location">Síðasta uppgefna staðsetning</string>
+    <string name="prefcat_location_timeline_title">Tímalína Google Maps</string>
+    <string name="pref_location_timeline_title">Virkja feril staðsetninga</string>
+    <string name="pref_location_timeline_upload_title">Samstilla við Google-reikning</string>
 </resources>

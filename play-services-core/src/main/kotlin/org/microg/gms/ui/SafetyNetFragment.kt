@@ -6,7 +6,6 @@
 package org.microg.gms.ui
 
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -43,11 +42,9 @@ import java.net.URLEncoder
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlin.random.Random
 
 class SafetyNetFragment : PreferenceFragmentCompat() {
     private lateinit var switchBarPreference: SwitchBarPreference
-    private lateinit var runAttest: Preference
     private lateinit var runReCaptcha: Preference
     private lateinit var runReCaptchaEnterprise: Preference
     private lateinit var apps: PreferenceCategory
@@ -59,7 +56,6 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_safetynet)
 
         switchBarPreference = preferenceScreen.findPreference("pref_safetynet_enabled") ?: switchBarPreference
-        runAttest = preferenceScreen.findPreference("pref_safetynet_run_attest") ?: runAttest
         runReCaptcha = preferenceScreen.findPreference("pref_recaptcha_run_test") ?: runReCaptcha
         runReCaptchaEnterprise = preferenceScreen.findPreference("pref_recaptcha_enterprise_run_test") ?: runReCaptchaEnterprise
         apps = preferenceScreen.findPreference("prefcat_safetynet_apps") ?: apps
@@ -67,11 +63,9 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
         appsNone = preferenceScreen.findPreference("pref_safetynet_apps_none") ?: appsNone
         droidguardUnsupported = preferenceScreen.findPreference("pref_droidguard_unsupported") ?: droidguardUnsupported
 
-        runAttest.isVisible = SAFETYNET_API_KEY != null
         runReCaptcha.isVisible = RECAPTCHA_SITE_KEY != null
         runReCaptchaEnterprise.isVisible = RECAPTCHA_ENTERPRISE_SITE_KEY != null
 
-        runAttest.setOnPreferenceClickListener { runSafetyNetAttest(); true }
         runReCaptcha.setOnPreferenceClickListener { runReCaptchaAttest(); true }
         runReCaptchaEnterprise.setOnPreferenceClickListener { runReCaptchaEnterpriseAttest();true }
         appsAll.setOnPreferenceClickListener { findNavController().navigate(requireContext(), R.id.openAllSafetyNetApps);true }
@@ -81,37 +75,6 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
             DroidGuardPreferences.setEnabled(requireContext(), newStatus)
             droidguardUnsupported.isVisible = newStatus && !DroidGuardPreferences.isAvailable(requireContext())
             true
-        }
-    }
-
-    private fun runSafetyNetAttest() {
-        val context = context ?: return
-        runAttest.setIcon(R.drawable.ic_circle_pending)
-        runAttest.setSummary(R.string.pref_test_summary_running)
-        lifecycleScope.launchWhenResumed {
-            try {
-                val response = SafetyNet.getClient(requireActivity())
-                    .attest(Random.nextBytes(32), SAFETYNET_API_KEY).await()
-                val (_, payload, _) = try {
-                    response.jwsResult.split(".")
-                } catch (e: Exception) {
-                    listOf(null, null, null)
-                }
-                formatSummaryForSafetyNetResult(
-                    context,
-                    payload?.let { Base64.decode(it, Base64.URL_SAFE).decodeToString() },
-                    response.result.status,
-                    ATTESTATION
-                )
-                    .let { (summary, icon) ->
-                        runAttest.summary = summary
-                        runAttest.icon = icon
-                    }
-            } catch (e: Exception) {
-                runAttest.summary = getString(R.string.pref_test_summary_failed, e.message)
-                runAttest.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
-            }
-            updateContent()
         }
     }
 
@@ -301,7 +264,6 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
-        private val SAFETYNET_API_KEY: String? = BuildConfig.SAFETYNET_KEY.takeIf { it.isNotBlank() }
         private val RECAPTCHA_SITE_KEY: String? = BuildConfig.RECAPTCHA_SITE_KEY.takeIf { it.isNotBlank() }
         private val RECAPTCHA_SECRET: String? = BuildConfig.RECAPTCHA_SECRET.takeIf { it.isNotBlank() }
         private val RECAPTCHA_ENTERPRISE_PROJECT_ID: String? = BuildConfig.RECAPTCHA_ENTERPRISE_PROJECT_ID.takeIf { it.isNotBlank() }

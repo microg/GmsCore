@@ -30,11 +30,6 @@
         android:layout="@layout/preference_category_no_label"
         android:dependency="pref_safetynet_enabled">
         <Preference
-            android:key="pref_safetynet_run_attest"
-            android:title="@string/pref_safetynet_test_title"
-            tools:icon="@drawable/ic_circle_check"
-            tools:summary="@string/pref_test_summary_passed" />
-        <Preference
             android:key="pref_recaptcha_run_test"
             android:title="@string/pref_recaptcha_test_title"
             tools:icon="@drawable/ic_circle_check"
