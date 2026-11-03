@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.collection.ArraySet
 import androidx.collection.arrayMapOf
@@ -31,6 +32,8 @@ import com.google.android.play.core.assetpacks.protocol.BundleKeys
 import com.google.android.play.core.assetpacks.protocol.CompressionFormat
 import com.google.android.play.core.assetpacks.protocol.PatchFormat
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.toBase64
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.HttpClient
@@ -64,12 +67,17 @@ operator fun <T> Bundle.plus(pair: Pair<BundleKeys.RootKey<T>, T>): Bundle = thi
 
 val Context.assetPacksDir: File
     get() = File(filesDir, "assetpacks")
+fun String.pathSafe(): String {
+    if (startsWith("__") || contains("/") || contains("\\") || contains("..") || contains("\u0000") || this == ".")
+        return "__" + toByteArray().digest("SHA1").toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
+    return this
+}
 fun Context.getSessionDir(sessionId: Int) =
     File(assetPacksDir, sessionId.toString())
 fun Context.getModuleDir(sessionId: Int, moduleName: String): File =
-    File(getSessionDir(sessionId), moduleName)
+    File(getSessionDir(sessionId), moduleName.pathSafe())
 fun Context.getSliceDir(sessionId: Int, moduleName: String, sliceId: String) =
-    File(getModuleDir(sessionId, moduleName), sliceId)
+    File(getModuleDir(sessionId, moduleName), sliceId.pathSafe())
 fun Context.getChunkFile(sessionId: Int, moduleName: String, sliceId: String, chunkNumber: Int): File =
     File(getSliceDir(sessionId, moduleName, sliceId), chunkNumber.toString())
 

@@ -125,6 +125,13 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45668769", true, 0),
         Flag("45633067", true, 0),
     ),
+    "gmail_android.device#com.google.android.gm" to arrayOf(
+        Flag("45729659", true, 0),
+    ),
+    "com.google.android.libraries.subscriptions#com.google.android.gm" to arrayOf(
+        Flag("45651738", true, 0),
+        Flag("45667364", true, 0),
+    ),
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
         // Enable v3 movie editor; legacy MovieEditorActivity NPEs on a missing media extra
@@ -140,10 +147,19 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("Watevra__host_max_api_level", encodeRepeatedString(listOf("DEFAULT:8")), 0),
     ),
     "com.google.android.apps.translate" to arrayOf(
+        // Enable the RecyclerView language picker and allow languages to be pinned by swiping.
+        Flag("LanguagePickerRecyclerView__language_picker_recycler_view", true, 0),
+        Flag("LanguagePickerRecyclerView__enable_pinned_languages", true, 0),
+        Flag("LanguagePickerRecyclerView__enable_swipe_onboarding", true, 0),
+        // Expose the full-screen action in translated-result cards.
+        Flag("FullScreenTranslation__enable_full_screen_translation", true, 0),
         // Enable Practice Tab
         Flag("SpeakEasy__enabled", true, 0),
         // Enable Layout adjustment
         Flag("OpenMic__enable_open_mic_2_august_launch_ui", true, 0),
+        // Keep the legacy settings controls, including the auto-play switch.
+        // The device picker replaces and hides that switch in recent Translate versions.
+        Flag("OpenMic__enable_device_picker_ui", false, 0),
         // Enable Handwriting Improvements
         Flag("HandwritingImprovements__enable_handwriting_improvements", true, 0),
     ),
@@ -157,6 +173,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+    ),
+    "com.google.android.videos" to arrayOf(
+        Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
     ),
 )
 

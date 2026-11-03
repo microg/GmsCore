@@ -28,4 +28,21 @@
     <string name="fido_sign_in_selection_continue">%1$s を使用して続行する</string>
     <string name="fido_sign_in_selection_description">パスキー</string>
     <string name="fido_biometric_prompt_title">本人確認を行う</string>
+    <string name="fido_transport_selection_hybrid">別のデバイスを使用する</string>
+    <string name="fido_qr_code_title">別のデバイスでQRコードをスキャンする</string>
+    <string name="fido_qr_code_body">電話またはタブレットを使用してQRコードをスキャンし、サインインを完了してください</string>
+    <string name="fido_ble_connecting">デバイスに接続する…</string>
+    <string name="fido_ble_generating">接続の待機中…</string>
+    <string name="fido_ble_permission_title">Bluetooth許可が必要</string>
+    <string name="fido_ble_permission_rationale">デバイス間認証を使用するには、Bluetooth許可が必要です。</string>
+    <string name="fido_action_go_to_settings">設定に移動</string>
+    <string name="fido_hybrid_receiver_button_cancel">キャンセル</string>
+    <string name="fido_hybrid_receiver_button_connect">接続する</string>
+    <string name="fido_hybrid_receiver_error_body">他のデバイスに接続できませんでした。もう一度試してください。</string>
+    <string name="fido_hybrid_receiver_error_title">接続に失敗</string>
+    <string name="fido_hybrid_receiver_connecting_body">他のデバイスへのセキュア接続を確立しています</string>
+    <string name="fido_hybrid_receiver_connecting_title">デバイスに接続中…</string>
+    <string name="fido_ble_permission_permanently_denied">Bluetooth許可が永続的に拒否されています。デバイス間認証を有効にするには、以下の設定を行ってください:\n\n1. 「設定に移動」をタップ\n2. 許可 / アプリ許可を探す\n3. 位置情報を有効化（またはAndroid 12+では「近くのデバイス」）\n4. アプリに戻り再試行</string>
+    <string name="fido_hybrid_receiver_initial_title">信頼できるデバイスにのみ接続してください</string>
+    <string name="fido_qr_code_body_sign">サインインするには、QRコードを電話またはタブレットで読み取ってください</string>
 </resources>

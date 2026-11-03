@@ -45,4 +45,9 @@
     <string name="prefcat_location_cell_title">行動網路位置</string>
     <string name="prefcat_geocoder_title">地址解析器</string>
     <string name="pref_location_wifi_moving_enabled_title">從熱點請求</string>
+    <string name="prefcat_location_timeline_title">Google 地圖時間軸</string>
+    <string name="pref_location_timeline_title">啟用定位記錄</string>
+    <string name="pref_location_timeline_summary">定期記錄您的位置資訊，並提供給 Google 地圖時間軸使用。</string>
+    <string name="pref_location_timeline_upload_title">同步至 Google 帳號</string>
+    <string name="pref_location_timeline_upload_summary">將定位記錄同步至 Google 伺服器，以便在其他裝置上顯示。</string>
 </resources>

@@ -6,5 +6,5 @@
 package com.google.android.play.core.integrity.protocol;
 
 interface IRequestDialogCallback {
-    void onRequestDialog(in Bundle bundle);
+    void onRequestDialog(in Bundle bundle) = 1;
 }

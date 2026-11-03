@@ -394,4 +394,21 @@
     <string name="prefcat_device_attestation_apps_title">Cihaz sertifikasyonu kullanan uygulamalar</string>
     <string name="pref_device_attestation_app_allow_requests_title">İsteklere izin ver</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Bu uygulamanın cihaz sertifikasyonu isteği göndermesine izin verin</string>
+    <string name="pref_auth_allow_find_devices_title">Google Aygıtımı Bul için yanıt verilmesine izin ver</string>
+    <string name="pref_auth_allow_find_devices_summary">Etkinleştirildiğinde, aygıt Google\'dan gelen \"Aygıtımı Bul\" bildirimlerine yanıt verebilir (Cloud Messaging gereklidir).</string>
+    <string name="credentials_service_sign_in_with_google_label">Google ile oturum aç</string>
+    <string name="credentials_service_remote_custom_subtitle">Güvenlik anahtarı, akıllı telefon veya tablet</string>
+    <string name="pref_passkey_manager_title">Geçiş anahtarlarını yönet</string>
+    <string name="pref_passkey_manager_empty_title">Kayıtlı geçiş anahtarı yok</string>
+    <string name="pref_passkey_manager_description">Üçüncü taraf uygulamalar geçiş anahtarlarını kaydettiğinde, microG yerel bir kayıt tutar. Bir uygulama microG\'ye bildirimde bulunmadan bir geçiş anahtarını silerse, bu kayıt sistemde kalabilir. Bu tür kalıntı girdileri buradan silebilirsiniz.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Geçiş anahtarını sil</string>
+    <string name="pref_passkey_manager_delete_dialog_message">\"%1$s\" üzerindeki \"%2$s\" için geçiş anahtarını sil. Bu işlem geri alınamaz; tekrar oturum açmak için yeni bir geçiş anahtarı kaydetmeniz gerekecektir.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Sil</string>
+    <string name="pref_passkey_manager_unknown_user">Bilinmeyen kullanıcı</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Ekran kilidi</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hibrit</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">Kimlik: %1$s</string>
 </resources>
