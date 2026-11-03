@@ -396,7 +396,7 @@ public enum GmsService {
     CORE_NOTIFICATIONS(375),
     KIDS_AUTH(376),
     NUDGES(377),
-    CAMERA_LOW_LIGHT(378),
+    CAMERA_LOW_LIGHT(378, "com.google.android.gms.camera_low_light.service.START"),
     IDENTITY_FIDO_INTERNAL(379),
     RECAPTCHABASE(380),
     AUTH_RESTORE_CREDENTIAL(381),

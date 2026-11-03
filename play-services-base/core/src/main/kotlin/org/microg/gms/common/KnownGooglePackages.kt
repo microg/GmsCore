@@ -223,6 +223,18 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         setOf(ACCOUNT, AUTH, OWNER, CREDENTIALS)
     ),
 
+    // Google Finance
+    Pair(
+        PackageAndCertHash("com.google.android.apps.finance", SHA256, "52084247aba308cb08f4befc89e869ce3dc4cbce2329f524a9bb3b10bf7d9864"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
+    // Flow
+    Pair(
+        PackageAndCertHash("com.google.android.apps.labs.whisk", SHA256, "2e7dbb9211acf86e2d288d1a0a4705b1480565d2dde54c1a66c11897d1c7c232"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
