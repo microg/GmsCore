@@ -19,7 +19,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
-import org.microg.vending.enterprise.proto.AppInstallPolicy
 import java.util.concurrent.TimeUnit
 
 @RequiresApi(21)
@@ -35,8 +34,10 @@ class MandatoryAppsJobService : JobService() {
             return false
         }
 
+        val constraints = MandatoryAppsJob.constraintsOf(params.extras)
+
         installJob = CoroutineScope(Dispatchers.IO).launch {
-            val succeeded = runCatching { installMandatoryApps(account) }
+            val succeeded = runCatching { installMandatoryApps(account, constraints) }
                 .onFailure { Log.w(TAG, "Unable to install mandatory apps", it) }
                 .getOrDefault(false)
 
@@ -70,22 +71,24 @@ class MandatoryAppsJobService : JobService() {
     private fun findWorkAccount(): Account? =
         AccountManager.get(this).getAccountsByType(AuthConstants.WORK_ACCOUNT_TYPE).firstOrNull()
 
-    private suspend fun installMandatoryApps(account: Account): Boolean {
+    private suspend fun installMandatoryApps(account: Account, constraints: InstallConstraints): Boolean {
         val enterpriseApps = awaitEnterprisePolicy(account) ?: return false
         val states = enterpriseApps.states.toMutableMap()
+        val pendingApps = states.filter { (app, state) -> app.isRequired && state.needsInstall() }
+        val (installableApps, deferredApps) = pendingApps.keys.partition { it.canBeInstalledUnder(constraints) }
+
+        deferInstalls(deferredApps)
+
+        Log.i(TAG, "Mandatory apps to install: ${installableApps.joinToString { it.packageName }}")
+
         val installer = EnterpriseAppInstaller(this, enterpriseApps.auth, states) { _, _, _ -> }
 
-        val pendingApps = states.filter { (app, state) -> app.isMandatory() && state.needsInstall() }
-        Log.i(TAG, "Mandatory apps to install: ${pendingApps.keys.joinToString { it.packageName }}")
-
-        pendingApps.forEach { (app, state) ->
-            installer.install(app, /* isUpdate */ state == UpdateAvailable)
+        installableApps.forEach { app ->
+            installer.install(app, /* isUpdate */ pendingApps[app] == UpdateAvailable)
         }
 
-        return pendingApps.keys.all { states[it] == Installed }
+        return installableApps.all { states[it] == Installed }
     }
-
-    private fun EnterpriseApp.isMandatory() = policy == AppInstallPolicy.MANDATORY
 
     private suspend fun awaitEnterprisePolicy(account: Account): EnterpriseApps? {
         repeat(POLICY_POLL_ATTEMPTS) { attempt ->
@@ -102,6 +105,13 @@ class MandatoryAppsJobService : JobService() {
         }
 
         return null
+    }
+
+    private fun deferInstalls(apps: List<EnterpriseApp>) {
+        apps.map { it.installConstraints.first() }.distinct().forEach { constraints ->
+            Log.i(TAG, "Deferring mandatory apps install until $constraints")
+            MandatoryAppsJob.scheduleUnder(this, constraints)
+        }
     }
 
     private fun AppState.needsInstall() = this == NotInstalled || this == UpdateAvailable
