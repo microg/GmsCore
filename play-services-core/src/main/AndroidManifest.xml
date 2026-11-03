@@ -1328,6 +1328,20 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.microg.mlkit.vision.documentscanner.DocumentScanningActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|screenLayout|uiMode"
+            android:theme="@style/Theme.App">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_DOCUMENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name="com.google.android.gms.maps.auth.ApiTokenService"
             android:exported="true"/>
