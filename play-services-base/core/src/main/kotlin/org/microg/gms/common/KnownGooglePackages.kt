@@ -229,6 +229,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         setOf(ACCOUNT, AUTH, OWNER)
     ),
 
+    // Flow
+    Pair(
+        PackageAndCertHash("com.google.android.apps.labs.whisk", SHA256, "2e7dbb9211acf86e2d288d1a0a4705b1480565d2dde54c1a66c11897d1c7c232"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
