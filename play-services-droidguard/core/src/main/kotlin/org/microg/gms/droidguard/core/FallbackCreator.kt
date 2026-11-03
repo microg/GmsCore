@@ -28,6 +28,15 @@ object FallbackCreator {
 
     @JvmStatic
     fun create(map: Map<Any?, Any?>, bytes: ByteArray?, flow: String?, context: Context, e: Throwable): ByteArray {
-        TODO("Not yet implemented")
+        try {
+            if (bytes != null) return bytes
+            // Provide a minimal non-empty fallback payload so callers don't get an empty/exceptional result.
+            val flowName = flow ?: "unknown"
+            val msg = "FALLBACK_OK: flow=$flowName"
+            return msg.encodeToByteArray()
+        } catch (ex: Throwable) {
+            Log.w("DGFallback", ex)
+            return "ERROR : $ex".encodeToByteArray()
+        }
     }
 }
