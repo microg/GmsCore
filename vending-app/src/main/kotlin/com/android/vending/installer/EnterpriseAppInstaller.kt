@@ -22,7 +22,6 @@ import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.Installed
 import org.microg.vending.enterprise.Pending
-import org.microg.vending.enterprise.proto.AppInstallPolicy
 import org.microg.vending.ui.notifyInstallProgress
 import kotlin.random.Random
 
@@ -44,7 +43,7 @@ internal class EnterpriseAppInstaller(
         // Purchase app (only needs to be done once, in theory – behaviour seems flaky)
         // Ignore failures
         runCatching {
-            if (app.policy != AppInstallPolicy.MANDATORY) {
+            if (!app.isRequired) {
                 val parameters = mapOf(
                     "ot" to "1",
                     "doc" to app.packageName,

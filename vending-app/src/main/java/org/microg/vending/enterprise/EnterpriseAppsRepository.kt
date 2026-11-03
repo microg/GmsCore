@@ -25,7 +25,11 @@ import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
 import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.enterprise.proto.AppInstallPolicy
+import org.microg.vending.enterprise.proto.ChargingConstraint
+import org.microg.vending.enterprise.proto.DeviceIdleConstraint
 import org.microg.vending.enterprise.proto.EnterpriseConsistencyToken
+import org.microg.vending.enterprise.proto.InstallConstraint
+import org.microg.vending.enterprise.proto.NetworkTypeConstraint
 import org.microg.vending.enterprise.proto.App as PolicyApp
 import org.microg.vending.proto.AppMeta
 import org.microg.vending.proto.GetItemsRequest
@@ -112,15 +116,15 @@ internal class EnterpriseAppsRepository(private val context: Context) {
         ).getItemsResponses.mapNotNull { it.response }.associate { item ->
             val packageName = item.meta!!.packageName!!
             val installedDetails = installedPackages.find { it.applicationInfo?.packageName == packageName }
-            val policy = policyApps.find { it.packageName == packageName }!!.policy ?: AppInstallPolicy.OPTIONAL
+            val policyApp = policyApps.find { it.packageName == packageName }!!
 
-            item.toEnterpriseApp(packageName, policy) to item.toAppState(installedDetails)
+            item.toEnterpriseApp(packageName, policyApp) to item.toAppState(installedDetails)
         }.onEach {
             Log.v(TAG, "${it.key.packageName} (state: ${it.value}) delivery token: ${it.key.deliveryToken ?: "none acquired"}")
         }
     }
 
-    private fun ItemResponse.toEnterpriseApp(packageName: String, policy: AppInstallPolicy) = EnterpriseApp(
+    private fun ItemResponse.toEnterpriseApp(packageName: String, policyApp: PolicyApp) = EnterpriseApp(
         packageName,
         offer?.delivery?.let { offer.version!!.versionCode!! },
         detail!!.name!!.displayName!!,
@@ -129,7 +133,14 @@ internal class EnterpriseAppsRepository(private val context: Context) {
         offer?.delivery?.dependencies?.map {
             App(it.packageName!!, it.versionCode!!, it.packageName, null, emptyList(), null)
         } ?: emptyList(),
-        policy,
+        policyApp.policy ?: AppInstallPolicy.OPTIONAL,
+        policyApp.installConstraints.map { it.toInstallConstraints() }.ifEmpty { listOf(InstallConstraints.NONE) },
+    )
+
+    private fun InstallConstraint.toInstallConstraints() = InstallConstraints(
+        requiresUnmeteredNetwork = networkType == NetworkTypeConstraint.INSTALL_ONLY_ON_UNMETERED_NETWORK,
+        requiresCharging = charging == ChargingConstraint.INSTALL_ONLY_WHEN_CHARGING,
+        requiresDeviceIdle = deviceIdle == DeviceIdleConstraint.INSTALL_ONLY_WHEN_DEVICE_IDLE
     )
 
     private fun ItemResponse.toAppState(installedDetails: PackageInfo?): AppState {
