@@ -47,5 +47,8 @@ dependencies {
     //api "com.google.firebase:firebase-encoders-json:17.1.0"
     //api "com.google.mlkit:common:18.11.0"
 
+    // Dependencies from "com.google.mlkit:common:18.11.0"
+    api 'androidx.appcompat:appcompat:1.6.1'
+
     annotationProcessor project(":safe-parcel-processor")
 }
