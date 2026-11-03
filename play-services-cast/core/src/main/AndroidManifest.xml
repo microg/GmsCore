@@ -7,13 +7,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
+        <service android:exported="true"
+            android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
             <intent-filter>
                 <action android:name="android.media.MediaRouteProviderService" />
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
+        <service android:exported="true"
+            android:name="org.microg.gms.cast.CastDeviceControllerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
             </intent-filter>

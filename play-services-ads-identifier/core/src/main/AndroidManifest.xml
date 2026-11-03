@@ -6,7 +6,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name=".AdvertisingIdService">
+        <service android:exported="true"
+            android:name=".AdvertisingIdService">
             <intent-filter>
                 <action android:name="com.google.android.gms.ads.identifier.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />

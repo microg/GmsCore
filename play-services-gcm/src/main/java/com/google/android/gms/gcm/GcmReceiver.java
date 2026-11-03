@@ -25,7 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.util.Base64;
 import android.util.Log;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.content.BroadcastReceiver;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
@@ -37,7 +37,7 @@ import static org.microg.gms.gcm.GcmConstants.GCMID_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
 
 /**
- * <code>WakefulBroadcastReceiver</code> that receives GCM messages and delivers them to an
+ * <code>BroadcastReceiver</code> that receives GCM messages and delivers them to an
  * application-specific {@link com.google.android.gms.gcm.GcmListenerService} subclass.
  * <p/>
  * This receiver should be declared in your application's manifest file as follows:
@@ -56,7 +56,7 @@ import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
  * The <code>com.google.android.c2dm.permission.SEND</code> permission is held by Google Play
  * services. This prevents other apps from invoking the broadcast receiver.
  */
-public class GcmReceiver extends WakefulBroadcastReceiver {
+public class GcmReceiver extends BroadcastReceiver {
     private static final String TAG = "GcmReceiver";
 
     public void onReceive(Context context, Intent intent) {
@@ -100,13 +100,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
     private void sendIntent(Context context, Intent intent) {
         setResultCodeIfOrdered(500);
         try {
-            ComponentName startedComponent;
-            if (context.checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-                startedComponent = startWakefulService(context, intent);
-            } else {
-                Log.d(TAG, "Missing wake lock permission, service start may be delayed");
-                startedComponent = context.startService(intent);
-            }
+            ComponentName startedComponent = context.startService(intent);
             if (startedComponent == null) {
                 Log.e(TAG, "Error while delivering the message: ServiceIntent not found.");
                 setResultCodeIfOrdered(404);

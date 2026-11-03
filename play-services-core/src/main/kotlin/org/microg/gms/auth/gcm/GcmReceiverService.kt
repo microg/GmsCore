@@ -21,7 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.PendingIntentCompat
-import androidx.legacy.content.WakefulBroadcastReceiver
+import android.content.BroadcastReceiver
 import com.google.android.gms.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -65,7 +65,7 @@ private const val NOTIFICATION_DELAY_TIME = 500L
 
 const val ACTION_GCM_NOTIFY_COMPLETE = "org.microg.gms.gcm.NOTIFY_COMPLETE"
 
-class GcmReceiver : WakefulBroadcastReceiver() {
+class GcmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val shouldReceiveTwoStepVerification = AuthPrefs.shouldReceiveTwoStepVerification(context)
         if (!shouldReceiveTwoStepVerification) {

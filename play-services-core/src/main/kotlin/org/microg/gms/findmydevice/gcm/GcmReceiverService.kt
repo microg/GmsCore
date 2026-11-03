@@ -20,7 +20,7 @@ import android.telephony.TelephonyManager
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.legacy.content.WakefulBroadcastReceiver
+import android.content.BroadcastReceiver
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Tasks
 import kotlinx.coroutines.runBlocking
@@ -54,7 +54,7 @@ import org.microg.gms.profile.Build
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 
-class GcmReceiver : WakefulBroadcastReceiver() {
+class GcmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val allowedFindDevices = AuthPrefs.allowedFindDevices(context)
         if (!allowedFindDevices) {
