@@ -50,4 +50,6 @@
     <string name="pref_location_timeline_summary">บันทึกข้อมูลตำแหน่งของคุณเป็นระยะ และทำให้ข้อมูลนั้นพร้อมใช้งานในไทม์ไลน์ของ Google Maps</string>
     <string name="pref_location_timeline_upload_title">ซิงค์กับบัญชี Google</string>
     <string name="pref_location_timeline_upload_summary">ซิงโครไนซ์ประวัติสถานที่ไปยังเซิร์ฟเวอร์ของ Google เพื่อให้สามารถแสดงผลบนอุปกรณ์อื่นๆ ได้</string>
+    <string name="pref_location_timeline_accounts_title">จัดการตั้งค่าด้วยบัญชี Google</string>
+    <string name="pref_location_timeline_accounts_summary">เลือกบัญชีเพื่อจัดการการตั้งค่าไทม์ไลน์และการซิงค์กับเซิร์ฟเวอร์ของบัญชีนั้น</string>
 </resources>
