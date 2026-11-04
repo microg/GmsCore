@@ -77,8 +77,7 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
         Log.d(TAG, "Method (retrieveBytes) called")
         lifecycleScope.launch {
             runCatching {
-                val retrieveBytes = blockStore.retrieveBytes()
-                callback?.onBytesResult(Status.SUCCESS, retrieveBytes)
+                callback?.onBytesResult(Status.SUCCESS, blockStore.retrieveBytes() ?: ByteArray(0))
             }
         }
     }
