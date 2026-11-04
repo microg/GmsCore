@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 microG Project Team
+  SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <string name="d2d_copy_accounts_title">Copy Google accounts</string>
+    <string name="d2d_copy_accounts_subtitle">Choose an account to copy to your Google TV.</string>
+    <plurals name="d2d_copying_accounts">
+        <item quantity="one">Copying account</item>
+        <item quantity="other">Copying accounts</item>
+    </plurals>
+    <string name="d2d_google_account">Google account</string>
+    <string name="d2d_unknown_account">Unknown account</string>
+    <string name="d2d_continue">Continue</string>
+    <string name="d2d_skip">Skip</string>
+    <string name="d2d_cancel">Cancel</string>
+    <string name="d2d_cancel_setup_title">Cancel setup?</string>
+    <string name="d2d_cancel_setup_message">If you cancel now, you’ll lose your progress and will need to start again.</string>
+    <string name="d2d_go_back">Go back</string>
+    <string name="d2d_cancel_setup_action">Cancel setup</string>
+    <string name="d2d_verify_title">Verify Google account</string>
+    <string name="d2d_verify_account">Account %1$d of %2$d · %3$s</string>
+    <string name="d2d_verify_message">Complete the Google sign-in below to continue copying this account.</string>
+    <string name="d2d_loading_sign_in">Loading Google sign-in</string>
+    <string name="d2d_transfer_in_progress">Account transfer in progress</string>
+    <string name="d2d_copy_confirmation_title">Copy to your new device?</string>
+    <string name="d2d_copy_confirmation_message">Copy your Google Accounts and restore your Google backup, if available.</string>
+    <string name="d2d_copy_confirmation_action">Copy</string>
+    <string name="d2d_try_again">Try again</string>
+    <string name="d2d_done">Done</string>
+</resources>

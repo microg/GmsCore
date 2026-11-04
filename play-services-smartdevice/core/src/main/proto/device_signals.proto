@@ -1,0 +1,33 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package smartdevice;
+
+option java_package = "org.microg.gms.smartdevice.d2d.proto";
+
+enum LockScreenQuality {
+  LOCK_SCREEN_QUALITY_NONE = 1;
+  LOCK_SCREEN_QUALITY_SECURE = 2;
+}
+
+message UserPresence {
+  optional bool lockScreenSecure = 1;
+  optional bool shownLockScreen = 2;
+  optional LockScreenQuality lockScreenQuality = 3 [default = LOCK_SCREEN_QUALITY_NONE];
+  optional int64 lastUnlockDurationInSeconds = 4;
+  optional int64 lockScreenSetupDurationInSeconds = 5;
+}
+
+message DeviceSignals {
+  optional string deviceId = 1;
+  optional string deviceName = 2;
+  optional string deviceModel = 3;
+  optional string sdkVersion = 4;
+  optional string googlePlayServicesVersion = 5;
+  optional string droidGuardResults = 6;
+  optional UserPresence userPresence = 7;
+}
