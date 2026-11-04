@@ -13,6 +13,7 @@ import "DeliveryResponse.proto";
 import "LicenseResult.proto";
 import "UploadDeviceConfigResponse.proto";
 import "GetItemsResponse.proto";
+import "ManagedConfigurations.proto";
 import "Purchase.proto";
 
 message GoogleApiResponse {
@@ -37,6 +38,7 @@ message Payload {
     optional UploadDeviceConfigResponse uploadDeviceConfigResponse = 28;
     optional ConsumePurchaseResponse consumePurchaseResponse = 30;
     optional PurchaseHistoryResponse purchaseHistoryResponse = 67;
+    optional ManagedConfigurationsResponse managedConfigurationsResponse = 72;
     optional LicenseCheckV1Response licenseV1Response = 76;
     optional SkuDetailsResponse skuDetailsResponse = 82;
     optional AcquireResponse acquireResponse = 94;

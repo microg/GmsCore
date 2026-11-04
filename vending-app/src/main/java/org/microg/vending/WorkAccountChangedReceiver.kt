@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import org.microg.gms.auth.AuthConstants
+import org.microg.vending.enterprise.AppliedManagedConfigurations
 import org.microg.vending.enterprise.MandatoryAppsJob
 import org.microg.vending.enterprise.WorkAccountCreationTimes
 import org.microg.vending.ui.WorkAppsActivity
@@ -27,6 +28,7 @@ class WorkAccountChangedReceiver : BroadcastReceiver() {
         val hasWorkAccounts = workAccounts.isNotEmpty()
 
         updateCreationTimes(context, workAccounts)
+        clearAppliedManagedConfigurationsIfNeeded(context, hasWorkAccounts)
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             updateMandatoryAppsJob(context, hasWorkAccounts)
@@ -41,6 +43,12 @@ class WorkAccountChangedReceiver : BroadcastReceiver() {
             creationTimes.clear()
         } else {
             workAccounts.forEach { creationTimes.recordIfAbsent(it) }
+        }
+    }
+
+    private fun clearAppliedManagedConfigurationsIfNeeded(context: Context, hasWorkAccounts: Boolean) {
+        if (!hasWorkAccounts) {
+            AppliedManagedConfigurations(context).clear()
         }
     }
 

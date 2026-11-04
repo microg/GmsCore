@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
+import org.microg.vending.billing.core.AuthData
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -36,7 +37,7 @@ class MandatoryAppsJobService : JobService() {
         }
 
         if (!isSyncInProgress.compareAndSet(false, true)) {
-            Log.i(TAG, "Mandatory apps sync already in progress, skipping")
+            Log.i(TAG, "Work apps sync already in progress, skipping")
             return false
         }
 
@@ -44,8 +45,8 @@ class MandatoryAppsJobService : JobService() {
 
         installJob = CoroutineScope(Dispatchers.IO).launch {
             val succeeded = try {
-                runCatching { installMandatoryApps(account, constraints) }
-                    .onFailure { Log.w(TAG, "Unable to install mandatory apps", it) }
+                runCatching { syncWorkApps(account, constraints) }
+                    .onFailure { Log.w(TAG, "Unable to sync work apps", it) }
                     .getOrDefault(false)
             } finally {
                 isSyncInProgress.set(false)
@@ -81,9 +82,21 @@ class MandatoryAppsJobService : JobService() {
     private fun findWorkAccount(): Account? =
         AccountManager.get(this).getAccountsByType(AuthConstants.WORK_ACCOUNT_TYPE).firstOrNull()
 
-    private suspend fun installMandatoryApps(account: Account, constraints: InstallConstraints): Boolean {
+    private suspend fun syncWorkApps(account: Account, constraints: InstallConstraints): Boolean {
         val enterpriseApps = awaitEnterprisePolicy(account) ?: return false
         val states = enterpriseApps.states.toMutableMap()
+        val succeeded = installMandatoryApps(enterpriseApps.auth, states, constraints)
+
+        applyManagedConfigurations(enterpriseApps.auth, states)
+
+        return succeeded
+    }
+
+    private suspend fun installMandatoryApps(
+        auth: AuthData,
+        states: MutableMap<EnterpriseApp, AppState>,
+        constraints: InstallConstraints
+    ): Boolean {
         val pendingApps = states.filter { (app, state) -> app.isRequired && state.needsInstall() }
         val (installableApps, deferredApps) = pendingApps.keys.partition { it.canBeInstalledUnder(constraints) }
 
@@ -91,7 +104,7 @@ class MandatoryAppsJobService : JobService() {
 
         Log.i(TAG, "Mandatory apps to install: ${installableApps.joinToString { it.packageName }}")
 
-        val installer = EnterpriseAppInstaller(this, enterpriseApps.auth, states) { _, _, _ -> }
+        val installer = EnterpriseAppInstaller(this, auth, states) { _, _, _ -> }
 
         installableApps.forEach { app ->
             installer.install(app, /* isUpdate */ pendingApps[app] == UpdateAvailable)
@@ -115,6 +128,32 @@ class MandatoryAppsJobService : JobService() {
         }
 
         return null
+    }
+
+    private suspend fun applyManagedConfigurations(auth: AuthData, states: Map<EnterpriseApp, AppState>) {
+        val appliedConfigurations = AppliedManagedConfigurations(this)
+
+        states.filterValues { it == Installed }.keys.forEach { app ->
+            applyManagedConfiguration(auth, app, appliedConfigurations)
+        }
+    }
+
+    private suspend fun applyManagedConfiguration(
+        auth: AuthData,
+        app: EnterpriseApp,
+        appliedConfigurations: AppliedManagedConfigurations
+    ) {
+        val configuration = runCatching { ManagedConfigurationsRepository().fetchConfiguration(auth, app) }
+            .onFailure { Log.w(TAG, "Unable to fetch the managed configuration of ${app.packageName}", it) }
+            .getOrNull()
+
+        if (configuration == null || appliedConfigurations.isApplied(app.packageName, configuration)) {
+            return
+        }
+
+        if (ManagedConfigurationsProxyClient(this).applyRestrictions(app.packageName, configuration.toBundle())) {
+            appliedConfigurations.record(app.packageName, configuration)
+        }
     }
 
     private fun deferInstalls(apps: List<EnterpriseApp>) {
