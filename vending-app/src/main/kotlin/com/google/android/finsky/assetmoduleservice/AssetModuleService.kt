@@ -57,6 +57,7 @@ class AssetModuleServiceImpl(
 ) : AbstractAssetModuleServiceImpl(context, lifecycle) {
     private val fileDescriptorMap = mutableMapOf<File, ParcelFileDescriptor>()
     private val lock = Any()
+    private val sessionManager = AssetModuleSessionManager(context)
 
     private fun checkSessionValid(packageName: String, sessionId: Int) {
         Log.d(TAG, "checkSessionValid: $packageName $sessionId ${packageDownloadData[packageName]?.sessionIds}")
@@ -92,6 +93,21 @@ class AssetModuleServiceImpl(
             Log.d(TAG, "startDownload: resetAllModuleStatus ")
             packageDownloadData[packageName]?.resetAllModuleStatus()
         }
+
+        params.moduleNames.forEach { moduleName ->
+            val status = synchronized(lock) {
+                packageDownloadData[packageName]?.getModuleData(moduleName)?.status
+            }
+            if (status == AssetPackStatus.DOWNLOADING) {
+                Log.w(TAG, "startDownload: module $moduleName still DOWNLOADING; overlapping cancel deferred to #2673")
+            }
+        }
+
+        val session = sessionManager.createSession(packageName, params.moduleNames)
+        synchronized(lock) {
+            packageDownloadData[packageName]?.bindModulesToSession(context, session.sessionId, params.moduleNames)
+        }
+
         params.moduleNames.forEach {
             val moduleData = packageDownloadData[packageName]?.getModuleData(it)
             if (moduleData?.status != AssetPackStatus.DOWNLOADING && moduleData?.status != AssetPackStatus.COMPLETED) {
@@ -110,8 +126,8 @@ class AssetModuleServiceImpl(
             }
         }
         val bundleData = buildDownloadBundle(packageDownloadData[packageName]!!, params.moduleNames)
-        Log.d(TAG, "startDownload: $bundleData")
-        callback?.onStartDownload(-1, bundleData)
+        Log.d(TAG, "startDownload: sessionId=${session.sessionId} $bundleData")
+        callback?.onStartDownload(session.sessionId, bundleData)
         params.moduleNames.forEach {
             val packData = packageDownloadData[packageName]?.getModuleData(it)
             if (packData?.status == AssetPackStatus.PENDING) {
@@ -134,15 +150,24 @@ class AssetModuleServiceImpl(
                 return
             }
 
-            packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
-                if (moduleName in params.installedAssetModules) return@forEach
+            val downloadData = packageDownloadData[packageName]
+            if (downloadData != null) {
+                val modulesBySession = downloadData.moduleNames
+                    .filter { it !in params.installedAssetModules }
+                    .groupBy { downloadData.sessionIds[it] ?: downloadData.sessionId }
 
-                listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
-
-                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
-                    val destination = chunkData.getChunkFile(context)
-                    if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
+                modulesBySession.forEach { (sessionId, modules) ->
+                    if (sessionId == 0 && modules.all { downloadData.getModuleData(it).status == AssetPackStatus.NOT_INSTALLED }) {
+                        return@forEach
+                    }
+                    listBundleData.add(buildDownloadBundle(downloadData, modules))
+                    modules.forEach { moduleName ->
+                        downloadData.getModuleData(moduleName).chunks.forEach { chunkData ->
+                            val destination = chunkData.getChunkFile(context)
+                            if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
+                                sendBroadcastForExistingFile(context, downloadData, moduleName, chunkData, destination)
+                            }
+                        }
                     }
                 }
             }
@@ -176,6 +201,7 @@ class AssetModuleServiceImpl(
         synchronized(lock) {
             packageDownloadData[packageName]?.updateDownloadStatus(params.moduleName, AssetPackStatus.COMPLETED)
             sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, params.moduleName, null, null)
+            packageDownloadData[packageName]?.let { sessionManager.markTerminalIfDone(params.sessionId, it) }
         }
 
         val directory = context.getModuleDir(params.sessionId, params.moduleName)
@@ -195,9 +221,19 @@ class AssetModuleServiceImpl(
     override suspend fun notifySessionFailed(params: NotifySessionFailedParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         checkSessionValid(packageName, params.sessionId)
 
-        // TODO: Implement
+        synchronized(lock) {
+            val downloadData = packageDownloadData[packageName]
+            if (downloadData != null) {
+                val modulesInSession = downloadData.sessionIds.filter { it.value == params.sessionId }.keys
+                modulesInSession.forEach { moduleName ->
+                    downloadData.updateDownloadStatus(moduleName, AssetPackStatus.FAILED)
+                    sendBroadcastForExistingFile(context, downloadData, moduleName, null, null)
+                }
+                sessionManager.markTerminalIfDone(params.sessionId, downloadData)
+            }
+        }
+        // Full cancel of in-flight downloads is #2673
         callback?.onNotifySessionFailed(bundleOf(BundleKeys.SESSION_ID to params.sessionId))
-        //throw UnsupportedOperationException()
     }
 
     override suspend fun keepAlive(params: KeepAliveParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
@@ -251,6 +287,7 @@ class AssetModuleServiceImpl(
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NETWORK_ERROR) })
             }
         }
+        // Do not mint a new session here — only startDownload allocates session ids.
         val bundleData = buildDownloadBundle(packageDownloadData[packageName]!!, params.moduleNames)
         Log.d(TAG, "requestDownloadInfo -> $bundleData")
         callback?.onRequestDownloadInfo(bundleData, bundleData)
