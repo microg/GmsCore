@@ -88,6 +88,7 @@ public class WearableService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
+        if (request.packageName == null) request.packageName = getPackageName();
         PackageUtils.getAndCheckCallingPackage(this, request.packageName);
         ConnectionInfo connectionInfo = new ConnectionInfo();
         connectionInfo.features = FEATURES;
