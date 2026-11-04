@@ -59,6 +59,7 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         } catch (e: Exception) {
             Log.w(TAG, "Error during handle init", e)
             this.handleInitError = e
+            closeFailedHandle(handleProxy)
         }
         this.condition.open()
         if (handleInitError == null) {
@@ -75,12 +76,24 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
                     }
                 }
             } catch (e: Exception) {
+                closeFailedHandle(handleProxy)
                 this.handleProxy = null
                 handleInitError = e
             }
         }
         return DroidGuardInitReply(null, null)
     }
+
+    private fun closeFailedHandle(handle: HandleProxy?) {
+        try {
+            handle?.close()
+        } catch (e: Exception) {
+            Log.w(TAG, "Error closing a failed native handle", e)
+        }
+    }
+
+    // Initialization may return a reply without reporting a failed native VM to its caller.
+    internal fun isReady(): Boolean = handleProxy != null && handleInitError == null
 
     override fun snapshot(map: MutableMap<Any?, Any?>): ByteArray {
         Log.d(TAG, "snapshot($map)")
@@ -116,3 +129,4 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         private val NOT_LOW_LATENCY_FLOWS = setOf("ad_attest", "attest", "checkin", "federatedMachineLearningReduced", "msa-f", "ad-event-attest-token")
     }
 }
+
