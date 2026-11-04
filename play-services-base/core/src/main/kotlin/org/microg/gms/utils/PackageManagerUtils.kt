@@ -8,7 +8,10 @@ package org.microg.gms.utils
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.content.pm.Signature
+import android.content.pm.SigningInfo
+import android.os.Build
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import com.google.android.gms.common.internal.CertData
 import java.security.MessageDigest
 import java.util.*
@@ -16,20 +19,26 @@ import java.util.*
 fun PackageManager.isPlatformCertificate(cert: CertData) = getPlatformCertificates().contains(cert)
 fun PackageManager.getPlatformCertificates() = getCertificates("android")
 
-fun PackageManager.getCertificates(packageName: String): List<CertData> = try {
-    getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures?.map { CertData(it.toByteArray()) }
-        ?: emptyList()
-} catch (e: NameNotFoundException) {
-    emptyList()
-}
+fun PackageManager.getCertificates(packageName: String): List<CertData> =
+    getSignatures(packageName).map { CertData(it.toByteArray()) }
 
 @Deprecated("It's actually a certificate", ReplaceWith("getCertificates"))
 fun PackageManager.getSignatures(packageName: String): Array<Signature> = try {
-    getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
-        ?: emptyArray()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        getSignInfo(packageName)?.signingCertificateHistory
+    } else {
+        null
+    } ?: getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
+    ?: emptyArray()
 } catch (e: NameNotFoundException) {
     emptyArray()
 }
+
+@RequiresApi(Build.VERSION_CODES.P)
+fun PackageManager.getSignInfo(packageName: String): SigningInfo? = runCatching {
+    getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
+}.getOrNull()
+
 
 fun PackageManager.getApplicationLabel(packageName: String): CharSequence = try {
     getApplicationLabel(getApplicationInfo(packageName, 0))
