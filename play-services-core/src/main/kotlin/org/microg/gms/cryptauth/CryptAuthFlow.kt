@@ -73,7 +73,7 @@ suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean {
         return false
     }
 
-    val cryptAuthSyncKeysResult = cryptAuthSyncKeys(authToken, instanceId, instanceToken, checkinInfo.androidId)
+    val cryptAuthSyncKeysResult = cryptAuthSyncKeys(authToken, instanceId, instanceToken, checkinInfo.androidId, getCryptAuthUserKey(accountName))
     if (cryptAuthSyncKeysResult == null
         || !cryptAuthSyncKeysResult.has(CRYPTAUTH_FIELD_SESSION_ID)
         || cryptAuthSyncKeysResult.get(CRYPTAUTH_FIELD_SESSION_ID) !is String
@@ -83,7 +83,12 @@ suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean {
     }
 
     val session: String = cryptAuthSyncKeysResult.get(CRYPTAUTH_FIELD_SESSION_ID) as String
-    val cryptAuthEnrollKeysResult = cryptAuthEnrollKeys(authToken, session)
+    // Server asks for the user key to be created by answering with keyCreation ACTIVE
+    val newUserKey = if (cryptAuthSyncKeysResult.isUserKeyCreationRequested()) {
+        Log.d(TAG, "Server requested creation of user key, enrolling it")
+        getOrCreateCryptAuthUserKey(accountName)
+    } else null
+    val cryptAuthEnrollKeysResult = cryptAuthEnrollKeys(authToken, session, newUserKey)
 
     return if (cryptAuthEnrollKeysResult != null) {
         /* Give Google server some time to process the new information.
@@ -96,6 +101,13 @@ suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean {
     } else {
         false
     }
+}
+
+private fun JSONObject.isUserKeyCreationRequested(): Boolean {
+    val responses = optJSONArray(CRYPTAUTH_FIELD_SYNC_SINGLE_KEY_RESPONSES) ?: return false
+    // Responses are in the order of the sync requests, which only contain the user key
+    val keyCreation = responses.optJSONObject(0)?.optString(CRYPTAUTH_FIELD_KEY_CREATION)
+    return keyCreation == "ACTIVE" || keyCreation == "INACTIVE"
 }
 
 private suspend fun Context.registerForCryptAuth(checkinInfo: LastCheckinInfo, instanceId: String): Bundle = completeRegisterRequest(
