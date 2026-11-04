@@ -97,7 +97,7 @@ class AppCertManager(private val context: Context) {
                         versionInfo = DeviceKeyRequest.VersionInfo(Build.VERSION.SDK_INT, BuildConfig.VERSION_CODE),
                         token = token
                 )
-                Log.d(TAG, "Request: ${request.toString().chunked(128).joinToString("\n")}")
+                Log.d(TAG, "Requesting AppCert DeviceKey")
                 val deferredResponse = CompletableDeferred<ByteArray?>()
                 queue.add(object : Request<ByteArray?>(Method.POST, "https://android.googleapis.com/auth/devicekey", null) {
                     override fun getBody(): ByteArray = request.encode()
@@ -114,7 +114,7 @@ class AppCertManager(private val context: Context) {
 
                     override fun deliverError(error: VolleyError) {
                         if (error.networkResponse != null) {
-                            Log.d(TAG, "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}")
+                            Log.d(TAG, "DeviceKey request failed with HTTP ${error.networkResponse.statusCode}")
                         } else {
                             Log.d(TAG, "Error: ${error.message}")
                         }
@@ -155,7 +155,7 @@ class AppCertManager(private val context: Context) {
         val proto = if (deviceKey != null) {
             val macSecret = deviceKey.macSecret?.toByteArray()
             if (macSecret == null) {
-                Log.w(TAG, "Invalid device key: $deviceKey")
+                Log.w(TAG, "Invalid device key: missing MAC secret")
                 return null
             }
             val mac = Mac.getInstance("HMACSHA256")
@@ -177,7 +177,7 @@ class AppCertManager(private val context: Context) {
             )
             return null // TODO
         }
-        Log.d(TAG, "Spatula Header: $proto")
+        Log.d(TAG, "Spatula header generated")
         return Base64.encodeToString(proto.encode(), Base64.NO_WRAP)
     }
 
