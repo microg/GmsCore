@@ -50,4 +50,6 @@
     <string name="pref_location_timeline_summary">Înregistrează periodic informațiile despre locație și le pune la dispoziția Cronologie Google Maps.</string>
     <string name="pref_location_timeline_upload_title">Sincronizarea cu contul Google</string>
     <string name="pref_location_timeline_upload_summary">Sincronizează istoricul locațiilor pe serverele Google, astfel încât să poată fi afișate pe alte dispozitive.</string>
+    <string name="pref_location_timeline_accounts_title">Gestionare prin contul Google</string>
+    <string name="pref_location_timeline_accounts_summary">Alege un cont pentru a-i gestiona setările privind cronologia și sincronizarea cu serverul.</string>
 </resources>

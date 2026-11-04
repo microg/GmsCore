@@ -428,4 +428,23 @@
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hibrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="in_app_reach_storage_usage">%1$d%% din %2$s utilizat</string>
+    <string name="in_app_reach_get_storage">Obține spațiu de stocare</string>
+    <string name="in_app_reach_clean_up_storage">Curățarea spațiului de stocare</string>
+    <string name="pref_account_details_title">Detalii cont</string>
+    <string name="pref_account_type_google">Cont Google</string>
+    <string name="prefcat_account_timeline_title">Cronologia Google Maps</string>
+    <string name="pref_account_timeline_title">Activează istoricul locațiilor</string>
+    <string name="pref_account_timeline_summary">Salvează periodic istoricul locațiilor acestui cont pentru ca funcția „Cronologie” din Google Maps să poată funcționa.</string>
+    <string name="pref_account_timeline_upload_title">Permite sincronizarea cu serverul</string>
+    <string name="pref_account_timeline_upload_summary">Permite acestui dispozitiv să încarce periodic istoricul locațiilor acestui cont pe serverele Google.</string>
+    <string name="pref_account_timeline_cloud_notice">Istoricul locațiilor este sincronizat cu acest cont Google. Permisiunea de încărcare se aplică numai acestui dispozitiv.</string>
+    <string name="prefcat_account_settings_title">Setări</string>
+    <string name="pref_account_system_sync_title">Setări de sincronizare a conturilor de sistem</string>
+    <string name="pref_account_timeline_loading">Se încarcă setările contului…</string>
+    <string name="pref_account_timeline_unavailable">Setările contului nu sunt disponibile în acest moment.</string>
+    <string name="pref_account_timeline_restricted">Această setare este restricționată pentru acest cont.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">Sincronizarea cu serverele Google este dezactivată pentru acest dispozitiv în setările de localizare. Setarea de încărcare de mai sus nu are niciun efect asupra acestui dispozitiv până când nu este activată.</string>
+    <string name="pref_account_timeline_disabled_on_device">Funcția „Cronologie” este dezactivată pentru acest dispozitiv în setările de localizare. Setările de mai sus nu au niciun efect asupra acestui dispozitiv până când nu este activată.</string>
+    <string name="pref_account_timeline_update_failed">Preferința privind încărcarea locală a fost salvată, dar setarea contului nu a putut fi confirmată. Actualizează pagina și încearcă din nou.</string>
 </resources>
