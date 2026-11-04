@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
+import org.microg.vending.billing.core.AuthData
 import java.util.concurrent.TimeUnit
 
 @RequiresApi(21)
@@ -85,6 +86,10 @@ class MandatoryAppsJobService : JobService() {
 
         installableApps.forEach { app ->
             installer.install(app, /* isUpdate */ pendingApps[app] == UpdateAvailable)
+
+            if (states[app] == Installed) {
+                applyManagedConfiguration(enterpriseApps.auth, app)
+            }
         }
 
         return installableApps.all { states[it] == Installed }
@@ -105,6 +110,16 @@ class MandatoryAppsJobService : JobService() {
         }
 
         return null
+    }
+
+    private suspend fun applyManagedConfiguration(auth: AuthData, app: EnterpriseApp) {
+        val configuration = runCatching { ManagedConfigurationsRepository().fetchConfiguration(auth, app) }
+            .onFailure { Log.w(TAG, "Unable to fetch the managed configuration of ${app.packageName}", it) }
+            .getOrNull()
+
+        if (configuration != null) {
+            ManagedConfigurationsProxyClient(this).applyRestrictions(app.packageName, configuration.toBundle())
+        }
     }
 
     private fun deferInstalls(apps: List<EnterpriseApp>) {

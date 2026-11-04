@@ -16,6 +16,7 @@ class GooglePlayApi {
         const val URL_PURCHASE = "$URL_FDFE/purchase"
         const val URL_DELIVERY = "$URL_FDFE/delivery"
         const val URL_ENTERPRISE_CLIENT_POLICY = "$URL_FDFE/getEnterpriseClientPolicy"
+        const val URL_MANAGED_CONFIGURATIONS = "$URL_FDFE/managedConfigurations"
         const val URL_SYNC = "$URL_FDFE/sync"
         const val URL_BULK = "$URL_FDFE/bulkGrantEntitlement"
     }
