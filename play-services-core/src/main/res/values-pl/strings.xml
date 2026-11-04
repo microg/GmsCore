@@ -428,4 +428,23 @@ Spróbuj ponownie później."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrydowy</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="in_app_reach_storage_usage">Użyto %1$d%% z %2$s</string>
+    <string name="in_app_reach_clean_up_storage">Uporządkuj pamięć wewnętrzną</string>
+    <string name="in_app_reach_get_storage">Uzyskaj pamięć na dane</string>
+    <string name="pref_account_details_title">Szczegóły konta</string>
+    <string name="pref_account_type_google">Konto Google</string>
+    <string name="prefcat_account_timeline_title">Oś czasu w Mapach Google</string>
+    <string name="pref_account_timeline_title">Włącz historię lokalizacji</string>
+    <string name="pref_account_timeline_summary">Okresowo zapisuj historię lokalizacji tego konta, aby funkcja „Oś czasu” w Mapach Google mogła działać.</string>
+    <string name="pref_account_timeline_upload_title">Zezwalaj na synchronizację z serwerem</string>
+    <string name="pref_account_timeline_upload_summary">Zezwalaj temu urządzeniu na okresowe przesyłanie historii lokalizacji z tego konta na serwery Google.</string>
+    <string name="pref_account_timeline_cloud_notice">Historia lokalizacji jest synchronizowana z tym kontem Google. Uprawnienie do przesyłania danych dotyczy wyłącznie tego urządzenia.</string>
+    <string name="prefcat_account_settings_title">Ustawienia</string>
+    <string name="pref_account_system_sync_title">Ustawienia synchronizacji konta systemowego</string>
+    <string name="pref_account_timeline_loading">Ładowanie ustawień konta…</string>
+    <string name="pref_account_timeline_unavailable">Ustawienia konta są obecnie niedostępne.</string>
+    <string name="pref_account_timeline_restricted">To ustawienie jest zablokowane dla tego konta.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">W ustawieniach lokalizacji wyłączono synchronizację z serwerami Google dla tego urządzenia. Powyższe ustawienie przesyłania danych nie będzie miało wpływu na to urządzenie, dopóki nie zostanie włączone.</string>
+    <string name="pref_account_timeline_disabled_on_device">W ustawieniach lokalizacji wyłączono funkcję osi czasu dla tego urządzenia. Powyższe ustawienia nie będą miały wpływu na to urządzenie, dopóki nie zostaną włączone.</string>
+    <string name="pref_account_timeline_update_failed">Lokalne ustawienie dotyczące przesyłania plików zostało zapisane, ale nie udało się potwierdzić ustawienia konta. Odśwież stronę i spróbuj ponownie.</string>
 </resources>
