@@ -8,6 +8,7 @@ package org.microg.gms.games
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -617,6 +618,42 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     override fun loadSnapshots(callbacks: IGamesCallbacks?, forceReload: Boolean) {
         Log.d(TAG, "Method loadSnapshots(forceReload:$forceReload) called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val authResponse = withContext(Dispatchers.IO) {
+                    AuthManager(context, account.name, packageName, "$SERVICE_GAMES_LITE ${Scopes.DRIVE_APPFOLDER}").apply { isPermitted = true }.requestAuth(true)
+                }
+                var oauthToken: String? = null
+                if (authResponse.auth?.let { oauthToken = it } == null) {
+                    throw RuntimeException("oauthToken is null")
+                }
+                val snapshots = SnapshotsDataClient.get(context).loadSnapshotData(oauthToken!!)
+                val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
+                        GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
+                        SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
+                val builder = DataHolder.builder(columns)
+                val playerValues = (player as? PlayerEntity)?.toContentValues()
+                snapshots.forEach { snapshot ->
+                    val row = playerValues?.let { ContentValues(it) } ?: ContentValues()
+                    snapshot.id?.let { row.put(SnapshotColumns.EXTERNAL_SNAPSHOT_ID, it) }
+                    snapshot.coverImage?.url?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_URL, it) }
+                    snapshot.coverImage?.width?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_WIDTH, it) }
+                    snapshot.coverImage?.height?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_HEIGHT, it) }
+                    snapshot.uniqueName?.let { row.put(SnapshotColumns.UNIQUE_NAME, it) }
+                    snapshot.title?.let { row.put(SnapshotColumns.TITLE, it) }
+                    snapshot.description?.let { row.put(SnapshotColumns.DESCRIPTION, it) }
+                    snapshot.lastModifiedMillis?.toLongOrNull()?.let { row.put(SnapshotColumns.LAST_MODIFIED_TIMESTAMP, it) }
+                    snapshot.durationMillis?.toLongOrNull()?.let { row.put(SnapshotColumns.DURATION, it) }
+                    snapshot.progressValue?.toLongOrNull()?.let { row.put(SnapshotColumns.PROGRESS_VALUE, it) }
+                    row.put(SnapshotColumns.PENDING_CHANGE_COUNT, 0)
+                    builder.withRow(row)
+                }
+                callbacks?.onSnapshotsLoaded(builder.build(GamesStatusCodes.OK.code))
+            }.onFailure {
+                Log.w(TAG, "loadSnapshots: error", it)
+                callbacks?.onSnapshotsLoaded(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code))
+            }
+        }
     }
 
     override fun commitSnapshot(
@@ -662,6 +699,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     override fun discardAndCloseSnapshot(contents: Contents?) {
         Log.d(TAG, "discardAndCloseSnapshot: $contents")
+        runCatching { contents?.parcelFileDescriptor?.close() }
     }
 
     override fun loadEventsById(callbacks: IGamesCallbacks?, forceReload: Boolean, eventsIds: Array<out String>?) {
@@ -712,12 +750,27 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     val fileOutputStream = FileOutputStream(file)
                     fileOutputStream.write(contentByteArray)
                 }
+                val snapshotProto = resolveSnapshotHeadResponse?.snapshotMetadata?.snapshot
                 val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
                         GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
                         SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
                 val dataHolder = if (player is PlayerEntity) {
-                    DataHolder.builder(columns)
-                        .withRow(player.toContentValues()).build(CommonStatusCodes.SUCCESS)
+                    val row = player.toContentValues()
+                    snapshotProto?.snapshotId?.let { row.put(SnapshotColumns.EXTERNAL_SNAPSHOT_ID, it) }
+                    saveName?.let { row.put(SnapshotColumns.UNIQUE_NAME, it) }
+                    snapshotProto?.content?.description?.let {
+                        row.put(SnapshotColumns.TITLE, it)
+                        row.put(SnapshotColumns.DESCRIPTION, it)
+                    } ?: saveName?.let { row.put(SnapshotColumns.TITLE, it) }
+                    snapshotProto?.content?.snapshotTimeInfo?.timestamp?.let { row.put(SnapshotColumns.LAST_MODIFIED_TIMESTAMP, it) }
+                    snapshotProto?.content?.duration?.let { row.put(SnapshotColumns.DURATION, it) }
+                    snapshotProto?.content?.progressValue?.let { row.put(SnapshotColumns.PROGRESS_VALUE, it) }
+                    snapshotProto?.content?.deviceName?.let { row.put(SnapshotColumns.DEVICE_NAME, it) }
+                    snapshotProto?.coverImage?.imageUrl?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_URL, it) }
+                    snapshotProto?.coverImage?.width?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_WIDTH, it) }
+                    snapshotProto?.coverImage?.height?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_HEIGHT, it) }
+                    row.put(SnapshotColumns.PENDING_CHANGE_COUNT, 0)
+                    DataHolder.builder(columns).withRow(row).build(CommonStatusCodes.SUCCESS)
                 } else {
                     DataHolder.builder(columns).build(CommonStatusCodes.SIGN_IN_REQUIRED)
                 }
