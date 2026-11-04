@@ -1,5 +1,8 @@
 package com.google.android.gms.cast.framework.media.internal;
 
-interface IFetchBitmapTask {
+import android.graphics.Bitmap;
+import android.net.Uri;
 
+interface IFetchBitmapTask {
+    Bitmap fetchBitmap(in Uri uri) = 0;
 }

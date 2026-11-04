@@ -16,6 +16,7 @@
 
 package com.google.android.gms.cast;
 
+import android.os.Build;
 import android.text.TextUtils;
 
 import java.util.Collection;
@@ -85,6 +86,9 @@ public final class CastMediaControlIntent {
      * @param applicationId The application ID of the receiver application.
      */
     public static String categoryForCast(String applicationId) {
+        if (applicationId == null) {
+            throw new IllegalArgumentException("applicationId must not be null");
+        }
         return CATEGORY_CAST + "/" + applicationId;
     }
 
@@ -105,7 +109,7 @@ public final class CastMediaControlIntent {
      * restrictions. See {@link #categoryForCast(Collection)} and {@link #categoryForCast(String)} for more details.
      */
     public static String categoryForCast(String applicationId, Collection<String> namespaces) {
-        return CATEGORY_CAST + "" + applicationId + "/" + TextUtils.join(",", namespaces);
+        return CATEGORY_CAST + "/" + applicationId + "/" + TextUtils.join(",", namespaces);
     }
 
     /**
@@ -123,6 +127,9 @@ public final class CastMediaControlIntent {
      * @param applicationId The application ID of the receiver application.
      */
     public static String categoryForRemotePlayback(String applicationId) {
+        if (applicationId == null) {
+            throw new IllegalArgumentException("applicationId must not be null");
+        }
         return CATEGORY_CAST_REMOTE_PLAYBACK + "/" + applicationId;
     }
 
@@ -137,6 +144,9 @@ public final class CastMediaControlIntent {
      * Returns an RFC-5646 language tag string fo the given locale.
      */
     public static String languageTagForLocale(Locale locale) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            return locale.toLanguageTag();
+        }
         StringBuilder sb = new StringBuilder(locale.getLanguage());
         if (!TextUtils.isEmpty(locale.getCountry())) sb.append('-').append(locale.getCountry());
         if (!TextUtils.isEmpty(locale.getVariant())) sb.append('-').append(locale.getVariant());
