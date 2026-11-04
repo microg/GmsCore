@@ -25,8 +25,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebViewClientCompat
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.recaptcha.RecaptchaHandle
 import com.google.android.gms.recaptcha.RecaptchaResultData
+import com.google.android.gms.recaptcha.RecaptchaStatusCodes
 import com.google.android.gms.recaptcha.internal.ExecuteParams
 import com.google.android.gms.recaptcha.internal.InitParams
 import com.google.android.gms.tasks.Task
@@ -131,20 +134,28 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
             additionalArgs[key] = params.action.additionalArgs.getString(key)!!
         }
         val request = RecaptchaExecuteRequest(token = lastRequestToken, action = params.action.toString(), additionalArgs = additionalArgs).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
-        val token = suspendCoroutine { continuation ->
-            executeFinished.set(false)
-            executeContinuation = continuation
-            eval("recaptcha.m.Main.execute(\"${request}\")")
-            lifecycleScope.launch {
-                delay(10000)
-                if (!executeFinished.getAndSet(true)) {
-                    try {
-                        continuation.resumeWithException(RuntimeException("Timeout reached"))
-                    } catch (_: Exception) {}
+        try {
+            val token = suspendCoroutine { continuation ->
+                executeFinished.set(false)
+                executeContinuation = continuation
+                eval("recaptcha.m.Main.execute(\"${request}\")")
+                lifecycleScope.launch {
+                    delay(10000)
+                    if (!executeFinished.getAndSet(true)) {
+                        try {
+                            continuation.resumeWithException(RuntimeException("Timeout reached"))
+                        } catch (_: Exception) {}
+                    }
                 }
             }
+            return RecaptchaResultData(token)
+        } catch (e: Exception) {
+            Log.w(TAG, "Exception during Recaptcha execute", e)
+            webView?.stopLoading()
+            webView?.loadUrl("about:blank")
+            webView = null
+            throw ApiException(Status(RecaptchaStatusCodes.RECAPTCHA_FEATURE_OFF, "Recaptcha execution failed: ${e.message}"))
         }
-        return RecaptchaResultData(token)
     }
 
     override suspend fun close(handle: RecaptchaHandle): Boolean {
