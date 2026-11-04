@@ -4,10 +4,23 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <application>
 
         <!-- Exposure Notifications -->
@@ -75,5 +88,72 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Nearby Share / Quick Share -->
+
+        <service
+            android:name="org.microg.gms.nearby.sharing.NearbySharingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.nearby.sharing.START_SERVICE" />
+                <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.nearby.sharing.ui.NearbySharingActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+            <intent-filter>
+                <action android:name="com.google.android.gms.SHARE_NEARBY" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.nearby.SEND_FOLDER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.gms.nearby.sharing.ui.ReceiveActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+            <intent-filter>
+                <action android:name="com.google.android.gms.RECEIVE_NEARBY" />
+                <action android:name="com.google.android.gms.nearby.sharing.RECEIVE_SURFACE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.gms.nearby.sharing.ui.NearbySharingSettingsActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight">
+            <intent-filter>
+                <action android:name="com.google.android.gms.settings.SHARING" />
+                <action android:name="com.google.android.gms.nearby.sharing.SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="org.microg.gms.nearby.sharing.ui.NearbySharingSliceProvider"
+            android:authorities="com.google.android.gms.nearby.sharing"
+            android:exported="true"
+            android:grantUriPermissions="true" />
     </application>
 </manifest>
