@@ -420,4 +420,23 @@
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Гибридный</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="in_app_reach_get_storage">Получить хранилище</string>
+    <string name="in_app_reach_storage_usage">%1$d%% из %2$s использованный</string>
+    <string name="in_app_reach_clean_up_storage">Очистить хранилище</string>
+    <string name="pref_account_details_title">Детали аккаунта</string>
+    <string name="pref_account_type_google">Google аккаунт</string>
+    <string name="prefcat_account_timeline_title">Google Maps Хронология</string>
+    <string name="pref_account_timeline_title">Включить историю местоположений</string>
+    <string name="pref_account_timeline_summary">Периодически сохранять историю местонахождения этой учетной записи, чтобы Хронология Google Maps могла работать.</string>
+    <string name="pref_account_timeline_upload_title">Разрешить синхронизацию с сервером</string>
+    <string name="pref_account_timeline_upload_summary">Разрешить устройству периодически загружать историю местоположений этой учетной записи на серверы Google.</string>
+    <string name="pref_account_timeline_cloud_notice">История местоположений синхронизирована с этой учетной записью Google. Разрешение на загрузку применимо только к данному устройству.</string>
+    <string name="prefcat_account_settings_title">Настройки</string>
+    <string name="pref_account_system_sync_title">Настройка синхронизации системной учетной записи</string>
+    <string name="pref_account_timeline_loading">Загрузка настроек аккаунта…</string>
+    <string name="pref_account_timeline_unavailable">Настройки учетной записи недоступны.</string>
+    <string name="pref_account_timeline_restricted">Этот параметр ограничен для этой учетной записи.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">Синхронизация с серверами Google отключена для этого устройства в настройках местоположения. Вышеуказанная настройка загрузки не влияет на устройство, пока его не включить.</string>
+    <string name="pref_account_timeline_disabled_on_device">Хронология отключена для этого устройства в настройках местоположения. Вышеуказанные настройки не влияют на устройство, пока его не включить.</string>
+    <string name="pref_account_timeline_update_failed">Настройка локальной загрузки сохранена, но настройку учетной записи не удалось подтвердить. Обновите страницу и повторите попытку.</string>
 </resources>
