@@ -50,4 +50,6 @@
     <string name="pref_location_timeline_summary">Періодично записувати інформацію про своє місцезнаходження та робіть її доступною для хронології Карт Google.</string>
     <string name="pref_location_timeline_upload_title">Синхронізувати з обліковим записом Google</string>
     <string name="pref_location_timeline_upload_summary">Синхронізуйте історію місцезнаходжень із серверами Google, щоб її можна було відображати на інших пристроях.</string>
+    <string name="pref_location_timeline_accounts_title">Керування через обліковий запис Google</string>
+    <string name="pref_location_timeline_accounts_summary">Виберіть обліковий запис для керування хронологіею та налаштуванням синхронізації сервера.</string>
 </resources>
