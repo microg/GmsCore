@@ -62,6 +62,7 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
 
         setContentView(R.layout.extended_permission_request)
         rationaleTextView = findViewById(R.id.rationale_textview)
+        hintView = findViewById(R.id.hint_sl)
 
         if (checkAllPermissions()) {
             hideLocationPermissionNotification(this)
@@ -88,8 +89,6 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
             editor.apply()
             finish()
         }
-
-        hintView = findViewById(R.id.hint_sl)
 
         val hintTitle = getString(R.string.permission_hint_title)
         val builder = SpannableStringBuilder(hintTitle + getString(R.string.permission_hint))
