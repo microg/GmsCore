@@ -63,7 +63,7 @@ class ApiTokenServiceImpl(private val context: Context, override val lifecycle: 
 
     override fun requestApiToken(params: Bundle?): Bundle {
         params?.keySet()
-        Log.d(TAG, "Method requestApiToken is called. Thread:${Thread.currentThread().name} Params: $params")
+        Log.d(TAG, "Method requestApiToken is called. Thread:${Thread.currentThread().name}")
         var callerPackageName = params?.getString(KEY_PACKAGE_NAME)
         val packagesForUid = context.applicationContext.packageManager.getPackagesForUid(getCallingUid())
         if (callerPackageName == null || packagesForUid.isNullOrEmpty() || (!packagesForUid.contains(callerPackageName) && !packagesForUid.contains(Constants.GMS_PACKAGE_NAME))) {
@@ -97,7 +97,7 @@ class ApiTokenServiceImpl(private val context: Context, override val lifecycle: 
                     Log.d(TAG, "error: ${ApiError.ERROR_API_TOKEN_EMPTY.value}")
                     errorBundle(ApiError.ERROR_API_TOKEN_EMPTY.code)
                 } else {
-                    Log.d(TAG, "requestApiToken success. response: $response")
+                    Log.d(TAG, "requestApiToken success")
                     resultBundle(response.apiToken, response.expiryTime, response.durationTime)
                 }
             } catch (e: Exception) {
