@@ -1,0 +1,101 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package userlocation;
+
+service UserLocationReportingService {
+  rpc GetApiSettings (GetApiSettingsRequest) returns (GetApiSettingsResponse);
+  rpc SetApiSettings (SetApiSettingsRequest) returns (SetApiSettingsResponse);
+}
+
+message GetApiSettingsRequest {
+  optional int32 deviceTag = 1;
+  optional DeviceDescriptor device = 3;
+  optional bool requestFlag = 5;
+}
+
+message GetApiSettingsResponse {
+  optional ApiSettings settings = 2;
+}
+
+message SetApiSettingsRequest {
+  optional int32 deviceTag = 1;
+  optional DeviceDescriptor device = 3;
+  optional ApiSettings settings = 4;
+  optional ClientAuthTokens authTokens = 6;
+  optional bool requestFlag = 8;
+}
+
+message SetApiSettingsResponse {
+  optional ApiSettings settings = 2;
+}
+
+message ClientAuthTokens {
+  optional string historySource = 1;
+  optional string reportingSource = 2;
+  optional string auditToken = 3;
+}
+
+message DeviceDescriptor {
+  optional string buildFingerprint = 1;
+  optional int32 releaseYear = 2;
+  optional int32 enum6 = 6;
+  optional int32 sdkInt = 10;
+  optional string deviceModel = 11;
+  optional int32 enum12 = 12;
+  optional string gcmRegistrationId = 13;
+  optional int32 gmsVersionCode = 14;
+  optional int32 gmsApkVersionCode = 16;
+  optional BuildInfo buildInfo = 17;
+  optional int32 moduleVersion = 18;
+  optional int32 osType = 19;
+}
+
+message BuildInfo {
+  optional string manufacturer = 1;
+  optional string brand = 2;
+  optional string product = 3;
+  optional string device = 4;
+  optional string model = 5;
+  optional bool buildFlag = 7;
+}
+
+message ApiSettings {
+  optional int64 modMillis = 1;
+  optional bool historyEnabled = 2;
+  optional bool reportingEnabled = 3;
+  optional int32 userRestriction = 4;
+  optional int32 source = 5;
+  optional int32 concurrencyType = 7;
+  repeated Deletion deletions = 10;
+  optional DeviceCapabilities deviceCapabilities = 12;
+  optional Consent adsSubconsent = 13;
+  optional bool migratedToOdlh = 16;
+}
+
+message Consent {
+  optional bool enabled = 1;
+  optional int32 source = 3;
+}
+
+message Deletion {
+  optional int64 id = 1;
+  optional int64 startSeconds = 2;
+  optional int64 endSeconds = 3;
+}
+
+message DeviceCapabilities {
+  optional bool countryAllowed = 1;
+  optional bool deviceCapable = 2;
+  optional bool locationEnabled = 3;
+  optional bool restrictedProfile = 4;
+  optional bool deviceFormFactorSupported = 5;
+  optional int32 locationMode = 6;
+  optional bool wifiScanningEnabled = 7;
+  optional bool batterySaverOn = 9;
+  optional int32 batterySaverTriggerLevel = 10;
+}
