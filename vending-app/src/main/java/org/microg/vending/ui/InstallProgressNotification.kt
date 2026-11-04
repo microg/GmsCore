@@ -25,6 +25,7 @@ import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.InstallProgress
 
 private const val INSTALL_NOTIFICATION_CHANNEL_ID = "packageInstall"
+private const val INSTALL_PROMPT_NOTIFICATION_CHANNEL_ID = "packageInstallPrompt"
 
 internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, installIntent: PendingIntent, deleteIntent: PendingIntent) {
     val notificationManager = NotificationManagerCompat.from(this)
@@ -35,6 +36,7 @@ internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, in
         Log.e(TAG, "Couldn't load label for $packageName (${e.message}). Is it not installed?")
         return
     }
+    createInstallPromptNotificationChannel()
     getInstallPromptNotificationBuilder().apply {
         setDeleteIntent(deleteIntent)
         setContentTitle(getString(R.string.installer_notification_progress_splitinstall_click_install, label))
@@ -203,8 +205,10 @@ internal fun Context.notifyInstallProgress(
 }
 
 private fun Context.getInstallPromptNotificationBuilder() =
-        NotificationCompat.Builder(this, INSTALL_NOTIFICATION_CHANNEL_ID)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
+        NotificationCompat.Builder(this, INSTALL_PROMPT_NOTIFICATION_CHANNEL_ID)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setOnlyAlertOnce(true)
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setLocalOnly(true)
 
@@ -226,6 +230,22 @@ private fun Context.createNotificationChannel() {
                 description = getString(R.string.installer_notification_channel_description)
                 enableVibration(false)
                 enableLights(false)
+                setShowBadge(false)
+            }
+        )
+    }
+}
+
+private fun Context.createInstallPromptNotificationChannel() {
+    if (android.os.Build.VERSION.SDK_INT >= 26) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                INSTALL_PROMPT_NOTIFICATION_CHANNEL_ID,
+                getString(R.string.installer_notification_prompt_channel_name),
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = getString(R.string.installer_notification_prompt_channel_description)
                 setShowBadge(false)
             }
         )
