@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 microG Project Team
+ * Copyright (C) 2013-2026 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,13 @@ import android.util.Log;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -102,7 +105,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
-
     @Override
     public void enableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
         Log.d(TAG, "enableConfig: " + name);
@@ -165,9 +167,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getDataItemsByUriWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
-        Log.d(TAG, "getDataItemsByUri: " + uri);
+        Log.d(TAG, "getDataItemsByUri: " + uri + ", filter: " + typeFilter);
         postMain(callbacks, () -> {
-            callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName));
+            if (typeFilter == com.google.android.gms.wearable.DataClient.FILTER_PREFIX) {
+                callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName, typeFilter));
+            } else {
+                callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName));
+            }
         });
     }
 
@@ -178,11 +184,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void deleteDataItemsWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
-        Log.d(TAG, "deleteDataItems: " + uri);
+        Log.d(TAG, "deleteDataItems: " + uri + ", filter: " + typeFilter);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
+                int deleted = typeFilter == com.google.android.gms.wearable.DataClient.FILTER_PREFIX
+                        ? wearable.deleteDataItems(uri, packageName, typeFilter)
+                        : wearable.deleteDataItems(uri, packageName);
+                callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, deleted));
             }
         });
     }
@@ -217,7 +226,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void getFdForAsset(IWearableCallbacks callbacks, final Asset asset) throws RemoteException {
         Log.d(TAG, "getFdForAsset " + asset);
         postMain(callbacks, () -> {
-            // TODO: Access control
             try {
                 callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(0, ParcelFileDescriptor.open(wearable.createAssetFile(asset.getDigest()), ParcelFileDescriptor.MODE_READ_ONLY)));
             } catch (FileNotFoundException e) {
@@ -281,41 +289,74 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
+        Log.d(TAG, "getConnectedCapability " + capability + ", filter: " + nodeFilter);
         postMain(callbacks, () -> {
-            List<NodeParcelable> nodes = new ArrayList<>();
-            for (String host : capabilities.getNodesForCapability(capability)) {
-                nodes.add(new NodeParcelable(host, host));
+            try {
+                Set<String> connectedNodeIds = new HashSet<>();
+                for (NodeParcelable node : wearable.getConnectedNodesParcelableList()) {
+                    connectedNodeIds.add(node.getId());
+                }
+                List<NodeParcelable> nodes = new ArrayList<>();
+                for (String host : capabilities.getNodesForCapability(capability)) {
+                    if (host.equals(wearable.getLocalNodeId())) continue;
+                    if (nodeFilter == 1) { // FILTER_REACHABLE
+                        if (!connectedNodeIds.contains(host)) continue;
+                    }
+                    nodes.add(new NodeParcelable(host, host));
+                }
+                CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
+            } catch (Exception e) {
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(8, null));
             }
-            CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
-            callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
         });
     }
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        Log.d(TAG, "getAllCapabilities, filter: " + nodeFilter);
+        postMain(callbacks, () -> {
+            try {
+                List<CapabilityInfoParcelable> caps = capabilities.getAllCapabilities(nodeFilter);
+                callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse(0, caps));
+            } catch (Exception e) {
+                callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse(8, new ArrayList<>()));
+            }
+        });
     }
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
+        Log.d(TAG, "addLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(capabilities.add(capability)));
+                int status = capabilities.add(capability);
+                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(status));
+                if (status == 0) {
+                    com.google.android.gms.wearable.internal.CapabilityInfoParcelable info =
+                            new com.google.android.gms.wearable.internal.CapabilityInfoParcelable(capability,
+                                    Arrays.asList(new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
+                    wearable.sendCapabilityChanged(packageName, info);
+                }
             }
         });
     }
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
+        Log.d(TAG, "removeLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(capabilities.remove(capability)));
+                int status = capabilities.remove(capability);
+                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(status));
+                if (status == 0) {
+                    com.google.android.gms.wearable.internal.CapabilityInfoParcelable info =
+                            new com.google.android.gms.wearable.internal.CapabilityInfoParcelable(capability,
+                                    Arrays.asList(new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
+                    wearable.sendCapabilityChanged(packageName, info);
+                }
             }
         });
     }
@@ -378,34 +419,60 @@ public class WearableServiceImpl extends IWearableService.Stub {
         Log.d(TAG, "unimplemented Method: doAncsNegativeAction: " + i);
     }
 
-    @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
-    }
-
     /*
      * Channels
      */
 
     @Override
-    public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannel: " + s);
+    public void openChannel(IWearableCallbacks callbacks, String nodeId, String path) throws RemoteException {
+        Log.d(TAG, "openChannel: " + nodeId + ", " + path);
+        postMain(callbacks, () -> {
+            boolean connected = false;
+            for (NodeParcelable node : wearable.getConnectedNodesParcelableList()) {
+                if (node.getId().equals(nodeId)) {
+                    connected = true;
+                    break;
+                }
+            }
+            if (connected) {
+                String token = "chan_" + System.currentTimeMillis();
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(0, new ChannelParcelable(token, nodeId, path)));
+            } else {
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(4000, null));
+            }
+        });
     }
 
     @Override
-    public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannelWithError:" + s + ", " + errorCode);
-
+    public void closeChannel(IWearableCallbacks callbacks, String token) throws RemoteException {
+        Log.d(TAG, "closeChannel: " + token);
+        postMain(callbacks, () -> {
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(0));
+        });
     }
 
     @Override
-    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelInputStream: " + s);
+    public void closeChannelWithError(IWearableCallbacks callbacks, String token, int errorCode) throws RemoteException {
+        Log.d(TAG, "closeChannelWithError: " + token + ", " + errorCode);
+        postMain(callbacks, () -> {
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(0));
+        });
     }
 
     @Override
-    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelOutputStream: " + s);
+    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelInputStream: " + token);
+        postMain(callbacks, () -> {
+            callbacks.onGetChannelInputStreamResponse(new GetChannelInputStreamResponse(0, null));
+        });
+    }
+
+    @Override
+    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelOutputStream: " + token);
+        postMain(callbacks, () -> {
+            callbacks.onGetChannelOutputStreamResponse(new GetChannelOutputStreamResponse(0, null));
+        });
     }
 
     @Override

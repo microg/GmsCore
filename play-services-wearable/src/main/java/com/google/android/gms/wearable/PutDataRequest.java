@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable.internal;
+package com.google.android.gms.wearable;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.DataItem;
-
+import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
@@ -49,6 +47,7 @@ public class PutDataRequest extends AutoSafeParcelable {
     byte[] data;
     @SafeParceled(6)
     long syncDeadline = DEFAULT_SYNC_DEADLINE;
+    private boolean urgent;
 
     private PutDataRequest() {
         uri = null;
@@ -125,6 +124,15 @@ public class PutDataRequest extends AutoSafeParcelable {
     public PutDataRequest setData(byte[] data) {
         this.data = data;
         return this;
+    }
+
+    public PutDataRequest setUrgent() {
+        this.urgent = true;
+        return this;
+    }
+
+    public boolean isUrgent() {
+        return urgent;
     }
 
     @Override

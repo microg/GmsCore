@@ -25,7 +25,7 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.DataItemBuffer;
-import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 
 public class DataApiImpl implements DataApi {
     @Override
