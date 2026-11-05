@@ -57,6 +57,14 @@ private const val SHA256 = "SHA-256"
 data class PackageAndCertHash(val packageName: String, val algorithm: String, val certHash: String)
 
 private val KNOWN_GOOGLE_PACKAGES = mapOf(
+    // Pixel Watch companion: ACCOUNT permission only, for account discovery. Like every
+    // listed package it is also recognised as a Google app (e.g. GServices reads), but it
+    // must not get AUTH, i.e. silent authentication or access to account credentials.
+    Pair(
+        PackageAndCertHash("com.google.android.apps.wear.companion", SHA256, "48ed0058d1b6638e39a6e4c2df1c4d5fdf593f696bf31b09a88f93141eaf600f"),
+        setOf(ACCOUNT)
+    ),
+
     // Legacy set
     // These include all previously KNOWN_GOOGLE_PACKAGES and grant them all google package permissions
     // Those should be replaced by new entries that

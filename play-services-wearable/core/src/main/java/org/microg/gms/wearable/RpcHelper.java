@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class RpcHelper {
     private final Map<String, RpcConnectionState> rpcStateMap = new HashMap<String, RpcConnectionState>();
+    private final Map<String, RpcConnectionState> unorderedStateMap = new HashMap<String, RpcConnectionState>();
     private final SharedPreferences preferences;
     private final Context context;
 
@@ -32,24 +33,52 @@ public class RpcHelper {
         this.preferences = context.getSharedPreferences("wearable.rpc_service.settings", 0);
     }
 
-    private String getRpcConnectionId(String packageName, String targetNodeId, String path) {
-        String mode = "lo";
+    private String getRpcConnectionId(String packageName, String targetNodeId, String path, int priority) {
+        if (priority < 0 || priority > 1) throw new IllegalArgumentException("Invalid RPC priority");
+        String mode = priority == 1 ? "hi" : "lo";
         if (packageName.equals("com.google.android.wearable.app") && path.startsWith("/s3"))
-            mode = "hi";
+            mode = "voice";
         return targetNodeId + ":" + mode;
     }
 
     public RpcHelper.RpcConnectionState useConnectionState(String packageName, String targetNodeId, String path) {
-        String rpcConnectionId = getRpcConnectionId(packageName, targetNodeId, path);
+        return useConnectionState(packageName, targetNodeId, path, 0);
+    }
+
+    public RpcHelper.RpcConnectionState useConnectionState(String packageName, String targetNodeId,
+                                                           String path, int priority) {
+        String rpcConnectionId = getRpcConnectionId(packageName, targetNodeId, path, priority);
         synchronized (rpcStateMap) {
             if (!rpcStateMap.containsKey(rpcConnectionId)) {
-                int g = preferences.getInt(rpcConnectionId, 1)+1;
+                int previous = preferences.getInt(rpcConnectionId, 1);
+                // Older versions charged high-priority frames to lo and voice frames to hi.
+                // Start beyond those persisted generations so peers discard the old ordering state.
+                if (rpcConnectionId.endsWith(":hi")) {
+                    previous = Math.max(previous, preferences.getInt(targetNodeId + ":lo", 1));
+                } else if (rpcConnectionId.endsWith(":voice")) {
+                    previous = Math.max(previous, preferences.getInt(targetNodeId + ":hi", 1));
+                }
+                int g = previous + 1;
                 preferences.edit().putInt(rpcConnectionId, g).apply();
                 rpcStateMap.put(rpcConnectionId, new RpcConnectionState(g));
             }
             RpcHelper.RpcConnectionState res = rpcStateMap.get(rpcConnectionId);
             res.lastRequestId++;
             return res.freeze();
+        }
+    }
+
+    public RpcConnectionState useUnorderedConnectionState(String packageName, String targetNodeId, String path) {
+        String connectionId = getRpcConnectionId(packageName, targetNodeId, path, 0);
+        synchronized (unorderedStateMap) {
+            RpcConnectionState state = unorderedStateMap.get(connectionId);
+            if (state == null) {
+                // Generation zero bypasses peer reordering and must not consume ordered RPC IDs.
+                state = new RpcConnectionState(0);
+                unorderedStateMap.put(connectionId, state);
+            }
+            state.lastRequestId++;
+            return state.freeze();
         }
     }
 

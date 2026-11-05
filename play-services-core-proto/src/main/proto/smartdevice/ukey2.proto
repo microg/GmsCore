@@ -1,0 +1,60 @@
+/* SPDX-FileCopyrightText: 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Wire-compatible subset of google/ukey2 src/main/proto/ukey.proto,
+// device_to_device_messages.proto and securegcm.proto.
+syntax = "proto2";
+package smartdevice;
+option java_package = "org.microg.gms.smartdevice.proto";
+
+enum Ukey2MessageType {
+  UNKNOWN_DO_NOT_USE = 0;
+  ALERT = 1;
+  CLIENT_INIT = 2;
+  SERVER_INIT = 3;
+  CLIENT_FINISH = 4;
+}
+
+message Ukey2Message {
+  optional Ukey2MessageType message_type = 1;
+  optional bytes message_data = 2;
+}
+
+message Ukey2Alert {
+  optional int32 type = 1;
+  optional string error_message = 2;
+}
+
+message Ukey2CipherCommitment {
+  optional int32 handshake_cipher = 1;
+  optional bytes commitment = 2;
+}
+
+message Ukey2ClientInit {
+  optional int32 version = 1;
+  optional bytes random = 2;
+  repeated Ukey2CipherCommitment cipher_commitments = 3;
+  optional string next_protocol = 4;
+}
+
+message Ukey2ServerInit {
+  optional int32 version = 1;
+  optional bytes random = 2;
+  optional int32 handshake_cipher = 3;
+  optional bytes public_key = 4;
+}
+
+message Ukey2ClientFinished {
+  optional bytes public_key = 1;
+}
+
+message D2DMessage {
+  optional bytes message = 1;
+  optional int32 sequence_number = 2;
+}
+
+message D2DGcmMetadata {
+  required int32 type = 1;
+  optional int32 version = 2 [default = 0];
+}

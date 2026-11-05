@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: Apache-2.0
+// Interoperability field contract observed in GMS 25.26.35 account bootstrap.
+// Original schema declarations; no implementation from the reference application is included.
+syntax = "proto2";
+package microg.cryptauth.bootstrap;
+option java_package = "org.microg.gms.cryptauth.proto";
+
+message BootstrapAssertionBody {
+  optional bytes client_data_hash = 1;
+  optional int64 counter = 2;
+  optional int32 version = 3;
+}
+
+message BootstrapScreenLockSignals {
+  optional bool secure_screen_lock = 1;
+  optional bool screen_lock_confirmed = 2;
+  optional int32 screen_lock_state = 3;
+  optional int64 seconds_since_unlock = 4;
+  optional int64 seconds_since_screen_lock_setup = 5;
+}
+
+message BootstrapSourceSignals {
+  optional string android_id = 1;
+  optional string device = 2;
+  optional string model = 3;
+  optional string sdk_version = 4;
+  optional string gms_version = 5;
+  optional string droidguard_result = 6;
+  optional BootstrapScreenLockSignals screen_lock = 7;
+}
