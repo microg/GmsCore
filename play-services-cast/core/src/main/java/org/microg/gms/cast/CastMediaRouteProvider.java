@@ -222,7 +222,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                             int status = Integer.parseInt(new String(attributes.get("st"), "UTF-8"));
 
                             onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
-                        } catch (UnsupportedEncodingException | NullPointerException ex) {
+                        } catch (UnsupportedEncodingException | NullPointerException | NumberFormatException ex) {
                             Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
                             return;
                         }
