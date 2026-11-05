@@ -11,6 +11,9 @@ import java.util.List;
 public class ModuleDescriptor {
     public static final String MODULE_ID = "com.google.android.gms.cronet_dynamite";
     public static final int MODULE_VERSION = 2;
+    public static final List<String> MERGED_PACKAGES = Arrays.asList(
+            "org.chromium.net.impl"
+    );
     public static final List<String> MERGED_CLASSES = Arrays.asList(
             "org.chromium.net.ApiVersion",
             "org.chromium.net.BidirectionalStream",
@@ -32,6 +35,10 @@ public class ModuleDescriptor {
             "org.chromium.net.UploadDataProviders",
             "org.chromium.net.UploadDataSink",
             "org.chromium.net.UrlRequest",
-            "org.chromium.net.UrlResponseInfo"
+            "org.chromium.net.UrlResponseInfo",
+            "org.chromium.net.impl.CronetEngineBase",
+            "org.chromium.net.impl.CronetEngineBuilder",
+            "org.chromium.net.impl.CronetEngineBuilderImpl",
+            "org.chromium.net.impl.ImplVersion"
     );
 }
