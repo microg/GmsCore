@@ -1464,3 +1464,14 @@ enum SessionRestoreOption {
   SESSION_RESTORE_OPTION_TRY = 3;
   SESSION_RESTORE_OPTION_STORE = 4;
 }
+
+message GetBillingConfigRequest {
+  optional int32 apiVersion = 1;
+  optional string package = 3;
+  repeated MultiOfferSkuDetail extraParams = 4;
+}
+
+message GetBillingConfigResponse {
+  optional string billingConfig = 1;
+  optional FailedResponse failedResponse = 2;
+}
