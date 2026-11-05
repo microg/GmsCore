@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="recaptcha_qr_confirm_title">Confirm verification</string>
+    <string name="recaptcha_qr_confirm_description">A website is asking to use your device for verification.</string>
+    <string name="recaptcha_qr_confirm_button">Confirm verification</string>
+    <string name="recaptcha_qr_confirm_cancel_button">Cancel</string>
+
+    <string name="recaptcha_qr_progress_title">Verifying on device</string>
+    <string name="recaptcha_qr_progress_description">reCAPTCHA is verifying the request on this device. Please wait.</string>
+    <string name="recaptcha_qr_progress_button">Cancel</string>
+
+    <string name="recaptcha_qr_failed_title">Verification failed</string>
+    <string name="recaptcha_qr_failed_description">Verification could not be completed. Return to the website and try again.</string>
+    <string name="recaptcha_qr_failed_button">Close</string>
+
+    <string name="recaptcha_qr_success_title">Verification complete</string>
+    <string name="recaptcha_qr_success_description">You can now close this screen and return to the website or app.</string>
+    <string name="recaptcha_qr_success_button">Done</string>
+</resources>
