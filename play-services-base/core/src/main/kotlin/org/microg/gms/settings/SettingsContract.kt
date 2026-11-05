@@ -222,6 +222,24 @@ object SettingsContract {
         )
     }
 
+    object Constellation {
+        const val ID = "constellation"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val PHONE_NUMBER_VERIFICATION_ENABLED = "phone_number_verification_enabled"
+        const val PHONE_NUMBER_VERIFICATION_LAST_PACKAGE = "phone_number_verification_last_package"
+        const val PHONE_NUMBER_VERIFICATION_LAST_USED_AT_MS = "phone_number_verification_last_used_at_ms"
+        const val PHONE_NUMBER_VERIFICATION_LAST_SUCCESSFUL = "phone_number_verification_last_successful"
+
+        val PROJECTION = arrayOf(
+            PHONE_NUMBER_VERIFICATION_ENABLED,
+            PHONE_NUMBER_VERIFICATION_LAST_PACKAGE,
+            PHONE_NUMBER_VERIFICATION_LAST_USED_AT_MS,
+            PHONE_NUMBER_VERIFICATION_LAST_SUCCESSFUL,
+        )
+    }
+
     object Profile {
         const val ID = "profile"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
