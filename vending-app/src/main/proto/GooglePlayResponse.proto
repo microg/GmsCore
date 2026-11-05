@@ -43,6 +43,7 @@ message Payload {
     optional EnterpriseClientPolicyResponse enterpriseClientPolicyResponse = 135;
     optional AcknowledgePurchaseResponse acknowledgePurchaseResponse = 140;
     optional LicenseCheckV2Response licenseV2Response = 173;
+    optional GetBillingConfigResponse getBillingConfigResponse = 217;
     //    optional SyncApiResp syncResult = 183;
 }
 

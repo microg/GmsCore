@@ -667,10 +667,23 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     override fun getBillingConfig(apiVersion: Int, packageName: String?, bundle: Bundle?, callback: IInAppBillingGetBillingConfigCallback) {
         val packageName = PackageUtils.getAndCheckCallingPackage(context, packageName)!!
         Log.d(TAG, "getBillingConfig apiVersion:$apiVersion packageName:$packageName bundle:$bundle")
-        val result = resultBundle(BillingResponseCode.OK, "", bundleOf(
-            "BILLING_CONFIG" to JSONObject().apply { put("countryCode", Locale.getDefault().country) }.toString()
-        ))
-        callback.callback(result)
+        val result = try {
+            val deferred = CoroutineScope(Dispatchers.IO).async {
+                val account = getPreferredAccount(bundle)
+                createIAPCore(context, account, packageName)
+                    .getBillingConfig(apiVersion, bundleToMap(bundle)).toBundle()
+            }
+            runBlocking { deferred.await() }
+        } catch (e: Exception) {
+            Log.w(TAG, "Unable to retrieve billing configuration: ${e.javaClass.simpleName}")
+            resultBundle(BillingResponseCode.ERROR, "Unable to retrieve billing configuration")
+        }
+        Log.d(TAG, "getBillingConfig result:$result")
+        try {
+            callback.callback(result)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to deliver billing configuration callback")
+        }
     }
 
     override fun isAlternativeBillingOnlyAvailable(

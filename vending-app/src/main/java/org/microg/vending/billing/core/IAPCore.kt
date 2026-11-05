@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Base64
 import android.util.Log
+import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.vending.makeTimestamp
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
@@ -16,14 +17,16 @@ import org.microg.gms.utils.toBase64
 import org.microg.vending.billing.proto.*
 import java.io.IOException
 
+private const val TAG = "IAPCore"
+
 private val skuDetailsCache = IAPCacheManager(2048)
 
 private fun dumpAcquireBase64(marker: String, bytes: ByteArray) {
-    Log.d("IAPCore", "===== $marker raw base64 (${bytes.size} bytes) BEGIN =====")
+    Log.d(TAG, "===== $marker raw base64 (${bytes.size} bytes) BEGIN =====")
     Base64.encodeToString(bytes, 11)
         .chunked(200)
-        .forEach { Log.d("IAPCore", "[$marker] $it") }
-    Log.d("IAPCore", "===== $marker END =====")
+        .forEach { Log.d(TAG, "[$marker] $it") }
+    Log.d(TAG, "===== $marker END =====")
 }
 
 class IAPCore(
@@ -32,6 +35,47 @@ class IAPCore(
     private val clientInfo: ClientInfo,
     private val authData: AuthData
 ) {
+    suspend fun getBillingConfig(apiVersion: Int, extraParams: Map<String, Any>): Map<String, Any> {
+        val request = GetBillingConfigRequest.Builder().apply {
+            this.apiVersion = apiVersion
+            package_ = clientInfo.pkgName
+            this.extraParams = extraParams.map { (key, value) ->
+                MultiOfferSkuDetail.Builder().apply {
+                    this.key = key
+                    when (value) {
+                        is Boolean -> bv = value
+                        is Long -> iv = value
+                        is Int -> iv = value.toLong()
+                        is List<*> -> skuSerializedDocIds = SkuSerializedDocIds.Builder().apply {
+                            docIds = value.map { it.toString() }
+                        }.build()
+
+                        else -> sv = value.toString()
+                    }
+                }.build()
+            }
+        }.build()
+        val response = HttpClient().post(
+            GooglePlayApi.URL_BILLING_CONFIG,
+            headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
+            payload = request,
+            adapter = GoogleApiResponse.ADAPTER
+        ).payload?.getBillingConfigResponse ?: throw IOException("Missing billing configuration response")
+        Log.d(TAG, "getBillingConfig: $response")
+        response.failedResponse?.let { error ->
+            return mapOf(
+                "RESPONSE_CODE" to (error.statusCode ?: 0),
+                "DEBUG_MESSAGE" to (error.msg ?: "")
+            )
+        }
+        val config = response.billingConfig ?: throw IOException("Missing billing configuration")
+        return mapOf(
+            "RESPONSE_CODE" to BillingResponseCode.OK,
+            "DEBUG_MESSAGE" to "",
+            "BILLING_CONFIG" to config
+        )
+    }
+
     suspend fun requestAuthProofToken(password: String): String {
         return HttpClient().post(
             GooglePlayApi.URL_AUTH_PROOF_TOKENS,
@@ -123,11 +167,11 @@ class IAPCore(
             if (cacheEntry != null) {
                 val getSkuDetailsResult = GetSkuDetailsResult.parseFrom(GoogleApiResponse.ADAPTER.decode(cacheEntry).payload?.skuDetailsResponse)
                 if (getSkuDetailsResult.skuDetailsList != null && getSkuDetailsResult.skuDetailsList.isNotEmpty()) {
-                    Log.d("IAPCore", "getSkuDetails from cache ")
+                    Log.d(TAG, "getSkuDetails from cache ")
                     return getSkuDetailsResult
                 }
             }
-            Log.d("IAPCore", "getSkuDetails: ")
+            Log.d(TAG, "getSkuDetails: ")
             val response = HttpClient().post(
                 GooglePlayApi.URL_SKU_DETAILS,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
@@ -322,7 +366,7 @@ class IAPCore(
             }
             AcquireResult.parseFrom(params, acquireRequest, response.payload?.acquireResponse)
         } catch (e: Exception) {
-            Log.e("IAPCore", "acquireRequest failed: ${e.message}", e)
+            Log.e(TAG, "acquireRequest failed: ${e.message}", e)
             throw RuntimeException("Network request failed. message=${e.message}")
         }
     }
