@@ -23,6 +23,7 @@ import okhttp3.OkHttpClient
 import org.json.JSONObject
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.games.CommitSnapshotRevisionRequest
+import org.microg.gms.games.CommitSnapshotRevisionResponse
 import org.microg.gms.games.DeleteSnapshotInfo
 import org.microg.gms.games.EmptyResult
 import org.microg.gms.games.GetSnapshotRequest
@@ -193,7 +194,7 @@ object SnapshotsApiClient {
     }
 
     suspend fun commitSnapshotRevision(context: Context, oauthToken: String,
-                                       commitSnapshotRevisionRequest: CommitSnapshotRevisionRequest): EmptyResult {
+                                       commitSnapshotRevisionRequest: CommitSnapshotRevisionRequest): CommitSnapshotRevisionResponse {
         val snapshotClient = getGrpcClient(context, oauthToken)
         return withContext(Dispatchers.IO) { snapshotClient.CommitSnapshotRevision().execute(commitSnapshotRevisionRequest) }
     }
