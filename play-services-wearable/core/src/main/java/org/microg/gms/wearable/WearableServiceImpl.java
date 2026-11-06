@@ -31,6 +31,7 @@ import android.os.Looper;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -2007,19 +2008,98 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     }
 
-    @Override
-    public void endCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCall");
+    private void legacyTelephonyCallControl(String... methodNames) throws Exception {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (tm == null) throw new IllegalStateException("No TelephonyManager");
+        Method getITelephony = TelephonyManager.class.getDeclaredMethod("getITelephony");
+        getITelephony.setAccessible(true);
+        Object telephony = getITelephony.invoke(tm);
+        if (telephony == null) throw new IllegalStateException("getITelephony() returned null");
+        NoSuchMethodException lastNotFound = null;
+        for (String name : methodNames) {
+            try {
+                Method m = telephony.getClass().getMethod(name);
+                m.invoke(telephony);
+                return;
+            } catch (NoSuchMethodException e) {
+                lastNotFound = e;
+            }
+        }
+        if (lastNotFound != null) throw lastNotFound;
     }
 
+    @RequiresPermission(Manifest.permission.ANSWER_PHONE_CALLS)
+    @Override
+    public void endCall(IWearableCallbacks callbacks) throws RemoteException {
+        postMain(callbacks, () -> {
+            try {
+                boolean handled = false;
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                    if (tm != null) {
+                        try {
+                            tm.endCall();
+                            handled = true;
+                        } catch (NoSuchMethodError ignored) {
+                        }
+                    }
+                }
+                if (!handled) legacyTelephonyCallControl("endCall");
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (Exception e) {
+                Log.e(TAG, "endCall: exception during processing", e);
+                callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
+            }
+        });
+    }
+
+    @RequiresPermission(Manifest.permission.ANSWER_PHONE_CALLS)
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: acceptRingingCall");
+        postMain(callbacks, () -> {
+            try {
+                boolean handled = false;
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                    if (tm != null) {
+                        try {
+                            tm.acceptRingingCall();
+                            handled = true;
+                        } catch (NoSuchMethodError ignored) {
+                        }
+                    }
+                }
+                if (!handled) legacyTelephonyCallControl("answerRingingCall");
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (Exception e) {
+                Log.e(TAG, "acceptRingingCall: exception during processing", e);
+                callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
+            }
+        });
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: silenceRinger");
+        postMain(callbacks, () -> {
+            try {
+                boolean handled = false;
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                    if (tm != null) {
+                        try {
+                            tm.silenceRinger();
+                            handled = true;
+                        } catch (NoSuchMethodError ignored) {
+                        }
+                    }
+                }
+                if (!handled) legacyTelephonyCallControl("silenceRinger");
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (Exception | NoSuchMethodError e) {
+                Log.e(TAG, "silenceRinger: exception during processing", e);
+                callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
+            }
+        });
     }
 
     /*
