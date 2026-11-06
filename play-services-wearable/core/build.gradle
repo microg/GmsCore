@@ -7,14 +7,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'com.squareup.wire'
 
 dependencies {
     implementation project(':play-services-base-core')
 
     implementation project(':play-services-location')
     implementation project(':play-services-wearable')
-
-    implementation "org.microg:wearable:$wearableVersion"
 }
 
 android {
@@ -48,6 +47,12 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
+    }
+}
+
+wire {
+    java {
+
     }
 }
 

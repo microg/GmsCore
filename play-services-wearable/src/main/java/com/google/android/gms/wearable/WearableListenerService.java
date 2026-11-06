@@ -31,9 +31,11 @@ import com.google.android.gms.wearable.internal.AmsEntityUpdateParcelable;
 import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
 import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
+import com.google.android.gms.wearable.internal.ConsentResponse;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
+import com.google.android.gms.wearable.internal.IRpcResponseCallback;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.wearable.ChannelImpl;
@@ -157,105 +159,68 @@ public abstract class WearableListenerService extends Service implements Capabil
 
         @Override
         public void onDataChanged(final DataHolder data) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onDataChanged(new DataEventBuffer(data));
-                }
-            });
+            post(() -> WearableListenerService.this.onDataChanged(new DataEventBuffer(data)));
         }
 
         @Override
         public void onMessageReceived(final MessageEventParcelable messageEvent) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onMessageReceived(messageEvent);
-                }
-            });
+            post(() -> WearableListenerService.this.onMessageReceived(messageEvent));
         }
 
         @Override
         public void onPeerConnected(final NodeParcelable node) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onPeerConnected(node);
-                }
-            });
+            post(() -> WearableListenerService.this.onPeerConnected(node));
         }
 
         @Override
         public void onPeerDisconnected(final NodeParcelable node) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onPeerDisconnected(node);
-                }
-            });
+            post(() -> WearableListenerService.this.onPeerDisconnected(node));
         }
 
         @Override
         public void onConnectedNodes(final List<NodeParcelable> nodes) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onConnectedNodes(new ArrayList<Node>(nodes));
-                }
-            });
+            post(() -> WearableListenerService.this.onConnectedNodes(new ArrayList<Node>(nodes)));
         }
 
         @Override
         public void onConnectedCapabilityChanged(final CapabilityInfoParcelable capabilityInfo) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onCapabilityChanged(capabilityInfo);
-                }
-            });
+            post(() -> WearableListenerService.this.onCapabilityChanged(capabilityInfo));
         }
 
         @Override
         public void onNotificationReceived(final AncsNotificationParcelable notification) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onNotificationReceived(notification);
-                }
-            });
+            post(() -> WearableListenerService.this.onNotificationReceived(notification));
         }
 
         @Override
         public void onEntityUpdate(final AmsEntityUpdateParcelable update) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    WearableListenerService.this.onEntityUpdate(update);
-                }
-            });
+            post(() -> WearableListenerService.this.onEntityUpdate(update));
+        }
+
+        @Override
+        public void onRequest(final MessageEventParcelable messageEvent, final IRpcResponseCallback callback) throws RemoteException {
+            post(() -> WearableListenerService.this.onMessageReceived(messageEvent));
+            if (callback != null) callback.onResponse(false, null);
         }
 
         @Override
         public void onChannelEvent(final ChannelEventParcelable channelEvent) throws RemoteException {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    switch (channelEvent.eventType) {
-                        case 1:
-                            WearableListenerService.this.onChannelOpened(new ChannelImpl(channelEvent.channel));
-                            break;
-                        case 2:
-                            WearableListenerService.this.onChannelClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
-                            break;
-                        case 3:
-                            WearableListenerService.this.onInputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
-                            break;
-                        case 4:
-                            WearableListenerService.this.onOutputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
-                            break;
-                        default:
-                            Log.w(TAG, "Unknown ChannelEvent.eventType");
-                    }
+            post(() -> {
+                switch (channelEvent.eventType) {
+                    case 1:
+                        WearableListenerService.this.onChannelOpened(new ChannelImpl(channelEvent.channel));
+                        break;
+                    case 2:
+                        WearableListenerService.this.onChannelClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                        break;
+                    case 3:
+                        WearableListenerService.this.onInputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                        break;
+                    case 4:
+                        WearableListenerService.this.onOutputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                        break;
+                    default:
+                        Log.w(TAG, "Unknown ChannelEvent.eventType");
                 }
             });
         }

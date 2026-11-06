@@ -26,6 +26,22 @@ import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
 
+import com.google.android.gms.wearable.internal.ConsentResponse;
+import com.google.android.gms.wearable.internal.GetTermsResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeyByAccountResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeysResponse;
+import com.google.android.gms.wearable.internal.GetRestoreStateResponse;
+import com.google.android.gms.wearable.internal.BooleanResponse;
+import com.google.android.gms.wearable.internal.GetCompanionPackageForNodeResponse;
+import com.google.android.gms.wearable.internal.RpcResponse;
+import com.google.android.gms.wearable.internal.GetEapIdResponse;
+import com.google.android.gms.wearable.internal.PerformEapAkaResponse;
+import com.google.android.gms.wearable.internal.GetNodeIdResponse;
+import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
+import com.google.android.gms.wearable.internal.GetAppThemeResponse;
+import com.google.android.gms.wearable.internal.AppRecommendationsResponse;
+import com.google.android.gms.wearable.internal.GetRestoreSupportedResponse;
+
 interface IWearableCallbacks {
     // Config
     void onGetConfigResponse(in GetConfigResponse response) = 1;
@@ -49,6 +65,7 @@ interface IWearableCallbacks {
     // Channels
     void onOpenChannelResponse(in OpenChannelResponse response) = 13;
     void onCloseChannelResponse(in CloseChannelResponse response) = 14;
+    void onCloseChannelResponse2(in CloseChannelResponse response) = 15; // found two entries in google gms
     void onGetChannelInputStreamResponse(in GetChannelInputStreamResponse response) = 16;
     void onGetChannelOutputStreamResponse(in GetChannelOutputStreamResponse response) = 17;
     void onChannelReceiveFileResponse(in ChannelReceiveFileResponse response) = 18;
@@ -62,4 +79,27 @@ interface IWearableCallbacks {
     void onGetAllCapabilitiesResponse(in GetAllCapabilitiesResponse response) = 22;
     void onAddLocalCapabilityResponse(in AddLocalCapabilityResponse response) = 25;
     void onRemoveLocalCapabilityResponse(in RemoveLocalCapabilityResponse response) = 26;
+
+    // Terms of service
+    void onGetTermsResponse(in GetTermsResponse response) = 48;
+    void onConsentResponse(in ConsentResponse response) = 37;
+
+    // Fastpair
+    void onGetFastpairAccountKeyByAccountResponse(in GetFastpairAccountKeyByAccountResponse response) = 49;
+    void onGetFastpairAccountKeysResponse(in GetFastpairAccountKeysResponse response) = 47;
+
+    // Uncategorized
+    void onGetRestoreStateResponse(in GetRestoreStateResponse response) = 46;
+    void onBooleanResponse(in BooleanResponse response) = 45;
+    void onGetCompanionPackageForNodeResponse(in GetCompanionPackageForNodeResponse response) = 36;
+    void onRpcResponse(in RpcResponse response) = 33;
+    void onGetEapIdResponse(in GetEapIdResponse response) = 34;
+    void onPerformEapAkaResponse(in PerformEapAkaResponse response) = 35;
+    void onGetNodeIdResponse(in GetNodeIdResponse response) = 38;
+    void onAppRecommendationsResponse(in AppRecommendationsResponse response) = 39;
+    void onGetAppThemeResponse(in GetAppThemeResponse response) = 40;
+    void onGetBackupSettingsSupportedResponse(in GetBackupSettingsSupportedResponse response) = 41;
+    void onGetRestoreSupportedResponse(in GetRestoreSupportedResponse response) = 42;
+
 }
+

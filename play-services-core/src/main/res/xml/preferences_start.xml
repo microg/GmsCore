@@ -67,6 +67,10 @@
             android:icon="@drawable/ic_map_marker"
             android:key="pref_location"
             android:title="@string/service_name_location"/>
+        <Preference
+            android:icon="@drawable/ic_watch"
+            android:key="pref_wear"
+            android:title="@string/service_name_wear" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
         <Preference
