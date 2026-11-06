@@ -440,6 +440,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
                         sendMessageResponse.statusCode = 4000;
                     }
                 } catch (Exception e) {
+                    Log.w(TAG, "sendMessage: failed node=" + targetNodeId + " path=" + path, e);
                     sendMessageResponse.statusCode = 8;
                 }
                 mainHandler.post(() -> {

@@ -37,22 +37,18 @@ public class NetworkConnectionManager implements Cloneable {
         connectivityReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (!ConnectivityManager.EXTRA_NO_CONNECTIVITY.equals(intent.getAction())) {
+                if (!ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()))
                     return;
-                }
-
-                if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+                if (intent.getBooleanExtra(
+                        ConnectivityManager.EXTRA_NO_CONNECTIVITY, false))
                     return;
-                }
 
                 onNetworkAvailable();
             }
         };
 
-        context.registerReceiver(
-                connectivityReceiver,
-                new IntentFilter(ConnectivityManager.EXTRA_NO_CONNECTIVITY)
-        );
+        context.registerReceiver(connectivityReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         Log.d(TAG, "initialised");
     }

@@ -559,6 +559,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             record.deleted = true;
             record.assetsAreReady = true;
             record.dataItem.data = null;
+            record.source = clockworkNodePreferences.getLocalNodeId();
             record.seqId = clockworkNodePreferences.getNextSeqId();
             record.v1SeqId = record.seqId;
             updateRecord(db, cursor.getString(0), record);

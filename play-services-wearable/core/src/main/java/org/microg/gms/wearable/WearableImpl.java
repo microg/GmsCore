@@ -16,6 +16,8 @@
 
 package org.microg.gms.wearable;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
@@ -89,10 +91,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import okio.ByteString;
@@ -121,7 +125,7 @@ public class WearableImpl {
     private final Map<String, Runnable> pendingDisconnects = new ConcurrentHashMap<>();
     private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
     private final AssetManager assetManager = new AssetManager(this);
-    private final Map<String, PendingRpcRequest> pendingRpcRequests = new ConcurrentHashMap<>();
+    private final Map<String, LinkedList<PendingRpcRequest>> pendingRpcRequests = new ConcurrentHashMap<>();
     private final Map<String, WearableWriter> peerWriters = new ConcurrentHashMap<>();
     public Handler networkHandler;
     private RpcHelper rpcHelper;
@@ -144,6 +148,7 @@ public class WearableImpl {
     private WearableWifiService wearWifiService;
 
     private RpcMessageTransport rpcTransport;
+    private TrustedPeersService trustedPeersService;
 
     private final Map<String, ConnectionRestrictions> nodeRestrictions = new ConcurrentHashMap<>();
 
@@ -190,8 +195,8 @@ public class WearableImpl {
         new Thread(() -> {
             try {
                 networkHandlerLock.await();
-                TrustedPeersService trustedPeers = new TrustedPeersService(context);
-                channelManager = new ChannelManager(networkHandler, this, getLocalNodeId(), trustedPeers);
+                this.trustedPeersService = new TrustedPeersService(context);
+                channelManager = new ChannelManager(networkHandler, this, getLocalNodeId(), trustedPeersService);
                 WearableChannelCallbacks callbacks = new WearableChannelCallbacks();
                 channelManager.setChannelCallbacks(callbacks);
                 channelManager.setCallbacks(ChannelAssetApiEnum.ORIGIN_CHANNEL_API, callbacks);
@@ -326,6 +331,10 @@ public class WearableImpl {
         record.seqId = record.v1SeqId;
         nodeDatabase.putRecord(record);
         return record;
+    }
+
+    public TrustedPeersService getTrustedPeersService() {
+        return trustedPeersService;
     }
 
     public void dispatchDataChanged(DataItemRecord record) {
@@ -993,7 +1002,12 @@ public class WearableImpl {
     public boolean invokeRequestListeners(Intent intent, MessageEventParcelable event, IRpcResponseCallback responseCallback) {
         boolean matched = false;
 
+        final String targetPackage = intent != null ? intent.getPackage() : null;
+
         for (String packageName : new ArrayList<>(listeners.keySet())) {
+            if (targetPackage != null && !targetPackage.equals(packageName)){
+                continue;
+            }
             List<ListenerInfo> packageListeners = listeners.get(packageName);
             if (packageListeners == null) {
                 continue;
@@ -1063,6 +1077,63 @@ public class WearableImpl {
         }
 
         return false;
+    }
+
+    public void invokeListenersForPackage(String target, Intent intent, ListenerInvoker invoker) {
+        if (TextUtils.isEmpty(target)){
+            Log.w(TAG, "invokeListenersForPackage: no target package, dropping " + intent);
+            return;
+        }
+
+        List<ListenerInfo> registered = listeners.get(target);
+        if (registered != null) {
+            for (ListenerInfo info : registered) {
+                if (!matchesListenerFilters(info, intent))
+                    continue;
+
+                try {
+                    invoker.invoke(info.listener);
+                } catch (RemoteException e) {
+                    Log.w(TAG, "invokeListenersForPackage: Registered listener at package " + target
+                            + " failed, removed", e);
+                    registered.remove(info);
+                }
+            }
+
+            if (registered.isEmpty()) {
+                listeners.remove(target);
+            }
+        }
+
+        if (intent != null) {
+            try {
+                invoker.invoke(
+                        RemoteListenerProxy.get(context, intent,
+                                IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER"));
+            } catch (RemoteException e) {
+                Log.w(TAG, "invokeListenersForPackage: Failed to deliver message to " + intent, e);
+            }
+        }
+    }
+
+    private boolean matchesListenerFilters(ListenerInfo info, Intent intent) {
+        if (info.filters == null || info.filters.length == 0)
+            return true;
+
+        if (intent == null)
+            return false;
+
+        for (IntentFilter filter : info.filters) {
+            if (filter.match(context.getContentResolver(), intent, false, TAG) > 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean isPackageAllowedForNode(String nodeId, String packageName) {
+        ConnectionRestrictions restrictions = nodeId != null ? nodeRestrictions.get(nodeId) : null;
+        return ConnectionRestrictionFilter.isPackageAllowed(restrictions, packageName);
     }
 
     public void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
@@ -1203,7 +1274,7 @@ public class WearableImpl {
     public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
         List<ListenerInfo> list = listeners.get(packageName);
         if (list == null) {
-            list = new ArrayList<>();
+            list = new CopyOnWriteArrayList<>();
             listeners.put(packageName, list);
         }
 
@@ -1261,6 +1332,8 @@ public class WearableImpl {
             default:
                 Log.w(TAG, "unimplemented config type: " + config.type);
         }
+
+        notifyConnectionsChanged();
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -1288,11 +1361,13 @@ public class WearableImpl {
             default:
                 Log.w(TAG, "unimplemented config type: " + config.type);
         }
+        notifyConnectionsChanged();
     }
 
     public void deleteConnection(String name) {
         configDatabase.deleteConfiguration(name);
         configurationsUpdated = true;
+        notifyConnectionsChanged();
     }
 
     public void updateConfiguration(ConnectionConfiguration config) {
@@ -1463,6 +1538,31 @@ public class WearableImpl {
         }
     }
 
+    public boolean isBleTransportEnabled() {
+        return context.getSharedPreferences("wearable_ble", MODE_PRIVATE)
+                .getBoolean("ble_transport_enabled", false);
+    }
+
+    public boolean useBleClient(ConnectionConfiguration configuration) {
+        return configuration.type == TYPE_BLUETOOTH_RFCOMM
+                && configuration.role == ROLE_CLIENT
+                && configuration.address != null
+                && configuration.name != null
+                && android.os.Build.VERSION.SDK_INT >= 29
+                && isBleTransportEnabled();
+    }
+
+    private void handleBleClient(ConnectionConfiguration configuration, boolean enabled) {
+        if (bleManager == null)
+            bleManager = new BleManager(context, this);
+
+        if (enabled) {
+            bleManager.enableClient(configuration);
+        } else {
+            bleManager.disableClient(configuration);
+        }
+    }
+
     private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
         if (networkManager == null) {
             networkManager = new NetworkConnectionManager(context, this);
@@ -1476,6 +1576,15 @@ public class WearableImpl {
     }
 
     private void handleLegacy(ConnectionConfiguration config, boolean enabled) {
+        if (useBleClient(config)) {
+            handleBleClient(config, enabled);
+            return;
+        }
+
+        if (!enabled && config.role == ROLE_CLIENT && bleManager != null) {
+            bleManager.disableClient(config);
+        }
+
         try {
             if (config.role == ROLE_CLIENT) {
                 if (enabled) {
@@ -1700,17 +1809,23 @@ public class WearableImpl {
         targetNodeId = resolveToWearableNodeId(targetNodeId);
 
         if (activeConnections.containsKey(targetNodeId)) {
-            ConnectionConfiguration cfg = getConfigurationByPeerNodeId(targetNodeId);
-            if (cfg == null)
-                cfg = getConfigurationByNodeId(targetNodeId);
+//            ConnectionConfiguration cfg = getConfigurationByPeerNodeId(targetNodeId);
+//            if (cfg == null)
+//                cfg = getConfigurationByNodeId(targetNodeId);
+//
+//            if (cfg != null
+//                    && cfg.packageName != null
+//                    && packageName != null
+//                    && !packageName.equals(cfg.packageName)) {
+//                Log.w(TAG, "sendMessage: refusing delivery of " + path
+//                        + " to node " + targetNodeId + " - owned by " + cfg.packageName
+//                        + ", caller is " + packageName);
+//                return -1;
+//            }
 
-            if (cfg != null
-                    && cfg.packageName != null
-                    && packageName != null
-                    && !packageName.equals(cfg.packageName)) {
-                Log.w(TAG, "sendMessage: refusing delivery of " + path
-                        + " to node " + targetNodeId + " - owned by " + cfg.packageName
-                        + ", caller is " + packageName);
+            if (!isPackageAllowedForNode(targetNodeId, packageName)) {
+                Log.w(TAG, "sendMessage: package " + packageName + " is not allowed to reach node "
+                        + targetNodeId + " (connection restrictions), dropping " + path);
                 return -1;
             }
 
@@ -1728,7 +1843,7 @@ public class WearableImpl {
                         break;
                     }
                 }
-                if (nearby) {
+                if (nearby && isPackageAllowedForNode(e.getKey(), packageName)) {
                     lastResult = writeToConnection(packageName, e.getKey(), e.getValue(), path, data, options, requiresResponse);
                 }
             }
@@ -1741,7 +1856,7 @@ public class WearableImpl {
 
     private int writeToConnection(String packageName, String nodeId, WearableConnection connection,
                                   String path, byte[] data, MessageOptions options, boolean requiresResponse) {
-        PendingRpcRequest pending = consumePendingRpcRequest(nodeId, path);
+        PendingRpcRequest pending = requiresResponse ? null : consumePendingRpcRequest(nodeId, path, packageName);
         Log.d(TAG, "writeToConnection: node=" + nodeId + " path=" + path
                 + " package=" + packageName + " pending=" + (pending != null));
 
@@ -1856,6 +1971,23 @@ public class WearableImpl {
             networkHandlerThread = null;
         }
 
+        if (bleManager != null) {
+            try {
+                bleManager.close();
+            } catch (Exception e) {
+                Log.w(TAG, "bleManager close failed", e);
+            }
+            bleManager = null;
+        }
+        if (networkManager != null) {
+            try {
+                networkManager.close();
+            } catch (Exception e) {
+                Log.w(TAG, "networkManager close failed", e);
+            }
+            networkManager = null;
+        }
+
         if (bluetoothClient != null) {
             bluetoothClient.close();
             bluetoothClient = null;
@@ -1867,6 +1999,36 @@ public class WearableImpl {
         if (sct != null) {
             sct.close();
             sct = null;
+        }
+    }
+
+    private volatile Runnable onConnectionsChanged;
+
+    public void setOnConnectionsChanged(Runnable r) {
+        onConnectionsChanged = r;
+    }
+
+    private void notifyConnectionsChanged() {
+        Runnable r = onConnectionsChanged;
+        if (r != null) r.run();
+    }
+
+    public boolean hasEnabledConnections() {
+        for (ConnectionConfiguration c : configDatabase.getAllConfigurations()) {
+            if (c.enabled && c.type != TYPE_CLOUD) return true;
+        }
+        return false;
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    public void restoreEnabledConnections() {
+        for (ConnectionConfiguration c : configDatabase.getAllConfigurations()) {
+            if (!c.enabled || c.type == TYPE_CLOUD) continue;
+            try {
+                enableConnection(c.name);
+            } catch (Exception e) {
+                Log.w(TAG, "restoreEnabledConnections: failed for " + c.name, e);
+            }
         }
     }
 
@@ -1885,25 +2047,70 @@ public class WearableImpl {
         return nodeId;
     }
 
+    private static final int MAX_PENDING_RPC_PER_PATH = 16;
+
     public void storePendingRpcRequest(PendingRpcRequest req) {
-        pendingRpcRequests.put(req.peerNodeId + ":" + req.path, req);
+        String key = req.peerNodeId + ":" + req.path;
+        synchronized (pendingRpcRequests) {
+            LinkedList<PendingRpcRequest> queue = pendingRpcRequests.get(key);
+            if (queue == null) {
+                queue = new java.util.LinkedList<>();
+                pendingRpcRequests.put(key, queue);
+            }
+            while (queue.size() >= MAX_PENDING_RPC_PER_PATH) {
+                PendingRpcRequest dropped = queue.removeFirst();
+                Log.w(TAG, "storePendingRpcRequest: queue full, dropping requestId=" + dropped.reqId
+                    + " path=" + dropped.path + " peer=" + dropped.peerNodeId);
+            }
+            queue.addLast(req);
+        }
+
         Log.d(TAG, "storePendingRpcRequest: requestId=" + req.reqId
                 + " path=" + req.path + " peer=" + req.peerNodeId);
     }
 
-    public PendingRpcRequest consumePendingRpcRequest(String targetNodeId, String path) {
-        return pendingRpcRequests.remove(targetNodeId + ":" + path);
+    public PendingRpcRequest consumePendingRpcRequest(String targetNodeId, String path, String packageName) {
+        String key = targetNodeId + ":" + path;
+        synchronized (pendingRpcRequests) {
+            LinkedList<PendingRpcRequest> queue = pendingRpcRequests.get(key);
+
+            if (queue == null)
+                return null;
+
+            Iterator<PendingRpcRequest> it = queue.iterator();
+            while (it.hasNext()) {
+                PendingRpcRequest p = it.next();
+                if (TextUtils.equals(p.packageName, packageName)) {
+                    it.remove();
+                    if (queue.isEmpty()) pendingRpcRequests.remove(key);
+                    return p;
+                }
+            }
+            return null;
+        }
+    }
+
+    public boolean removePendingRpcRequest(PendingRpcRequest req) {
+        String key = req.peerNodeId + ":" + req.path;
+
+        synchronized (pendingRpcRequests) {
+            LinkedList<PendingRpcRequest> queue = pendingRpcRequests.get(key);
+            if (queue == null || !queue.remove(req)) return false;
+            if (queue.isEmpty()) pendingRpcRequests.remove(key);
+            return true;
+        }
     }
 
     public void clearPendingRpcRequestsForPeer(String peerNodeId) {
-        Iterator<Map.Entry<String, PendingRpcRequest>> it =
-                pendingRpcRequests.entrySet().iterator();
+        synchronized (pendingRpcRequests) {
+            Iterator<Map.Entry<String, LinkedList<PendingRpcRequest>>> it =
+                    pendingRpcRequests.entrySet().iterator();
 
-        while (it.hasNext()) {
-            Map.Entry<String, PendingRpcRequest> e = it.next();
-
-            if (e.getKey().startsWith(peerNodeId + ":")) {
-                it.remove();
+            while (it.hasNext()) {
+                Map.Entry<String, LinkedList<PendingRpcRequest>> e = it.next();
+                if (e.getKey().startsWith(peerNodeId + ":")) {
+                    it.remove();
+                }
             }
         }
     }

@@ -217,7 +217,28 @@ public class DataTransport {
             return;
         }
 
+        if (repairStalePeerState(remote)) {
+            sendSyncStart();
+        }
+
         startSyncThread(new HashMap<>(remote));
+    }
+
+    private boolean repairStalePeerState(Map<String, Long> remote) {
+        Long peerOwnSeqId = remote.get(peerNodeId);
+        if (peerOwnSeqId == null)
+            return false;
+
+        Long storedSeqId = wearable.getNodeDatabase().getAllCurrentSeqIds().get(peerNodeId);
+        if (storedSeqId == null || storedSeqId >= peerOwnSeqId)
+            return false;
+
+        Log.w(TAG, "repairStalePeerState: peer=" + peerNodeId + " reports own seqId=" + peerOwnSeqId
+                + " but stored sedId=" + storedSeqId + "; dropping stored items and requesting resync");
+
+        wearable.getNodeDatabase().deleteAllItemsBySourceNode(peerNodeId);
+
+        return true;
     }
 
     private void startSyncThread(Map<String, Long> remotePeers) {

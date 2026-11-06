@@ -311,7 +311,8 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onSetDataItem(SetDataItem setDataItem) {
         Log.d(TAG, "onSetDataItem: " + setDataItem);
-        wearable.putDataItem(DataItemRecord.fromSetDataItem(setDataItem));
+//        wearable.putDataItem(DataItemRecord.fromSetDataItem(setDataItem));
+        handleSetDataItem(getConnection(), peerNodeId, setDataItem);
     }
 
     @Override
@@ -332,6 +333,12 @@ public class MessageHandler extends ServerMessageListener {
         final String path = request.path;
         final String packageName = request.packageName;
         final String sourceNodeId = TextUtils.isEmpty(request.sourceNodeId) ? peerNodeId : request.sourceNodeId;
+
+        if (peerNodeId != null && !wearable.isPackageAllowedForNode(peerNodeId, packageName)) {
+            Log.w(TAG, "onRpcRequest: dropping " + path + " from node " + peerNodeId
+                    + ", package " + packageName + " is not allowed by connection restrictions");
+            return;
+        }
 
         if (!Boolean.TRUE.equals(request.requiresResponse) && request.senderRequestId != null && peerNodeId != null) {
 
@@ -397,11 +404,11 @@ public class MessageHandler extends ServerMessageListener {
             final String pendingPath = path;
 
             wearable.networkHandler.postDelayed(() -> {
-                WearableImpl.PendingRpcRequest stillPending = wearable.consumePendingRpcRequest(pendingPeer, pendingPath);
-
-                if (stillPending == null) {
+                if (!wearable.removePendingRpcRequest(pending)) {
                     return;
                 }
+
+                final WearableImpl.PendingRpcRequest stillPending = pending;
 
                 Log.d(TAG, "onRpcRequest: auto-ACK path=" + pendingPath + " requestId=" + requestId);
 
@@ -617,7 +624,8 @@ public class MessageHandler extends ServerMessageListener {
         Log.d(TAG, "handleSetDataItem from " + sourceNodeId + ": " + setDataItem.uri);
 
         DataItemRecord record = DataItemRecord.fromSetDataItem(setDataItem);
-        record.source = sourceNodeId;
+        if (TextUtils.isEmpty(record.source))
+            record.source = sourceNodeId;
 
         List<Asset> missingAssets = new ArrayList<>();
         if (setDataItem.assets != null) {
@@ -633,10 +641,16 @@ public class MessageHandler extends ServerMessageListener {
 
         record.assetsAreReady = missingAssets.isEmpty();
 
+        AppKey rawKey = new AppKey(record.packageName, record.signatureDigest);
+        AppKey resolvedKey = wearable.getTrustedPeersService().resolveAppKey(sourceNodeId, rawKey);
+        record.packageName = resolvedKey.packageName;
+        record.signatureDigest = resolvedKey.signatureDigest;
+
         wearable.putDataItem(record);
 
         if (!missingAssets.isEmpty()) {
-            fetchMissingAssets(connection, record, missingAssets);
+            if (connection != null)
+                fetchMissingAssets(connection, record, missingAssets);
         }
     }
 
@@ -743,10 +757,16 @@ public class MessageHandler extends ServerMessageListener {
             handleDataSyncProgress(messageEvent);
             return;
         }
+        if (TextUtils.isEmpty(packageName)) {
+            Log.w(TAG, "sendMessageReceived: no target package for "
+                    + messageEvent.getPath() + ", dropping");
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
         intent.setData(new Uri.Builder().scheme("wear").authority(messageEvent.getSourceNodeId()).path(messageEvent.getPath()).build());
-        wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
+        wearable.invokeListenersForPackage(packageName, intent,
+                listener -> listener.onMessageReceived(messageEvent));
     }
 
     private void handleDataSyncProgress(MessageEventParcelable messageEvent) {
