@@ -29,7 +29,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
     }
 
     override fun snapshot(map: Map<Any?, Any?>?): ByteArray {
-        Log.d(TAG, "snapshot($map)")
+        Log.d(TAG, "snapshot()")
         val paramsMap = mutableMapOf("flow" to flow, "source" to packageName)
         for (key in request?.bundle?.keySet().orEmpty()) {
             request?.bundle?.getString(key)?.let { paramsMap["x-request-$key"] = it }
@@ -37,7 +37,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
         val params = paramsMap.map { Uri.encode(it.key) + "=" + Uri.encode(it.value) }.joinToString("&")
         val connection = URL("$url?$params").openConnection() as HttpURLConnection
         val payload = map.orEmpty().map { Uri.encode(it.key as String) + "=" + Uri.encode(it.value as String) }.joinToString("&")
-        Log.d(TAG, "POST ${connection.url}: $payload")
+        Log.d(TAG, "Sending remote DroidGuard snapshot")
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
         connection.requestMethod = "POST"
         connection.doInput = true
@@ -54,7 +54,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
     }
 
     override fun initWithRequest(flow: String?, request: DroidGuardResultsRequest?): DroidGuardInitReply? {
-        Log.d(TAG, "initWithRequest($flow, $request)")
+        Log.d(TAG, "initWithRequest($flow)")
         this.flow = flow
         this.request = request
         return null
