@@ -30,7 +30,6 @@ class HardwareAttestationBlockingProvider(
         private var currentlyEnabled = false
         private lateinit var originalProvider: Provider
         private const val PROVIDER_NAME = "AndroidKeyStore"
-        private const val FIELD_KEY_STORE_SPI = "keyStoreSpi"
 
         @JvmStatic
         fun ensureEnabled(enabled: Boolean = true) {
@@ -39,8 +38,13 @@ class HardwareAttestationBlockingProvider(
                 if (enabled) {
                     Log.d(TAG, "Hardware attestation blocking enabled")
                     originalProvider = Security.getProvider(PROVIDER_NAME)
-                    val realKeystore = KeyStore.getInstance(PROVIDER_NAME)
-                    val realSpi = realKeystore.get<KeyStoreSpi>(FIELD_KEY_STORE_SPI)
+                    // Instantiate the SPI through the provider's own JCA service
+                    // entry instead of reading KeyStore's private keyStoreSpi
+                    // field — reflective field access fails with
+                    // InaccessibleObjectException on strict-module runtimes.
+                    val realSpi = originalProvider.getService("KeyStore", PROVIDER_NAME)
+                        ?.newInstance(null) as? KeyStoreSpi
+                        ?: throw KeyStoreException("$PROVIDER_NAME service missing on ${originalProvider.name}")
 
                     val newProvider = HardwareAttestationBlockingProvider(originalProvider, realSpi)
                     Security.removeProvider(PROVIDER_NAME)
@@ -92,10 +96,4 @@ class HardwareAttestationBlockingKeyStore(private val realSpi: KeyStoreSpi) : Ke
     companion object {
         var realSpi: KeyStoreSpi? = null
     }
-}
-
-private fun <T> Any.get(name: String) = this::class.java.getDeclaredField(name).let { field ->
-    field.isAccessible = true
-    @Suppress("unchecked_cast")
-    field.get(this) as T
 }

@@ -1,0 +1,13 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      Current OkHttp's Android artifact declares API 21. This override is limited
+      to the instrumentation APK, whose tests run on API 21+, and does not change
+      the production library's API 19 minimum.
+    -->
+    <uses-sdk tools:overrideLibrary="okhttp.okhttp3,androidx.startup" />
+</manifest>
