@@ -35,6 +35,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import java.util.concurrent.TimeUnit
 
 /**
  * Drives Ts43Challenge.verify -> EapAkaService -> ServiceEntitlementBuilder -> OkHttp against a
@@ -90,11 +91,24 @@ class Ts43VerifierSeamTest {
     private fun eapRelay(packet: ByteArray) =
         JSONObject().put("eap-relay-packet", Base64.encodeToString(packet, Base64.NO_WRAP)).toString()
 
-    private fun akaChallenge(id: Byte): ByteArray {
+    private fun akaChallenge(id: Byte, identity: String): ByteArray {
         val attrs = byteArrayOf(1, 5, 0, 0) + ByteArray(16) { 0x55 } +
-                byteArrayOf(2, 5, 0, 0) + ByteArray(16) { 0x66 }
+                byteArrayOf(2, 5, 0, 0) + ByteArray(16) { 0x66 } +
+                byteArrayOf(11, 5, 0, 0) + ByteArray(16)
         val len = 8 + attrs.size
-        return byteArrayOf(1, id, (len shr 8).toByte(), len.toByte(), 23, 1, 0, 0) + attrs
+        val packet = byteArrayOf(1, id, (len shr 8).toByte(), len.toByte(), 23, 1, 0, 0) + attrs
+        val kAut = Fips186Prf.deriveKeys(identity.toByteArray(), ik, ck)["K_aut"]!!
+        val macOffset = packet.size - 16
+        val serverMac = Mac.getInstance("HmacSHA1")
+            .apply { init(SecretKeySpec(kAut, "HmacSHA1")) }
+            .doFinal(packet)
+            .copyOf(16)
+        serverMac.copyInto(packet, macOffset)
+        return packet
+    }
+
+    private fun takeRequest() = requireNotNull(server.takeRequest(5, TimeUnit.SECONDS)) {
+        "Expected TS.43 HTTP request"
     }
 
     private fun macValid(packet: ByteArray, identity: String): Boolean {
@@ -155,19 +169,19 @@ class Ts43VerifierSeamTest {
     @Test
     fun akaChallenge_clientResponseVerifiesAgainstAnnouncedIdentity_thenOdsaErrorIsReported() {
         val realm = "nai.epc.carrier.example"
-        server.enqueue(MockResponse().setBody(eapRelay(akaChallenge(0x21))))
+        server.enqueue(MockResponse().setBody(eapRelay(akaChallenge(0x21, "0$imsi@$realm"))))
         // After a correct AKA response the entitlement server issues a token; the ODSA call then fails
         server.enqueue(MockResponse().setBody("{\"Token\":{\"token\":\"tok-1\"}}"))
         server.enqueue(MockResponse().setResponseCode(500))
 
         val response = challenge(realm).verify(context, -1).ts43_challenge_response!!
 
-        val first = server.takeRequest()
+        val first = takeRequest()
         assertEquals("GET", first.method)
         val eapId = first.requestUrl!!.queryParameter("EAP_ID")
         assertEquals("0$imsi@$realm", eapId)
 
-        val second = server.takeRequest()
+        val second = takeRequest()
         assertEquals("POST", second.method)
         assertEquals("application/vnd.gsma.eap-relay.v1.0+json", second.getHeader("Content-Type")?.substringBefore(';'))
         val sent = Base64.decode(JSONObject(second.body.readUtf8()).getString("eap-relay-packet"), Base64.DEFAULT)
@@ -175,7 +189,7 @@ class Ts43VerifierSeamTest {
         assertEquals(0x21, sent[1].toInt())
         assertTrue("AT_MAC must verify for the EAP_ID the client announced", macValid(sent, eapId!!))
 
-        val third = server.takeRequest()
+        val third = takeRequest()
         assertEquals("tok-1", third.requestUrl!!.queryParameter("token"))
         assertEquals("GetPhoneNumber", third.requestUrl!!.queryParameter("operation"))
 
