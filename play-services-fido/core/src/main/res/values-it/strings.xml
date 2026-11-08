@@ -2,7 +2,7 @@
 <resources>
     <string name="fido_welcome_button_get_started">Inizia</string>
     <string name="fido_usb_prompt_body">Collega la tua chiave di sicurezza alla porta USB, o collegala con un cavo USB. Se la tua chiave ha un pulsante o un disco dorato, premilo ora.</string>
-    <string name="fido_transport_usb_wait_connect_body">Per favore, collega la tua chiave di sicurezza via USB.</string>
+    <string name="fido_transport_usb_wait_connect_body">Collega la tua chiave di sicurezza USB.</string>
     <string name="fido_nfc_prompt_body">Tieni appoggiata la tua chiave sul retro del tuo dispositivo fino a quando non smette di vibrare</string>
     <string name="fido_welcome_body">Usare la tua chiave di sicurezza con %1$s aiuta a proteggere i tuoi dati personali.</string>
     <string name="fido_welcome_title">Usa la tua chiave di sicurezza con %1$s</string>
@@ -13,7 +13,7 @@
     <string name="fido_transport_selection_title">Scegli come usare la tua chiave di sicurezza</string>
     <string name="fido_biometric_prompt_title">Verifica la tua identità</string>
     <string name="fido_usb_title">Collega la tua chiave di sicurezza via USB</string>
-    <string name="fido_transport_usb_wait_confirm_body">Per favore, premi l\'anello o il disco dorato su %1$s.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Premi l\'anello o il disco dorato su %1$s.</string>
     <string name="fido_welcome_privileged_info">%1$s agisce come browser fidato per usare la tua chiave di sicurezza con %2$s.</string>
     <string name="fido_nfc_title">Collega la tua chiave di sicurezza via NFC</string>
     <string name="fido_transport_selection_bluetooth">Usa chiave di sicurezza via Bluetooth</string>
@@ -28,4 +28,6 @@
     <string name="fido_sign_in_selection_title">Seleziona un account</string>
     <string name="fido_sign_in_selection_continue">per continuare ad utilizzare %1$s</string>
     <string name="fido_sign_in_selection_description">Passkey</string>
+    <string name="fido_qr_code_title">Scansiona il codice QR con un altro dispositivo</string>
+    <string name="fido_transport_selection_hybrid">Usa un altro dispositivo</string>
 </resources>

@@ -271,7 +271,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="pref_vending_asset_delivery_switch">Abilita il download delle risorse su richiesta</string>
     <string name="pref_vending_asset_delivery_summary">Consenti lo scaricamento di risorse aggiuntive su richiesta delle app che utilizzano Play Asset Delivery</string>
     <string name="pref_vending_asset_device_sync_summary">Le app che utilizzano Play Asset Delivery scaricheranno delle risorse aggiuntive in base alle informazioni del dispositivo in uso.</string>
-    <string name="pref_vending_asset_device_sync_switch">Abilita sincronizzazione delle informazioni del dispositivo</string>
+    <string name="pref_vending_asset_device_sync_switch">Abilita la sincronizzazione delle informazioni del dispositivo</string>
     <string name="games_delete_snapshot_dialog_cancel">Annulla</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
     <string name="games_delete_snapshot_error">Eliminazione fallita, riprova più tardi</string>
@@ -385,11 +385,11 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="family_management_invite_sent_date_format">Invito inviato il %s</string>
     <string name="family_management_invite_send">Invito inviato</string>
     <string name="family_management_pwd_error">Password errata, reinseriscila</string>
-    <string name="pref_app_install_settings_title">Impostazioni Installatore App</string>
-    <string name="pref_app_install_switch_title">Consenti installazione app</string>
+    <string name="pref_app_install_settings_title">Impostazioni installazione app</string>
+    <string name="pref_app_install_switch_title">Consenti l\'installazione di app</string>
     <string name="pref_app_install_other_apps_note">L’autorizzazione consente l’installazione di app provenienti da altre fonti.</string>
     <string name="pref_app_install_permission_instruction">Per garantire il corretto funzionamento delle app installate, autorizza microG Companion a installare app scaricate da altre fonti.</string>
-    <string name="prefcat_app_install_list_title">Apps che usano Installatore app</string>
+    <string name="prefcat_app_install_list_title">App che usano la funzionalità di installazione</string>
     <string name="service_name_google_location_sharing">Condivisione della posizione Google</string>
     <string name="location_sharing_description">Gestisci la condivisione della posizione in tempo reale tra le app e i servizi Google di questo dispositivo</string>
     <string name="location_sharing_learn_more">Scopri di più sulla Condivisione della posizione</string>
@@ -404,4 +404,11 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="location_sharing_turn_off_confirm">Disattiva</string>
     <string name="location_sharing_confirm_dialog_title">Attiva Condivisione della posizione</string>
     <string name="location_sharing_confirm_dialog_text">Le persone con cui condividi la posizione possono sempre vedere:\n·Nome e foto \n·La posizione recente del dispositivo, anche se non stai usando un servizio Google\n·La batteria del dispositivo e se è in carica\n·orario di arrivo e partenza, se impostano una notifica di Condivisione posizione</string>
+    <string name="credentials_service_sign_in_with_google_label">Accedi con Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Chiave di sicurezza, smartphone o tablet</string>
+    <string name="pref_auth_allow_find_devices_title">Consenti notifiche da Google Find Hub</string>
+    <string name="pref_auth_allow_find_devices_summary">Quando l\'opzione è abilitata, il dispositivo può reagire alle notifiche inviate da Google Find Hub/Trova il tuo telefono (la messaggistica cloud dev\'essere attiva).</string>
+    <string name="in_app_reach_get_storage">Ottieni più spazio</string>
+    <string name="in_app_reach_clean_up_storage">Libera spazio</string>
+    <string name="in_app_reach_storage_usage">%1$d%% di %2$s usati</string>
 </resources>

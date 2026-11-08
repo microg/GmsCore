@@ -45,4 +45,9 @@
     <string name="location_data_export_cell_title">Esporta il database locale delle posizioni delle antenne delle reti cellulari</string>
     <string name="location_data_import_result_toast">%1$d voci importate.</string>
     <string name="prefcat_app_last_location">Ultima posizione segnalata</string>
+    <string name="prefcat_location_timeline_title">Spostamenti di Google Maps</string>
+    <string name="pref_location_timeline_title">Abilita la cronologia delle posizioni</string>
+    <string name="pref_location_timeline_summary">Registra periodicamente le informazioni sulla tua posizione per includerle negli Spostamenti di Google Maps.</string>
+    <string name="pref_location_timeline_upload_title">Sincronizza con l\'account Google</string>
+    <string name="pref_location_timeline_upload_summary">Sincronizza la cronologia delle posizioni con i server di Google, in modo che sia visibile sugli altri dispositivi.</string>
 </resources>
