@@ -280,7 +280,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">Activer la distribution des packs d\'éléments à la demande</string>
     <string name="pref_vending_asset_delivery_summary">Télécharger les packs d\'éléments additionnels quand requis par les applis utilisant Play Asset Delivery</string>
-    <string name="pref_vending_asset_device_sync_switch">Activer la synchronisation des information sur l\'appareil</string>
+    <string name="pref_vending_asset_device_sync_switch">Activer la synchronisation des informations sur l\'appareil</string>
     <string name="pref_vending_asset_device_sync_summary">Les applis utilisant Play Asset Delivery téléchargeront du contenu additionnel en se basant sur les informations de l\'appareil actuellement utilisé.</string>
     <string name="games_achievement_list_title">Réussites</string>
     <string name="games_achievements_empty_text">Pas de réussites pour ce jeu</string>
@@ -431,4 +431,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_passkey_manager_transport_screen_lock">Verrouillage écran</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybride</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID : %1$s</string>
+    <string name="in_app_reach_storage_usage">%1$d%% sur %2$s utilisés</string>
+    <string name="in_app_reach_get_storage">Voir le stockage</string>
+    <string name="in_app_reach_clean_up_storage">Nettoyer le stockage</string>
 </resources>
