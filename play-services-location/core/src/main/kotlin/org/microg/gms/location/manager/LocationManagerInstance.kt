@@ -217,7 +217,7 @@ class LocationManagerInstance(
         lifecycleScope.launchWhenStarted {
             val states = context.getDetailedLocationSettingsStates()
             val requests = settingsRequest?.requests?.map {
-                it.priority to (if (it.granularity == Granularity.GRANULARITY_PERMISSION_LEVEL) context.granularityFromPermission(clientIdentity) else it.granularity)
+                it.priority to getEffectiveGranularity(it.granularity, context.granularityFromPermission(clientIdentity))
             }.orEmpty()
             val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
             val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
