@@ -18,6 +18,6 @@
     android:accountPreferences="@xml/preferences_auth"
     android:accountType="com.google"
     android:customTokens="true"
-    android:icon="@drawable/proprietary_auth_gls_ic_google_selected"
-    android:smallIcon="@drawable/proprietary_auth_gls_ic_google_minitab_selected"
+    android:icon="@mipmap/ic_app"
+    android:smallIcon="@mipmap/ic_app"
     android:label="@string/google_account_label" />
