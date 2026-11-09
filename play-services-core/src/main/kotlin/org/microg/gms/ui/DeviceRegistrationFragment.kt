@@ -19,6 +19,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.microg.gms.checkin.CheckinManager
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.checkin.getCheckinServiceInfo
 import org.microg.gms.profile.ProfileManager
@@ -92,6 +94,17 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
         switchBarPreference.setOnPreferenceChangeListener { _, newValue ->
             val newStatus = newValue as Boolean
             CheckinPreferences.setEnabled(requireContext(), newStatus)
+            true
+        }
+
+        findPreference<Preference>("pref_device_registration_data")?.setOnPreferenceClickListener {
+            val rawCheckInRequest = CheckinManager.getLastRawCheckInRequest(context)
+            MaterialAlertDialogBuilder(it.context)
+                .setTitle(R.string.pref_device_registration_data_title)
+                .setMessage(rawCheckInRequest ?: getString(R.string.data_na))
+                .setPositiveButton(android.R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
             true
         }
     }
