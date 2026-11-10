@@ -119,6 +119,7 @@ private fun findDocumentQuad(gray: Mat, hint: Array<Point>? = null): Array<Point
                 candidates += points
                 if (area > bestArea) {
                     best = points
+                    bestArea = area
                 }
             }
             polygon.release()
