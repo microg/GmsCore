@@ -6,6 +6,7 @@
 package org.microg.gms.recaptcha.modac
 
 import android.content.Context
+import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 import android.util.Log
 import kotlinx.coroutines.CancellationException
@@ -231,7 +232,7 @@ internal class DefaultRecaptchaClientWorkflow(
     }
 
     private fun gmsInstallerPackage(): String = try {
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (SDK_INT >= 30) {
             context.packageManager.getInstallSourceInfo(Constants.GMS_PACKAGE_NAME)
                 .initiatingPackageName
                 .orEmpty()

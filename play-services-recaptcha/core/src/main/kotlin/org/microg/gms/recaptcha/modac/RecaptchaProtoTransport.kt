@@ -6,6 +6,7 @@
 package org.microg.gms.recaptcha.modac
 
 import android.content.Context
+import android.os.Build.VERSION.SDK_INT
 import android.os.LocaleList
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.NetworkResponse
@@ -19,7 +20,6 @@ import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
-import org.microg.gms.profile.Build
 import org.microg.gms.utils.singleInstanceOf
 
 private const val PROTO_CONTENT_TYPE = "application/x-protobuffer"
@@ -83,7 +83,7 @@ private class RawProtoRequest(
 
     override fun getHeaders(): Map<String, String> = mapOf(
         "Accept" to PROTO_CONTENT_TYPE,
-        "Accept-Language" to if (Build.VERSION.SDK_INT >= 24) {
+        "Accept-Language" to if (SDK_INT >= 24) {
             LocaleList.getDefault().toLanguageTags()
         } else {
             Locale.getDefault().language

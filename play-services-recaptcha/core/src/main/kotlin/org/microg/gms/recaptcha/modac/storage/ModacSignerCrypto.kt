@@ -5,10 +5,10 @@
 
 package org.microg.gms.recaptcha.modac.storage
 
+import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
-import org.microg.gms.profile.Build
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
@@ -22,7 +22,7 @@ private const val AES_TRANSFORMATION = "AES/GCM/NoPadding"
 internal object ModacSignerCrypto {
 
     fun fetchAndDecrypt(key: String, cache: ModacSignerCache): ByteArray? {
-        if (Build.VERSION.SDK_INT < 23) {
+        if (SDK_INT < 23) {
             Log.d(TAG, "Encrypted credential cache requires Android 6.0 or newer")
             return null
         }
@@ -50,7 +50,7 @@ internal object ModacSignerCrypto {
     }
 
     fun encryptAndStore(key: String, cache: ModacSignerCache, plainBytes: ByteArray): Boolean {
-        if (Build.VERSION.SDK_INT < 23) {
+        if (SDK_INT < 23) {
             Log.d(TAG, "Encrypted credential cache requires Android 6.0 or newer")
             return false
         }

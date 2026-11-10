@@ -5,11 +5,11 @@
 
 package org.microg.gms.recaptcha.modac.storage
 
+import android.os.Build.VERSION.SDK_INT
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.annotation.RequiresApi
-import org.microg.gms.profile.Build
 import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -22,7 +22,7 @@ internal object ModacKeystore {
 
     @Synchronized
     fun getOrCreateKey(): SecretKey? {
-        if (Build.VERSION.SDK_INT < 23) {
+        if (SDK_INT < 23) {
             Log.w(TAG, "AES/GCM Keystore requires Android 6.0 or newer")
             return null
         }
