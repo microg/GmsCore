@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.fitness.FitnessStatusCodes
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.internal.IGoogleFitRecordingApi
 import com.google.android.gms.fitness.request.ListSubscriptionsRequest
@@ -54,13 +55,17 @@ class FitRecordingBrokerImpl(
     override fun subscribe(request: SubscribeRequest) {
         Log.d(TAG, "subscribe request: $request")
         val dataType = request.subscription.dataType ?: request.subscription.dataSource?.dataType
-        val success = if (dataType?.name == DataType.TYPE_STEP_COUNT_DELTA.name) {
+        val status = if (dataType?.name == DataType.TYPE_STEP_COUNT_DELTA.name) {
             context.enforceActivityRecognitionPermission(packageName)
-            FitnessStepRecorder.subscribe(context, clientId, request.subscription)
+            if (FitnessStepRecorder.subscribe(context, clientId, request.subscription)) {
+                Status.SUCCESS
+            } else {
+                Status(FitnessStatusCodes.TRANSIENT_ERROR)
+            }
         } else {
-            false
+            Status(FitnessStatusCodes.SUCCESS_NO_DATA_SOURCES)
         }
-        return request.callback.onResult(if (success) Status.SUCCESS else Status(5008))
+        return request.callback.onResult(status)
     }
 
     override fun unsubscribe(request: UnsubscribeRequest) {

@@ -15,6 +15,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fitness.internal.IGoogleFitHistoryApi
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.fitness.FitnessStatusCodes
 import com.google.android.gms.fitness.data.Bucket
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
@@ -73,7 +74,7 @@ class FitHistoryBrokerImpl(
                 request.dataSources.orEmpty().map { it.dataType } +
                 request.aggregatedDataSources.orEmpty().map { it.dataType }
         if (requestedTypes.none { it.name == DataType.TYPE_STEP_COUNT_DELTA.name }) {
-            return request.callback.onPostResult(dataReadResult(Status(5008)))
+            return request.callback.onPostResult(dataReadResult(Status(FitnessStatusCodes.DATA_TYPE_NOT_FOUND)))
         }
 
         context.enforceActivityRecognitionPermission(packageName)
@@ -83,7 +84,7 @@ class FitHistoryBrokerImpl(
         val result = dataReadResult(Status.SUCCESS).apply { uniqueDataSources = dataSources }
         if (request.bucketDurationMillis > 0) {
             if (request.bucketType != Bucket.TYPE_TIME) {
-                return request.callback.onPostResult(dataReadResult(Status(5012)))
+                return request.callback.onPostResult(dataReadResult(Status(FitnessStatusCodes.AGGREGATION_NOT_SUPPORTED)))
             }
             result.rawBuckets = buildBuckets(request, samples, dataSources)
         } else {
