@@ -71,8 +71,31 @@ public class DynamiteContextFactory {
         }
     }
 
+    private static boolean canShareVisionClassLoader(DynamiteModuleInfo moduleInfo) {
+        if (!moduleInfo.getMergedClasses().isEmpty() || !moduleInfo.getMergedPackages().isEmpty()) {
+            return false;
+        }
+        // Face detection and OCR must share the classes that load their native libraries.
+        switch (moduleInfo.getModuleId()) {
+            case "com.google.android.gms.vision.dynamite":
+            case "com.google.android.gms.vision.face":
+            case "com.google.android.gms.vision.dynamite.face":
+            case "com.google.mlkit.dynamite.face":
+            case "com.google.android.gms.vision.ocr":
+            case "com.google.android.gms.vision.dynamite.ocr":
+            case "com.google.android.gms.mlkit_ocr_chinese":
+            case "com.google.android.gms.mlkit_ocr_devanagari":
+            case "com.google.android.gms.mlkit_ocr_japanese":
+            case "com.google.android.gms.mlkit_ocr_korean":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public static ClassLoader createClassLoader(DynamiteModuleInfo moduleInfo, Context gmsContext, Context originalContext) {
-        String cacheKey = moduleInfo.getModuleId() + "-" + originalContext.getPackageName();
+        String cacheGroup = canShareVisionClassLoader(moduleInfo) ? "microg-shared-vision-runtime" : moduleInfo.getModuleId();
+        String cacheKey = cacheGroup + "-" + originalContext.getPackageName();
         synchronized (sClassLoaderCache) {
             ClassLoader cached = sClassLoaderCache.get(cacheKey);
             if (cached != null) {
@@ -94,6 +117,10 @@ public class DynamiteContextFactory {
         }
         ClassLoader classLoader = new PathClassLoader(gmsContext.getApplicationInfo().sourceDir, nativeLoaderDirs.toString(), new FilteredClassLoader(originalContext.getClassLoader(), moduleInfo.getMergedClasses(), moduleInfo.getMergedPackages()));
         synchronized (sClassLoaderCache) {
+            ClassLoader cached = sClassLoaderCache.get(cacheKey);
+            if (cached != null) {
+                return cached;
+            }
             sClassLoaderCache.put(cacheKey, classLoader);
         }
         Log.d(TAG, "Created and cached a new ClassLoader for cacheKey: " + cacheKey + " ClassLoader: " + classLoader.hashCode());
