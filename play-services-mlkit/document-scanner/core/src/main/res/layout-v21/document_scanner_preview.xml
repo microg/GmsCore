@@ -107,13 +107,13 @@
                     android:layout_weight="1"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/gm3_ref_palette_neutral_variant80"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:singleLine="true"
                     android:ellipsize="end"
                     app:iconGravity="textTop"
                     app:iconPadding="10dp"
                     app:iconSize="24dp"
-                    app:iconTint="@color/gm3_ref_palette_neutral_variant80" />
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
 
                 <Button
                     android:id="@+id/document_scanning_preview_filter"
@@ -124,13 +124,13 @@
                     android:layout_weight="1"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/gm3_ref_palette_neutral_variant80"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:singleLine="true"
                     android:ellipsize="end"
                     app:iconGravity="textTop"
                     app:iconPadding="10dp"
                     app:iconSize="24dp"
-                    app:iconTint="@color/gm3_ref_palette_neutral_variant80" />
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
 
                 <Button
                     android:id="@+id/document_scanning_preview_retake"
@@ -141,13 +141,13 @@
                     android:layout_weight="1"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/gm3_ref_palette_neutral_variant80"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:singleLine="true"
                     android:ellipsize="end"
                     app:iconGravity="textTop"
                     app:iconPadding="10dp"
                     app:iconSize="24dp"
-                    app:iconTint="@color/gm3_ref_palette_neutral_variant80" />
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
 
                 <Button
                     android:id="@+id/document_scanning_preview_delete"
@@ -158,13 +158,13 @@
                     android:layout_weight="1"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/gm3_ref_palette_neutral_variant80"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:singleLine="true"
                     android:ellipsize="end"
                     app:iconGravity="textTop"
                     app:iconPadding="10dp"
                     app:iconSize="24dp"
-                    app:iconTint="@color/gm3_ref_palette_neutral_variant80" />
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
 
             </LinearLayout>
         </HorizontalScrollView>
