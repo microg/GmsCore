@@ -10,6 +10,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.google.android.gms.location.reporting.ReportingState
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.location.LocationSettings
 import userlocation.ApiSettings
 import userlocation.ClientAuthTokens
 import userlocation.GetApiSettingsRequest
@@ -120,6 +121,12 @@ internal fun setLocalAccountReportingEnabled(
     }
     return true
 }
+
+fun isTimelineEnabledOnDevice(context: Context): Boolean =
+    runCatching { LocationSettings(context).mapsTimeline }.getOrDefault(false)
+fun isTimelineUploadEnabledOnDevice(context: Context): Boolean =
+    isTimelineEnabledOnDevice(context) &&
+            runCatching { LocationSettings(context).mapsTimelineUpload }.getOrDefault(false)
 
 fun isLocalAccountReportingEnabled(context: Context, account: Account): Boolean =
     isGoogleAccountOnDevice(context, account) &&

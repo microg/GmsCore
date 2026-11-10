@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <Preference
         app:iconSpaceReserved="false"
@@ -23,6 +24,15 @@
             app:persistent="false"
             app:summary="@string/pref_account_timeline_upload_summary"
             app:title="@string/pref_account_timeline_upload_title" />
+
+        <Preference
+            app:icon="@drawable/ic_circle_warn"
+            app:iconSpaceReserved="false"
+            app:isPreferenceVisible="false"
+            app:key="pref_account_timeline_device_notice"
+            app:selectable="false"
+            tools:summary="@string/pref_account_timeline_disabled_on_device"
+            tools:isPreferenceVisible="true" />
 
         <Preference
             app:iconSpaceReserved="false"

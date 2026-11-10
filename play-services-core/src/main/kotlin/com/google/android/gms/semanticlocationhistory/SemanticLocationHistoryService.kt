@@ -39,7 +39,9 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.location.reporting.fetchEffectiveAccountLocationSettings
 import org.microg.gms.location.reporting.fetchEffectiveTimelineEnabled
+import org.microg.gms.location.reporting.isTimelineEnabledOnDevice
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private val FEATURES = arrayOf(
@@ -75,6 +77,11 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         )
         lifecycleScope.launch(Dispatchers.IO) {
             try {
+                if (!isTimelineEnabledOnDevice(context)) {
+                    Log.w(TAG, "Timeline access denied: disabled on this device")
+                    onDenied()
+                    return@launch
+                }
                 if (!fetchEffectiveTimelineEnabled(context, account, canAccessRemoteSettings)) {
                     Log.w(TAG, "Timeline access denied")
                     onDenied()
@@ -325,11 +332,16 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
             GooglePackagePermission.REPORTING
         )
         lifecycleScope.launch(Dispatchers.IO) {
-            val timelineEnabled = fetchEffectiveTimelineEnabled(
-                context,
-                account,
-                canAccessSettings
-            )
+            val timelineEnabled = if (isTimelineEnabledOnDevice(context)) {
+                fetchEffectiveTimelineEnabled(context, account, canAccessSettings)
+            } else {
+                fetchEffectiveAccountLocationSettings(
+                    context,
+                    account,
+                    allowRemoteAccountSettings = canAccessSettings,
+                    refreshRemoteAccountSettings = false
+                ).timelineEnabled
+            }
             val accountName = account?.name
             val deviceTag = if (!accountName.isNullOrEmpty()) storageManager.getDeviceTag(accountName) else 0
             val reportingState = ReportingState(

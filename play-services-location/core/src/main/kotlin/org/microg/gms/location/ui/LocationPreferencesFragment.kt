@@ -57,6 +57,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var cellLearning: TwoStatePreference
     private lateinit var nominatim: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
+    private lateinit var timelineEnabled: TwoStatePreference
+    private lateinit var timelineUpload: TwoStatePreference
     private lateinit var timelineAccounts: Preference
 
     init {
@@ -273,6 +275,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         cellIchnaea = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellIchnaea
         cellLearning = preferenceScreen.findPreference("pref_location_cell_learning_enabled") ?: cellLearning
         nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
+        timelineEnabled = preferenceScreen.findPreference("pref_location_timeline") ?: timelineEnabled
+        timelineUpload = preferenceScreen.findPreference("pref_location_timeline_upload") ?: timelineUpload
         timelineAccounts = preferenceScreen.findPreference("pref_location_timeline_accounts") ?: timelineAccounts
 
         locationAppsAll.setOnPreferenceClickListener {
@@ -317,6 +321,17 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         }
         configureChangeListener(cellLearning) { LocationSettings(requireContext()).cellLearning = it }
         configureChangeListener(nominatim) { LocationSettings(requireContext()).geocoderNominatim = it }
+        configureChangeListener(timelineEnabled) {
+            LocationSettings(requireContext()).mapsTimeline = it
+            if (!it) {
+                LocationSettings(requireContext()).mapsTimelineUpload = false
+                timelineUpload.isChecked = false
+                timelineUpload.isEnabled = false
+            } else {
+                timelineUpload.isEnabled = true
+            }
+        }
+        configureChangeListener(timelineUpload) { LocationSettings(requireContext()).mapsTimelineUpload = it }
         timelineAccounts.setOnPreferenceClickListener {
             findNavController().navigate("x-gms-settings://accounts".toUri())
             true
@@ -356,6 +371,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             cellIchnaea.isChecked = LocationSettings(context).cellIchnaea
             cellLearning.isChecked = LocationSettings(context).cellLearning
             nominatim.isChecked = LocationSettings(context).geocoderNominatim
+            timelineEnabled.isChecked = LocationSettings(context).mapsTimeline
+            timelineUpload.isEnabled = LocationSettings(context).mapsTimeline
+            timelineUpload.isChecked = LocationSettings(context).mapsTimelineUpload
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.listAppsByAccessTime()
                 val res = apps.map { app ->

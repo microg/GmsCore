@@ -30,6 +30,7 @@ import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
 import org.microg.gms.location.reporting.fetchEffectiveAccountLocationSettings
 import org.microg.gms.location.reporting.isLocalAccountReportingEnabled
+import org.microg.gms.location.reporting.isTimelineUploadEnabledOnDevice
 import java.security.SecureRandom
 import java.util.TimeZone
 import javax.crypto.Cipher
@@ -58,6 +59,7 @@ private const val TAG = "OdlhBackupProcessor"
 object OdlhBackupProcessor {
 
     private fun isBackupEnabled(context: Context, account: Account): Boolean {
+        if (!isTimelineUploadEnabledOnDevice(context)) return false
         if (!isLocalAccountReportingEnabled(context, account)) return false
         val settings = fetchEffectiveAccountLocationSettings(context, account)
         return settings.allowed && settings.uploadAllowed

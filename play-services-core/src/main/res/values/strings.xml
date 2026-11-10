@@ -495,5 +495,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_account_timeline_loading">Loading account settings…</string>
     <string name="pref_account_timeline_unavailable">Account settings are currently unavailable.</string>
     <string name="pref_account_timeline_restricted">This setting is restricted for this account.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">Synchronization to Google servers is turned off for this device in location settings. The upload setting above has no effect on this device until it is turned on.</string>
+    <string name="pref_account_timeline_disabled_on_device">Timeline is turned off for this device in location settings. The settings above have no effect on this device until it is turned on.</string>
     <string name="pref_account_timeline_update_failed">The local upload preference was saved, but the account setting could not be confirmed. Refresh and try again.</string>
 </resources>

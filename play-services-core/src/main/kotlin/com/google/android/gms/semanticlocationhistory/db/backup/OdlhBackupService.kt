@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.location.reporting.hasAnyLocalAccountReportingEnabled
+import org.microg.gms.location.reporting.isTimelineUploadEnabledOnDevice
 
 private const val TAG = "OdlhBackupService"
 
@@ -30,9 +31,9 @@ class OdlhBackupService : LifecycleService() {
         private const val BACKUP_INTERVAL_MS = 8 * 60 * 60 * 1000L // 8h
 
         fun scheduleBackup(context: Context) {
-            if (!hasAnyLocalAccountReportingEnabled(context)) {
+            if (!isTimelineUploadEnabledOnDevice(context) || !hasAnyLocalAccountReportingEnabled(context)) {
                 cancelBackup(context)
-                Log.d(TAG, "scheduleBackup: skipped because local upload is disabled")
+                Log.d(TAG, "scheduleBackup: skipped because upload is disabled on this device or for all accounts")
                 return
             }
             val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager

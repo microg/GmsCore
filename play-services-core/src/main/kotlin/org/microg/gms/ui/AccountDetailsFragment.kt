@@ -25,22 +25,28 @@ import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.location.reporting.ManagedAccountLocationSettings
 import org.microg.gms.location.reporting.REPORTING_SETTINGS_CHANGED_ACTION
+import org.microg.gms.location.reporting.isTimelineEnabledOnDevice
+import org.microg.gms.location.reporting.isTimelineUploadEnabledOnDevice
 
 internal const val ARG_ACCOUNT_DETAILS_NAME = "accountName"
 
 private const val PREF_ACCOUNT_DETAILS_HEADER = "pref_account_details_header"
 private const val PREF_ACCOUNT_TIMELINE = "pref_account_timeline"
 private const val PREF_ACCOUNT_TIMELINE_UPLOAD = "pref_account_timeline_upload"
+private const val PREF_ACCOUNT_TIMELINE_DEVICE_NOTICE = "pref_account_timeline_device_notice"
 private const val PREF_ACCOUNT_SYSTEM_SYNC = "pref_account_system_sync"
 
 class AccountDetailsFragment : PreferenceFragmentCompat() {
     private lateinit var account: Account
     private lateinit var timeline: SwitchPreferenceCompat
     private lateinit var timelineUpload: SwitchPreferenceCompat
+    private lateinit var deviceNotice: Preference
     private var accountSettings: ManagedAccountLocationSettings? = null
     private var requestId = 0
     private var requestInProgress = false
     private var refreshPending = false
+    private var timelineEnabledOnDevice = true
+    private var timelineUploadEnabledOnDevice = true
     private val settingsChangedReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action != REPORTING_SETTINGS_CHANGED_ACTION) return
@@ -60,6 +66,7 @@ class AccountDetailsFragment : PreferenceFragmentCompat() {
         )
         timeline = requireNotNull(findPreference(PREF_ACCOUNT_TIMELINE))
         timelineUpload = requireNotNull(findPreference(PREF_ACCOUNT_TIMELINE_UPLOAD))
+        deviceNotice = requireNotNull(findPreference(PREF_ACCOUNT_TIMELINE_DEVICE_NOTICE))
 
         findPreference<Preference>(PREF_ACCOUNT_DETAILS_HEADER)?.apply {
             title = account.name
@@ -104,6 +111,8 @@ class AccountDetailsFragment : PreferenceFragmentCompat() {
             findNavController().popBackStack()
             return
         }
+        timelineEnabledOnDevice = isTimelineEnabledOnDevice(requireContext())
+        timelineUploadEnabledOnDevice = isTimelineUploadEnabledOnDevice(requireContext())
         loadSettings(forceRefresh = true)
     }
 
@@ -200,6 +209,12 @@ class AccountDetailsFragment : PreferenceFragmentCompat() {
             !historyKnown -> getString(R.string.pref_account_timeline_unavailable)
             restricted && !canDisableUpload -> getString(R.string.pref_account_timeline_restricted)
             else -> getString(R.string.pref_account_timeline_upload_summary)
+        }
+        deviceNotice.isVisible = !timelineEnabledOnDevice || !timelineUploadEnabledOnDevice
+        deviceNotice.summary = when {
+            !timelineEnabledOnDevice -> getString(R.string.pref_account_timeline_disabled_on_device)
+            !timelineUploadEnabledOnDevice -> getString(R.string.pref_account_timeline_upload_disabled_on_device)
+            else -> null
         }
     }
 }
