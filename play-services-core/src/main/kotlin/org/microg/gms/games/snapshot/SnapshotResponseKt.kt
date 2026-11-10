@@ -97,7 +97,7 @@ fun JSONObject.toSnapshotImage() = SnapshotImage(
     optString("kind")
 )
 
-fun SnapshotTimeInfo.toMillis() = timestamp * 1000 + playedTime / 1000000
+fun SnapshotTimeInfo.toMillis() = (timestamp ?: 0L) * 1000 + (playedTime ?: 0) / 1000000
 
 /**
  * The head revision and any unresolved conflicting revisions, most recently modified one wins.

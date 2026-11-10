@@ -110,8 +110,8 @@ message SnapshotContent {
 }
 
 message SnapshotTimeInfo {
-  required int64 timestamp = 1;
-  required int32 playedTime = 2;
+  optional int64 timestamp = 1;
+  optional int32 playedTime = 2;
 }
 
 message SnapshotContentInfo {
