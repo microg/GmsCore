@@ -148,6 +148,7 @@ class FitHistoryBrokerImpl(
                 request.dataTypes.orEmpty().any { it.name in stepTypes } ||
                 request.dataSources.orEmpty().any { it.dataType.name in stepTypes }
         if (deletesSteps) {
+            context.enforceActivityRecognitionPermission(packageName)
             FitnessStepRecorder.deleteSamples(context, request.startTimeMillis, request.endTimeMillis)
         }
         request.callback?.onResult(Status.SUCCESS)
