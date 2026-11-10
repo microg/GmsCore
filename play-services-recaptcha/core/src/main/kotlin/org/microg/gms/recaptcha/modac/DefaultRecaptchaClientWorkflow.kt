@@ -6,7 +6,6 @@
 package org.microg.gms.recaptcha.modac
 
 import android.content.Context
-import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 import android.util.Log
 import kotlinx.coroutines.CancellationException
@@ -117,7 +116,7 @@ internal class DefaultRecaptchaClientWorkflow(
             initSignal = "",
             playServicesAvailable = isFirstParty,
             playStoreInstalled = isPackageInstalled(Constants.VENDING_PACKAGE_NAME),
-            installerPackage = gmsInstallerPackage(),
+            installerPackage = Constants.VENDING_PACKAGE_NAME,
             buildId = RECAPTCHA_BUILD_ID,
         )
         val cachedCredential = credentialStore.read(request.siteKey)
@@ -229,19 +228,6 @@ internal class DefaultRecaptchaClientWorkflow(
         true
     } catch (e: Exception) {
         false
-    }
-
-    private fun gmsInstallerPackage(): String = try {
-        if (SDK_INT >= 30) {
-            context.packageManager.getInstallSourceInfo(Constants.GMS_PACKAGE_NAME)
-                .initiatingPackageName
-                .orEmpty()
-        } else {
-            @Suppress("DEPRECATION")
-            context.packageManager.getInstallerPackageName(Constants.GMS_PACKAGE_NAME).orEmpty()
-        }
-    } catch (e: Exception) {
-        ""
     }
 
     private fun InitializationState.toSignalRequest(
