@@ -13,6 +13,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
 import android.util.Log
 import androidx.core.content.edit
@@ -39,7 +40,7 @@ private const val MINUTE_MILLIS = 60_000L
 internal data class StepSample(val startTimeMillis: Long, val endTimeMillis: Long, val steps: Int)
 
 internal fun Context.enforceActivityRecognitionPermission(packageName: String) {
-    val permission = if (android.os.Build.VERSION.SDK_INT >= 29) {
+    val permission = if (SDK_INT >= 29) {
         Manifest.permission.ACTIVITY_RECOGNITION
     } else {
         LEGACY_ACTIVITY_RECOGNITION_PERMISSION

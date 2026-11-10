@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.edit
@@ -20,7 +21,7 @@ private const val PERMISSION_REQUESTED = "activity-recognition-requested"
 private const val REQUEST_ACTIVITY_RECOGNITION = 1
 
 internal fun Context.ensureActivityRecognitionPermission(): Boolean {
-    if (android.os.Build.VERSION.SDK_INT < 29 ||
+    if (SDK_INT < 29 ||
         checkSelfPermission(Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED
     ) return true
 
@@ -38,7 +39,7 @@ internal fun Context.ensureActivityRecognitionPermission(): Boolean {
 internal class FitnessPermissionActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (android.os.Build.VERSION.SDK_INT < 29 ||
+        if (SDK_INT < 29 ||
             checkSelfPermission(Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED
         ) {
             finish()
