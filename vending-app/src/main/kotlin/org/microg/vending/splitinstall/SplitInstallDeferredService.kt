@@ -47,7 +47,9 @@ class SplitInstallDeferredService : JobIntentService() {
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            Log.w(TAG, "Deferred split request failed (${e.javaClass.simpleName})")
+            Log.w(TAG, "Deferred split request failed: package=$packageName, session=${intent.getIntExtra("session_id", -1)}, " +
+                    "uninstall=${intent.getBooleanExtra("uninstall", false)}, version=${intent.getLongExtra("version", 0)}, " +
+                    "clientInstallTime=${intent.getLongExtra("client_install_time", 0)}, exception=${e.javaClass.simpleName}")
         }
     }
 

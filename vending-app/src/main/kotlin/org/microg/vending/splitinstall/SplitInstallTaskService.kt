@@ -49,37 +49,53 @@ class SplitInstallTaskService : LifecycleService() {
         val label = runCatching {
             packageManager.getApplicationInfo(intent.getStringExtra("package_name")!!, 0).loadLabel(packageManager).toString()
         }.getOrElse { applicationInfo.loadLabel(packageManager).toString() }
-        try {
-            val notification = notifyInstallProgress(label, NOTIFICATION_ID, Downloading(0, 1))!!
-            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        } catch (e: Exception) {
-            lifecycleScope.launch {
-                try {
-                    withContext(Dispatchers.IO) {
-                        val manager = SplitInstallManager(this@SplitInstallTaskService)
-                        manager.restoreSessions()
-                        manager.failInstall(intent.getIntExtra("session_id", -1))
+        if (activeTasks == 0) {
+            try {
+                val notification = notifyInstallProgress(label, NOTIFICATION_ID, Downloading(0, 1))!!
+                ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            } catch (e: Exception) {
+                Log.w(TAG, "Unable to start split install foreground service: package=${intent.getStringExtra("package_name")}, " +
+                        "session=${intent.getIntExtra("session_id", -1)}, startId=$startId, exception=${e.javaClass.simpleName}")
+                lifecycleScope.launch {
+                    try {
+                        withContext(Dispatchers.IO) {
+                            val manager = SplitInstallManager(this@SplitInstallTaskService)
+                            manager.restoreSessions()
+                            manager.failInstall(intent.getIntExtra("session_id", -1))
+                        }
+                    } finally {
+                        if (activeTasks == 0) stopSelf(startId)
                     }
-                } finally {
-                    if (activeTasks == 0) stopSelf(startId)
                 }
+                return START_NOT_STICKY
             }
-            return START_NOT_STICKY
         }
         activeTasks++
         lifecycleScope.launch {
             try {
                 withContext(Dispatchers.IO) {
                     workMutex.withLock {
+                        val sessionId = intent.getIntExtra("session_id", -1)
                         val manager = SplitInstallManager(this@SplitInstallTaskService)
                         manager.restoreSessions()
-                        manager.install(intent.getIntExtra("session_id", -1))
+                        try {
+                            notifyInstallProgress(label, NOTIFICATION_ID, Downloading(0, 1))
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Unable to update split install notification: package=${intent.getStringExtra("package_name")}, " +
+                                    "session=$sessionId, notification=$NOTIFICATION_ID, exception=${e.javaClass.simpleName}")
+                            manager.failInstall(sessionId)
+                            return@withLock
+                        }
+                        manager.install(sessionId, NOTIFICATION_ID)
                     }
                 }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Log.w(TAG, "Split install work failed (${e.javaClass.simpleName})")
+                Log.w(TAG, "Split install work failed: package=${intent.getStringExtra("package_name")}, " +
+                        "session=${intent.getIntExtra("session_id", -1)}, startId=$startId, exception=${e.javaClass.simpleName}")
             } finally {
                 if (--activeTasks == 0) {
                     ServiceCompat.stopForeground(this@SplitInstallTaskService, ServiceCompat.STOP_FOREGROUND_REMOVE)

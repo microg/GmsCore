@@ -56,10 +56,12 @@ class SplitInstallServiceImpl(
         }
         Log.d(TAG, "$method: packageName=$packageName")
         if (packageName == null) {
+            Log.d(TAG, "$method rejected: caller package verification failed")
             error(callback, -7)
             return
         }
         if (!VendingPreferences.isSplitInstallEnabled(context)) {
+            Log.d(TAG, "$method rejected for $packageName: split installation is disabled")
             error(callback, ERROR_API_NOT_AVAILABLE)
             return
         }
@@ -70,6 +72,7 @@ class SplitInstallServiceImpl(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: SplitInstallException) {
+                Log.w(TAG, "$method failed for $packageName: error=${e.errorCode}")
                 error(callback, e.errorCode)
             } catch (e: Exception) {
                 Log.w(TAG, "Split install request failed for $packageName (${e.javaClass.simpleName})")
@@ -80,6 +83,7 @@ class SplitInstallServiceImpl(
 
     private fun error(callback: ISplitInstallServiceCallback, code: Int) {
         runCatching { callback.onError(Bundle().apply { putInt("error_code", code) }) }
+            .onFailure { Log.d(TAG, "Unable to deliver split install error: code=$code, exception=${it.javaClass.simpleName}") }
     }
 
     override fun startInstall(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) =

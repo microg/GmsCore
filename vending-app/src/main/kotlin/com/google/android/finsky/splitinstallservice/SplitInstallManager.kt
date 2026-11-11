@@ -60,11 +60,13 @@ import org.xmlpull.v1.XmlPullParser
 import java.io.File
 import java.io.IOException
 import java.util.Locale
+import java.util.zip.ZipFile
 
 private const val TAG = "SplitInstallManager"
 private const val MIN_SPLITCOMPAT_VERSION = 10300
 private const val SCHEDULE_INSTALL = "install"
 private const val SCHEDULE_UNINSTALL = "uninstall"
+private val FONT_ASSET_EXTENSIONS = setOf("otf", "ttf", "ttc", "otc", "pfb", "pfm", "mmm")
 
 internal const val ERROR_API_NOT_AVAILABLE = -5
 internal const val ERROR_INVALID_REQUEST = -3
@@ -88,6 +90,8 @@ class SplitInstallManager(private val context: Context) {
         validateRequest(splits)
         val modules = splits.mapNotNull { it.getString("module_name") }.distinct()
         val languages = splits.mapNotNull { it.getString("language") }.distinct()
+        Log.d(TAG, "Split request for $packageName: modules=$modules, languages=$languages, " +
+                "playCoreVersion=$playCoreVersion, deferred=${deferredRequest != null}")
         requestMutex.withLock {
             sessionManager.removeStaleSessions(packageName)
             val packageInfo = context.packageManager.getPackageInfo(packageName, 0)
@@ -129,11 +133,33 @@ class SplitInstallManager(private val context: Context) {
             }
             // TODO: The criteria for using SplitCompat need to be defined more clearly here.
             val useSplitCompat = deferredRequest == null && playCoreVersion >= MIN_SPLITCOMPAT_VERSION && languages.isEmpty()
-            val downloadedState = withContext(Dispatchers.IO) {
-                sessionManager.findDownloadedSession(packageName, version, requested, modules, languages, useSplitCompat)?.let {
-                    // Renew URI grants in case the app was reinstalled.
-                    sessionManager.reuseDownloadedSession(it)
+            Log.d(TAG, "Split delivery for $packageName: version=$version, requested=$requested, useSplitCompat=$useSplitCompat")
+            if (deferredRequest == null) {
+                sessionManager.findActiveSession(packageName, version, requested, modules, languages, useSplitCompat)?.let { session ->
+                    clearPendingRequests()
+                    onStarted(session.state.getInt("session_id"), Bundle(session.state))
+                    synchronized(session) {
+                        if (sessionManager.isCurrent(session) && sessionManager.isCurrentInstallation(session)) {
+                            sessionManager.sendUpdate(packageName, session.state)
+                        }
+                    }
+                    return
                 }
+            }
+            val downloadedState = withContext(Dispatchers.IO) {
+                val session = sessionManager.findDownloadedSession(packageName, version, requested, modules, languages, useSplitCompat)
+                    ?: return@withContext null
+                try {
+                    if (requiresNativeDelivery(modules, sessionManager.downloadedFiles(session))) return@withContext null
+                } catch (e: SplitInstallException) {
+                    Log.w(TAG, "Split cache rejected for $packageName: session=${session.state.getInt("session_id")}, error=${e.errorCode}")
+                    return@withContext null
+                } catch (e: IOException) {
+                    Log.w(TAG, "Split cache inspection failed for $packageName: session=${session.state.getInt("session_id")}, exception=${e.javaClass.simpleName}")
+                    return@withContext null
+                }
+                // Renew URI grants in case the app was reinstalled.
+                sessionManager.reuseDownloadedSession(session)
             }
             if (downloadedState != null) {
                 clearPendingRequests()
@@ -163,13 +189,14 @@ class SplitInstallManager(private val context: Context) {
             try {
                 SplitInstallTaskService.enqueueInstall(context, sessionId, packageName)
             } catch (e: Exception) {
+                Log.w(TAG, "Unable to enqueue split install for $packageName: session=$sessionId, error=$ERROR_INTERNAL, exception=${e.javaClass.simpleName}")
                 sessionManager.update(newSession, STATUS_FAILED) { putInt("error_code", ERROR_INTERNAL) }
             }
         }
     }
 
     @RequiresApi(21)
-    internal suspend fun install(sessionId: Int) {
+    internal suspend fun install(sessionId: Int, progressNotificationId: Int = sessionId) {
         val session = sessionManager.getSession(sessionId) ?: return
         val job = currentCoroutineContext()[Job]
         synchronized(session) {
@@ -179,10 +206,12 @@ class SplitInstallManager(private val context: Context) {
                 return
             }
             if (!VendingPreferences.isSplitInstallEnabled(context)) {
+                Log.w(TAG, "Split install disabled for ${session.packageName}: session=$sessionId, error=$ERROR_API_NOT_AVAILABLE")
                 sessionManager.update(session, STATUS_FAILED) { putInt("error_code", ERROR_API_NOT_AVAILABLE) }
                 return
             }
             session.job = job
+            session.progressNotificationId = progressNotificationId
         }
         val version = session.version
         val packageName = session.packageName
@@ -195,9 +224,13 @@ class SplitInstallManager(private val context: Context) {
                 }
                 val components = requestComponents(packageName, version, session.requested, languages)
                 val total = components.sumOf { it.size }
+                Log.d(TAG, "Split download for $packageName: session=$sessionId, components=${components.map { it.componentName }}, totalBytes=$total")
                 val directory = File(context.cacheDir, "split-install/$packageName/$version/$sessionId")
                 if (!directory.mkdirs() && !directory.isDirectory) throw IOException("Cannot create split directory")
-                if (total > directory.usableSpace / 2) throw SplitInstallException(-10)
+                if (total > directory.usableSpace / 2) {
+                    Log.w(TAG, "Insufficient split download space: session=$sessionId, totalBytes=$total, usableBytes=${directory.usableSpace}, error=-10")
+                    throw SplitInstallException(-10)
+                }
                 sessionManager.update(session, STATUS_DOWNLOADING) { putLong("total_bytes_to_download", total) }
                 var downloaded = 0L
                 var lastUpdate = 0L
@@ -220,6 +253,9 @@ class SplitInstallManager(private val context: Context) {
                             if (file.length() != component.size) throw IOException("Incomplete split download")
                             break
                         } catch (e: IOException) {
+                            Log.w(TAG, "Split download attempt failed for $packageName: session=$sessionId, split=${component.componentName}, " +
+                                    "attempt=${attempt + 1}/3, bytes=${file.length()}/${component.size}, " +
+                                    "exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
                             if (attempt == 2) throw e
                         }
                     }
@@ -229,6 +265,10 @@ class SplitInstallManager(private val context: Context) {
                 if (!sessionManager.isCurrentInstallation(session)) {
                     sessionManager.removeSession(session)
                     return@withContext
+                }
+                val modules = session.state.getStringArrayList("module_names").orEmpty()
+                if (session.useSplitCompat && requiresNativeDelivery(modules, files)) {
+                    if (!sessionManager.useNativeInstallation(session)) return@withContext
                 }
                 if (!session.useSplitCompat) {
                     installNative(session, files)
@@ -248,6 +288,7 @@ class SplitInstallManager(private val context: Context) {
                         STATUS_PENDING, STATUS_DOWNLOADING -> try {
                             sessionManager.update(session, STATUS_PENDING)
                         } catch (failure: SplitInstallException) {
+                            Log.w(TAG, "Unable to restore pending split install for $packageName: session=$sessionId, error=${failure.errorCode}")
                             sessionManager.update(session, STATUS_FAILED) { putInt("error_code", failure.errorCode) }
                         }
 
@@ -265,11 +306,19 @@ class SplitInstallManager(private val context: Context) {
                 e is IOException || e is ResponseException -> -6
                 else -> ERROR_INTERNAL
             }
-            Log.w(TAG, "Split install failed for $packageName, session $sessionId, error $error, HTTP $httpStatus (${e.javaClass.simpleName})")
+            Log.d(TAG, "Split install failure: package=$packageName, version=$version, session=$sessionId, " +
+                    "nativeSession=${session.installerSessionId}, status=${session.state.getInt("status")}, " +
+                    "useSplitCompat=${session.useSplitCompat}, deferred=${session.isDeferred}, " +
+                    "bytes=${session.state.getLong("bytes_downloaded")}/${session.state.getLong("total_bytes_to_download")}, " +
+                    "error=$error, HTTP=$httpStatus, exception=${e.javaClass.simpleName}, " +
+                    "cause=${e.cause?.javaClass?.simpleName}, origin=${e.stackTrace.firstOrNull()}")
             sessionManager.update(session, STATUS_FAILED) { putInt("error_code", error) }
         } finally {
             synchronized(session) {
-                if (session.job === job) session.job = null
+                if (session.job === job) {
+                    session.job = null
+                    session.progressNotificationId = sessionId
+                }
                 if (session.state.getInt("status") == STATUS_CANCELING) sessionManager.update(session, STATUS_CANCELED)
             }
             enqueuePending(packageName, !session.state.getBoolean("uninstall"))
@@ -278,8 +327,26 @@ class SplitInstallManager(private val context: Context) {
 
     internal fun failInstall(sessionId: Int) = sessionManager.failInstall(sessionId)
 
+    private fun requiresNativeDelivery(modules: List<String>, files: List<File>): Boolean {
+        val dexFileName = Regex("classes(?:[0-9]+)?\\.dex")
+        return files.any { file ->
+            val split = file.nameWithoutExtension
+            split in modules && !split.startsWith("config.") && !split.contains(".config.") && ZipFile(file).use { apk ->
+                // Font-only assets can be mounted by SplitCompat without system registration.
+                apk.entries().asSequence().none { dexFileName.matches(it.name) } &&
+                        apk.entries().asSequence().any {
+                            !it.isDirectory && it.name.startsWith("assets/") &&
+                                    it.name.substringAfterLast('.', "").lowercase(Locale.ROOT) !in FONT_ASSET_EXTENSIONS
+                        }
+            }.also { required ->
+                if (required) Log.d(TAG, "Native split delivery required: split=$split, reason=non-font assets without DEX in requested feature")
+            }
+        }
+    }
+
     private suspend fun requestComponents(packageName: String, version: Long, requested: List<String>, languages: List<String>): List<PackageComponent> {
         val accounts = AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE)
+        Log.d(TAG, "Requesting split delivery for $packageName: version=$version, requested=$requested, languages=$languages, accountCount=${accounts.size}")
         var errorCode = -15
         for ((index, account) in accounts.withIndex()) {
             currentCoroutineContext().ensureActive()
@@ -288,11 +355,11 @@ class SplitInstallManager(private val context: Context) {
                 AuthManager.getAuthData(context, account)
             } catch (e: AuthenticatorException) {
                 currentCoroutineContext().ensureActive()
-                Log.w(TAG, "Split delivery account $candidate authentication failed")
+                Log.w(TAG, "Split authentication failed for $packageName: account=$candidate, exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
                 continue
             } catch (e: OperationCanceledException) {
                 currentCoroutineContext().ensureActive()
-                Log.w(TAG, "Split delivery account $candidate token request canceled or timed out")
+                Log.w(TAG, "Split token request failed for $packageName: account=$candidate, exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
                 continue
             }
             currentCoroutineContext().ensureActive()
@@ -306,7 +373,7 @@ class SplitInstallManager(private val context: Context) {
                 throw e
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
-                Log.w(TAG, "Device sync failed for split delivery")
+                Log.w(TAG, "Split device sync failed for $packageName: account=$candidate, exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
             }
             currentCoroutineContext().ensureActive()
             val components = try {
@@ -314,7 +381,7 @@ class SplitInstallManager(private val context: Context) {
             } catch (e: DeliveryException) {
                 currentCoroutineContext().ensureActive()
                 if (e.status != DeliveryStatus.NOT_PURCHASED) throw e
-                Log.d(TAG, "Split delivery account $candidate failed with ${e.status}")
+                Log.w(TAG, "Split delivery for $packageName: account=$candidate, status=${e.status}, retainedError=$errorCode")
                 continue
             } catch (e: ResponseException) {
                 currentCoroutineContext().ensureActive()
@@ -324,16 +391,18 @@ class SplitInstallManager(private val context: Context) {
                     401, 403 -> Unit
                     else -> throw e
                 }
-                Log.w(TAG, "Split delivery account $candidate failed with HTTP $httpStatus")
+                Log.w(TAG, "Split delivery failed for $packageName: account=$candidate, HTTP=$httpStatus, retainedError=$errorCode")
                 continue
             }
             currentCoroutineContext().ensureActive()
             val available = requested.count { name -> components.any { it.componentName == name } }
             Log.d(TAG, "Split delivery account $candidate provides $available/${requested.size} requested splits")
             if (available == requested.size) return components
+            Log.d(TAG, "Split delivery incomplete for $packageName: account=$candidate, missing=${requested.filter { name -> components.none { it.componentName == name } }}")
             errorCode = -2
         }
         currentCoroutineContext().ensureActive()
+        Log.w(TAG, "Split delivery exhausted for $packageName: version=$version, accountCount=${accounts.size}, requested=$requested, error=$errorCode")
         throw SplitInstallException(errorCode)
     }
 
@@ -351,12 +420,16 @@ class SplitInstallManager(private val context: Context) {
                 .filterNot { (name, _) -> name in replaced || name in toRemove }.map { (_, path) -> File(path) }
             files + File(app.sourceDir) + retained
         } else files
+        Log.d(TAG, "Starting native split install for ${session.packageName}: session=${session.state.getInt("session_id")}, " +
+                "completion=$completion, fullInstall=$fullInstall, files=${components.size}, removed=$toRemove")
         context.installPackages(
             session.packageName, components,
             isUpdate = fullInstall, splitInstall = true, keepFiles = true,
             splitSessionId = session.state.getInt("session_id"), removedSplits = toRemove,
             onSessionCreated = { id ->
                 synchronized(session) {
+                    Log.d(TAG, "Native split session created for ${session.packageName}: session=${session.state.getInt("session_id")}, " +
+                            "nativeSession=$id, status=${session.state.getInt("status")}, completion=$completion")
                     job?.ensureActive()
                     session.job?.ensureActive()
                     if (!sessionManager.isCurrent(session) || !sessionManager.isCurrentInstallation(session)) {
@@ -400,6 +473,7 @@ class SplitInstallManager(private val context: Context) {
         try {
             SplitInstallTaskService.enqueueInstall(context, id, packageName)
         } catch (e: Exception) {
+            Log.w(TAG, "Unable to enqueue split removal for $packageName: session=$id, error=$ERROR_INTERNAL, exception=${e.javaClass.simpleName}")
             sessionManager.update(session, STATUS_FAILED) { putInt("error_code", ERROR_INTERNAL) }
         }
     }
@@ -467,7 +541,7 @@ class SplitInstallManager(private val context: Context) {
                 )
             }
         } catch (e: JSONException) {
-            Log.w(TAG, "Unable to read deferred split metadata")
+            Log.w(TAG, "Invalid deferred split metadata for $packageName: exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
             null
         }
         val info = try {
@@ -492,6 +566,7 @@ class SplitInstallManager(private val context: Context) {
                 .put("playcore_version_code", request.playCoreVersion).put("requested", JSONArray(request.splits)).put("blocked", JSONArray(request.blocked)).toString()
         )
         if (!editor.commit()) {
+            Log.w(TAG, "Unable to save deferred split metadata for $packageName: requestedCount=${request?.splits?.size ?: 0}, blockedCount=${request?.blocked?.size ?: 0}, error=-10")
             val rollback = deferred.edit()
             when (previous) {
                 is String -> rollback.putString(packageName, previous)
@@ -531,7 +606,7 @@ class SplitInstallManager(private val context: Context) {
                     }, excludedWork)
                 }
             } catch (e: Exception) {
-                Log.w(TAG, "Unable to schedule pending splits for $packageName (${e.javaClass.simpleName})")
+                Log.w(TAG, "Pending split scheduling failed for $packageName: includeInstall=$includeInstall, includeRemovals=$includeRemovals, exception=${e.javaClass.simpleName}")
             }
         }
     }
@@ -541,6 +616,7 @@ class SplitInstallManager(private val context: Context) {
         val request = try {
             parseSchedulingRequest(value)
         } catch (e: JSONException) {
+            Log.w(TAG, "Invalid split scheduling metadata for $packageName: exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
             null
         }
         val info = try {
@@ -568,6 +644,7 @@ class SplitInstallManager(private val context: Context) {
         if (request == null || request.actions.isEmpty()) editor.remove(packageName)
         else editor.putString(packageName, request.serialize())
         if (!editor.commit()) {
+            Log.w(TAG, "Unable to save split scheduling for $packageName: actions=${request?.actions}, version=${request?.version}, error=-10")
             // Keep both newly requested work and unacknowledged work available for recovery.
             val old = runCatching { previous?.let(::parseSchedulingRequest) }.getOrNull()
             val retry = request?.let { pending ->
@@ -594,7 +671,7 @@ class SplitInstallManager(private val context: Context) {
         val pending = try {
             readPendingScheduling(packageName) ?: return@synchronized
         } catch (e: Exception) {
-            Log.w(TAG, "Unable to restore split scheduling for $packageName (${e.javaClass.simpleName})")
+            Log.w(TAG, "Split scheduling recovery failed for $packageName: excludedAction=$excludedAction, exception=${e.javaClass.simpleName}")
             return@synchronized
         }
         for (action in pending.actions) {
@@ -621,7 +698,7 @@ class SplitInstallManager(private val context: Context) {
                 }
                 consumePendingScheduling(packageName, action)
             } catch (e: Exception) {
-                Log.w(TAG, "Unable to schedule split $action for $packageName (${e.javaClass.simpleName})")
+                Log.w(TAG, "Split scheduling failed for $packageName: action=$action, version=${pending.version}, clientInstallTime=${pending.clientInstallTime}, exception=${e.javaClass.simpleName}")
             }
         }
     }
@@ -636,7 +713,7 @@ class SplitInstallManager(private val context: Context) {
                 consumePendingScheduling(pendingPackage, consumedAction, version, clientInstallTime)
             } catch (e: SplitInstallException) {
                 // A failed acknowledgement must not prevent valid queued work from running.
-                Log.w(TAG, "Unable to acknowledge split $consumedAction for $pendingPackage (error ${e.errorCode})")
+                Log.w(TAG, "Split scheduling acknowledgement failed for $pendingPackage: action=$consumedAction, version=$version, clientInstallTime=$clientInstallTime, error=${e.errorCode}")
             }
         }
         var restoredPending = false
@@ -660,7 +737,7 @@ class SplitInstallManager(private val context: Context) {
         try {
             SplitInstallCompletionService.schedule(context)
         } catch (e: RuntimeException) {
-            Log.w(TAG, "Unable to schedule split completion (${e.javaClass.simpleName})")
+            Log.w(TAG, "Split completion scheduling failed: exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
         }
     }
 
@@ -708,7 +785,9 @@ class SplitInstallManager(private val context: Context) {
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Log.w(TAG, "Split completion failed (${e.javaClass.simpleName})")
+                Log.w(TAG, "Split completion failed for ${session.packageName}: session=${session.state.getInt("session_id")}, " +
+                        "nativeSession=${session.installerSessionId}, error=${(e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL}, " +
+                        "exception=${e.javaClass.simpleName}, origin=${e.stackTrace.firstOrNull()}")
                 sessionManager.finishCompletion(session, (e as? SplitInstallException)?.errorCode ?: ERROR_INTERNAL)
             } finally {
                 synchronized(session) {
@@ -779,7 +858,10 @@ class SplitInstallManager(private val context: Context) {
                 }
             }
         }
-        if (result.isEmpty()) throw SplitInstallException(-2)
+        if (result.isEmpty()) {
+            Log.w(TAG, "No language split mapping for $packageName: modules=$modules, languages=$languages, error=-2")
+            throw SplitInstallException(-2)
+        }
         return result
     }
 
