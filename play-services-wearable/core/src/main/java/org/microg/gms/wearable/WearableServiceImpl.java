@@ -43,12 +43,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final WearableImpl wearable;
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
+    private final WearOsCompanionBridge companionBridge;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
         this.capabilities = new CapabilityManager(context, wearable, packageName);
+        this.companionBridge = new WearOsCompanionBridge(context, wearable, packageName);
         this.mainHandler = new Handler(context.getMainLooper());
     }
 
@@ -228,33 +230,38 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void optInCloudSync(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
+        companionBridge.setCloudSyncEnabled(enable);
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     @Deprecated
     public void getCloudSyncOptInDone(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInDone");
+        callbacks.onGetCloudSyncOptInDoneResponse(new GetCloudSyncOptInDoneResponse(0, companionBridge.isCloudSyncOptInDone()));
     }
 
     @Override
     public void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
+        companionBridge.setCloudSyncEnabled(enable);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void getCloudSyncSetting(IWearableCallbacks callbacks) throws RemoteException {
-        callbacks.onGetCloudSyncSettingResponse(new GetCloudSyncSettingResponse(0, false));
+        callbacks.onGetCloudSyncSettingResponse(new GetCloudSyncSettingResponse(0, companionBridge.isCloudSyncEnabled()));
     }
 
     @Override
     public void getCloudSyncOptInStatus(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInStatus");
+        callbacks.onGetCloudSyncOptInStatusResponse(new GetCloudSyncOptInStatusResponse());
     }
 
     @Override
     public void sendRemoteCommand(IWearableCallbacks callbacks, byte b) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: sendRemoteCommand: " + b);
+        postNetwork(callbacks, () -> {
+            companionBridge.dispatchRemoteMediaCommand(b);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
@@ -281,7 +288,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
         postMain(callbacks, () -> {
             List<NodeParcelable> nodes = new ArrayList<>();
             for (String host : capabilities.getNodesForCapability(capability)) {
@@ -294,8 +300,12 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        postMain(callbacks, () -> {
+            GetAllCapabilitiesResponse response = new GetAllCapabilitiesResponse();
+            response.statusCode = 0;
+            response.capabilities = capabilities.getAllCapabilities(nodeFilter);
+            callbacks.onGetAllCapabilitiesResponse(response);
+        });
     }
 
     @Override
@@ -336,46 +346,68 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getStorageInformation(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getStorageInformation");
+        postMain(callbacks, () -> {
+            callbacks.onStorageInfoResponse(new StorageInfoResponse());
+        });
     }
 
     @Override
     public void clearStorage(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: clearStorage");
+        postMain(callbacks, () -> {
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCall");
+        postNetwork(callbacks, () -> {
+            companionBridge.dispatchTelecomAction("END_CALL");
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: acceptRingingCall");
+        postNetwork(callbacks, () -> {
+            companionBridge.dispatchTelecomAction("ACCEPT_RINGING_CALL");
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: silenceRinger");
+        postNetwork(callbacks, () -> {
+            companionBridge.dispatchTelecomAction("SILENCE_RINGER");
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     /*
-     * Apple Notification Center Service
+     * Apple Notification Center Service / WearOS Notification Bridging
      */
 
     @Override
     public void injectAncsNotificationForTesting(IWearableCallbacks callbacks, AncsNotificationParcelable notification) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: injectAncsNotificationForTesting: " + notification);
+        postNetwork(callbacks, () -> {
+            companionBridge.bridgeNotification(notification);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void doAncsPositiveAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsPositiveAction: " + i);
+        postNetwork(callbacks, () -> {
+            companionBridge.performNotificationAction(i, true);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void doAncsNegativeAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsNegativeAction: " + i);
+        postNetwork(callbacks, () -> {
+            companionBridge.performNotificationAction(i, false);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
@@ -420,7 +452,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void syncWifiCredentials(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: syncWifiCredentials");
+        postNetwork(callbacks, () -> {
+            companionBridge.syncWifiCredentialsToWatches();
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     /*
@@ -430,7 +465,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     @Deprecated
     public void putConnection(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: putConnection");
+        putConfig(callbacks, config);
     }
 
     @Override

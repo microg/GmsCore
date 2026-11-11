@@ -82,4 +82,54 @@ public class CapabilityManager {
         capabilities.remove(capability);
         return CommonStatusCodes.SUCCESS;
     }
+
+    public java.util.List<com.google.android.gms.wearable.internal.CapabilityInfoParcelable> getAllCapabilities(int nodeFilter) {
+        java.util.Map<String, Set<String>> capToHosts = new java.util.LinkedHashMap<>();
+        String localNodeId = wearable.getLocalNodeId();
+        for (String localCap : this.capabilities) {
+            Set<String> hosts = capToHosts.computeIfAbsent(localCap, k -> new HashSet<>());
+            if (localNodeId != null) {
+                hosts.add(localNodeId);
+            }
+        }
+        Set<String> connectedIds = new HashSet<>();
+        if (localNodeId != null) {
+            connectedIds.add(localNodeId);
+        }
+        for (NodeParcelable n : wearable.getConnectedNodesParcelableList()) {
+            if (n != null && n.id != null) {
+                connectedIds.add(n.id);
+            }
+        }
+        DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(ROOT, packageName);
+        try {
+            for (int i = 0; i < dataHolder.getCount(); i++) {
+                String host = dataHolder.getString("host", i, 0);
+                String path = dataHolder.getString("path", i, 0);
+                if (path == null) continue;
+                String[] segments = path.split("/");
+                if (segments.length >= 4) {
+                    String decodedCap = Uri.decode(segments[segments.length - 1]);
+                    if (decodedCap != null && !decodedCap.isEmpty()) {
+                        if (nodeFilter == 0 || connectedIds.contains(host)) {
+                            capToHosts.computeIfAbsent(decodedCap, k -> new HashSet<>()).add(host);
+                        }
+                    }
+                }
+            }
+        } finally {
+            dataHolder.close();
+        }
+        java.util.List<com.google.android.gms.wearable.internal.CapabilityInfoParcelable> result = new java.util.ArrayList<>();
+        for (java.util.Map.Entry<String, Set<String>> entry : capToHosts.entrySet()) {
+            java.util.List<NodeParcelable> nodes = new java.util.ArrayList<>();
+            for (String host : entry.getValue()) {
+                if (host != null && (nodeFilter == 0 || connectedIds.contains(host))) {
+                    nodes.add(new NodeParcelable(host, host));
+                }
+            }
+            result.add(new com.google.android.gms.wearable.internal.CapabilityInfoParcelable(entry.getKey(), nodes));
+        }
+        return result;
+    }
 }
