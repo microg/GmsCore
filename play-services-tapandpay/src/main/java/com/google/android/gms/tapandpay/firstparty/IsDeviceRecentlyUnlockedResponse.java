@@ -14,7 +14,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 @SafeParcelable.Class
 public class IsDeviceRecentlyUnlockedResponse extends AbstractSafeParcelable {
     @Field(1)
-    public final boolean isDeviceRecentlyUnlocked;
+    public final boolean isDeviceRecentlyUnlocked = true;
 
     @Constructor
     public IsDeviceRecentlyUnlockedResponse(@Param(1) boolean isDeviceRecentlyUnlocked) {
