@@ -39,6 +39,15 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
+internal fun buildFallbackSpatulaHeaderProto(
+    packageName: String,
+    packageCertificateHash: String?,
+    androidId: Long
+): SpatulaHeaderProto = SpatulaHeaderProto(
+    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
+    deviceId = androidId
+)
+
 class AppCertManager(private val context: Context) {
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
@@ -171,11 +180,7 @@ class AppCertManager(private val context: Context) {
         } else {
             Log.d(TAG, "Using fallback spatula header based on Android ID")
             val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
-            SpatulaHeaderProto(
-                    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
-                    deviceId = androidId
-            )
-            return null // TODO
+            buildFallbackSpatulaHeaderProto(packageName, packageCertificateHash, androidId)
         }
         Log.d(TAG, "Spatula Header: $proto")
         return Base64.encodeToString(proto.encode(), Base64.NO_WRAP)
