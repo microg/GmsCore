@@ -185,6 +185,12 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <uses-sdk tools:overrideLibrary="coil.svg, coil.compose.singleton, coil.compose.base,
         androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
@@ -215,6 +221,16 @@
             android:name="org.microg.gms.provision.ProvisionService"
             android:exported="true"
             android:permission="org.microg.gms.PROVISION" />
+
+        <service
+            android:name="org.microg.gms.rcs.RcsConstellationService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+                <action android:name="com.google.android.gms.rcs.PROVISIONING" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
 
         <!-- Location -->
 
