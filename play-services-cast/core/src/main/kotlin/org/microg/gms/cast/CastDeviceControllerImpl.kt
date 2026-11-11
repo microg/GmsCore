@@ -390,7 +390,7 @@ class CastDeviceControllerImpl(
     }
 
     private fun applicationConnected(application: ReceiverApplication, wasLaunched: Boolean) {
-        attachedApplicationId = application.appId
+        attachedApplicationId = application.clientAppId
         attachedSessionId = application.sessionId
         notify { onApplicationConnectionSuccess(application.toMetadata(), application.statusText, application.sessionId, wasLaunched) }
         if (rejoining) {
@@ -436,7 +436,9 @@ class CastDeviceControllerImpl(
     }
 
     private fun ReceiverApplication.toMetadata() = ApplicationMetadata().also {
-        it.applicationId = appId
+        // Clients know platform-specific receivers by their universal id, see ReceiverApplication.clientAppId
+        it.applicationId = clientAppId
+        it.applicationType = if (universalAppId != null) appType ?: "WEB" else appType
         it.name = displayName
         it.namespaces = ArrayList(namespaces)
         it.images = if (iconUrl != null) arrayListOf(WebImage(Uri.parse(iconUrl))) else arrayListOf()

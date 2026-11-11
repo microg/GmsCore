@@ -43,6 +43,11 @@ public class ApplicationMetadata extends AutoSafeParcelable {
     public String senderAppIdentifier;
     @SafeParceled(7)
     public Uri senderAppLaunchUri;
+    @SafeParceled(8)
+    public String iconUrl;
+    /** Receiver application type such as "WEB" or "ANDROID_TV", null if unknown. */
+    @SafeParceled(9)
+    public String applicationType;
 
     public String getApplicationId() {
         return applicationId;

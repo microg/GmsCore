@@ -61,6 +61,32 @@ class CastDeviceSessionJoinTest {
     }
 
     @Test
+    fun joinMatchesAPlatformSpecificReceiverByItsUniversalAppId() {
+        Harness().use { harness ->
+            val requestId = harness.beginJoin()
+
+            harness.receive(platformReceiverStatus("android-tv-transport").put("requestId", requestId))
+
+            harness.assertConnected("android-tv-transport", false)
+            assertEquals(listOf(APP_ID), harness.callbacks.connected.map { it.clientAppId })
+            assertEquals(listOf("ANDROID_TV"), harness.callbacks.connected.map { it.appType })
+        }
+    }
+
+    @Test
+    fun launchMatchesAPlatformSpecificReceiverByItsUniversalAppId() {
+        Harness().use { harness ->
+            val statusRequestId = harness.beginLaunch(relaunchIfRunning = false)
+            harness.receive(JSONObject().put("type", "RECEIVER_STATUS").put("requestId", statusRequestId).put("status", JSONObject()))
+            val launchRequestId = harness.takeReceiverRequest("LAUNCH")
+
+            harness.receive(platformReceiverStatus("android-tv-transport").put("requestId", launchRequestId))
+
+            harness.assertConnected("android-tv-transport", true)
+        }
+    }
+
+    @Test
     fun joinForwardsEachRequestedConnectionTypeToTheApplication() {
         for (connectionType in listOf(0, 1, 2)) {
             Harness().use { harness ->
@@ -375,6 +401,14 @@ class CastDeviceSessionJoinTest {
 
     companion object {
         private const val APP_ID = "app-id"
+
+        /** A receiver running a platform build of [APP_ID] under its own id, as a Chromecast with Google TV reports it. */
+        private fun platformReceiverStatus(transportId: String): JSONObject = JSONObject().put("type", "RECEIVER_STATUS").put(
+            "status", JSONObject().put("applications", JSONArray().put(
+                JSONObject().put("appId", "platform-app-id").put("universalAppId", APP_ID).put("appType", "ANDROID_TV")
+                    .put("sessionId", "session-id").put("transportId", transportId)
+            ))
+        )
 
         private fun receiverStatus(transportId: String): JSONObject = JSONObject().put("type", "RECEIVER_STATUS").put(
             "status", JSONObject().put("applications", JSONArray().put(
