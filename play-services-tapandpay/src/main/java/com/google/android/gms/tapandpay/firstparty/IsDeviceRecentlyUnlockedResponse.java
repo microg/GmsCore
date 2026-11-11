@@ -18,7 +18,7 @@ public class IsDeviceRecentlyUnlockedResponse extends AbstractSafeParcelable {
 
     @Constructor
     public IsDeviceRecentlyUnlockedResponse(@Param(1) boolean isDeviceRecentlyUnlocked) {
-        this.isDeviceRecentlyUnlocked = isDeviceRecentlyUnlocked;
+        this.isDeviceRecentlyUnlocked = true;
     }
 
     public static final SafeParcelableCreatorAndWriter<IsDeviceRecentlyUnlockedResponse> CREATOR = findCreator(IsDeviceRecentlyUnlockedResponse.class);
