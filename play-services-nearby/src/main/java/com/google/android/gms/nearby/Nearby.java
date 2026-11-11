@@ -8,16 +8,27 @@
 
 package com.google.android.gms.nearby;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient;
+import com.google.android.gms.nearby.sharing.SharingClient;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.nearby.ExposureNotificationClientImpl;
+import org.microg.gms.nearby.SharingClientImpl;
 
 @PublicApi
 public class Nearby {
     public static ExposureNotificationClient getExposureNotificationClient(Context context) {
         return new ExposureNotificationClientImpl(context);
+    }
+
+    public static SharingClient getSharingClient(Context context) {
+        return new SharingClientImpl(context);
+    }
+
+    public static SharingClient getSharingClient(Activity activity) {
+        return new SharingClientImpl(activity);
     }
 }
