@@ -24,6 +24,8 @@ import android.util.Log;
 
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.BinderWrapper;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -45,6 +47,9 @@ public class CastDeviceControllerService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new CastDeviceControllerImpl(this, request.packageName, request.extras), null);
+        ConnectionInfo connectionInfo = new ConnectionInfo();
+        connectionInfo.features = new Feature[]{new Feature("cxless_client_minimal", 1)};
+        CastDeviceControllerImpl controller = new CastDeviceControllerImpl(this, request.packageName, request.extras);
+        callback.onPostInitCompleteWithConnectionInfo(0, controller, connectionInfo);
     }
 }
