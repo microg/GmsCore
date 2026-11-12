@@ -44,12 +44,15 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
             style.addSource(RasterSource(sourceId, tileSet, TILE_SIZE))
         }
 
-        style.addLayer(
+        map.addRasterLayerForZIndex(
+            style,
             RasterLayer(layerId, sourceId).withProperties(
                 PropertyFactory.rasterOpacity(opacity()),
                 PropertyFactory.visibility(visibilityValue()),
                 PropertyFactory.rasterFadeDuration(if (fadeIn) FADE_DURATION_MS else 0f)
-            )
+            ),
+            zIndex,
+            id
         )
     }
 
@@ -66,6 +69,7 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
     override fun remove() {
         TileProviderHttpAdapter.unregister(id)
         map.tileOverlays.remove(id)
+        map.removeRasterLayerForZIndex(zIndex, id)
         map.map?.getStyle { style ->
             style.removeLayer(layerId)
             style.removeSource(sourceId)
@@ -83,7 +87,13 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
     override fun getId(): String = id
 
     override fun setZIndex(zIndex: Float) {
+        if (zIndex == this.zIndex) return
+        map.removeRasterLayerForZIndex(this.zIndex, id)
         this.zIndex = zIndex
+        map.map?.getStyle { style ->
+            style.removeLayer(layerId)
+            addToStyle(style)
+        }
     }
 
     override fun getZIndex(): Float = zIndex
