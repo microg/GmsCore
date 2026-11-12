@@ -15,6 +15,7 @@ enum class GooglePackagePermission {
     AD_ID, // Advertising ID
     APP_CERT, // Receive certificate confirming valid app installation (incl. Spatula)
     AUTH, // Sign in to Google account without user interface confirmation
+    CHECKIN, // Device Android ID and checkin
     CREDENTIALS, // Access to credentials
     GAMES, // Google Play Games first party access
     IMPERSONATE, // Allow to act as another package
@@ -233,6 +234,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
     Pair(
         PackageAndCertHash("com.google.android.apps.labs.whisk", SHA256, "2e7dbb9211acf86e2d288d1a0a4705b1480565d2dde54c1a66c11897d1c7c232"),
         setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
+    // Android Device Policy
+    Pair(
+        PackageAndCertHash("com.google.android.apps.work.clouddpc", SHA256, "23962f4b43b9857638ea66f4d419518eae282491acda4b94707bd59003c45e58"),
+        setOf(CHECKIN)
     ),
 
 )
