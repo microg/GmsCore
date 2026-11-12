@@ -5,6 +5,7 @@ class GooglePlayApi {
         const val URL_BASE = "https://play-fe.googleapis.com"
         const val URL_FDFE = "$URL_BASE/fdfe"
         const val URL_SKU_DETAILS = "$URL_FDFE/skuDetails"
+        const val URL_BILLING_CONFIG = "$URL_FDFE/getBillingConfig"
         const val URL_EES_ACQUIRE = "$URL_FDFE/ees/acquire"
         const val URL_ACKNOWLEDGE_PURCHASE = "$URL_FDFE/acknowledgePurchase"
         const val URL_CONSUME_PURCHASE = "$URL_FDFE/consumePurchase"
