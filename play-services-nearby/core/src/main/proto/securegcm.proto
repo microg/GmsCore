@@ -1,0 +1,308 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+package securegcm;
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.google.security.cryptauth.lib.securegcm";
+option java_outer_classname = "SecureGcmProto";
+option objc_class_prefix = "SGCM";
+
+// Message used only during enrollment
+// Field numbers should be kept in sync with DeviceInfo in:
+//   java/com/google/security/cryptauth/backend/services/common/common.proto
+message GcmDeviceInfo {
+  // This field's name does not match the one in DeviceInfo for legacy reasons.
+  // Consider using long_device_id and device_type instead when enrolling
+  // non-android devices.
+  optional fixed64 android_device_id = 1;
+
+  // Used for device_address of DeviceInfo field 2, but for GCM capable devices.
+  optional bytes gcm_registration_id = 102;
+
+  // Used for device_address of DeviceInfo field 2, but for iOS devices.
+  optional bytes apn_registration_id = 202;
+
+  // Does the user have notifications enabled for the given device address.
+  optional bool notification_enabled = 203 [default = true];
+
+  // Used for device_address of DeviceInfo field 2, a Bluetooth Mac address for
+  // the device (e.g., to be used with EasyUnlock)
+  optional string bluetooth_mac_address = 302;
+
+  // SHA-256 hash of the device master key (from the key exchange).
+  // Differs from DeviceInfo field 3, which contains the actual master key.
+  optional bytes device_master_key_hash = 103;
+
+  // A SecureMessage.EcP256PublicKey
+  required bytes user_public_key = 4;
+
+  // device's model name
+  // (e.g., an android.os.Build.MODEL or UIDevice.model)
+  optional string device_model = 7;
+
+  // device's locale
+  optional string locale = 8;
+
+  // The handle for user_public_key (and implicitly, a master key)
+  optional bytes key_handle = 9;
+
+  // The initial counter value for the device, sent by the device
+  optional int64 counter = 12 [default = 0];
+
+  // The Operating System version on the device
+  // (e.g., an android.os.Build.DISPLAY or UIDevice.systemVersion)
+  optional string device_os_version = 13;
+
+  // The Operating System version number on the device
+  // (e.g., an android.os.Build.VERSION.SDK_INT)
+  optional int64 device_os_version_code = 14;
+
+  // The Operating System release on the device
+  // (e.g., an android.os.Build.VERSION.RELEASE)
+  optional string device_os_release = 15;
+
+  // The Operating System codename on the device
+  // (e.g., an android.os.Build.VERSION.CODENAME or UIDevice.systemName)
+  optional string device_os_codename = 16;
+
+  // The software version running on the device
+  // (e.g., Authenticator app version string)
+  optional string device_software_version = 17;
+
+  // The software version number running on the device
+  // (e.g., Authenticator app version code)
+  optional int64 device_software_version_code = 18;
+
+  // Software package information if applicable
+  // (e.g., com.google.android.apps.authenticator2)
+  optional string device_software_package = 19;
+
+  // Size of the display in thousandths of an inch (e.g., 7000 mils = 7 in)
+  optional int32 device_display_diagonal_mils = 22;
+
+  // For Authzen capable devices, their Authzen protocol version
+  optional int32 device_authzen_version = 24;
+
+  // Not all devices have device identifiers that fit in 64 bits.
+  optional bytes long_device_id = 29;
+
+  // The device manufacturer name
+  // (e.g., android.os.Build.MANUFACTURER)
+  optional string device_manufacturer = 31;
+
+  // Used to indicate which type of device this is.
+  optional DeviceType device_type = 32 [default = ANDROID];
+
+  // Fields corresponding to screenlock type/features and hardware features
+  // should be numbered in the 400 range.
+
+  // Is this device using  a secure screenlock (e.g., pattern or pin unlock)
+  optional bool using_secure_screenlock = 400 [default = false];
+
+  // Is auto-unlocking the screenlock (e.g., when at "home") supported?
+  optional bool auto_unlock_screenlock_supported = 401 [default = false];
+
+  // Is auto-unlocking the screenlock (e.g., when at "home") enabled?
+  optional bool auto_unlock_screenlock_enabled = 402 [default = false];
+
+  // Does the device have a Bluetooth (classic) radio?
+  optional bool bluetooth_radio_supported = 403 [default = false];
+
+  // Is the Bluetooth (classic) radio on?
+  optional bool bluetooth_radio_enabled = 404 [default = false];
+
+  // Does the device hardware support a mobile data connection?
+  optional bool mobile_data_supported = 405 [default = false];
+
+  // Does the device support tethering?
+  optional bool tethering_supported = 406 [default = false];
+
+  // Does the device have a BLE radio?
+  optional bool ble_radio_supported = 407 [default = false];
+
+  // Is the device a "Pixel Experience" Android device?
+  optional bool pixel_experience = 408 [default = false];
+
+  // Is the device running in the ARC++ container on a chromebook?
+  optional bool arc_plus_plus = 409 [default = false];
+
+  // Is the value set in |using_secure_screenlock| reliable? On some Android
+  // devices, the platform API to get the screenlock state is not trustworthy.
+  // See b/32212161.
+  optional bool is_screenlock_state_flaky = 410 [default = false];
+
+  // A list of multi-device software features supported by the device.
+  repeated SoftwareFeature supported_software_features = 411;
+
+  // A list of multi-device software features currently enabled (active) on the
+  // device.
+  repeated SoftwareFeature enabled_software_features = 412;
+
+  // The enrollment session id this is sent with
+  optional bytes enrollment_session_id = 1000;
+
+  // A copy of the user's OAuth token
+  optional string oauth_token = 1001;
+}
+
+// This enum is used by iOS devices as values for device_display_diagonal_mils
+// in GcmDeviceInfo. There is no good way to calculate it on those devices.
+enum AppleDeviceDiagonalMils {
+  // This is the mils diagonal on an iPhone 5.
+  APPLE_PHONE = 4000;
+  // This is the mils diagonal on an iPad mini.
+  APPLE_PAD = 7900;
+}
+
+// This should be kept in sync with DeviceType in:
+// java/com/google/security/cryptauth/backend/services/common/common_enums.proto
+enum DeviceType {
+  UNKNOWN = 0;
+  ANDROID = 1;
+  CHROME = 2;
+  IOS = 3;
+  BROWSER = 4;
+  OSX = 5;
+}
+
+// MultiDevice features which may be supported and enabled on a device. See
+enum SoftwareFeature {
+  UNKNOWN_FEATURE = 0;
+  BETTER_TOGETHER_HOST = 1;
+  BETTER_TOGETHER_CLIENT = 2;
+  EASY_UNLOCK_HOST = 3;
+  EASY_UNLOCK_CLIENT = 4;
+  MAGIC_TETHER_HOST = 5;
+  MAGIC_TETHER_CLIENT = 6;
+  SMS_CONNECT_HOST = 7;
+  SMS_CONNECT_CLIENT = 8;
+}
+
+// A list of "reasons" that can be provided for calling server-side APIs.
+// This is particularly important for calls that can be triggered by different
+// kinds of events. Please try to keep reasons as generic as possible, so that
+// codes can be re-used by various callers in a sensible fashion.
+enum InvocationReason {
+  REASON_UNKNOWN = 0;
+  // First run of the software package invoking this call
+  REASON_INITIALIZATION = 1;
+  // Ordinary periodic actions (e.g. monthly master key rotation)
+  REASON_PERIODIC = 2;
+  // Slow-cycle periodic action (e.g. yearly keypair rotation???)
+  REASON_SLOW_PERIODIC = 3;
+  // Fast-cycle periodic action (e.g. daily sync for Smart Lock users)
+  REASON_FAST_PERIODIC = 4;
+  // Expired state (e.g. expired credentials, or cached entries) was detected
+  REASON_EXPIRATION = 5;
+  // An unexpected protocol failure occurred (so attempting to repair state)
+  REASON_FAILURE_RECOVERY = 6;
+  // A new account has been added to the device
+  REASON_NEW_ACCOUNT = 7;
+  // An existing account on the device has been changed
+  REASON_CHANGED_ACCOUNT = 8;
+  // The user toggled the state of a feature (e.g. Smart Lock enabled via BT)
+  REASON_FEATURE_TOGGLED = 9;
+  // A "push" from the server caused this action (e.g. a sync tickle)
+  REASON_SERVER_INITIATED = 10;
+  // A local address change triggered this (e.g. GCM registration id changed)
+  REASON_ADDRESS_CHANGE = 11;
+  // A software update has triggered this
+  REASON_SOFTWARE_UPDATE = 12;
+  // A manual action by the user triggered this (e.g. commands sent via adb)
+  REASON_MANUAL = 13;
+  // A custom key has been invalidated on the device (e.g. screen lock is
+  // disabled).
+  REASON_CUSTOM_KEY_INVALIDATION = 14;
+  // Periodic action triggered by auth_proximity
+  REASON_PROXIMITY_PERIODIC = 15;
+}
+
+enum Type {
+  ENROLLMENT = 0;
+  TICKLE = 1;
+  TX_REQUEST = 2;
+  TX_REPLY = 3;
+  TX_SYNC_REQUEST = 4;
+  TX_SYNC_RESPONSE = 5;
+  TX_PING = 6;
+  DEVICE_INFO_UPDATE = 7;
+  TX_CANCEL_REQUEST = 8;
+
+  // DEPRECATED (can be re-used after Aug 2015)
+  PROXIMITYAUTH_PAIRING = 10;
+
+  // The kind of identity assertion generated by a "GCM V1" device (i.e.,
+  // an Android phone that has registered with us a public and a symmetric
+  // key)
+  GCMV1_IDENTITY_ASSERTION = 11;
+
+  // Device-to-device communications are protected by an unauthenticated
+  // Diffie-Hellman exchange. The InitiatorHello message is simply the
+  // initiator's public DH key, and is not encoded as a SecureMessage, so
+  // it doesn't have a tag.
+  // The ResponderHello message (which is sent by the responder
+  // to the initiator), on the other hand, carries a payload that is protected
+  // by the derived shared key. It also contains the responder's
+  // public DH key. ResponderHelloAndPayload messages have the
+  // DEVICE_TO_DEVICE_RESPONDER_HELLO tag.
+  DEVICE_TO_DEVICE_RESPONDER_HELLO_PAYLOAD = 12;
+
+  // Device-to-device communications are protected by an unauthenticated
+  // Diffie-Hellman exchange. Once the initiator and responder
+  // agree on a shared key (through Diffie-Hellman), they will use messages
+  // tagged with DEVICE_TO_DEVICE_MESSAGE to exchange data.
+  DEVICE_TO_DEVICE_MESSAGE = 13;
+
+  // Notification to let a device know it should contact a nearby device.
+  DEVICE_PROXIMITY_CALLBACK = 14;
+
+  // Device-to-device communications are protected by an unauthenticated
+  // Diffie-Hellman exchange. During device-to-device authentication, the first
+  // message from initiator (the challenge) is signed and put into the payload
+  // of the message sent back to the initiator.
+  UNLOCK_KEY_SIGNED_CHALLENGE = 15;
+
+  // Specialty (corp only) features
+  LOGIN_NOTIFICATION = 101;
+}
+
+message GcmMetadata {
+  required Type type = 1;
+  optional int32 version = 2 [default = 0];
+}
+
+message Tickle {
+  // Time after which this tickle should expire
+  optional fixed64 expiry_time = 1;
+}
+
+message LoginNotificationInfo {
+  // Time at which the server received the login notification request.
+  optional fixed64 creation_time = 2;
+
+  // Must correspond to user_id in LoginNotificationRequest, if set.
+  optional string email = 3;
+
+  // Host where the user's credentials were used to login, if meaningful.
+  optional string host = 4;
+
+  // Location from where the user's credentials were used, if meaningful.
+  optional string source = 5;
+
+  // Type of login, e.g. ssh, gnome-screensaver, or web.
+  optional string event_type = 6;
+}
