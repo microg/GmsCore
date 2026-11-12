@@ -74,6 +74,7 @@ public class SignatureService extends Service {
 
         @Override
         public String[] querySignature(String packageName, boolean suggested) throws RemoteException {
+            Log.i(TAG, "querySignature: " + packageName + " suggested:" + suggested);
             try (Cursor cursor = database.query(TABLE_APPLIST, null, COLUMN_NAME + "=?",
                     new String[]{packageName}, null, null, null)) {
                 switch (cursor.getCount()) {
@@ -96,6 +97,7 @@ public class SignatureService extends Service {
         }
 
         private String[] getResult(boolean useFakeSignature) {
+            Log.i(TAG, "getResult: " + useFakeSignature);
             if (useFakeSignature) {
                 return new String[]{getString(R.string.fake_signature),};
             } else {
