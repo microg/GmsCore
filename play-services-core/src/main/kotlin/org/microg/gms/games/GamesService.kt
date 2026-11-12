@@ -8,9 +8,11 @@ package org.microg.gms.games
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcel
@@ -58,6 +60,8 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.achievements.AchievementsApiClient
 import org.microg.gms.games.snapshot.SnapshotsDataClient
+import org.microg.gms.games.snapshot.mostRecentSnapshot
+import org.microg.gms.games.snapshot.toMillis
 import org.microg.gms.games.utils.AccountPromptManager
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.File
@@ -155,6 +159,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     private val pattern: Pattern = Pattern.compile("[0-9a-zA-Z-._~]{1,100}")
     private var saveName: String? = null
+    private var snapshotId: String? = null
+    private var conflictingSnapshotIds: List<String> = emptyList()
 
     override fun clientDisconnecting(clientId: Long) {
         Log.d(TAG, "Not yet implemented: clientDisconnecting($clientId)")
@@ -617,6 +623,43 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     override fun loadSnapshots(callbacks: IGamesCallbacks?, forceReload: Boolean) {
         Log.d(TAG, "Method loadSnapshots(forceReload:$forceReload) called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val authResponse = withContext(Dispatchers.IO) {
+                    AuthManager(context, account.name, packageName, "$SERVICE_GAMES_LITE ${Scopes.DRIVE_APPFOLDER}").apply { isPermitted = true }.requestAuth(true)
+                }
+                var oauthToken: String? = null
+                if (authResponse.auth?.let { oauthToken = it } == null) {
+                    throw RuntimeException("oauthToken is null")
+                }
+                val snapshots = SnapshotsDataClient.get(context).loadSnapshotData(oauthToken!!)
+                Log.d(TAG, "loadSnapshots: ${snapshots.size} snapshot(s): ${snapshots.map { it.uniqueName }}")
+                val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
+                        GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
+                        SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
+                val builder = DataHolder.builder(columns)
+                val playerValues = (player as? PlayerEntity)?.toContentValues()
+                snapshots.forEach { snapshot ->
+                    val row = playerValues?.let { ContentValues(it) } ?: ContentValues()
+                    snapshot.id?.let { row.put(SnapshotColumns.EXTERNAL_SNAPSHOT_ID, it) }
+                    snapshot.coverImage?.url?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_URL, it) }
+                    snapshot.coverImage?.width?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_WIDTH, it) }
+                    snapshot.coverImage?.height?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_HEIGHT, it) }
+                    snapshot.uniqueName?.let { row.put(SnapshotColumns.UNIQUE_NAME, it) }
+                    snapshot.title?.let { row.put(SnapshotColumns.TITLE, it) }
+                    snapshot.description?.let { row.put(SnapshotColumns.DESCRIPTION, it) }
+                    snapshot.lastModifiedMillis?.toLongOrNull()?.let { row.put(SnapshotColumns.LAST_MODIFIED_TIMESTAMP, it) }
+                    snapshot.durationMillis?.toLongOrNull()?.let { row.put(SnapshotColumns.DURATION, it) }
+                    snapshot.progressValue?.toLongOrNull()?.let { row.put(SnapshotColumns.PROGRESS_VALUE, it) }
+                    row.put(SnapshotColumns.PENDING_CHANGE_COUNT, 0)
+                    builder.withRow(row)
+                }
+                callbacks?.onSnapshotsLoaded(builder.build(GamesStatusCodes.OK.code))
+            }.onFailure {
+                Log.w(TAG, "loadSnapshots: error", it)
+                callbacks?.onSnapshotsLoaded(DataHolder.empty(GamesStatusCodes.INTERNAL_ERROR.code))
+            }
+        }
     }
 
     override fun commitSnapshot(
@@ -636,9 +679,12 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     if (authResponse.auth?.let { oauthToken = it } == null) {
                         throw RuntimeException("oauthToken is null")
                     }
-                    val result = SnapshotsDataClient.get(context).commitSnapshot(oauthToken!!, saveName, change, contents, maxCoverImageSize)
-                    if (result == true) {
-                        callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.OK.code))
+                    val committedSnapshot = SnapshotsDataClient.get(context).commitSnapshot(oauthToken!!, saveName, str ?: snapshotId, conflictingSnapshotIds, change, contents, maxCoverImageSize)
+                    if (committedSnapshot != null) {
+                        Log.d(TAG, "commitSnapshot: committed revision ${committedSnapshot.snapshotId}")
+                        snapshotId = committedSnapshot.snapshotId ?: snapshotId
+                        conflictingSnapshotIds = emptyList()
+                        callbacks?.commitSnapshotResult(buildSnapshotMetadata(committedSnapshot))
                     } else {
                         callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code))
                     }
@@ -652,6 +698,28 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
         }
     }
 
+    private fun buildSnapshotMetadata(snapshot: org.microg.gms.games.Snapshot?): DataHolder {
+        val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
+                GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
+                SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
+        val row = (player as? PlayerEntity)?.toContentValues() ?: ContentValues()
+        snapshotId?.let { row.put(SnapshotColumns.EXTERNAL_SNAPSHOT_ID, it) }
+        saveName?.let {
+            row.put(SnapshotColumns.UNIQUE_NAME, it)
+            row.put(SnapshotColumns.TITLE, it)
+        }
+        snapshot?.content?.description?.let { row.put(SnapshotColumns.DESCRIPTION, it) }
+        snapshot?.content?.snapshotTimeInfo?.toMillis()?.let { row.put(SnapshotColumns.LAST_MODIFIED_TIMESTAMP, it) }
+        snapshot?.content?.duration?.let { row.put(SnapshotColumns.DURATION, it) }
+        snapshot?.content?.progressValue?.let { row.put(SnapshotColumns.PROGRESS_VALUE, it) }
+        snapshot?.content?.deviceName?.let { row.put(SnapshotColumns.DEVICE_NAME, it) }
+        snapshot?.coverImage?.imageUrl?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_URL, it) }
+        snapshot?.coverImage?.width?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_WIDTH, it) }
+        snapshot?.coverImage?.height?.let { row.put(SnapshotColumns.COVER_ICON_IMAGE_HEIGHT, it) }
+        row.put(SnapshotColumns.PENDING_CHANGE_COUNT, 0)
+        return DataHolder.builder(columns).withRow(row).build(CommonStatusCodes.SUCCESS)
+    }
+
     override fun loadEvents(callbacks: IGamesCallbacks?, forceReload: Boolean) {
         Log.d(TAG, "Not yet implemented: loadEvents($forceReload)")
     }
@@ -662,6 +730,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     override fun discardAndCloseSnapshot(contents: Contents?) {
         Log.d(TAG, "discardAndCloseSnapshot: $contents")
+        runCatching { contents?.parcelFileDescriptor?.close() }
     }
 
     override fun loadEventsById(callbacks: IGamesCallbacks?, forceReload: Boolean, eventsIds: Array<out String>?) {
@@ -706,23 +775,32 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     unknownFileInt3 = 3
                 }.build()
                 val resolveSnapshotHeadResponse = SnapshotsDataClient.get(context).resolveSnapshotHead(oauthToken!!, resolveSnapshotHeadRequest)
-                val contentUrl = resolveSnapshotHeadResponse?.snapshotMetadata?.snapshot?.snapshotContentInfo?.url
+                // The server returns the head plus unresolved conflicting revisions. Use the content of the most recently
+                // modified one; committing on top of the head with the conflicting revisions listed resolves the conflict.
+                val metadata = resolveSnapshotHeadResponse?.snapshotMetadata
+                val snapshotProto = metadata?.mostRecentSnapshot()
+                snapshotId = metadata?.snapshot?.snapshotId ?: snapshotProto?.snapshotId
+                conflictingSnapshotIds = metadata?.snapshots.orEmpty().mapNotNull { it.snapshotId }
+                if (conflictingSnapshotIds.isNotEmpty()) {
+                    Log.d(TAG, "resolveSnapshotHead: head $snapshotId, conflicting: $conflictingSnapshotIds, using ${snapshotProto?.snapshotId}")
+                }
+                val contentUrl = snapshotProto?.snapshotContentInfo?.url
                 if (contentUrl != null) {
                     val contentByteArray = SnapshotsDataClient.get(context).getDataFromDrive(oauthToken!!, contentUrl)
-                    val fileOutputStream = FileOutputStream(file)
-                    fileOutputStream.write(contentByteArray)
+                        ?: throw RuntimeException("Failed to download snapshot content")
+                    FileOutputStream(file).use { it.write(contentByteArray) }
                 }
-                val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
-                        GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
-                        SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
                 val dataHolder = if (player is PlayerEntity) {
-                    DataHolder.builder(columns)
-                        .withRow(player.toContentValues()).build(CommonStatusCodes.SUCCESS)
+                    buildSnapshotMetadata(snapshotProto)
                 } else {
+                    val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
+                            GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
+                            SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
                     DataHolder.builder(columns).build(CommonStatusCodes.SIGN_IN_REQUIRED)
                 }
                 callbacks.onResolveSnapshotHead(dataHolder, Contents(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_WRITE), 1, ParcelFileDescriptor.MODE_READ_WRITE, driveId, true, null))
             }.onFailure {
+                Log.w(TAG, "resolveSnapshotHead: error", it)
                 callbacks.onResolveSnapshotHead(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code), null)
             }
         }

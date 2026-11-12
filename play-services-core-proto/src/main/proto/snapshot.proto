@@ -10,7 +10,7 @@ service SnapshotsExtended {
   rpc DeleteSnapshot (DeleteSnapshotInfo) returns (EmptyResult);
   rpc ResolveSnapshotHead(ResolveSnapshotHeadRequest) returns (ResolveSnapshotHeadResponse);
   rpc PrepareSnapshotRevision(PrepareSnapshotRevisionRequest) returns (PrepareSnapshotRevisionResponse);
-  rpc CommitSnapshotRevision(CommitSnapshotRevisionRequest) returns (EmptyResult);
+  rpc CommitSnapshotRevision(CommitSnapshotRevisionRequest) returns (CommitSnapshotRevisionResponse);
 }
 
 message ResolveSnapshotHeadResponse {
@@ -66,6 +66,11 @@ message DeleteSnapshotInfo {
   optional string snapshotId = 2;
 }
 
+message CommitSnapshotRevisionResponse {
+  optional string snapshotId = 1;
+  optional SnapshotMetadata snapshotMetadata = 2;
+}
+
 message EmptyResult {
 
 }
@@ -105,8 +110,8 @@ message SnapshotContent {
 }
 
 message SnapshotTimeInfo {
-  required int64 timestamp = 1;
-  required int32 playedTime = 2;
+  optional int64 timestamp = 1;
+  optional int32 playedTime = 2;
 }
 
 message SnapshotContentInfo {
