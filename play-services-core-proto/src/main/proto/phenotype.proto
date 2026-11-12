@@ -1,0 +1,313 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package org.microg.gms.phenotype;
+
+option java_package = "org.microg.gms.phenotype";
+option java_outer_classname = "PhenotypeProto";
+
+message FlagUpdate {
+    repeated string configPackages = 1;
+}
+
+message ExternalExperimentTokenList {
+    repeated bytes tokens = 1;
+}
+
+message ConfigurationPackageMetadata {
+    optional LogSourcePolicy logSources = 2;
+    optional SubpackagePolicy subpackage = 3;
+}
+
+message LogSourcePolicy {
+    optional bool replace = 1;
+    repeated string names = 2;
+}
+
+message ExperimentLogSources {
+    repeated string names = 1;
+}
+
+message SubpackagePolicy {
+    optional bool forceCaller = 1;
+}
+
+message AndroidBuildDataProperties {
+    optional int64 baselineCl = 4 [default = -1];
+}
+
+message DeclarativeRegistration {
+    enum Format {
+        XML = 0;
+        FIELD1 = 1;
+        FIELD2 = 2;
+        BINARY = 3;
+    }
+    optional string configPackage = 1;
+    oneof configurationVersion {
+        int32 version = 2;
+        int64 versionCode = 15;
+    }
+    repeated string logSources = 3;
+    repeated int32 weakExperimentIds = 4 [packed = true];
+    optional bytes params = 5;
+    optional bool weak = 6;
+    oneof owner {
+        string androidPackage = 7;
+        string field10 = 10;
+    }
+    optional RegistrationSource registrationSource = 8;
+    optional Format registrationFormat = 9;
+    optional bool autoSubpackage = 11;
+    optional bool deleteRuntimeProperties = 12;
+    optional int64 baselineCl = 13;
+    optional bytes heterodyneInfo = 14;
+    optional AndroidBacking androidBacking = 16;
+}
+
+enum AndroidBacking {
+    UNKNOWN_BACKING = 0;
+    SHARED_PREFS = 1;
+    CONTENT_PROVIDER = 2;
+    PROCESS_STABLE_CONTENT_PROVIDER = 3;
+    TIKTOK = 4;
+    DEVICE_CONFIG = 5;
+    FILE = 6;
+}
+
+enum RegistrationSource {
+    UNKNOWN = 0;
+    CLIENT = 1;
+    RESOURCE = 2;
+}
+
+message RegistrationHeterodyneInfo {
+    optional string configPackage = 1;
+}
+
+message CommitConfigurationProperties {
+    optional string snapshotToken = 1;
+    optional CommitConfigurationMetadata metadata = 2;
+    optional string configPackage = 3;
+}
+
+message CommitConfigurationMetadata {
+    optional int32 field1 = 1;
+    optional int32 field2 = 2;
+}
+
+message SharedStorageInfo {
+    optional CredentialStorageInfo credentialEncrypted = 1;
+    optional DeviceStorageInfo deviceEncrypted = 2;
+}
+
+message CredentialStorageInfo {
+    optional bytes secret = 1;
+    optional bool enabled = 2;
+    optional string directory = 3;
+    optional int64 generatedAtMillis = 4;
+    repeated string includeStaticConfigPackages = 5;
+    repeated string excludeStaticConfigPackages = 6;
+    repeated int32 storageTypes = 7 [packed = true];
+    optional StoragePath path = 8;
+    optional bool enableCommitV2Api = 10;
+    optional bool allowEmptySnapshotToken = 11;
+    optional SharedStorageClientFlags clientFlags = 12;
+}
+
+message DeviceStorageInfo {
+    optional bytes secret = 1;
+    optional bool enabled = 2;
+    optional string directory = 3;
+    repeated string includeStaticConfigPackages = 4;
+    repeated string excludeStaticConfigPackages = 5;
+    repeated int32 storageTypes = 7 [packed = true];
+    optional StoragePath path = 8;
+    optional bool enableCommitV2Api = 10;
+    optional bool allowEmptySnapshotToken = 11;
+    optional SharedStorageClientFlags clientFlags = 12;
+}
+
+message SharedStorageClientFlags {
+    optional bool streamFlagsBlob = 1;
+}
+
+message StoragePath {
+    optional string parentDirectory = 1;
+    optional int64 sdkVersion = 2;
+}
+
+message SharedConfigurationMetadata {
+    optional string snapshotToken = 1;
+    optional bytes experimentToken = 2;
+    optional string serverToken = 3;
+    optional int64 serverTimestamp = 4;
+    map<string, SharedOverrideValue> overrides = 5;
+}
+
+message SharedOverrideValue {
+    oneof value {
+        fixed64 longValue = 1;
+        bool boolValue = 2;
+        double doubleValue = 3;
+        string stringValue = 4;
+        bytes bytesValue = 5;
+    }
+    optional string name = 10;
+}
+
+enum FetchReason {
+    UNSPECIFIED = 0;
+    PERIODIC = 1;
+    ADAPTIVE = 2;
+    GCM_PUSH = 3;
+    APPLICATION_PUSH = 4;
+    NEW_USER = 5;
+    NEW_APPLICATION = 6;
+    NEW_REGISTER_VERSION = 7;
+    NEW_REGISTER_OTHER = 8;
+    MOBDOG = 9;
+    RETRY_AFTER = 10;
+    APPLICATION_PUSH_RETRY = 11;
+    NEW_USER_SYNC = 12;
+    NEW_APPLICATION_SYNC = 13;
+    NEW_REGISTER_VERSION_SYNC = 14;
+    NEW_REGISTER_OTHER_SYNC = 15;
+    NEW_APP_PROPERTIES = 16;
+    GMSCORE_SAFEBOOT = 17;
+    CHECK_IN = 18;
+    FORCE_SYNC = 19;
+    FLAG_CORRUPTION = 20;
+    FLAG_OVERRIDE = 21;
+    MOBILE_UTILITIES = 22;
+    GMSCORE_APP_DOCTOR_SOS = 23;
+}
+
+message SyncRequest {
+    optional ClientInfo clientInfo = 1;
+    repeated PackageRequest packages = 2;
+    optional bytes bytesTag = 3;
+    optional FetchReason fetchReason = 4;
+    optional int32 apiVersion = 5;
+    optional string packageId = 7;
+    map<string, AppWideProperties> appProperties = 11;
+}
+
+message AppWideProperties {
+    optional bytes properties = 1;
+}
+
+message ClientInfo {
+    optional int64 numAccounts = 2;
+    optional SyncInfo syncInfo = 4;
+    optional string deviceState = 5;
+    optional bytes dogfoodsToken = 6;
+    optional bool isExempt = 7;
+    optional ServerConfig serverConfig = 8;
+}
+
+message SyncInfo {
+    optional int32 syncType = 1;
+    optional PhenotypeDeviceConfig deviceConfig = 2;
+    optional int64 timestamp = 12;
+}
+
+message PhenotypeDeviceConfig {
+    optional int64 sdkVersion = 1;
+    optional int32 buildType = 3;
+    optional string manufacturer = 4;
+    optional string model = 5;
+    optional string product = 6;
+    optional string brand = 7;
+    optional string device = 8;
+    optional string hardware = 9;
+    optional string board = 10;
+    optional string radio = 11;
+    optional string bootloader = 12;
+    optional string fingerprint = 13;
+    optional string buildId = 14;
+    optional string buildDisplay = 15;
+    optional string sdkVersionStr = 16;
+    optional string abiList = 17;
+    optional int32 gmsVersionCode = 19;
+    optional bool playEnabled = 20;
+    optional int32 densityDpi = 23;
+}
+
+message PackageRequest {
+    optional PackageVersion version = 1;
+    optional bytes params = 2;
+    repeated PartitionTag partitionTags = 3;
+    optional bytes tokensTag = 4;
+    optional bytes heterodyneInfo = 6;
+    optional bytes runtimeProperties = 8;
+}
+
+message PackageVersion {
+    optional string packageName = 1;
+    optional int64 version = 2;
+    optional SignatureInfo signatureInfo = 3;
+    optional sfixed64 baselineCl = 4;
+    optional string androidPackageName = 5;
+}
+
+message SignatureInfo {
+    optional int32 accountIndex = 1;
+}
+
+message PartitionTag {
+    optional int64 ordinal = 1;
+    optional bytes tag = 2;
+}
+
+message ServerConfig {
+}
+
+message SyncResponse {
+    repeated ConfigPackage configPackages = 1;
+    optional bytes bytesTag = 2;
+    optional string deviceState = 3;
+    optional int64 serverTimestamp = 4;
+    repeated int32 failedAccounts = 6;
+}
+
+message ConfigPackage {
+    optional PackageVersion version = 1;
+    repeated FlagPartition flagPartitions = 2;
+    optional bytes experimentToken = 3;
+    optional string serverToken = 4;
+    repeated CrossLoggedToken crossLoggedTokens = 6;
+    optional bytes tokensTag = 7;
+    optional int64 servingVersion = 11;
+}
+
+message CrossLoggedToken {
+    optional PackageVersion sourceVersion = 1;
+    optional bytes token = 2;
+    optional int32 type = 3;
+}
+
+message FlagPartition {
+    optional PartitionTag tag = 1;
+    repeated FlagValue flags = 2;
+    optional int32 partitionType = 3;
+}
+
+message FlagValue {
+    optional string name = 1;
+    optional int64 intValue = 2;
+    optional bool boolValue = 3;
+    optional double floatValue = 4;
+    optional string stringValue = 5;
+    optional ExtensionValue extensionValue = 6;
+    optional int32 valueType = 9;
+    optional bool isForced = 10;
+}
+
+message ExtensionValue {
+    optional bytes data = 1;
+}
