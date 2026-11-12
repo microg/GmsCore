@@ -11,6 +11,15 @@
         tools:ignore="ProtectedPermissions" />
 
     <application>
+        <!-- Local operator opt-in: enabled with adb shell pm enable for the server device. -->
+        <provider
+            android:name=".DroidGuardSessionProvider"
+            android:authorities="org.microg.gms.droidguard"
+            android:enabled="false"
+            android:exported="true"
+            android:permission="android.permission.DUMP"
+            android:process="com.google.android.gms.unstable" />
+
         <service
             android:name=".DroidGuardService"
             android:enabled="true"
@@ -27,3 +36,4 @@
     </application>
 
 </manifest>
+

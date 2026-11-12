@@ -11,3 +11,6 @@ local.properties
 .settings
 .classpath
 .project
+
+__pycache__/
+*.pyc

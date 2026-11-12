@@ -1,0 +1,142 @@
+{
+  "source": {
+    "expected_commit": "7a648d5fe5f073c61ef7b202aef4c74dd329f4be",
+    "expected_tree": "24896870026d0edb04989c9627b4a1dc0586670d",
+    "actual_commit": "7a648d5fe5f073c61ef7b202aef4c74dd329f4be",
+    "actual_tree": "24896870026d0edb04989c9627b4a1dc0586670d",
+    "matches": true
+  },
+  "execution": {
+    "started_at": "2026-10-04T09:48:11.159810+00:00",
+    "started_monotonic_ns": 216110541348,
+    "workflow_commit": "3e8f39598ae7d76c053ffac80c64070b1f508b3b",
+    "workflow_ref": "refs/heads/validation/dott3841-integrated-cd79-20261004",
+    "run_url": "https://github.com/woahwhattheheck/GmsCore/actions/runs/37193312230",
+    "run_attempt": "1",
+    "ended_at": "2026-10-04T10:02:33.044605+00:00",
+    "elapsed_seconds": 861.885
+  },
+  "build_step_outcome": "success",
+  "build": {
+    "started_at": "2026-10-04T09:48:14Z",
+    "ended_at": "2026-10-04T10:02:32.869573+00:00",
+    "elapsed_seconds": 858.87,
+    "exit_code": 0,
+    "source_commit": "7a648d5fe5f073c61ef7b202aef4c74dd329f4be",
+    "source_tree": "24896870026d0edb04989c9627b4a1dc0586670d",
+    "gradle_jvmargs": "-Xmx3g -XX:MaxMetaspaceSize=768m",
+    "max_workers": 1,
+    "kotlin_compiler_execution_strategy": "in-process",
+    "tasks": [
+      ":play-services-droidguard-core:testDebugUnitTest",
+      "assembleVtmDefaultDebug"
+    ],
+    "test_filters": [
+      "org.microg.gms.droidguard.core.RemoteDroidGuardInitializationTest",
+      "org.microg.gms.droidguard.core.RemoteDroidGuardSessionTest",
+      "org.microg.gms.droidguard.core.RemoteDroidGuardHttpClientTest"
+    ]
+  },
+  "junit": {
+    "droidguard_core": {
+      "report_files": 3,
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "files": [
+        {
+          "path": "files/play-services-droidguard/core/build/test-results/testDebugUnitTest/TEST-org.microg.gms.droidguard.core.RemoteDroidGuardHttpClientTest.xml",
+          "bytes": 669,
+          "sha256": "6702e230b9b56f886097f3af7d4aa99e5337881d0ee35e0d27016765745ae63f"
+        },
+        {
+          "path": "files/play-services-droidguard/core/build/test-results/testDebugUnitTest/TEST-org.microg.gms.droidguard.core.RemoteDroidGuardInitializationTest.xml",
+          "bytes": 1196,
+          "sha256": "58460fadc77fc02430ec0e5b34804d8ddecbe17b271e3ba1755eb44ed1878d8b"
+        },
+        {
+          "path": "files/play-services-droidguard/core/build/test-results/testDebugUnitTest/TEST-org.microg.gms.droidguard.core.RemoteDroidGuardSessionTest.xml",
+          "bytes": 1132,
+          "sha256": "d5c96945a8fcbb846cfbbc47feec2230b35f42db6cdeb58f3d919209de704a83"
+        }
+      ]
+    }
+  },
+  "focused_class_counts": {
+    "org.microg.gms.droidguard.core.RemoteDroidGuardSessionTest": 5,
+    "org.microg.gms.droidguard.core.RemoteDroidGuardInitializationTest": 5,
+    "org.microg.gms.droidguard.core.RemoteDroidGuardHttpClientTest": 2
+  },
+  "test_patch": {
+    "source": "Retained session lifecycle regression patch v2, attachment F0C6HQDQ6DU",
+    "patch_sha256": "497af7ad875d46645c85eff4f2d02711678dc0513fbf70f4359ccc7636b7fc24",
+    "patch_bytes": 5001,
+    "target": "play-services-droidguard/core/src/test/kotlin/org/microg/gms/droidguard/core/RemoteDroidGuardSessionTest.kt",
+    "before_blob": "608b7680149c62640c91fdf136661384ff6294b7",
+    "after_blob": "f300e7fad7a6a9649d6c591f36a701b6bf7ee80b",
+    "production_diff": []
+  },
+  "source_delta_after_build": [
+    "play-services-droidguard/core/src/test/kotlin/org/microg/gms/droidguard/core/RemoteDroidGuardSessionTest.kt"
+  ],
+  "apks": [
+    {
+      "path": "files/play-services-core/build/outputs/apk/vtmDefault/debug/com.google.android.gms-252432000.apk",
+      "bytes": 107313927,
+      "sha256": "d40be530096efce543222918b062abfe2310e1508fddb0393c2603ed302e5749"
+    }
+  ],
+  "problems": [],
+  "device_dott_result": "not executed by this workflow",
+  "workflow_run": {
+    "id": 37193312230,
+    "job_id": 111409876131,
+    "conclusion": "success",
+    "url": "https://github.com/woahwhattheheck/GmsCore/actions/runs/37193312230"
+  },
+  "artifact": {
+    "id": 11300192593,
+    "name": "dott3841-integrated-7a648d5fe5f073c61ef7b202aef4c74dd329f4be-37193312230-1",
+    "size_in_bytes": 102840134,
+    "url": "https://api.github.com/repos/woahwhattheheck/GmsCore/actions/artifacts/11300192593",
+    "archive_download_url": "https://api.github.com/repos/woahwhattheheck/GmsCore/actions/artifacts/11300192593/zip",
+    "expired": false,
+    "created_at": "2026-10-04T10:02:37Z",
+    "expires_at": "2026-11-03T10:02:33Z",
+    "updated_at": "2026-10-04T10:02:37Z",
+    "digest": "sha256:4e970c513674419a2279a8b3bf3ac2a9929ffe629010eacd61662048b4259786",
+    "workflow_run": {
+      "id": 37193312230,
+      "repository_id": 1399995704,
+      "head_repository_id": 1399995704,
+      "head_branch": "validation/dott3841-integrated-cd79-20261004",
+      "head_sha": "3e8f39598ae7d76c053ffac80c64070b1f508b3b"
+    },
+    "download_url": "https://github.com/woahwhattheheck/GmsCore/actions/runs/37193312230/artifacts/11300192593"
+  },
+  "task_log_lines": [
+    "Ubuntu",
+    "24.04.5",
+    "openjdk version \"17.0.20.1\" 2026-08-18",
+    "javac 17.0.20.1",
+    "Pkg.Revision=35.0.0",
+    "Pkg.Revision=2",
+    "AndroidVersion.ApiLevel=35",
+    "> Task :play-services-droidguard-core:compileDebugKotlin",
+    "> Task :play-services-droidguard-core:compileDebugUnitTestKotlin",
+    "> Task :play-services-droidguard-core:testDebugUnitTest",
+    "> Task :play-services-core:assembleVtmDefaultDebug",
+    "BUILD SUCCESSFUL in 14m 17s",
+    "1749 actionable tasks: 1220 executed, 529 from cache"
+  ],
+  "toolchain": {
+    "runner": "Ubuntu 24.04.5",
+    "gradle": "8.13",
+    "java_stdout": "openjdk version \"17.0.20.1\" 2026-08-18",
+    "javac": "17.0.20.1",
+    "android_api_level": 35,
+    "android_build_tools": "35.0.0"
+  },
+  "receipt_note": "Extracted from the completed workflow job summary and task log, with GitHub artifact metadata added. The product revision and transient test-only patch are recorded separately."
+}
