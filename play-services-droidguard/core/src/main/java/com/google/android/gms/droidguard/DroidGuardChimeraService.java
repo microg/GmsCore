@@ -120,6 +120,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
             SerialUnflaky.INSTANCE.fetch();
             ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "SurfaceFlinger");
             ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "thermalservice");
+            ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "activity");
             return new DroidGuardServiceBroker(this);
         }
         return null;
@@ -137,6 +138,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         SerialUnflaky.INSTANCE.fetch();
         ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "SurfaceFlinger");
         ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "thermalservice");
+        ServiceCallProxy.INSTANCE.maySetBlockDumpForService(this, "activity");
         super.onCreate();
     }
 
