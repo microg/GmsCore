@@ -1,0 +1,70 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// The part of the Cast channel protocol that device authentication needs. Field numbers are those of the protocol,
+// see cast_channel.proto of Open Screen. Everything is optional here, so that what a device sends gets checked by
+// CastDeviceAuthenticator and not by the decoder.
+
+syntax = "proto2";
+
+option java_package = "org.microg.gms.cast.proto";
+
+message CastMessage {
+  enum ProtocolVersion {
+    CASTV2_1_0 = 0;
+  }
+  optional ProtocolVersion protocol_version = 1;
+  optional string source_id = 2;
+  optional string destination_id = 3;
+  optional string namespace = 4;
+
+  enum PayloadType {
+    STRING = 0;
+    BINARY = 1;
+  }
+  optional PayloadType payload_type = 5;
+  optional string payload_utf8 = 6;
+  optional bytes payload_binary = 7;
+}
+
+enum SignatureAlgorithm {
+  UNSPECIFIED = 0;
+  RSASSA_PKCS1v15 = 1;
+  RSASSA_PSS = 2;
+}
+
+enum HashAlgorithm {
+  SHA1 = 0;
+  SHA256 = 1;
+}
+
+message AuthChallenge {
+  optional SignatureAlgorithm signature_algorithm = 1;
+  optional bytes sender_nonce = 2;
+  optional HashAlgorithm hash_algorithm = 3;
+}
+
+message AuthResponse {
+  optional bytes signature = 1;
+  optional bytes client_auth_certificate = 2;
+  repeated bytes intermediate_certificate = 3;
+  // RSASSA_PKCS1v15 if absent
+  optional SignatureAlgorithm signature_algorithm = 4;
+  // Absent if the device does not know about nonces
+  optional bytes sender_nonce = 5;
+  // SHA1 if absent
+  optional HashAlgorithm hash_algorithm = 6;
+  optional bytes crl = 7;
+}
+
+message AuthError {
+  optional int32 error_type = 1;
+}
+
+message DeviceAuthMessage {
+  optional AuthChallenge challenge = 1;
+  optional AuthResponse response = 2;
+  optional AuthError error = 3;
+}

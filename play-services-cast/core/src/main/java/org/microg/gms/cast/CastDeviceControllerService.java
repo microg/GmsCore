@@ -18,33 +18,59 @@ package org.microg.gms.cast;
 
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.Parcel;
-import android.util.ArrayMap;
 import android.util.Log;
 
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
-import com.google.android.gms.common.internal.BinderWrapper;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.GmsService;
-
-import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastDeviceControllerService extends BaseService {
     private static final String TAG = CastDeviceControllerService.class.getSimpleName();
 
+    /**
+     * Features we announce to the client library. The GoogleApi based Cast client (play-services-cast 19+) refuses to
+     * connect to a device unless "cxless_client_minimal" is available and only asks for feature flags if
+     * "module_flag_control" is. Only add features here once the calls guarded by them are implemented.
+     */
+    private static final Feature[] FEATURES = new Feature[]{
+            new Feature("cxless_client_minimal", 1),
+            new Feature("module_flag_control", 1),
+    };
+
     public CastDeviceControllerService() {
-        super("GmsCastDeviceControllerSvc", GmsService.CAST);
+        super("GmsCastDeviceControllerSvc", GmsService.CAST, GmsService.CAST_API);
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new CastDeviceControllerImpl(this, request.packageName, request.extras), null);
+        IBinder binder;
+        if (service == GmsService.CAST_API) {
+            // Connection-less API, used by CastContext to query feature flags
+            Log.d(TAG, "Cast API requested by " + request.packageName);
+            binder = new CastServiceImpl();
+        } else {
+            try {
+                String packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName);
+                binder = new CastDeviceControllerImpl(this, packageName, request.extras);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "Refusing service request", e);
+                callback.onPostInitComplete(CommonStatusCodes.INTERNAL_ERROR, null, null);
+                return;
+            }
+        }
+        if (request.supportsConnectionInfo) {
+            ConnectionInfo connectionInfo = new ConnectionInfo();
+            connectionInfo.features = FEATURES;
+            callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, binder, connectionInfo);
+        } else {
+            // Old client libraries don't know about ConnectionInfo and would never see the connection complete
+            callback.onPostInitComplete(CommonStatusCodes.SUCCESS, binder, null);
+        }
     }
 }

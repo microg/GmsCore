@@ -16,78 +16,49 @@
 
 package org.microg.gms.cast;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.mediarouter.media.MediaRouteProvider;
-import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
-import com.google.android.gms.cast.CastDevice;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.io.IOException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
-import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
-
+/**
+ * Route controller handed to the MediaRouter of client apps.
+ * <p>
+ * Sessions are not handled here: the Cast framework in the client connects to the device through
+ * {@link CastDeviceControllerImpl}. The only thing the MediaRouter needs from us is volume control, which is what the
+ * volume keys end up using while a Cast route is selected. Volume requests are forwarded to the device connection of
+ * the running session instead of opening a second one.
+ */
 public class CastMediaRouteController extends MediaRouteProvider.RouteController {
-    private static final String TAG = CastMediaRouteController.class.getSimpleName();
+    private static final String TAG = "GmsCastRouteController";
 
-    private CastMediaRouteProvider provider;
-    private String routeId;
-    private ChromeCast chromecast;
+    private final CastDeviceRegistry registry = CastDeviceRegistry.getInstance();
+    private final String routeId;
 
-    public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
-        super();
-
-        this.provider = provider;
+    public CastMediaRouteController(String routeId) {
         this.routeId = routeId;
-        this.chromecast = new ChromeCast(address);
     }
 
-    public boolean onControlRequest(Intent intent, MediaRouter.ControlRequestCallback callback) {
-        Log.d(TAG, "unimplemented Method: onControlRequest: " + this.routeId);
-        return false;
-    }
-
-    public void onRelease() {
-        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
-    }
-
-    public void onSelect() {
-        Log.d(TAG, "unimplemented Method: onSelect: " + this.routeId);
-    }
-
+    @Override
     public void onSetVolume(int volume) {
-        Log.d(TAG, "unimplemented Method: onSetVolume: " + this.routeId);
+        requestVolume((double) volume / CastMediaRouteProvider.ROUTE_VOLUME_MAX);
     }
 
-    public void onUnselect() {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
-    }
-
-    public void onUnselect(int reason) {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
-    }
-
+    @Override
     public void onUpdateVolume(int delta) {
-        Log.d(TAG, "unimplemented Method: onUpdateVolume: " + this.routeId);
+        double current = this.registry.getVolume(this.routeId);
+        if (current < 0) {
+            Log.d(TAG, "Volume of " + this.routeId + " is not known, ignoring volume change");
+            return;
+        }
+        requestVolume(current + (double) delta / CastMediaRouteProvider.ROUTE_VOLUME_MAX);
+    }
+
+    private void requestVolume(double volume) {
+        CastDeviceControllerImpl controller = this.registry.getController(this.routeId);
+        if (controller == null) {
+            Log.d(TAG, "No session on " + this.routeId + ", ignoring volume change");
+            return;
+        }
+        controller.setVolumeFromRoute(volume);
     }
 }
