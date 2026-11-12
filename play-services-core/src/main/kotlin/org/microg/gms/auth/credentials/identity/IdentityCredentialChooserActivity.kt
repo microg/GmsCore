@@ -51,6 +51,7 @@ import org.microg.gms.auth.credentials.provider.parsePublicKeyCredentialCreation
 import org.microg.gms.auth.credentials.provider.parsePublicKeyCredentialRequestOptions
 import org.microg.gms.auth.credentials.provider.toJson
 import org.microg.gms.auth.signin.BEGIN_SIGN_IN_REQUEST
+import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_REGISTER
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_SIGN
@@ -89,8 +90,12 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
     }
 
     private fun routeGet(req: GetCredentialRequest) {
-        val option = req.credentialOptions.firstOrNull()
+        val options = req.credentialOptions
+        val option = options.firstOrNull { it.type == PublicKeyCredential.TYPE_PUBLIC_KEY_CREDENTIAL && hasKnownPasskey(it) }
+            ?: options.firstOrNull { it.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL }
+            ?: options.firstOrNull()
             ?: return finishWithGetException(NoCredentialException("No credential options requested"))
+        Log.d(TAG, "routeGet types=${options.map { it.type }} selected=${option.type}")
         when (option.type) {
             PublicKeyCredential.TYPE_PUBLIC_KEY_CREDENTIAL -> startPasskeyGet(option)
             TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> startGoogleSignIn(option)
@@ -107,6 +112,12 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
             else -> finishWithCreateException(CreateCredentialNoCreateOptionException("Unsupported create type: ${req.type}"))
         }
     }
+
+    private fun hasKnownPasskey(option: CredentialOption): Boolean = runCatching {
+        val requestJson = option.credentialRetrievalData?.getString(PUBKEY_REQ_JSON_KEY) ?: return false
+        val rpId = JSONObject(requestJson).parsePublicKeyCredentialRequestOptions().rpId
+        Database(this).getKnownRegistrationInfo(rpId).isNotEmpty()
+    }.getOrDefault(false)
 
     private fun startPasskeyGet(option: CredentialOption) {
         val data = option.credentialRetrievalData
