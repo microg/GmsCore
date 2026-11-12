@@ -20,13 +20,43 @@ message EnterprisePolicy {
 message App {
     optional string packageName = 1;
     optional AppInstallPolicy policy = 2;
-    optional string emptyString = 4; // = ""
+    repeated InstallConstraint installConstraints = 4;
+    optional int32 minVersionCode = 5;
     optional int32 unknownNumber = 9; // = 1
+}
+
+message EnterpriseConsistencyToken {
+    optional int64 timestampMicros = 1;
+}
+
+message InstallConstraint {
+    optional NetworkTypeConstraint networkType = 1;
+    optional ChargingConstraint charging = 2;
+    optional DeviceIdleConstraint deviceIdle = 3;
 }
 
 // TODO: could be inaccurate
 enum AppInstallPolicy {
     UNKNOWN = 0;
     OPTIONAL = 1;
+    FORCE_INSTALLED = 2;
     MANDATORY = 3;
+}
+
+enum NetworkTypeConstraint {
+    NETWORK_TYPE_CONSTRAINT_UNSPECIFIED = 0;
+    INSTALL_ON_ANY_NETWORK = 1;
+    INSTALL_ONLY_ON_UNMETERED_NETWORK = 2;
+}
+
+enum ChargingConstraint {
+    CHARGING_CONSTRAINT_UNSPECIFIED = 0;
+    CHARGING_NOT_REQUIRED = 1;
+    INSTALL_ONLY_WHEN_CHARGING = 2;
+}
+
+enum DeviceIdleConstraint {
+    DEVICE_IDLE_CONSTRAINT_UNSPECIFIED = 0;
+    DEVICE_IDLE_NOT_REQUIRED = 1;
+    INSTALL_ONLY_WHEN_DEVICE_IDLE = 2;
 }
