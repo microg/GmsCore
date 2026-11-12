@@ -17,4 +17,5 @@ interface ICastContext {
     void onActivityPaused(in IObjectWrapper activity) = 8; // deprecated?
     IObjectWrapper getWrappedThis() = 9;
     void setReceiverApplicationId(String receiverApplicationId, in Map/*<String, IBinder>*/ sessionProvidersByCategory) = 10;
+    boolean hasActivityInRecents() = 11;
 }
