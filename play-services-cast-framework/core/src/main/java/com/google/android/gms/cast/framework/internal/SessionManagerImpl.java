@@ -22,33 +22,34 @@ import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.ICastStateListener;
-import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
-import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class SessionManagerImpl extends ISessionManager.Stub {
     private static final String TAG = SessionManagerImpl.class.getSimpleName();
 
     private CastContextImpl castContext;
 
-    private Set<ISessionManagerListener> sessionManagerListeners = new HashSet<ISessionManagerListener>();
-    private Set<ICastStateListener> castStateListeners = new HashSet<ICastStateListener>();
+    // Fix: listeners are added from binder threads and iterated elsewhere,
+    // so use thread-safe sets instead of HashSet.
+    private final Set<ISessionManagerListener> sessionManagerListeners =
+            new CopyOnWriteArraySet<ISessionManagerListener>();
+    private final Set<ICastStateListener> castStateListeners =
+            new CopyOnWriteArraySet<ICastStateListener>();
 
-    private Map<String, SessionImpl> routeSessions = new HashMap<String, SessionImpl>();
+    private final Map<String, SessionImpl> routeSessions = new HashMap<String, SessionImpl>();
+    private volatile SessionImpl currentSession;
+    private volatile int castState = CastState.NO_DEVICES_AVAILABLE;
 
-    private SessionImpl currentSession;
-
-    private int castState = CastState.NO_DEVICES_AVAILABLE;
+    private String pendingRouteId;
+    private String pendingSessionId;
 
     public SessionManagerImpl(CastContextImpl castContext) {
         this.castContext = castContext;
@@ -56,38 +57,43 @@ public class SessionManagerImpl extends ISessionManager.Stub {
 
     @Override
     public IObjectWrapper getWrappedCurrentSession() throws RemoteException {
-        if (this.currentSession == null) {
+        SessionImpl session = this.currentSession;
+        if (session == null) {
             return ObjectWrapper.wrap(null);
         }
-        return this.currentSession.getWrappedSession();
+        return session.getWrappedSession();
     }
 
     @Override
     public void endCurrentSession(boolean b, boolean stopCasting) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCurrentSession");
+        // Fix: this was an empty stub.
+        SessionImpl session = this.currentSession;
+        if (session == null) {
+            Log.d(TAG, "endCurrentSession: no current session");
+            return;
+        }
+        // TODO: if stopCasting is true, also stop the app on the Chromecast.
+        this.onSessionEnding(session);
+        this.onSessionEnded(session, 0);
     }
 
     @Override
     public void addSessionManagerListener(ISessionManagerListener listener) {
-        Log.d(TAG, "unimplemented Method: addSessionManagerListener");
         this.sessionManagerListeners.add(listener);
     }
 
     @Override
     public void removeSessionManagerListener(ISessionManagerListener listener) {
-        Log.d(TAG, "unimplemented Method: removeSessionManagerListener");
         this.sessionManagerListeners.remove(listener);
     }
 
     @Override
     public void addCastStateListener(ICastStateListener listener) {
-        Log.d(TAG, "unimplemented Method: addCastStateListener");
         this.castStateListeners.add(listener);
     }
 
     @Override
     public void removeCastStateListener(ICastStateListener listener) {
-        Log.d(TAG, "unimplemented Method: removeCastStateListener");
         this.castStateListeners.remove(listener);
     }
 
@@ -103,13 +109,50 @@ public class SessionManagerImpl extends ISessionManager.Stub {
 
     @Override
     public void startSession(Bundle params) {
-        Log.d(TAG, "unimplemented Method: startSession");
         String routeId = params.getString("CAST_INTENT_TO_CAST_ROUTE_ID_KEY");
         String sessionId = params.getString("CAST_INTENT_TO_CAST_SESSION_ID_KEY");
+        Log.d(TAG, "startSession: route=" + routeId + " session=" + sessionId);
+        this.pendingRouteId = routeId;
+        this.pendingSessionId = sessionId;
+        if (routeId != null) {
+            this.onRouteSelected(routeId, params);
+        }
     }
 
     public void onRouteSelected(String routeId, Bundle extras) {
-        Log.d(TAG, "unimplemented Method: onRouteSelected: " + routeId);
+        Log.d(TAG, "onRouteSelected: " + routeId);
+        this.pendingRouteId = routeId;
+        // TODO (needs SessionImpl.java): create a SessionImpl for this route,
+        // connect it to the Chromecast, then call startSessionFor(...) below.
+    }
+
+    /**
+     * NEW: call this when the list of Chromecast devices changes.
+     * It drives the visibility of the Cast button in apps.
+     */
+    public void onDeviceAvailabilityChanged(boolean devicesAvailable) {
+        if (this.currentSession != null) {
+            return; // a session is active, keep its state
+        }
+        this.setCastState(devicesAvailable
+                ? CastState.NOT_CONNECTED
+                : CastState.NO_DEVICES_AVAILABLE);
+    }
+
+    /**
+     * NEW: whoever creates the SessionImpl and connects it calls this
+     * to publish the whole start sequence to the app.
+     */
+    public void startSessionFor(String routeId, SessionImpl session, String sessionId) {
+        this.routeSessions.put(routeId, session);
+        this.onSessionStarting(session);
+        this.onSessionStarted(session, sessionId);
+    }
+
+    /** NEW: call this when connecting failed. */
+    public void failSessionStart(String routeId, SessionImpl session, int error) {
+        this.routeSessions.remove(routeId);
+        this.onSessionStartFailed(session, error);
     }
 
     private void setCastState(int castState) {
