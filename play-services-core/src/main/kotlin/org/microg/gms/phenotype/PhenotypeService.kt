@@ -96,6 +96,12 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45644218", true, 0),
         Flag("45691184", true, 0)
     ),
+    "googledata.experiments.mobile.assistant.client_packages.component.soda_hotword.device#com.google.android.googlequicksearchbox" to arrayOf(
+        // Allow "Hey Google" on the hotword DSP of devices whose sound trigger HAL does not report a Google DSP
+        // identifier in supportedModelArch (the device allowlist the Google app normally gets from the server).
+        // Without it the Google app falls back to the software hotword, which only works while the screen is on.
+        Flag("45656222", true, 0),
+    ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
         Flag("enable_voice_in_chinese", true, 0),
