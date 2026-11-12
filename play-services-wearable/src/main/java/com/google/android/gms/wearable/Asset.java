@@ -19,8 +19,6 @@ package com.google.android.gms.wearable;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
-import com.google.android.gms.wearable.internal.PutDataRequest;
-
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;

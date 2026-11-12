@@ -36,5 +36,13 @@ public class DeleteDataItemsResponse extends AutoSafeParcelable {
         this.count = count;
     }
 
+    public int getStatusCode() {
+        return status;
+    }
+
+    public int getNumDeleted() {
+        return count;
+    }
+
     public static final Creator<DeleteDataItemsResponse> CREATOR = new AutoCreator<DeleteDataItemsResponse>(DeleteDataItemsResponse.class);
 }

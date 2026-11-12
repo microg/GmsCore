@@ -32,5 +32,9 @@ public class AddLocalCapabilityResponse extends AutoSafeParcelable {
         this.status = status;
     }
 
+    public int getStatusCode() {
+        return status;
+    }
+
     public static final Creator<AddLocalCapabilityResponse> CREATOR = new AutoCreator<AddLocalCapabilityResponse>(AddLocalCapabilityResponse.class);
 }
