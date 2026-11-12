@@ -1,6 +1,7 @@
 package org.microg.gms.cryptauth
 
 import android.content.Context
+import android.util.Base64
 import android.util.Log
 import com.google.android.gms.BuildConfig
 import cryptauthv2.ApplicationSpecificMetadata
@@ -29,9 +30,13 @@ private const val API_KEY = "AIzaSyAP-gfH3qvi6vgHZbSYwQ_XHqV_mXHhzIk"
 internal const val CERTIFICATE = "58E1C4133F7441EC3D2C270270A14802DA47BA0E"
 
 internal const val CRYPTAUTH_FIELD_SESSION_ID = "randomSessionId"
+internal const val CRYPTAUTH_FIELD_SYNC_SINGLE_KEY_RESPONSES = "syncSingleKeyResponses"
+internal const val CRYPTAUTH_FIELD_KEY_CREATION = "keyCreation"
+
+internal const val CRYPTAUTH_KEY_NAME_USER_KEY = "PublicKey"
 
 
-internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: String, instanceToken: String, androidId: Long): JSONObject? {
+internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: String, instanceToken: String, androidId: Long, userKey: CryptAuthUserKey?): JSONObject? {
     // CryptAuth sync request tells server whether or not screenlock is enabled
 
     val deviceConfig = DeviceConfiguration(this)
@@ -53,8 +58,9 @@ internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: St
         locale = Utils.getLocale(this).toString().replace("_", "-"),
         device_os_version = Build.DISPLAY ?: "",
         device_os_version_code = Build.VERSION.SDK_INT.toLong(),
-        device_os_release = Build.VERSION.CODENAME?: "",
-        device_display_diagonal_mils = (deviceConfig.diagonalInch / 1000).roundToInt(),
+        device_os_release = Build.VERSION.RELEASE ?: "",
+        device_os_codename = Build.VERSION.CODENAME ?: "",
+        device_display_diagonal_mils = (deviceConfig.diagonalInch * 1000).roundToInt(),
         device_model = Build.MODEL ?: "",
         device_manufacturer = Build.MANUFACTURER ?: "",
         device_type = ClientAppMetadata.DeviceType.ANDROID,
@@ -73,8 +79,9 @@ internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: St
         "clientVersion" to "1.0.0",
         "syncSingleKeyRequests" to jsonArrayOf(
             jsonObjectOf(
-                "keyName" to "PublicKey",
-                "keyHandles" to "ZGV2aWNlX2tleQo=" // base64 for `device_key`
+                "keyName" to CRYPTAUTH_KEY_NAME_USER_KEY,
+                "keyHandles" to (userKey?.let { jsonArrayOf(Base64.encodeToString(it.handle, Base64.NO_WRAP)) }
+                    ?: "ZGV2aWNlX2tleQo=") // base64 for `device_key`
             )
         ),
         "clientMetadata" to jsonObjectOf(
@@ -86,11 +93,23 @@ internal suspend fun Context.cryptAuthSyncKeys(authToken: String, instanceId: St
     return cryptAuthQuery(CRYPTAUTH_BASE_URL + CRYPTAUTH_METHOD_SYNC_KEYS, authToken, jsonBody)
 }
 
-internal suspend fun Context.cryptAuthEnrollKeys(authToken: String, session: String): JSONObject? {
+internal suspend fun Context.cryptAuthEnrollKeys(authToken: String, session: String, newUserKey: CryptAuthUserKey?): JSONObject? {
+    val enrollSingleKeyRequests = JSONArray()
+    if (newUserKey != null) {
+        val sessionBytes = Base64.decode(session, Base64.DEFAULT)
+        enrollSingleKeyRequests.put(
+            jsonObjectOf(
+                "keyName" to CRYPTAUTH_KEY_NAME_USER_KEY,
+                "newKeyHandle" to Base64.encodeToString(newUserKey.handle, Base64.NO_WRAP),
+                "keyMaterial" to Base64.encodeToString(newUserKey.keyMaterial, Base64.NO_WRAP),
+                "keyProof" to Base64.encodeToString(newUserKey.computeKeyProof(sessionBytes), Base64.NO_WRAP)
+            )
+        )
+    }
     val jsonBody = jsonObjectOf(
         CRYPTAUTH_FIELD_SESSION_ID to session,
         "clientEphemeralDh" to "",
-        "enrollSingleKeyRequests" to JSONArray(),
+        "enrollSingleKeyRequests" to enrollSingleKeyRequests,
     )
 
     return cryptAuthQuery(CRYPTAUTH_BASE_URL + CRYPTAUTH_METHOD_ENROLL_KEYS, authToken, jsonBody)
