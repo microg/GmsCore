@@ -60,6 +60,20 @@ class IAPCore(
 
             val multiOfferSkuDetailTemp: MutableList<MultiOfferSkuDetail> = mutableListOf()
             params.multiOfferSkuDetail.forEach {
+                val value = it.value
+                if (it.key != "SKU_SERIALIZED_DOCID_LIST" && value is List<*> && value.all { element -> element is String }) {
+                    // The Billing Library passes flags such as PRODUCT_TYPES_TO_RETURN_MULTIPLE_OFFERS as
+                    // ArrayList<String>. Keep them as a list instead of letting toString() turn them into
+                    // the single string "[subs, inapp]".
+                    @Suppress("UNCHECKED_CAST")
+                    multiOfferSkuDetailTemp.add(
+                        MultiOfferSkuDetail.Builder().apply {
+                            key = it.key
+                            skuSerializedDocIds = SkuSerializedDocIds.Builder().docIds(value as List<String>).build()
+                        }.build()
+                    )
+                    return@forEach
+                }
                 multiOfferSkuDetailTemp.add(
                     if (it.key == "SKU_SERIALIZED_DOCID_LIST") {
                         val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
