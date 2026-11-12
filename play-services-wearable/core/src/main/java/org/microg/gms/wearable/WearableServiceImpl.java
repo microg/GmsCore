@@ -294,8 +294,21 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        postMain(callbacks, () -> {
+            List<CapabilityInfoParcelable> list = new ArrayList<>();
+            java.util.Map<String, Set<String>> map = capabilities.getAllCapabilitiesMap();
+            for (java.util.Map.Entry<String, Set<String>> entry : map.entrySet()) {
+                List<NodeParcelable> nodes = new ArrayList<>();
+                for (String host : entry.getValue()) {
+                    nodes.add(new NodeParcelable(host, host));
+                }
+                list.add(new CapabilityInfoParcelable(entry.getKey(), nodes));
+            }
+            GetAllCapabilitiesResponse response = new GetAllCapabilitiesResponse();
+            response.statusCode = 0;
+            response.capabilities = list;
+            callbacks.onGetAllCapabilitiesResponse(response);
+        });
     }
 
     @Override
