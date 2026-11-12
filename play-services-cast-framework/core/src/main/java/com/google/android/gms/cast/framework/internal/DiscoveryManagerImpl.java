@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.android.gms.cast.framework.internal;
 
 import android.os.RemoteException;
@@ -21,19 +20,18 @@ import android.util.Log;
 
 import com.google.android.gms.cast.framework.IDiscoveryManager;
 import com.google.android.gms.cast.framework.IDiscoveryManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class DiscoveryManagerImpl extends IDiscoveryManager.Stub {
     private static final String TAG = DiscoveryManagerImpl.class.getSimpleName();
 
-    private CastContextImpl castContextImpl;
+    private final CastContextImpl castContextImpl;
 
-    private Set discoveryManagerListeners = new HashSet();
+    private final Set<IDiscoveryManagerListener> discoveryManagerListeners = new HashSet<>();
 
     public DiscoveryManagerImpl(CastContextImpl castContextImpl) {
         this.castContextImpl = castContextImpl;
@@ -41,23 +39,23 @@ public class DiscoveryManagerImpl extends IDiscoveryManager.Stub {
 
     @Override
     public void startDiscovery() {
-        Log.d(TAG, "unimplemented Method: startDiscovery");
+        Log.d(TAG, "startDiscovery");
+        castContextImpl.setActiveDiscovery(true);
     }
 
     @Override
     public void stopDiscovery() {
-        Log.d(TAG, "unimplemented Method: stopDiscovery");
+        Log.d(TAG, "stopDiscovery");
+        castContextImpl.setActiveDiscovery(false);
     }
 
     @Override
     public void addDiscoveryManagerListener(IDiscoveryManagerListener listener) {
-        Log.d(TAG, "unimplemented Method: addDiscoveryManagerListener");
-        this.discoveryManagerListeners.add(listener);
+        if (listener != null) this.discoveryManagerListeners.add(listener);
     }
 
     @Override
     public void removeDiscoveryManagerListener(IDiscoveryManagerListener listener) {
-        Log.d(TAG, "unimplemented Method: removeDiscoveryManagerListener");
         this.discoveryManagerListeners.remove(listener);
     }
 

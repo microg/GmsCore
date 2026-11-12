@@ -25,5 +25,10 @@ public class JoinOptions extends AutoSafeParcelable {
     @SafeParceled(2)
     private int connectionType = 0;
 
+    /** The virtual connection type requested by the client: strong, weak, or invisible. */
+    public int getConnectionType() {
+        return connectionType;
+    }
+
     public static Creator<JoinOptions> CREATOR = new AutoCreator<JoinOptions>(JoinOptions.class);
 }
