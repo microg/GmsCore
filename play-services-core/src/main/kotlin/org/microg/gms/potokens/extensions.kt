@@ -31,6 +31,7 @@ const val KEY_USED_INTEGRITY_TOKEN_INFO = "used_integrity_token_info"
 const val PO_TOKEN_ACCESS_LIMIT_TIME = 15 * 1000L
 const val PO_TOKEN_ACCESS_LIMIT_COUNT = 2
 
+const val PO_TOKEN_ACCESS_INTERVAL_COUNT_RESET_TIME = 30 * 60 * 1000L
 const val PO_TOKEN_ACCESS_INTERVAL_TIME = 6 * 60 * 60 * 1000L // 6 hour
 
 data class IntegrityTokenInfo(val key: String?, val token: String?, val tokenBackUp: String?, val updateTime: Long) {

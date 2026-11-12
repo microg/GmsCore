@@ -6,9 +6,12 @@
 package org.microg.gms.droidguard;
 
 import android.util.Base64;
+import android.util.Log;
 
 public class Utils {
+    public static final String TAG = "DroidGuardUtils";
     public static byte[] getErrorBytes(String s) {
+        Log.w(TAG, "getErrorBytes: " + s);
         return ("ERROR : " + s).getBytes();
     }
 
