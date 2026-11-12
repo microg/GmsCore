@@ -78,7 +78,6 @@ public class SessionImpl extends ISession.Stub {
         this.mIsConnecting = false;
         this.mIsConnected = false;
         this.routeId = null;
-        this.castContext = null;
         this.castDevice = null;
         this.routeInfoExtra = null;
         this.castContext.getSessionManagerImpl().onSessionStartFailed(this, statusCode);
@@ -87,6 +86,7 @@ public class SessionImpl extends ISession.Stub {
         } catch (RemoteException ex) {
             Log.e(TAG, "Error calling selectDefaultRoute: " + ex.getMessage());
         }
+        this.castContext = null;
     }
 
     public void onRouteSelected(Bundle extras) {
