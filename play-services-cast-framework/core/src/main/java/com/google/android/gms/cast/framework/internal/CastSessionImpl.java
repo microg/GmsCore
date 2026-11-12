@@ -34,6 +34,9 @@ public class CastSessionImpl extends ICastSession.Stub {
     private CastOptions options;
     private SessionImpl session;
     private ICastConnectionController controller;
+    private String sessionId;
+    private boolean disconnected;
+    private boolean stopCasting;
 
     public CastSessionImpl(CastOptions options, IObjectWrapper session, ICastConnectionController controller) throws RemoteException {
         this.options = options;
@@ -64,16 +67,40 @@ public class CastSessionImpl extends ICastSession.Stub {
 
     @Override
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
+        if (this.disconnected) {
+            if (this.stopCasting) {
+                try {
+                    this.controller.stopApplication(sessionId);
+                } catch (RemoteException ex) {
+                    Log.e(TAG, "Error calling stopApplication: " + ex.getMessage());
+                }
+            }
+            return;
+        }
+        this.sessionId = sessionId;
         this.session.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
     }
 
     @Override
     public void onApplicationConnectionFailure(int statusCode) {
+        if (this.disconnected) {
+            return;
+        }
         this.session.onApplicationConnectionFailure(statusCode);
     }
 
     @Override
-    public void disconnectFromDevice(boolean boolean1, int int1) {
-        Log.d(TAG, "unimplemented Method: disconnectFromDevice");
+    public void disconnectFromDevice(boolean stopCasting, int reason) throws RemoteException {
+        this.disconnected = true;
+        this.stopCasting = stopCasting;
+        if (stopCasting && this.sessionId != null) {
+            try {
+                this.controller.stopApplication(this.sessionId);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling stopApplication: " + ex.getMessage());
+            }
+        }
+        this.sessionId = null;
+        this.controller.closeConnection(reason);
     }
 }

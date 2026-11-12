@@ -43,6 +43,7 @@ public class SessionImpl extends ISession.Stub {
 
     private boolean mIsConnecting = false;
     private boolean mIsConnected = false;
+    private boolean mIsDisconnecting = false;
     private String routeId = null;
 
     public SessionImpl(String category, String sessionId, ISessionProxy proxy) {
@@ -61,6 +62,19 @@ public class SessionImpl extends ISession.Stub {
         this.mIsConnected = false;
         this.castContext.getSessionManagerImpl().onSessionStarting(this);
         this.proxy.start(routeInfoExtra);
+    }
+
+    public void end(boolean stopCasting) {
+        if (this.castContext == null || this.mIsDisconnecting) {
+            return;
+        }
+        this.mIsDisconnecting = true;
+        this.castContext.getSessionManagerImpl().onSessionEnding(this);
+        try {
+            this.proxy.end(stopCasting);
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Error calling end: " + ex.getMessage());
+        }
     }
 
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
@@ -138,8 +152,7 @@ public class SessionImpl extends ISession.Stub {
 
     @Override
     public boolean isDisconnecting() {
-        Log.d(TAG, "unimplemented Method: isDisconnecting");
-        return false;
+        return this.mIsDisconnecting;
     }
 
     @Override
@@ -172,7 +185,14 @@ public class SessionImpl extends ISession.Stub {
 
     @Override
     public void notifySessionEnded(int error) {
-        Log.d(TAG, "unimplemented Method: notifySessionEnded");
+        if (this.castContext == null) {
+            return;
+        }
+        this.mIsConnecting = false;
+        this.mIsConnected = false;
+        this.mIsDisconnecting = false;
+        this.castContext.getSessionManagerImpl().onSessionEnded(this, error);
+        this.castContext = null;
     }
 
     @Override
