@@ -36,6 +36,12 @@ class TextRecognizer(private val helper: TextRecognizerHelper) : INativeTextReco
             is ByteBuffer -> ImageFormat.NV21
             else -> throw IllegalArgumentException("Expected OCR Bitmap or NV21 buffer")
         }
+        try {
+            helper.init()
+        } catch (e: IllegalStateException) {
+            closed = true
+            throw UnsupportedOperationException("Offline OCR is unavailable", e)
+        }
         return helper.recognize(source, format, metadata.width, metadata.height, metadata.rotation, options?.region).toLegacyText()
     }
 

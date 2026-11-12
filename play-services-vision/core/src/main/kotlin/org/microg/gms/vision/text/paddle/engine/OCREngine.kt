@@ -13,6 +13,7 @@ import org.microg.gms.vision.text.paddle.postprocess.BoxSorter
 import org.microg.gms.vision.text.paddle.postprocess.CTCDecoder
 import org.microg.gms.vision.text.paddle.postprocess.DBPostProcessor
 import org.microg.gms.vision.text.paddle.postprocess.QuadTextCrop
+import org.microg.gms.vision.text.paddle.postprocess.WordBoxEstimator
 import org.microg.gms.vision.text.paddle.preprocess.DetPreprocessor
 import org.microg.gms.vision.text.paddle.preprocess.OrientationPreprocessor
 import org.microg.gms.vision.text.paddle.preprocess.RecPreprocessor
@@ -45,29 +46,39 @@ class OCREngine(context: Context, recognitionModel: RecognitionModel) {
     /** Reads a caller-owned BGR image without modifying or releasing it. */
     fun run(src: Mat): List<OCRResult> {
         require(!src.empty() && src.type() == CvType.CV_8UC3) { "OCR input must be a nonempty BGR image" }
-        val input = DetPreprocessor.preprocess(src)
+        val input = DetPreprocessor.preprocess(src, sessionManager::detectionInputBuffer)
         val (output, shape) = sessionManager.runDetection(input.tensorData, input.shape)
         val boxes = DBPostProcessor.process(output, shape, src.rows(), src.cols())
         val results = mutableListOf<OCRResult>()
+        var wordAnalyses = 0
         for (box in BoxSorter.sortInReadingOrder(boxes)) {
             val crop = QuadTextCrop.crop(src, box)
             try {
-                if (crop.empty()) continue
+                val image = crop.image
+                if (image.empty()) continue
+                var rotated180 = false
                 if (useTextlineOrientation) {
-                    val orientationInput = OrientationPreprocessor.preprocess(crop)
+                    val orientationInput = OrientationPreprocessor.preprocess(image)
                     val (orientation, orientationShape) = sessionManager.runOrientation(orientationInput.tensorData, orientationInput.shape)
                     check(orientationShape.contentEquals(longArrayOf(1, 2)) && orientation.all { it.isFinite() && it in 0f..1f }) {
                         "Invalid OCR orientation probabilities"
                     }
                     if (orientation[1] >= ORIENTATION_SCORE_THRESHOLD && orientation[1] > orientation[0]) {
-                        Core.rotate(crop, crop, Core.ROTATE_180)
+                        Core.rotate(image, image, Core.ROTATE_180)
+                        rotated180 = true
                     }
                 }
-                val recInput = RecPreprocessor.preprocess(crop)
+                val recInput = RecPreprocessor.preprocess(image)
                 val (recOutput, recShape) = sessionManager.runRecognition(recInput.tensorData, recInput.shape)
                 val (text, confidence) = CTCDecoder.decode(recOutput, recShape, characterList)
                 if (confidence >= RECOGNITION_SCORE_THRESHOLD) {
-                    results.add(OCRResult(box, text, confidence))
+                    val words = if (wordAnalyses < WordBoxEstimator.MAX_LINES_PER_IMAGE && text.any(Char::isWhitespace)) {
+                        wordAnalyses++
+                        WordBoxEstimator.estimate(crop, text, rotated180)
+                    } else {
+                        emptyList()
+                    }
+                    results.add(OCRResult(box, text, confidence, words))
                 }
             } finally {
                 crop.release()

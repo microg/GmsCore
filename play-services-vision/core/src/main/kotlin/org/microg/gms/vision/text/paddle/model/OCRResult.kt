@@ -19,4 +19,7 @@ data class OCRResult(
     val box: OCRBox,
     val text: String,
     val confidence: Float,
+    val words: List<OCRWord> = emptyList(),
 )
+
+data class OCRWord(val box: OCRBox, val text: String)

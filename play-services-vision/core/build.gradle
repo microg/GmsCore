@@ -11,7 +11,7 @@ apply plugin: 'signing'
 dependencies {
     api project(':play-services-mlkit-barcode-scanning')
     api project(':play-services-mlkit-face-detection')
-    api project(':play-services-mlkit-text-recognition')
+    api project(':play-services-mlkit-text-recognition-common')
     api project(':play-services-vision')
 
     implementation project(':play-services-base-core')

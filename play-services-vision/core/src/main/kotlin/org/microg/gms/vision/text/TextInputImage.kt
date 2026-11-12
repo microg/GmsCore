@@ -110,9 +110,15 @@ internal object TextInputImage {
                 data.rewind()
 
                 require(width % 2 == 0 && height % 2 == 0) { "Packed YUV requires even dimensions" }
-                // Camera YV12 buffers align both luma and chroma rows to 16 bytes.
-                val yStride = if (format == ImageFormat.YV12) (width + 15) / 16 * 16 else width
-                val chromaStride = if (format == ImageFormat.YV12) (yStride / 2 + 15) / 16 * 16 else width
+                val pixels = width * height
+                val packedYv12 = format == ImageFormat.YV12 && data.limit() == pixels + pixels / 2
+                // Camera preview YV12 aligns both luma and chroma rows to 16 bytes.
+                val yStride = if (format == ImageFormat.YV12 && !packedYv12) (width + 15) / 16 * 16 else width
+                val chromaStride = when {
+                    format == ImageFormat.NV21 -> width
+                    packedYv12 -> width / 2
+                    else -> (yStride / 2 + 15) / 16 * 16
+                }
                 val yPlaneSize = yStride * height
                 val chromaPlaneSize = chromaStride * (height / 2)
                 val uPlaneOffset = yPlaneSize + chromaPlaneSize
@@ -192,20 +198,26 @@ internal object TextInputImage {
     private fun bitmapRegionToBgrMat(bitmap: Bitmap, region: Rect): Mat {
         val width = region.width()
         val height = region.height()
-        val colors = IntArray(width * height)
-        bitmap.getPixels(colors, 0, width, region.left, region.top, width, height)
+        // Copy only a band of pixels at a time so the ROI does not need a full-size Java buffer.
+        val rowsPerBand = (64 * 1024 / (width * (Int.SIZE_BYTES + 3))).coerceIn(1, height)
+        val colors = IntArray(width * rowsPerBand)
         val pixels = ByteArray(colors.size * 3)
-        for (index in colors.indices) {
-            val color = colors[index]
-            val offset = index * 3
-            pixels[offset] = color.toByte()
-            pixels[offset + 1] = (color ushr 8).toByte()
-            pixels[offset + 2] = (color ushr 16).toByte()
-        }
         val bgr = Mat()
         return try {
             bgr.create(height, width, CvType.CV_8UC3)
-            check(bgr.put(0, 0, pixels) == pixels.size) { "OCR input pixels are truncated" }
+            for (row in 0 until height step rowsPerBand) {
+                val rows = minOf(rowsPerBand, height - row)
+                bitmap.getPixels(colors, 0, width, region.left, region.top + row, width, rows)
+                val count = width * rows
+                for (index in 0 until count) {
+                    val color = colors[index]
+                    val offset = index * 3
+                    pixels[offset] = color.toByte()
+                    pixels[offset + 1] = (color ushr 8).toByte()
+                    pixels[offset + 2] = (color ushr 16).toByte()
+                }
+                check(bgr.put(row, 0, pixels, 0, count * 3) == count * 3) { "OCR input pixels are truncated" }
+            }
             bgr
         } catch (t: Throwable) {
             bgr.release()

@@ -58,7 +58,17 @@ class OnnxSessionManager(context: Context) {
         return environment.createSession(bytes, options)
     }
 
-    fun runDetection(tensorData: FloatArray, shape: LongArray): Pair<FloatArray, LongArray> {
+    fun detectionInputBuffer(size: Int): FloatBuffer {
+        val bytes = size * Float.SIZE_BYTES
+        val buffer = cachedDetectionInputBuffer?.get()?.takeIf { it.capacity() >= size }
+            ?: allocateInputBuffer(bytes).also {
+                if (bytes <= MAX_CACHED_DETECTION_INPUT_BYTES) cachedDetectionInputBuffer = WeakReference(it)
+            }
+        buffer.clear()
+        return buffer
+    }
+
+    fun runDetection(tensorData: FloatBuffer, shape: LongArray): Pair<FloatArray, LongArray> {
         return run(checkNotNull(detectionSession) { "OCR detection model is not loaded" }, tensorData, shape, 4)
     }
 
@@ -76,24 +86,29 @@ class OnnxSessionManager(context: Context) {
         shape: LongArray,
         outputRank: Int,
     ): Pair<FloatArray, LongArray> {
-        require(shape.size == 4 && shape[0] == 1L && shape[1] == 3L) { "OCR input must be one NCHW image with three channels" }
-        require(elementCount(shape) == tensorData.size) { "OCR input shape and data length do not match" }
-        check(session.inputNames.size == 1 && session.outputNames.size == 1) { "OCR model must have one input and one output" }
         val inputBytes = tensorData.size * Float.SIZE_BYTES
-        // Reuse large detector inputs while available without retaining them across GC.
-        val detection = outputRank == 4
-        val cached = if (detection) cachedDetectionInputBuffer?.get() else cachedInputBuffer
-        val inputBuffer = cached?.takeIf { it.capacity() >= tensorData.size }
-            ?: ByteBuffer.allocateDirect(inputBytes).order(ByteOrder.nativeOrder()).asFloatBuffer().also {
-                if (detection) {
-                    if (inputBytes <= MAX_CACHED_DETECTION_INPUT_BYTES) cachedDetectionInputBuffer = WeakReference(it)
-                } else if (inputBytes <= MAX_CACHED_INPUT_BYTES) {
-                    cachedInputBuffer = it
-                }
+        val inputBuffer = cachedInputBuffer?.takeIf { it.capacity() >= tensorData.size }
+            ?: allocateInputBuffer(inputBytes).also {
+                if (inputBytes <= MAX_CACHED_INPUT_BYTES) cachedInputBuffer = it
             }
         inputBuffer.clear()
         inputBuffer.put(tensorData)
         inputBuffer.flip()
+        return run(session, inputBuffer, shape, outputRank)
+    }
+
+    private fun allocateInputBuffer(bytes: Int): FloatBuffer =
+        ByteBuffer.allocateDirect(bytes).order(ByteOrder.nativeOrder()).asFloatBuffer()
+
+    private fun run(
+        session: OrtSession,
+        inputBuffer: FloatBuffer,
+        shape: LongArray,
+        outputRank: Int,
+    ): Pair<FloatArray, LongArray> {
+        require(shape.size == 4 && shape[0] == 1L && shape[1] == 3L) { "OCR input must be one NCHW image with three channels" }
+        require(elementCount(shape) == inputBuffer.remaining()) { "OCR input shape and data length do not match" }
+        check(session.inputNames.size == 1 && session.outputNames.size == 1) { "OCR model must have one input and one output" }
         OnnxTensor.createTensor(environment, inputBuffer, shape).use { input ->
             session.run(mapOf(session.inputNames.single() to input)).use { result ->
                 val output = result[0] as? OnnxTensor ?: error("OCR output is not a tensor")

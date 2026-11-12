@@ -1,0 +1,35 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.mlkit.vision.interfaces"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-mlkit-vision-interfaces'
+
+dependencies {
+    api project(':play-services-tasks')
+    api "androidx.lifecycle:lifecycle-common:$lifecycleVersion"
+}

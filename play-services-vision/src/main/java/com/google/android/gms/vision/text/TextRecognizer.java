@@ -19,9 +19,9 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.internal.client.INativeTextRecognizer;
 import com.google.android.gms.vision.text.internal.client.INativeTextRecognizerCreator;
 import com.google.android.gms.vision.text.internal.client.LineBoxParcel;
-import com.google.android.gms.vision.text.internal.client.RecognitionOptions;
 import com.google.android.gms.vision.text.internal.client.TextRecognizerOptions;
 
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.PublicApi;
 
 @PublicApi
@@ -44,7 +44,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
         if (remote == null) return result;
         try {
             Object image = bitmap != null ? bitmap : frame.getGrayscaleImageData();
-            LineBoxParcel[] lines = remote.recognizeWithOptions(ObjectWrapper.wrap(image), frame.getMetadata().createParcel(), new RecognitionOptions());
+            LineBoxParcel[] lines = remote.recognize(ObjectWrapper.wrap(image), frame.getMetadata().createParcel());
             if (lines == null) return result;
             SparseArray<SparseArray<LineBoxParcel>> blocks = new SparseArray<>();
             for (LineBoxParcel line : lines) {
@@ -59,6 +59,9 @@ public final class TextRecognizer extends Detector<TextBlock> {
             for (int i = 0; i < blocks.size(); i++) {
                 result.put(blocks.keyAt(i), new TextBlock(blocks.valueAt(i)));
             }
+        } catch (UnsupportedOperationException e) {
+            remote = null;
+            Log.w(TAG, "Text recognition is unavailable", e);
         } catch (RemoteException e) {
             Log.w(TAG, "Text recognition failed", e);
         }
@@ -91,6 +94,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
 
     @PublicApi
     public static class Builder {
+        private static final String MODULE_ID = "com.google.android.gms.vision.ocr";
         private final Context context;
 
         public Builder(Context context) {
@@ -101,8 +105,19 @@ public final class TextRecognizer extends Detector<TextBlock> {
         public TextRecognizer build() {
             INativeTextRecognizer remote = null;
             try {
-                Class<?> creatorClass = Class.forName("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator");
-                IBinder binder = (IBinder) creatorClass.getConstructor().newInstance();
+                Context gms = context.createPackageContext(Constants.GMS_PACKAGE_NAME,
+                        Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+                Class<?> factory = gms.getClassLoader().loadClass("com.google.android.gms.chimera.DynamiteContextFactory");
+                Context module = (Context) factory.getMethod("createDynamiteContext", String.class, Context.class)
+                        .invoke(null, MODULE_ID, context);
+                if (module == null) throw new IllegalStateException("OCR module is unavailable");
+                ClassLoader loader = module.getClassLoader();
+                Class<?> descriptor = loader.loadClass("com.google.android.gms.dynamite.descriptors." + MODULE_ID + ".ModuleDescriptor");
+                if (descriptor.getField("MODULE_VERSION").getInt(null) <= 0) {
+                    throw new IllegalStateException("OCR module is not supported on this Android version");
+                }
+                IBinder binder = (IBinder) loader.loadClass("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator")
+                        .getConstructor().newInstance();
                 INativeTextRecognizerCreator creator = INativeTextRecognizerCreator.Stub.asInterface(binder);
                 remote = creator.create(ObjectWrapper.wrap(context), new TextRecognizerOptions());
             } catch (Exception | LinkageError e) {

@@ -6,14 +6,10 @@
 package org.microg.gms.vision.text
 
 import android.graphics.Point
-import android.graphics.Rect
 import com.google.android.gms.vision.text.internal.client.BoundingBoxParcel
 import com.google.android.gms.vision.text.internal.client.LineBoxParcel
 import com.google.android.gms.vision.text.internal.client.WordBoxParcel
-import com.google.mlkit.vision.text.aidls.TextBlockParcel
-import com.google.mlkit.vision.text.aidls.TextElementParcel
-import com.google.mlkit.vision.text.aidls.TextLineParcel
-import com.google.mlkit.vision.text.aidls.TextResultParcel
+import org.microg.gms.vision.text.paddle.model.OCRBox
 import org.microg.gms.vision.text.paddle.model.OCRResult
 import kotlin.math.atan2
 import kotlin.math.ceil
@@ -22,48 +18,25 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-internal fun List<OCRResult>.toMlKitText(): TextResultParcel {
-    val blocks = map { result ->
-        val points = result.box.points
-        val corners = points.map { Point(it.x.roundToInt(), it.y.roundToInt()) }
-        val bounds = Rect(
-            floor(points.minOf { it.x }).toInt(),
-            floor(points.minOf { it.y }).toInt(),
-            ceil(points.maxOf { it.x }).toInt(),
-            ceil(points.maxOf { it.y }).toInt(),
-        )
-        val angle = Math.toDegrees(atan2((points[1].y - points[0].y).toDouble(), (points[1].x - points[0].x).toDouble())).toFloat()
-        // The model exposes line boxes, so each line is one element without invented word boxes.
-        val element = TextElementParcel().apply {
-            text = result.text
-            boundingBox = bounds
-            cornerPoints = corners
-            confidence = result.confidence
-            this.angle = angle
-        }
-        val line = TextLineParcel().apply {
-            text = result.text
-            boundingBox = bounds
-            cornerPoints = corners
-            elements = listOf(element)
-            confidence = result.confidence
-            this.angle = angle
-        }
-        TextBlockParcel().apply {
-            text = result.text
-            boundingBox = bounds
-            cornerPoints = corners
-            lines = listOf(line)
+internal fun List<OCRResult>.toLegacyText(): Array<LineBoxParcel> = buildList(size) {
+    for (block in this@toLegacyText.groupTextLines()) {
+        for (index in block) {
+            val result = this@toLegacyText[index]
+            val box = result.box.toLegacyBox()
+            val words = if (result.words.isEmpty()) {
+                arrayOf(WordBoxParcel(emptyArray(), box, box, result.text, result.confidence, "und", false))
+            } else {
+                result.words.map { word ->
+                    val wordBox = word.box.toLegacyBox()
+                    WordBoxParcel(emptyArray(), wordBox, wordBox, word.text, result.confidence, "und", false)
+                }.toTypedArray()
+            }
+            add(LineBoxParcel(words, box, box, box, result.text, result.confidence, "und", index, false, block.first, index - block.first))
         }
     }
-    return TextResultParcel().apply {
-        text = blocks.joinToString("\n") { it.text }
-        this.blocks = blocks
-    }
-}
+}.toTypedArray()
 
-internal fun List<OCRResult>.toLegacyText(): Array<LineBoxParcel> = mapIndexed { index, result ->
-    val points = result.box.points
+private fun OCRBox.toLegacyBox(): BoundingBoxParcel {
     val dx = (points[1].x.roundToInt() - points[0].x.roundToInt()).toDouble()
     val dy = (points[1].y.roundToInt() - points[0].y.roundToInt()).toDouble()
     val angle = Math.toDegrees(atan2(dy, dx)).toFloat()
@@ -94,7 +67,5 @@ internal fun List<OCRResult>.toLegacyText(): Array<LineBoxParcel> = mapIndexed {
     val originY = -origin.x * sine + origin.y * cosine
     val width = ceil(maxX - originX + edgeMargin).toInt()
     val height = ceil(maxY - originY + edgeMargin).toInt()
-    val box = BoundingBoxParcel(origin.x, origin.y, width, height, angle)
-    val word = WordBoxParcel(emptyArray(), box, box, result.text, result.confidence, "und", false)
-    LineBoxParcel(arrayOf(word), box, box, box, result.text, result.confidence, "und", index, false, index, 0)
-}.toTypedArray()
+    return BoundingBoxParcel(origin.x, origin.y, width, height, angle)
+}

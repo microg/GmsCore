@@ -24,7 +24,7 @@ object BoxSorter {
                 val next = list[j + 1]
                 val curr = list[j]
                 if (kotlin.math.abs(next.points[0].y - curr.points[0].y) < ROW_THRESHOLD_Y &&
-                    next.points[0].x < curr.points[0].x
+                    next.points[0].x < curr.points[0].x && curr.overlapsVertically(next)
                 ) {
                     list[j] = next
                     list[j + 1] = curr
@@ -36,4 +36,8 @@ object BoxSorter {
         }
         return list
     }
+
+    private fun OCRBox.overlapsVertically(other: OCRBox): Boolean =
+        points.minOf { it.y } < other.points.maxOf { it.y } &&
+            other.points.minOf { it.y } < points.maxOf { it.y }
 }

@@ -19,10 +19,9 @@ import org.microg.gms.vision.text.TextRecognizer as NativeTextRecognizer
 @Keep
 open class ChimeraNativeTextRecognizerCreator : INativeTextRecognizerCreator.Stub() {
     override fun create(context: IObjectWrapper, options: TextRecognizerOptions?): INativeTextRecognizer {
+        check(android.os.Build.VERSION.SDK_INT >= 26) { "Offline OCR requires API 26 or newer" }
         val caller = context.unwrap<Context>() ?: throw IllegalArgumentException("OCR context is null")
         val modelContext = caller.createPackageContext(Constants.GMS_PACKAGE_NAME, 0)
-        val helper = TextRecognizerHelper(modelContext)
-        helper.init()
-        return NativeTextRecognizer(helper)
+        return NativeTextRecognizer(TextRecognizerHelper(modelContext))
     }
 }

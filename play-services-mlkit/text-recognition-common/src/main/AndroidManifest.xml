@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 microG Project Team
+     SPDX-License-Identifier: Apache-2.0 -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <provider
+            android:name="org.microg.mlkit.vision.text.TextRecognitionContext"
+            android:authorities="${applicationId}.microg.mlkit.textinit"
+            android:exported="false"
+            android:initOrder="100" />
+    </application>
+</manifest>
