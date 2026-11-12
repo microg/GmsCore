@@ -10,13 +10,44 @@ import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableService;
 
+import com.google.android.gms.wearable.internal.PrivacyRecordOptinRequest;
+import com.google.android.gms.wearable.internal.AddAccountToConsentRequest;
+
+import com.google.android.gms.wearable.internal.LogCounterRequest;
+import com.google.android.gms.wearable.internal.LogEventRequest;
+import com.google.android.gms.wearable.internal.LogTimerRequest;
+
+
+import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
+import com.google.android.gms.wearable.internal.GetRestoreStateRequest;
+import com.google.android.gms.wearable.internal.GetRestoreStateResponse;
+import com.google.android.gms.wearable.internal.GetRestoreSupportedResponse;
+import com.google.android.gms.wearable.internal.SaveRestoreStateRequest;
+import com.google.android.gms.wearable.internal.StartRestoreSessionRequest;
+
+import com.google.android.gms.wearable.MessageOptions;
+
+import android.accounts.Account;
+import com.google.android.gms.wearable.AppTheme;
+import com.google.android.gms.wearable.AppRecommendationsRequest;
+import com.google.android.gms.wearable.ConnectionDelayConfig;
+import com.google.android.gms.wearable.internal.AddSupervisedAccountRequest;
+import com.google.android.gms.wearable.internal.RecordUntetheredSupervisedAccountTransferRequest;
+import com.google.android.gms.wearable.internal.AcceptTermsRequest;
+import com.google.android.gms.wearable.internal.RecordTermConsentRequest;
+import com.google.android.gms.wearable.internal.ConsentStatusRequest;
+
 interface IWearableService {
     // Configs
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
     void deleteConfig(IWearableCallbacks callbacks, String name) = 20;
     void getConfigs(IWearableCallbacks callbacks) = 21;
-    void enableConfig(IWearableCallbacks callbacks, String name) = 22;
+    void enableConfig(IWearableCallbacks callbacks, String name) = 22; // aka enableConnection
     void disableConfig(IWearableCallbacks callbacks, String name) = 23;
+
+    void updateConnectionStrategy(IWearableCallbacks callbacks, String name, int strategy) = 71;
+    void getRelatedConfigs(IWearableCallbacks callbacks) = 72;
+    void updateConfig(IWearableCallbacks iWearableCallbacks, in ConnectionConfiguration config) = 73;
 
     // DataItems
     void putData(IWearableCallbacks callbacks, in PutDataRequest request) = 5;
@@ -28,9 +59,14 @@ interface IWearableService {
     void deleteDataItemsWithFilter(IWearableCallbacks callbacks, in Uri uri, int typeFilter) = 40;
 
     void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 11;
+    void sendRequest(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 57;
+    void sendMessageWithOptions(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data, in MessageOptions options) = 58;
+    void sendRequestWithOptions(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data, in MessageOptions options) = 59;
+
     void getFdForAsset(IWearableCallbacks callbacks, in Asset asset) = 12;
 
     void getLocalNode(IWearableCallbacks callbacks) = 13;
+    void getNodeId(IWearableCallbacks callbacks, String address) = 66;
     void getConnectedNodes(IWearableCallbacks callbacks) = 14;
 
     // Capabilties
@@ -64,6 +100,8 @@ interface IWearableService {
     void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, in ParcelFileDescriptor fd, long l1, long l2) = 38;
 
     void syncWifiCredentials(IWearableCallbacks callbacks) = 36;
+    void syncWifiCredentialWithSsid(IWearableCallbacks callbacks, String ssid, String password) = 87;
+    void syncWifiCredentialForNode(IWearableCallbacks callbacks, String nodeId) = 88;
 
     // Cloud Sync
     void optInCloudSync(IWearableCallbacks callbacks, boolean enable) = 47;
@@ -72,7 +110,65 @@ interface IWearableService {
     void getCloudSyncSetting(IWearableCallbacks callbacks) = 50;
     void getCloudSyncOptInStatus(IWearableCallbacks callbacks) = 51;
 
-    void sendRemoteCommand(IWearableCallbacks callbacks, byte b) = 52;
+    void sendAmsRemoteCommand(IWearableCallbacks callbacks, byte command) = 52;
+
+    void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
+
+    void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
+
+    void getCompanionPackageForNode(IWearableCallbacks callbacks, String nodeId) = 62;
+
+    void setCloudSyncSettingByNode(IWearableCallbacks callbacks, String s, boolean b) = 74;
+
+    void logCounter(IWearableCallbacks callbacks, in LogCounterRequest request) = 105;
+    void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;
+    void logTimer(IWearableCallbacks callbacks, in LogTimerRequest request) = 107;
+    void clearLogs(IWearableCallbacks callbacks) = 108; // just assuming this is clearLogs
+
+    // Backup / Restore
+    void getBackupSettingsSupported(IWearableCallbacks callbacks, String nodeId) = 78;
+    void getRestoreSupported(IWearableCallbacks callbacks) = 79;
+    void startRestoreSession(IWearableCallbacks callbacks, in StartRestoreSessionRequest request) = 81;
+    void saveRestoreState(IWearableCallbacks callbacks, in SaveRestoreStateRequest request) = 85;
+    void getRestoreState(IWearableCallbacks callbacks, in GetRestoreStateRequest request) = 86;
+    void getBackupEnabled(IWearableCallbacks callbacks, String nodeId) = 90;
+
+    void dataSynchronizationProgressTracking(IWearableCallbacks callbacks, String peerNodeId) = 92;
+
+    // eSIM
+    void getEapId(IWearableCallbacks callbacks, int subscriptionId) = 60;
+    void performEapAka(IWearableCallbacks callbacks, int subscriptionId, String s) = 61;
+
+    // FastPair
+    void associateDeviceAndAccountWithFastPair(IWearableCallbacks callbacks, String s1, in Account account, String s2, String s3) = 63;
+    void getFastpairAccountKeys(IWearableCallbacks callbacks) = 91;
+    void getFastpairAccountKeyByAccount(IWearableCallbacks callbacks, in Account account) = 96;
+
+    // Recommendations / theming
+    void getAppRecommendations(IWearableCallbacks callbacks, in AppRecommendationsRequest request) = 67;
+    void setThemeForApp(IWearableCallbacks callbacks, in AppTheme theme) = 76;
+    void getThemeForApp(IWearableCallbacks callbacks, String packageName) = 77;
+
+    // Connection management
+    void retryConnection(IWearableCallbacks callbacks, String nodeId, boolean b) = 68;
+    void cancelMigration(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 75;
+    void isNodeConnectionMetered(IWearableCallbacks callbacks, String nodeId) = 89;
+    void setConnectionDelayConfig(IWearableCallbacks callbacks, in ConnectionDelayConfig config) = 100;
+    void connectionDelayUnknown101(IWearableCallbacks callbacks, String s) = 101;
+    void clearConnectionDelayConfig(IWearableCallbacks callbacks, String nodeId) = 102;
+
+    // Supervised accounts
+    void addSupervisedAccount(IWearableCallbacks callbacks, in AddSupervisedAccountRequest request) = 69;
+    void recordUntetheredSupervisedAccountTransfer(IWearableCallbacks callbacks, in RecordUntetheredSupervisedAccountTransferRequest request) = 104;
+
+    // Consent / terms
+    void getConsentStatus(IWearableCallbacks callbacks) = 64;
+    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
+    void acceptTerms(IWearableCallbacks callbacks, in AcceptTermsRequest request) = 93;
+    void recordTermConsent(IWearableCallbacks callbacks, in RecordTermConsentRequest request) = 94;
+    void getTerms(IWearableCallbacks callbacks, int i) = 95;
+    void getConsentStatusForRequest(IWearableCallbacks callbacks, in ConsentStatusRequest request) = 103;
+    void recordSwaadlOptIn(IWearableCallbacks callbacks) = 83;
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;

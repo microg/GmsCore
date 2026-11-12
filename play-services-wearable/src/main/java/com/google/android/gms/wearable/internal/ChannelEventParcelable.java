@@ -20,7 +20,6 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class ChannelEventParcelable extends AutoSafeParcelable {
-
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -31,6 +30,40 @@ public class ChannelEventParcelable extends AutoSafeParcelable {
     public int closeReason;
     @SafeParceled(5)
     public int appSpecificErrorCode;
+
+    public static final int EVENT_TYPE_CHANNEL_OPENED = 1;
+    public static final int EVENT_TYPE_CHANNEL_CLOSED = 2;
+    public static final int EVENT_TYPE_INPUT_CLOSED = 3;
+    public static final int EVENT_TYPE_OUTPUT_CLOSED = 4;
+
+    private ChannelEventParcelable() {}
+
+    public ChannelEventParcelable(ChannelParcelable channel, int eventType, int closeReason, int appSpecificErrorCode) {
+        this.channel = channel;
+        this.eventType = eventType;
+        this.closeReason = closeReason;
+        this.appSpecificErrorCode = appSpecificErrorCode;
+    }
+
+    public String getTypeString() {
+        switch (eventType) {
+            case EVENT_TYPE_CHANNEL_OPENED: return "CHANNEL_OPENED";
+            case EVENT_TYPE_CHANNEL_CLOSED: return "CHANNEL_CLOSED";
+            case EVENT_TYPE_INPUT_CLOSED: return "INPUT_CLOSED";
+            case EVENT_TYPE_OUTPUT_CLOSED: return "OUTPUT_CLOSED";
+            default: return "UNKNOWN(" + eventType + ")";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ChannelEventParcelable{" +
+                "channel=" + channel +
+                ", type=" + getTypeString() +
+                ", closeReason=" + closeReason +
+                ", appErrorCode=" + appSpecificErrorCode +
+                '}';
+    }
 
     public static final Creator<ChannelEventParcelable> CREATOR = new AutoCreator<ChannelEventParcelable>(ChannelEventParcelable.class);
 }
