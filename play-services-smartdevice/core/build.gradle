@@ -1,0 +1,58 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.wire'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    implementation project(':play-services-smartdevice')
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-fido')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+
+}
+
+android {
+    namespace "org.microg.gms.smartdevice.d2d"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+wire {
+    kotlin {}
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-smartdevice'

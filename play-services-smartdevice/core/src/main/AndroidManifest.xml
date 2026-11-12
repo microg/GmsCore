@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <application>
+
+        <activity android:name="org.microg.gms.smartdevice.d2d.ui.SourceDirectTransferActivityV1"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:process=":ui"
+            android:taskAffinity="com.google.android.gms.smartdevice.directtransfer"
+            android:theme="@style/Theme.SmartDevice.D2D.DirectTransfer"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name="org.microg.gms.smartdevice.d2d.ui.SourceDirectTransferActivityV2"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:process=":ui"
+            android:taskAffinity="com.google.android.gms.smartdevice.directtransfer"
+            android:theme="@style/Theme.SmartDevice.D2D.DirectTransfer"
+            android:windowSoftInputMode="adjustPan" />
+
+    </application>
+</manifest>

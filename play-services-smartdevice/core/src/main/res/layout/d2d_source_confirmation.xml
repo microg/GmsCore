@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d2d_surface"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/d2d_page_padding"
+            android:paddingTop="32dp"
+            android:paddingEnd="@dimen/d2d_page_padding"
+            android:paddingBottom="24dp">
+
+            <FrameLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/d2d_icon_background"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_d2d_devices" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/d2d_confirmation_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/d2d_copy_confirmation_title"
+                android:textColor="@color/d2d_text_primary"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/d2d_confirmation_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/d2d_copy_confirmation_message"
+                android:textColor="@color/d2d_text_secondary"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/d2d_outline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/d2d_page_padding"
+        android:paddingTop="16dp"
+        android:paddingEnd="@dimen/d2d_page_padding"
+        android:paddingBottom="16dp">
+
+        <Button
+            android:id="@+id/d2d_confirmation_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/d2d_secondary_button"
+            android:minWidth="96dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@string/d2d_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/d2d_primary"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/d2d_confirmation_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/d2d_primary_button"
+            android:minWidth="104dp"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:text="@string/d2d_copy_confirmation_action"
+            android:textAllCaps="false"
+            android:textColor="@color/d2d_on_primary"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>

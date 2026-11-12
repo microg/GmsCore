@@ -63,6 +63,9 @@ class AuthenticatorGetAssertionRequest(
             rpId = obj[0x01]?.AsString() ?: "",
             clientDataHash = obj[0x02].GetByteString(),
             allowList = obj[0x03]?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() } ?: emptyList(),
+            extensions = obj[0x04]?.keys?.associate { key ->
+                key.AsString() to obj[0x04][key]
+            } ?: emptyMap(),
             options = obj[0x05]?.let { optObj ->
                 Options(
                     userPresence = optObj["up"]?.AsBoolean() ?: true,
