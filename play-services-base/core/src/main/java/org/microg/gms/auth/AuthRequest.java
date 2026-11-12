@@ -103,6 +103,13 @@ public class AuthRequest extends HttpFormClient.Request {
     public String buildVersion;
 
     @Override
+    public boolean isContentLoggingAllowed() {
+        // Every auth request carries account credentials; both OAuth and weblogin responses
+        // carry tokens, and weblogin continuation URLs also contain transfer session material.
+        return false;
+    }
+
+    @Override
     protected void prepare() {
         userAgent = String.format(USER_AGENT, deviceName, buildVersion);
     }

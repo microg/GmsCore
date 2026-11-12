@@ -25,6 +25,8 @@ import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
+import com.google.android.gms.wearable.internal.RpcResponse;
+import com.google.android.gms.wearable.internal.ConsentResponse;
 
 interface IWearableCallbacks {
     // Config
@@ -35,6 +37,7 @@ interface IWearableCallbacks {
     void onGetCloudSyncOptInOutDoneResponse(in GetCloudSyncOptInOutDoneResponse response) = 27;
     void onGetCloudSyncSettingResponse(in GetCloudSyncSettingResponse response) = 28;
     void onGetCloudSyncOptInStatusResponse(in GetCloudSyncOptInStatusResponse response) = 29;
+    void onConsentResponse(in ConsentResponse response) = 37;
 
     // Data
     void onPutDataResponse(in PutDataResponse response) = 2;
@@ -42,6 +45,7 @@ interface IWearableCallbacks {
     void onDataItemChanged(in DataHolder dataHolder) = 4;
     void onDeleteDataItemsResponse(in DeleteDataItemsResponse response) = 5;
     void onSendMessageResponse(in SendMessageResponse response) = 6;
+    void onRpcResponse(in RpcResponse response) = 33;
     void onGetFdForAssetResponse(in GetFdForAssetResponse response) = 7;
     void onGetLocalNodeResponse(in GetLocalNodeResponse response) = 8;
     void onGetConnectedNodesResponse(in GetConnectedNodesResponse response) = 9;

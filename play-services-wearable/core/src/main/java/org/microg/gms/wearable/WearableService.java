@@ -37,9 +37,6 @@ public class WearableService extends BaseService {
             new Feature("wear_await_data_sync_complete", 1L),
             new Feature("wear_backup_restore", 8L),
             new Feature("wear_consent", 2L),
-            new Feature("wear_consent_recordoptin", 1L),
-            new Feature("wear_consent_recordoptin_swaadl", 1L),
-            new Feature("wear_consent_supervised", 2L),
             new Feature("wear_get_phone_switching_feature_status", 1L),
             new Feature("wear_fast_pair_account_key_sync", 1L),
             new Feature("wear_fast_pair_get_account_keys", 1L),
@@ -50,16 +47,13 @@ public class WearableService extends BaseService {
             new Feature("wear_logging_service", 2L),
             new Feature("wear_retry_connection", 1L),
             new Feature("wear_set_cloud_sync_setting_by_node", 1L),
-            new Feature("wear_first_party_consents", 2L),
             new Feature("wear_update_config", 1L),
             new Feature("wear_update_connection_retry_strategy", 1L),
             new Feature("wear_update_delay_config", 1L),
             new Feature("wearable_services", 1L),
             new Feature("wear_cancel_migration", 1L),
-            new Feature("wear_customizable_screens", 2L),
             new Feature("wear_wifi_immediate_connect", 1L),
             new Feature("wear_get_node_active_network_metered", 1L),
-            new Feature("wear_consents_per_watch", 3L),
             new Feature("wear_material3_experience", 1L),
             new Feature("wear_offload_connection", 1L),
             new Feature("wear_get_local_capabilities", 1L),
@@ -78,11 +72,13 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        if (android.os.Build.VERSION.SDK_INT >= 21) WearableMediaBridge.attach(wearable);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (android.os.Build.VERSION.SDK_INT >= 21) WearableMediaBridge.detach(wearable);
         wearable.stop();
     }
 

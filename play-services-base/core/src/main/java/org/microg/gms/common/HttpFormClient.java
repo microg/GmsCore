@@ -35,6 +35,7 @@ public class HttpFormClient {
     private static final String TAG = "GmsHttpFormClient";
 
     public static <T> T request(String url, Request request, Class<T> tClass) throws IOException {
+        boolean logContents = request.isContentLoggingAllowed();
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
@@ -80,7 +81,7 @@ public class HttpFormClient {
             }
         }
 
-        Log.d(TAG, "-- Request --\n" + content);
+        if (logContents) Log.d(TAG, "-- Request --\n" + content);
         String replace = content.toString().trim().replace("\n", "");
         OutputStream os = connection.getOutputStream();
         os.write(replace.trim().getBytes());
@@ -97,8 +98,8 @@ public class HttpFormClient {
         }
 
         String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
-        Log.d(TAG, "-- Response --\n" + result);
-        return parseResponse(tClass, connection, result);
+        if (logContents) Log.d(TAG, "-- Response --\n" + result);
+        return parseResponse(tClass, connection, result, logContents);
     }
 
     private static String valueFromBoolVal(String value, Boolean boolVal, boolean truePresent, boolean falsePresent) {
@@ -125,7 +126,7 @@ public class HttpFormClient {
         }
     }
 
-    private static <T> T parseResponse(Class<T> tClass, HttpURLConnection connection, String result) throws IOException {
+    private static <T> T parseResponse(Class<T> tClass, HttpURLConnection connection, String result, boolean logContents) throws IOException {
         Map<String, List<String>> headerFields = connection.getHeaderFields();
         T response;
         try {
@@ -157,9 +158,9 @@ public class HttpFormClient {
                     }
                 }
             } catch (Exception e) {
-                Log.w(TAG, e);
+                if (logContents) Log.w(TAG, e);
             }
-            if (!matched) {
+            if (!matched && logContents) {
                 Log.w(TAG, "Response line '" + s + "' not processed");
             }
         }
@@ -180,7 +181,7 @@ public class HttpFormClient {
                         field.setInt(response, Integer.parseInt(value));
                     }
                 } catch (Exception e) {
-                    Log.w(TAG, e);
+                    if (logContents) Log.w(TAG, e);
                 }
             }
             if (field.isAnnotationPresent(ResponseStatusCode.class) && field.getType() == int.class) {
@@ -188,7 +189,7 @@ public class HttpFormClient {
                     field.setAccessible(true);
                     field.setInt(response, connection.getResponseCode());
                 } catch (IllegalAccessException e) {
-                    Log.w(TAG, e);
+                    if (logContents) Log.w(TAG, e);
                 }
             }
             if (field.isAnnotationPresent(ResponseStatusText.class) && field.getType() == String.class) {
@@ -196,7 +197,7 @@ public class HttpFormClient {
                     field.setAccessible(true);
                     field.set(response, connection.getResponseMessage());
                 } catch (IllegalAccessException e) {
-                    Log.w(TAG, e);
+                    if (logContents) Log.w(TAG, e);
                 }
             }
         }
@@ -215,6 +216,10 @@ public class HttpFormClient {
     }
 
     public static abstract class Request {
+        /** Sensitive auth flows may suppress bodies and value-bearing parser diagnostics. */
+        public boolean isContentLoggingAllowed() {
+            return true;
+        }
         protected void prepare() {
         }
     }

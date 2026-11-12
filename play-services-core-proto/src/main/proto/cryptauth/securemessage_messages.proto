@@ -1,0 +1,40 @@
+/* SPDX-FileCopyrightText: 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Wire-format subset of https://github.com/google/ukey2/blob/master/src/main/proto/securemessage.proto.
+syntax = "proto2";
+package securemessage;
+option java_package = "org.microg.gms.cryptauth.proto";
+
+message SecureMessage {
+  required bytes header_and_body = 1;
+  required bytes signature = 2;
+}
+
+enum SigScheme {
+  HMAC_SHA256 = 1;
+  ECDSA_P256_SHA256 = 2;
+  RSA2048_SHA256 = 3;
+}
+
+enum EncScheme {
+  NONE = 1;
+  AES_256_CBC = 2;
+}
+
+message Header {
+  required SigScheme signature_scheme = 1;
+  required EncScheme encryption_scheme = 2;
+  optional bytes verification_key_id = 3;
+  optional bytes decryption_key_id = 4;
+  optional bytes iv = 5;
+  optional bytes public_metadata = 6;
+  optional uint32 associated_data_length = 7 [default = 0];
+}
+
+// Preserve serialized header bytes exactly, including optional-field presence.
+message HeaderAndBodyInternal {
+  required bytes header = 1;
+  required bytes body = 2;
+}

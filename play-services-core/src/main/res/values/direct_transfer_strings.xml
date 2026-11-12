@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="direct_transfer_verification_body">Google needs an additional verification before copying your account to the watch. Complete it below, or cancel the transfer.</string>
+    <string name="direct_transfer_consent_title">Copy a Google account to your watch</string>
+    <string name="direct_transfer_consent_body">Google Pixel Watch requested this transfer. Choose the account to copy to the connected watch. Your phone will ask you to confirm its screen lock before account access is transferred.</string>
+    <string name="direct_transfer_consent_target">Watch: %1$s</string>
+    <string name="direct_transfer_consent_confirm">Continue</string>
+    <string name="direct_transfer_credential_body">Confirm your identity to copy the selected Google account to the connected watch.</string>
+    <string name="direct_transfer_progress_title">Transferring your account</string>
+    <string name="direct_transfer_progress_body">Keep this screen open while the account is prepared and copied to your watch. You can cancel at any time.</string>
+</resources>

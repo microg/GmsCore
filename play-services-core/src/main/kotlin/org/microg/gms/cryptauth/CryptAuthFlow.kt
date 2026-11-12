@@ -8,31 +8,21 @@ import android.util.Base64
 import android.util.Log
 import com.google.android.gms.BuildConfig
 import com.google.android.gms.common.Scopes
-import cryptauthv2.ApplicationSpecificMetadata
-import cryptauthv2.ClientAppMetadata
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import okio.ByteString.Companion.toByteString
-import org.json.JSONArray
-import org.json.JSONObject
+import kotlinx.coroutines.sync.withLock
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
-import org.microg.gms.common.DeviceConfiguration
-import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GcmConstants
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.RegisterRequest
 import org.microg.gms.gcm.completeRegisterRequest
-import org.microg.gms.profile.Build
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.security.KeyPairGenerator
 import java.security.MessageDigest
-import kotlin.math.roundToInt
 
 private const val TAG = "CryptAuthFlow"
 
@@ -49,7 +39,19 @@ private const val AFTER_REQUEST_DELAY = 5000L
 
 suspend fun Context.sendDeviceScreenlockState(account: Account): Boolean = sendDeviceScreenlockState(account.name)
 
-suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean {
+suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean = cryptAuthStateMutex.withLock {
+    try {
+        sendDeviceScreenlockStateLocked(accountName)
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (failure: Exception) {
+        // Exceptions from authentication, protocol parsing or network services can contain secrets.
+        Log.w(TAG, "CryptAuth screen-lock update failed (${failure.javaClass.simpleName})")
+        false
+    }
+}
+
+private suspend fun Context.sendDeviceScreenlockStateLocked(accountName: String): Boolean {
 
     // Ensure that device is checked in
     val checkinInfo = LastCheckinInfo.read(this)
@@ -95,6 +97,64 @@ suspend fun Context.sendDeviceScreenlockState(accountName: String): Boolean {
         true
     } else {
         false
+    }
+}
+
+/**
+ * Synchronize transfer keys after the transfer service has authorized its caller and obtained
+ * account-specific consent. The existing screen-lock error resolver does not invoke this flow.
+ */
+internal suspend fun Context.ensureCryptAuthTransferKeys(
+    account: Account,
+    diagnostic: CryptAuthTransferDiagnostics = CryptAuthTransferDiagnostics()
+): CryptAuthState = cryptAuthStateMutex.withLock {
+    diagnostic.at(CryptAuthTransferDiagnosticReason.STORAGE_API) {
+        check(android.os.Build.VERSION.SDK_INT >= 21) { "CryptAuth transfer requires no-backup storage" }
+    }
+    withContext(Dispatchers.IO) {
+        val checkin = diagnostic.at(CryptAuthTransferDiagnosticReason.CHECKIN_READ) {
+            LastCheckinInfo.read(this@ensureCryptAuthTransferKeys)
+        }
+        diagnostic.at(CryptAuthTransferDiagnosticReason.CHECKIN_REQUIRED) {
+            check(checkin.androidId != 0L) { "CryptAuth transfer requires device check-in" }
+        }
+        val store = diagnostic.at(CryptAuthTransferDiagnosticReason.STORAGE_OPEN) {
+            CryptAuthKeyStore(this@ensureCryptAuthTransferKeys, account.name)
+        }
+        val instanceId = diagnostic.at(CryptAuthTransferDiagnosticReason.STATE_READ) { store.read().instanceId }
+        val registration = diagnostic.at(CryptAuthTransferDiagnosticReason.GCM_REGISTRATION) {
+            registerForCryptAuth(checkin, instanceId)
+        }
+        val instanceToken = diagnostic.at(CryptAuthTransferDiagnosticReason.GCM_TOKEN) {
+            requireNotNull(registration.getString(GcmConstants.EXTRA_REGISTRATION_ID)) { "Missing CryptAuth registration" }
+        }
+        val authentication = diagnostic.at(CryptAuthTransferDiagnosticReason.OAUTH_AUTHENTICATION) {
+            authenticateForCryptAuth(account.name)
+        }
+        val authToken = diagnostic.at(CryptAuthTransferDiagnosticReason.OAUTH_TOKEN) {
+            requireNotNull(authentication) { "CryptAuth authentication failed" }
+        }
+        val http = CryptAuthHttpTransport(authToken)
+        val transport = object : CryptAuthTransport {
+            override suspend fun sync(request: cryptauthv2.SyncKeysRequest) =
+                diagnostic.at(CryptAuthTransferDiagnosticReason.SYNC_KEYS) { http.sync(request) }
+            override suspend fun enroll(request: cryptauthv2.EnrollKeysRequest) =
+                diagnostic.at(CryptAuthTransferDiagnosticReason.ENROLL_KEYS) { http.enroll(request) }
+        }
+        val metadata = diagnostic.at(CryptAuthTransferDiagnosticReason.CLIENT_METADATA) {
+            cryptAuthMetadata(instanceId, instanceToken, checkin.androidId)
+        }
+        diagnostic.at(CryptAuthTransferDiagnosticReason.KEY_ENROLLMENT) {
+            CryptAuthEnrollment(transport, store).enroll(metadata)
+        }
+        val state = diagnostic.at(CryptAuthTransferDiagnosticReason.STATE_RELOAD) { store.read() }
+        diagnostic.at(CryptAuthTransferDiagnosticReason.TRANSFER_KEYS) {
+            check(state.pendingKeys.isEmpty() && state.keys.count { it.name == "PublicKey" && it.active } == 1 &&
+                state.keys.count { it.name == "authzen" && it.active && it.type == cryptauthv2.KeyType.RAW256 } == 1) {
+                "CryptAuth transfer keys are unavailable"
+            }
+        }
+        state
     }
 }
 
