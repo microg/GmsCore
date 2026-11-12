@@ -1,0 +1,962 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+package location.nearby.proto.sharing;
+
+// import "logs/proto/logs_annotations/logs_annotations.proto";
+// import "logs/proto/wireless/beto/beto_enums.proto";
+// import "logs/proto/wireless/beto/log_dimension_annotations.proto";
+
+// option (logs_proto.file_not_used_for_logging_except_enums) = true;
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.google.location.nearby.proto";
+option java_outer_classname = "SharingEnums";
+option objc_class_prefix = "GNSHP";
+
+// We use event based logging (an event object can be constructed and logged
+// immediately when they occur). To obtain session based information (e.g.
+// durations, counting incoming introductions), we use flowId (sender/receiver)
+// in NearbyClearcutLogger (for android, or clearcut_event_logger as the
+// equivalence for Windows) for all events (may exclude settings), and
+// session_id for a pair of events (start and end of a session).
+// Next id: 74
+enum EventType {
+  UNKNOWN_EVENT_TYPE = 0;
+
+  // LINT.IfChange(EventType)
+
+  // When new users accept agreements (like grant permission to contacts for
+  // CONTACT_ONLY visibility) and are enrolled into Nearby Sharing. This event
+  // is used to count number of new users.
+  ACCEPT_AGREEMENTS = 1;
+
+  // User enables/disables nearby sharing from setting or tile service.
+  ENABLE_NEARBY_SHARING = 2;
+
+  // User sets visibility preference from setting.
+  SET_VISIBILITY = 3;
+
+  // Describe attachments immediately when Nearby Sharing is opened by another
+  // app which is used to generate/attach attachments to be shared with other
+  // devices.
+  DESCRIBE_ATTACHMENTS = 4
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Start of a scanning phase at sender.
+  SCAN_FOR_SHARE_TARGETS_START = 5 /*[[*/
+                                   /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                                   /*( stage = STAGE_QS_DISCOVER_START )*/
+      /*]]*/;
+
+  // End of the scanning phase at sender.
+  SCAN_FOR_SHARE_TARGETS_END = 6 /*[[*/
+                                 /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                                 /*( stage = STAGE_QS_DISCOVER_END )*/
+      /*]]*/;
+
+  // Receiver advertises itself for presence (a pseudo session).
+  ADVERTISE_DEVICE_PRESENCE_START = 7 /*[[*/
+                                      /*( device_role = DEVICE_ROLE_REMOTE, )*/
+                                      /*( stage = STAGE_QS_ADVERTISE_START )*/
+      /*]]*/;
+
+  // End of the advertising phase at receiver.
+  ADVERTISE_DEVICE_PRESENCE_END = 8 /*[[*/
+                                    /*( device_role = DEVICE_ROLE_REMOTE, )*/
+                                    /*( stage = STAGE_QS_ADVERTISE_END )*/
+      /*]]*/;
+
+  // Sender sends a fast initialization to receiver.
+  SEND_FAST_INITIALIZATION = 9
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Receiver receives the fast initialization.
+  RECEIVE_FAST_INITIALIZATION = 10
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Sender discovers a share target.
+  DISCOVER_SHARE_TARGET = 11 /*[[*/
+                             /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                             /*( stage = STAGE_QS_DISCOVERED )*/
+      /*]]*/;
+
+  // Sender sends introduction (before attachments being sent).
+  SEND_INTRODUCTION = 12
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Receiver receives introduction.
+  RECEIVE_INTRODUCTION = 13
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Receiver responds to introduction (before attachments being sent).
+  // Actions: Accept, Reject, or (for some reason) Fail.
+  RESPOND_TO_INTRODUCTION = 14
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Start of the sending attachments phase at sender.
+  SEND_ATTACHMENTS_START = 15 /*[[*/
+                              /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                              /*( stage = STAGE_QS_TRANSFER_START )*/
+      /*]]*/;
+
+  // End of sending attachments phase at sender.
+  SEND_ATTACHMENTS_END = 16 /*[[*/
+                            /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                            /*( stage = STAGE_QS_TRANSFER_END )*/
+      /*]]*/;
+
+  // Start of the receiving attachments phase at receiver.
+  RECEIVE_ATTACHMENTS_START = 17
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // End of receiving attachments phase at receiver.
+  RECEIVE_ATTACHMENTS_END = 18 /*[[*/
+                               /*( device_role = DEVICE_ROLE_REMOTE, )*/
+                               /*( stage = STAGE_QS_TRANSFER_END )*/
+      /*]]*/;
+
+  // Sender cancels sending attachments.
+  CANCEL_SENDING_ATTACHMENTS = 19
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Receiver cancels receiving attachments.
+  CANCEL_RECEIVING_ATTACHMENTS = 20
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Receiver opens received attachments.
+  OPEN_RECEIVED_ATTACHMENTS = 21
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // User opens the setup activity.
+  LAUNCH_SETUP_ACTIVITY = 22 [deprecated = true];
+
+  // User adds a contact.
+  ADD_CONTACT = 23;
+
+  // User removes a contact.
+  REMOVE_CONTACT = 24;
+
+  // Local devices all Fast Share server.
+  FAST_SHARE_SERVER_RESPONSE = 25;
+
+  // The start of a sending session.
+  SEND_START = 26 /*[[*/
+                  /*( device_role = DEVICE_ROLE_INITIATOR, )*/
+                  /*( stage = STAGE_QS_CONNECT_START )*/
+      /*]]*/;
+
+  // Receiver accepts a fast initialization.
+  ACCEPT_FAST_INITIALIZATION = 27
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Set data usage preference.
+  SET_DATA_USAGE = 28;
+
+  // Receiver dismisses a fast initialization
+  DISMISS_FAST_INITIALIZATION = 29
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Cancel connection.
+  CANCEL_CONNECTION = 30
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // User starts a chimera activity (e.g. ConsentsChimeraActivity,
+  // DeviceVisibilityChimeraActivity...)
+  LAUNCH_ACTIVITY = 31;
+
+  // Receiver dismisses a privacy notification.
+  DISMISS_PRIVACY_NOTIFICATION = 32;
+
+  // Receiver taps a privacy notification.
+  TAP_PRIVACY_NOTIFICATION = 33;
+
+  // Receiver taps a help page.
+  TAP_HELP = 34;
+
+  // Receiver taps a feedback.
+  TAP_FEEDBACK = 35;
+
+  // Receiver adds quick settings tile.
+  ADD_QUICK_SETTINGS_TILE = 36;
+
+  // Receiver removes quick settings tile.
+  REMOVE_QUICK_SETTINGS_TILE = 37;
+
+  // Receiver phone consent clicked.
+  LAUNCH_PHONE_CONSENT = 38;
+
+  // Devices show a phone consent banner in Nearby Share Settings
+  DISPLAY_PHONE_CONSENT = 54;
+
+  // Receiver taps quick settings tile.
+  TAP_QUICK_SETTINGS_TILE = 39;
+
+  // Receiver Installation of APKs status.
+  INSTALL_APK = 40 /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Receiver verification of APKs status.
+  VERIFY_APK = 41 /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // User starts a consent.
+  LAUNCH_CONSENT = 42;
+
+  // After receiving payloads, Nearby Share still needs to transfer the payloads
+  // to correct attachment formats and move files attachments from temporary
+  // directory to final destination.
+  PROCESS_RECEIVED_ATTACHMENTS_END = 43
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Toggle Show Notification setting item in Nearby Share setting.
+  TOGGLE_SHOW_NOTIFICATION = 44;
+
+  // Set device name
+  SET_DEVICE_NAME = 45;
+
+  // users dropped off opt-in page.
+  DECLINE_AGREEMENTS = 46;
+
+  // Request setting permissions (Wifi/BT/location/airplane mode).
+  REQUEST_SETTING_PERMISSIONS = 47;
+
+  // Set up a connection with the remote device.
+  ESTABLISH_CONNECTION = 48 /*[ stage = STAGE_QS_CONNECT_END ]*/;
+
+  // Track device states in Nearby Share setting.
+  DEVICE_SETTINGS = 49;
+
+  // Receiver auto dismisses a fast initialization notification.
+  AUTO_DISMISS_FAST_INITIALIZATION = 50
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // App Crash event.
+  // Used only for Windows App now.
+  APP_CRASH = 51;
+
+  // Sender taps the Send button in quick settings
+  TAP_QUICK_SETTINGS_FILE_SHARE = 52
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Devices show a privacy notification
+  DISPLAY_PRIVACY_NOTIFICATION = 53;
+
+  // Preference usage event (e.g. load/save preferences, etc).
+  // Used only for Windows App now.
+  PREFERENCES_USAGE = 55;
+
+  // Default opt in
+  DEFAULT_OPT_IN = 56;
+
+  // The result of the setup wizard flow
+  SETUP_WIZARD = 57;
+
+  // Sender taps a QR code
+  TAP_QR_CODE = 58 /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // QR code link shown
+  QR_CODE_LINK_SHOWN = 59
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // Sender failed to parse endpoint id.
+  PARSING_FAILED_ENDPOINT_ID = 60
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // The device is discovered by fast initialization
+  FAST_INIT_DISCOVER_DEVICE = 61
+      /*[ device_role = DEVICE_ROLE_REMOTE ]*/;
+
+  // Send desktop notification.
+  SEND_DESKTOP_NOTIFICATION = 62;
+
+  // User sets account preference
+  SET_ACCOUNT = 63;
+
+  // Decrypt certificate failure
+  DECRYPT_CERTIFICATE_FAILURE = 64;
+
+  // Show allow permission auto access UI
+  SHOW_ALLOW_PERMISSION_AUTO_ACCESS = 65
+      /*[ device_role = DEVICE_ROLE_INITIATOR ]*/;
+
+  // UI events for transferring files with desktop applications. It includes
+  // event types such as DESKTOP_TRANSFER_EVENT_SEND_TYPE_SELECT_A_DEVICE.
+  SEND_DESKTOP_TRANSFER_EVENT = 66;
+
+  // Show accept button on Quick Share receive UI
+  WAITING_FOR_ACCEPT = 67;
+
+  // High quality event setup
+  HIGH_QUALITY_MEDIUM_SETUP = 68;
+
+  // RPC call status
+  RPC_CALL_STATUS = 69;
+
+  // A QR code sharing session has started
+  START_QR_CODE_SESSION = 70;
+
+  // A QR code URL has been opened in a web client/browser instead of in a
+  // native Quick Share app.
+  QR_CODE_OPENED_IN_WEB_CLIENT = 71;
+
+  // A HaTS survey session id has been joined with Quick Share flow id.
+  HATS_JOINT_EVENT = 72;
+
+  // Previews received.
+  RECEIVE_PREVIEWS = 73;
+
+  // LINT.ThenChange(//depot/google3/location/nearby/proto/nearby_event_codes.proto:SharingEventCode)
+}
+
+// Event category to differentiate whether this comes from sender or receiver,
+// whether this is for communication flow, or for settings.
+enum EventCategory {
+  UNKNOWN_EVENT_CATEGORY = 0;
+  SENDING_EVENT = 1;
+  RECEIVING_EVENT = 2;
+  SETTINGS_EVENT = 3;
+  RPC_EVENT = 4;
+}
+
+// Status of nearby sharing.
+enum NearbySharingStatus {
+  UNKNOWN_NEARBY_SHARING_STATUS = 0;
+
+  ON = 1;
+  OFF = 2;
+}
+
+enum Visibility {
+  UNKNOWN_VISIBILITY = 0;
+
+  CONTACTS_ONLY = 1;
+  EVERYONE = 2;
+  SELECTED_CONTACTS_ONLY = 3 [deprecated = true];
+  HIDDEN = 4;
+  SELF_SHARE = 5;
+}
+
+enum DataUsage {
+  UNKNOWN_DATA_USAGE = 0;
+
+  ONLINE = 1;
+  WIFI_ONLY = 2;
+  OFFLINE = 3;
+}
+
+// The status of establishing a connection. Used by ESTABLISH_CONNECTION.
+enum EstablishConnectionStatus {
+  CONNECTION_STATUS_UNKNOWN = 0;
+
+  CONNECTION_STATUS_SUCCESS = 1
+      /*[ status_bucket = STATUS_SUCCESSFUL ]*/;
+  CONNECTION_STATUS_FAILURE = 2
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_CANCELLATION = 3
+      /*[ status_bucket = STATUS_CANCELLED ]*/;
+  CONNECTION_STATUS_MEDIA_UNAVAILABLE_ATTACHMENT = 4
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_FAILED_PAIRED_KEYHANDSHAKE = 5
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_FAILED_WRITE_INTRODUCTION = 6
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_FAILED_NULL_CONNECTION = 7
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_FAILED_NO_TRANSFER_UPDATE_CALLBACK = 8
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  CONNECTION_STATUS_LOST_CONNECTIVITY = 9
+      /*[ status_bucket = STATUS_INTERRUPTION ]*/;
+  // TODO: b/341782941 - : Annote this status when it's confirmed by Nearby
+  // Connections team.
+  CONNECTION_STATUS_INVALID_ADVERTISEMENT = 10;
+}
+
+// The status of sending and receiving attachments. Used by SEND_ATTACHMENTS.
+enum AttachmentTransmissionStatus {
+  UNKNOWN_ATTACHMENT_TRANSMISSION_STATUS = 0;
+  COMPLETE_ATTACHMENT_TRANSMISSION_STATUS = 1
+      /*[ status_bucket = STATUS_SUCCESSFUL ]*/;
+  CANCELED_ATTACHMENT_TRANSMISSION_STATUS = 2
+      /*[ status_bucket = STATUS_CANCELLED ]*/;
+  FAILED_ATTACHMENT_TRANSMISSION_STATUS = 3
+      /*[ status_bucket = STATUS_INTERNAL_ERROR ]*/;
+  REJECTED_ATTACHMENT = 4 [deprecated = true];
+  TIMED_OUT_ATTACHMENT = 5 [deprecated = true];
+  AWAITING_REMOTE_ACCEPTANCE_FAILED_ATTACHMENT = 6 [deprecated = true];
+  NOT_ENOUGH_SPACE_ATTACHMENT = 7 [deprecated = true];
+  FAILED_NO_TRANSFER_UPDATE_CALLBACK = 8 [deprecated = true];
+  MEDIA_UNAVAILABLE_ATTACHMENT = 9 [deprecated = true];
+  UNSUPPORTED_ATTACHMENT_TYPE_ATTACHMENT = 10 [deprecated = true];
+  NO_ATTACHMENT_FOUND = 11 [deprecated = true];
+  FAILED_NO_SHARE_TARGET_ENDPOINT = 12 [deprecated = true];
+  FAILED_PAIRED_KEYHANDSHAKE = 13 [deprecated = true];
+  FAILED_NULL_CONNECTION = 14 [deprecated = true];
+  FAILED_NO_PAYLOAD = 15 [deprecated = true];
+  FAILED_WRITE_INTRODUCTION = 16 [deprecated = true];
+
+  // The remote response is either missing or has an unknown type.
+  FAILED_UNKNOWN_REMOTE_RESPONSE = 17 [deprecated = true];
+
+  // Breakdowns of FAILED_NULL_CONNECTION (Desktop side)
+  FAILED_NULL_CONNECTION_INIT_OUTGOING = 18;
+  FAILED_NULL_CONNECTION_DISCONNECTED = 19;
+
+  // Breakdowns of FAILED_NULL_CONNECTION (android side)
+  // Connection failed due to Wifi is disconnected or Bluetooth setting is off
+  // or user turn on airplane mode.
+  FAILED_NULL_CONNECTION_LOST_CONNECTIVITY = 20 [deprecated = true];
+  // Unexpected connection failure.
+  FAILED_NULL_CONNECTION_FAILURE = 21 [deprecated = true];
+
+  REJECTED_ATTACHMENT_TRANSMISSION_STATUS = 22;
+  TIMED_OUT_ATTACHMENT_TRANSMISSION_STATUS = 23;
+  NOT_ENOUGH_SPACE_ATTACHMENT_TRANSMISSION_STATUS = 24
+      /*[ status_bucket = STATUS_INTERRUPTION ]*/;
+  UNSUPPORTED_ATTACHMENT_TYPE_ATTACHMENT_TRANSMISSION_STATUS = 25;
+  FAILED_UNKNOWN_REMOTE_RESPONSE_TRANSMISSION_STATUS = 26;
+  // Connection failed due to Wifi is disconnected or Bluetooth setting is off
+  // or user turn on airplane mode.
+  NO_RESPONSE_FRAME_CONNECTION_CLOSED_LOST_CONNECTIVITY_TRANSMISSION_STATUS = 27
+      [deprecated = true];
+  // Unexpected connection failure due to no response frame.
+  NO_RESPONSE_FRAME_CONNECTION_CLOSED_TRANSMISSION_STATUS = 28;
+  // Connection failed due to Wifi is disconnected or Bluetooth setting is off
+  // or user turn on airplane mode.
+  LOST_CONNECTIVITY_TRANSMISSION_STATUS = 29
+      /*[ status_bucket = STATUS_INTERRUPTION ]*/;
+  // Connection failed due to the medium is not allowed.
+  FAILED_DISALLOWED_MEDIUM = 30;
+}
+
+// Generic result status of NearbyConnections API calls.
+enum ConnectionLayerStatus {
+  // No status is available
+  CONNECTION_LAYER_STATUS_UNKNOWN = 0;
+  // The operation was successful.
+  CONNECTION_LAYER_STATUS_SUCCESS = 1;
+  // The operation failed, without any more information.
+  CONNECTION_LAYER_STATUS_ERROR = 2;
+  // The app called an API method out of order (i.e. another method is expected
+  // to be called first).
+  CONNECTION_LAYER_STATUS_OUT_OF_ORDER_API_CALL = 3;
+  // The app already has active operations (advertising, discovering, or
+  // connected to other devices) with another Strategy. Stop these operations on
+  // the current Strategy before trying to advertise or discover with a new
+  // Strategy.
+  CONNECTION_LAYER_STATUS_ALREADY_HAVE_ACTIVE_STRATEGY = 4;
+  // The app is already advertising; call StopAdvertising() before trying to
+  // advertise again.
+  CONNECTION_LAYER_STATUS_ALREADY_ADVERTISING = 5;
+  // The app is already discovering; call StopDiscovery() before trying to
+  // discover again.
+  CONNECTION_LAYER_STATUS_ALREADY_DISCOVERING = 6;
+  // NC is already listening for incoming connections from remote endpoints.
+  CONNECTION_LAYER_STATUS_ALREADY_LISTENING = 7;
+  // An attempt to read from/write to a connected remote endpoint failed. If
+  // this occurs repeatedly, consider invoking DisconnectFromEndpoint().
+  CONNECTION_LAYER_STATUS_END_POINT_IO_ERROR = 8;
+  // An attempt to interact with a remote endpoint failed because it's unknown
+  // to us -- it's either an endpoint that was never discovered, or an endpoint
+  // that never connected to us (both of which are indicative of bad input from
+  // the client app).
+  CONNECTION_LAYER_STATUS_END_POINT_UNKNOWN = 9;
+  // The remote endpoint rejected the connection request.
+  CONNECTION_LAYER_STATUS_CONNECTION_REJECTED = 10;
+  // The app is already connected to the specified endpoint. Multiple
+  // connections to a remote endpoint cannot be maintained simultaneously.
+  CONNECTION_LAYER_STATUS_ALREADY_CONNECTED_TO_END_POINT = 11;
+  // The remote endpoint is not connected; messages cannot be sent to it.
+  CONNECTION_LAYER_STATUS_NOT_CONNECTED_TO_END_POINT = 12;
+  // There was an error trying to use the device's Bluetooth capabilities.
+  CONNECTION_LAYER_STATUS_BLUETOOTH_ERROR = 13;
+  // There was an error trying to use the device's Bluetooth Low Energy
+  // capabilities.
+  CONNECTION_LAYER_STATUS_BLE_ERROR = 14;
+  // There was an error trying to use the device's Wi-Fi capabilities.
+  CONNECTION_LAYER_STATUS_WIFI_LAN_ERROR = 15;
+  // An attempt to interact with an in-flight Payload failed because it's
+  // unknown to us.
+  CONNECTION_LAYER_STATUS_PAYLOAD_UNKNOWN = 16;
+  // The connection was reset
+  CONNECTION_LAYER_STATUS_RESET = 17;
+  // The connection timed out
+  CONNECTION_LAYER_STATUS_TIMEOUT = 18;
+}
+
+// The status of processing attachments after receiver received payloads
+// successfully.
+enum ProcessReceivedAttachmentsStatus {
+  PROCESSING_STATUS_UNKNOWN = 0;
+
+  PROCESSING_STATUS_COMPLETE_PROCESSING_ATTACHMENTS = 1;
+  PROCESSING_STATUS_FAILED_MOVING_FILES = 2;
+  PROCESSING_STATUS_FAILED_RECEIVING_APK = 3;
+  PROCESSING_STATUS_FAILED_RECEIVING_TEXT = 4;
+  PROCESSING_STATUS_FAILED_RECEIVING_WIFI_CREDENTIALS = 5;
+}
+
+// The status of advertising and discovering sessions. Used by
+// SCAN_FOR_SHARE_TARGETS and ADVERTISE_DEVICE_PRESENCE.
+enum SessionStatus {
+  UNKNOWN_SESSION_STATUS = 0;
+  SUCCEEDED_SESSION_STATUS = 1
+      /*[ status_bucket = STATUS_SUCCESSFUL ]*/;
+
+  // TODO: b/341782941 - FAILED_SESSION_STATUS occurs when the status of
+  // advertising or discovering sessions is not successful. It can be
+  // due to STATUS_INTERNAL_ERROR, STATUS_INTERRUPTION, STATUS_CANCELLED.
+  // More session statuses should be logged to determine the status.
+  FAILED_SESSION_STATUS = 2;
+}
+
+// User's response to introductions.
+enum ResponseToIntroduction {
+  UNKNOWN_RESPONSE_TO_INTRODUCTION = 0;
+
+  ACCEPT_INTRODUCTION = 1;
+  REJECT_INTRODUCTION = 2;
+  FAIL_INTRODUCTION = 3;
+}
+
+// TODO(fdi): may eventually include desktop, etc.
+// The type of a remote device.
+enum DeviceType {
+  UNKNOWN_DEVICE_TYPE = 0;
+
+  PHONE = 1;
+  TABLET = 2;
+  LAPTOP = 3;
+  CAR = 4;
+  FOLDABLE = 5;
+  XR = 6;
+}
+
+// TODO(fdi): may eventually include windows, iOS, etc.
+// The OS type of a remote device.
+enum OSType {
+  UNKNOWN_OS_TYPE = 0;
+
+  ANDROID = 1;
+  CHROME_OS = 2;
+  IOS = 3;
+  WINDOWS = 4;
+  MACOS = 5;
+}
+
+// Relationship of remote device to sender device.
+enum DeviceRelationship {
+  UNKNOWN_DEVICE_RELATIONSHIP = 0;
+
+  // The remote device belongs to the same owner as sender device.
+  IS_SELF = 1;
+  // The remote device is a contact of sender.
+  IS_CONTACT = 2;
+  // The remote device is a stranger.
+  IS_STRANGER = 3;
+}
+
+// The device sources of the clearcut log.
+enum LogSource {
+  UNSPECIFIED_SOURCE = 0;
+
+  // Represents the devices in Nearby labs.
+  LAB_DEVICES = 1;
+  // Represents the devices tested by Nearby engs, in the long term can include
+  // any devices with newest feature flags.
+  INTERNAL_DEVICES = 2;
+  // Represents the devices testing our in-development features before they're
+  // released to the greater public.
+  BETA_TESTER_DEVICES = 3;
+  // Represents the OEM partners (like Samsung) that we're working with to
+  // verify functionality on their devices.
+  OEM_DEVICES = 4;
+  // Represents the device for debugging.
+  DEBUG_DEVICES = 5;
+  // Represents the device for Nearby Module Food.
+  NEARBY_MODULE_FOOD_DEVICES = 6;
+  // Represents the device for BeTo Team Food.
+  BETO_DOGFOOD_DEVICES = 7;
+  // Represents the device for Nearby dog Food.
+  NEARBY_DOGFOOD_DEVICES = 8;
+  // Represents the device for Nearby Team Food.
+  NEARBY_TEAMFOOD_DEVICES = 9;
+}
+
+// The Fast Share server action name.
+enum ServerActionName {
+  UNKNOWN_SERVER_ACTION = 0;
+
+  UPLOAD_CERTIFICATES = 1;
+  DOWNLOAD_CERTIFICATES = 2;
+  CHECK_REACHABILITY = 3;
+  UPLOAD_CONTACTS = 4;
+  UPDATE_DEVICE_NAME = 5;
+  UPLOAD_SENDER_CERTIFICATES = 6;
+  DOWNLOAD_SENDER_CERTIFICATES = 7;
+  UPLOAD_CONTACTS_AND_CERTIFICATES = 8;
+  LIST_REACHABLE_PHONE_NUMBERS = 9;
+  LIST_MY_DEVICES = 10;
+  LIST_CONTACT_PEOPLE = 11;
+
+  // used for analytics logger to record action name.
+  DOWNLOAD_CERTIFICATES_INFO = 12;
+}
+
+// The Fast Share server response state.
+enum ServerResponseState {
+  UNKNOWN_SERVER_RESPONSE_STATE = 0;
+
+  SERVER_RESPONSE_SUCCESS = 1;
+  SERVER_RESPONSE_UNKNOWN_FAILURE = 2;
+
+  // For StatusException.
+  SERVER_RESPONSE_STATUS_OTHER_FAILURE = 3;
+  SERVER_RESPONSE_STATUS_DEADLINE_EXCEEDED = 4;
+  SERVER_RESPONSE_STATUS_PERMISSION_DENIED = 5;
+  SERVER_RESPONSE_STATUS_UNAVAILABLE = 6;
+  SERVER_RESPONSE_STATUS_UNAUTHENTICATED = 7;
+  SERVER_RESPONSE_STATUS_INVALID_ARGUMENT = 9;
+
+  // For GoogleAuthException.
+  SERVER_RESPONSE_GOOGLE_AUTH_FAILURE = 8;
+
+  // For Internet connect status.
+  SERVER_RESPONSE_NOT_CONNECTED_TO_INTERNET = 10;
+}
+
+// The purpose of requesting the server request.
+enum SyncPurpose {
+  SYNC_PURPOSE_UNKNOWN = 0;
+  // When NearbySharingChimeraService#sync() is called.
+  SYNC_PURPOSE_ON_DEMAND_SYNC = 1;
+  // Requested by chime notification.
+  SYNC_PURPOSE_CHIME_NOTIFICATION = 2;
+  // For reqular daily sync.
+  SYNC_PURPOSE_DAILY_SYNC = 3;
+  // Wen a device opts into Nearby Share.
+  SYNC_PURPOSE_OPT_IN_FIRST_SYNC = 4;
+  // Requested when Nearby Share automatically enables a device that shares
+  // a single account that has already opted in on another device.
+  SYNC_PURPOSE_CHECK_DEFAULT_OPT_IN = 5;
+  // When a device enables Nearby Share.
+  SYNC_PURPOSE_NEARBY_SHARE_ENABLED = 6;
+  // When a device is in fast init advertising.
+  SYNC_PURPOSE_SYNC_AT_FAST_INIT = 7;
+  // When device start discovery.
+  SYNC_PURPOSE_SYNC_AT_DISCOVERY = 8;
+  // When device tries to load valid private certificate.
+  SYNC_PURPOSE_SYNC_AT_LOAD_PRIVATE_CERTIFICATE = 9;
+  // When device start advertiseement.
+  SYNC_PURPOSE_SYNC_AT_ADVERTISEMENT = 10;
+  // When device contacts list changes.
+  SYNC_PURPOSE_CONTACT_LIST_CHANGE = 11;
+  // When showing the C11 banner in Neary Share setting.
+  SYNC_PURPOSE_SHOW_C11N_VIEW = 12;
+  // For regular check contact reachability.
+  SYNC_PURPOSE_REGULAR_CHECK_CONTACT_REACHABILITY = 13;
+  // When selected contacts list changes in visibility setting.
+  SYNC_PURPOSE_VISIBILITY_SELECTED_CONTACT_CHANGE = 14;
+  // When switching account.
+  SYNC_PURPOSE_ACCOUNT_CHANGE = 15;
+  // When regenerate certificates
+  SYNC_PURPOSE_REGENERATE_CERTIFICATES = 16;
+  // When Device Contacts consent changes
+  SYNC_PURPOSE_DEVICE_CONTACTS_CONSENT_CHANGE = 17;
+}
+
+// The device role to trigger the server request.
+enum ClientRole {
+  CLIENT_ROLE_UNKNOWN = 0;
+  CLIENT_ROLE_SENDER = 1;
+  CLIENT_ROLE_RECEIVER = 2;
+}
+
+// The type of Nearby Sharing scanning.
+enum ScanType {
+  UNKNOWN_SCAN_TYPE = 0;
+  FOREGROUND_SCAN = 1;
+  FOREGROUND_RETRY_SCAN = 2;
+  DIRECT_SHARE_SCAN = 3;
+  BACKGROUND_SCAN = 4;
+}
+
+// The type of parsing endpoint id failed type.
+enum ParsingFailedType {
+  FAILED_UNKNOWN_TYPE = 0;
+  // NULL advertisement is returned due to sender failing to parse advertisement
+  // from endpointInfo byte stream from receiver advertisement.
+  FAILED_PARSE_ADVERTISEMENT = 1;
+  // NULL shareTarget is returned due to sender failing to create shareTarget
+  // from a valid parsed advertisement stemming from issues in certificates, QR
+  // code tokens or device names.
+  FAILED_CONVERT_SHARE_TARGET = 2;
+}
+
+// The Nearby Sharing advertising mode.
+enum AdvertisingMode {
+  UNKNOWN_ADVERTISING_MODE = 0;
+  SCREEN_OFF_ADVERTISING_MODE = 1;
+  BACKGROUND_ADVERTISING_MODE = 2;
+  MIDGROUND_ADVERTISING_MODE = 3;
+  FOREGROUND_ADVERTISING_MODE = 4;
+  SUSPENDED_ADVERTISING_MODE = 5;
+}
+
+// The Nearby Sharing discovery mode.
+enum DiscoveryMode {
+  UNKNOWN_DISCOVERY_MODE = 0;
+  SCREEN_OFF_DISCOVERY_MODE = 1;
+  BACKGROUND_DISCOVERY_MODE = 2;
+  MIDGROUND_DISCOVERY_MODE = 3;
+  FOREGROUND_DISCOVERY_MODE = 4;
+  SUSPENDED_DISCOVERY_MODE = 5;
+}
+
+// The class name of chimera activity.
+enum ActivityName {
+  UNKNOWN_ACTIVITY = 0;
+
+  SHARE_SHEET_ACTIVITY = 1;
+  SETTINGS_ACTIVITY = 2;
+  RECEIVE_SURFACE_ACTIVITY = 3;
+  SETUP_ACTIVITY = 4;
+  DEVICE_VISIBILITY_ACTIVITY = 5;
+  CONSENTS_ACTIVITY = 6;
+  SET_DEVICE_NAME_DIALOG = 7;
+  SET_DATA_USAGE_DIALOG = 8;
+  QUICK_SETTINGS_ACTIVITY = 9;
+  REMOTE_COPY_SHARE_SHEET_ACTIVITY = 10;
+  SETUP_WIZARD_ACTIVITY = 11;
+  SETTINGS_REVIEW_ACTIVITY = 12;
+}
+
+// The type of consent page user launches.
+enum ConsentType {
+  CONSENT_TYPE_UNKNOWN = 0;
+
+  // launch Constellation consent page.
+  CONSENT_TYPE_C11N = 1;
+  // launch device contact consent page.
+  CONSENT_TYPE_DEVICE_CONTACT = 2;
+}
+
+enum ConsentAcceptanceStatus {
+  CONSENT_UNKNOWN_ACCEPT_STATUS = 0;
+
+  CONSENT_ACCEPTED = 1;
+  CONSENT_DECLINED = 2;
+  // unable to enable consent.
+  CONSENT_UNABLE_TO_ENABLE = 3;
+}
+
+enum ApkSource {
+  UNKNOWN_APK_SOURCE = 0;
+
+  APK_FROM_SD_CARD = 1;
+  INSTALLED_APP = 2;
+}
+
+// The Installation status of APK.
+enum InstallAPKStatus {
+  UNKNOWN_INSTALL_APK_STATUS = 0;
+
+  FAIL_INSTALLATION = 1;
+  SUCCESS_INSTALLATION = 2;
+}
+
+// The verification status of APK.
+enum VerifyAPKStatus {
+  UNKNOWN_VERIFY_APK_STATUS = 0;
+
+  NOT_INSTALLABLE = 1;
+  INSTALLABLE = 2;
+  ALREADY_INSTALLED = 3;
+}
+
+enum ShowNotificationStatus {
+  UNKNOWN_SHOW_NOTIFICATION_STATUS = 0;
+
+  SHOW = 1;
+  NOT_SHOW = 2;
+}
+
+enum PermissionRequestResult {
+  PERMISSION_UNKNOWN_REQUEST_RESULT = 0;
+
+  PERMISSION_GRANTED = 1;
+  PERMISSION_REJECTED = 2;
+  PERMISSION_UNABLE_TO_GRANT = 3;
+}
+
+enum PermissionRequestType {
+  PERMISSION_UNKNOWN_TYPE = 0;
+
+  PERMISSION_AIRPLANE_MODE_OFF = 1;
+  PERMISSION_WIFI = 2;
+  PERMISSION_BLUETOOTH = 3;
+  PERMISSION_LOCATION = 4;
+  PERMISSION_WIFI_HOTSPOT = 5;
+}
+
+enum SharingUseCase {
+  USE_CASE_UNKNOWN = 0;
+
+  USE_CASE_NEARBY_SHARE = 1;
+  USE_CASE_REMOTE_COPY_PASTE = 2;
+  USE_CASE_WIFI_CREDENTIAL = 3;
+  USE_CASE_APP_SHARE = 4;
+  USE_CASE_QUICK_SETTING_FILE_SHARE = 5;
+  USE_CASE_SETUP_WIZARD = 6;
+  // Deprecated. QR code is an addition to existing use cases rather than being
+  // a separate use case.
+  USE_CASE_NEARBY_SHARE_WITH_QR_CODE = 7 [deprecated = true];
+  // The user was redirected from Bluetooth sharing UI to Nearby Share
+  USE_CASE_REDIRECTED_FROM_BLUETOOTH_SHARE = 8;
+}
+
+// Used only for Windows App now.
+enum AppCrashReason {
+  APP_CRASH_REASON_UNKNOWN = 0;
+}
+
+// Thes source where the attachemnt comes from. It can be an action, app name,
+// etc. The first 6 source types are being used as FileSenderType in Nearby
+// Share Windows app.
+enum AttachmentSourceType {
+  ATTACHMENT_SOURCE_UNKNOWN = 0;
+  ATTACHMENT_SOURCE_CONTEXT_MENU = 1;
+  ATTACHMENT_SOURCE_DRAG_AND_DROP = 2;
+  ATTACHMENT_SOURCE_SELECT_FILES_BUTTON = 3;
+  ATTACHMENT_SOURCE_PASTE = 4;
+  ATTACHMENT_SOURCE_SELECT_FOLDERS_BUTTON = 5;
+  ATTACHMENT_SOURCE_SHARE_ACTIVATION = 6;
+}
+
+// The action to interact with preferences.
+// Used only for Windows App now.
+enum PreferencesAction {
+  PREFERENCES_ACTION_UNKNOWN = 0;
+  PREFERENCES_ACTION_NO_ACTION = 1;
+
+  // Primary actions/functions towards preferences
+  PREFERENCES_ACTION_LOAD_PREFERENCES = 2;
+  PREFERENCES_ACTION_SAVE_PREFERENCESS = 3;
+  PREFERENCES_ACTION_ATTEMPT_LOAD = 4;
+  PREFERENCES_ACTION_RESTORE_FROM_BACKUP = 5;
+
+  // Other actions within the 4 actions above
+  PREFERENCES_ACTION_CREATE_PREFERENCES_PATH = 6;
+  PREFERENCES_ACTION_MAKE_PREFERENCES_BACKUP_FILE = 7;
+  PREFERENCES_ACTION_CHECK_IF_PREFERENCES_PATH_EXISTS = 8;
+  PREFERENCES_ACTION_CHECK_IF_PREFERENCES_INPUT_STREAM_STATUS = 9;
+  PREFERENCES_ACTION_CHECK_IF_PREFERENCES_FILE_IS_CORRUPTED = 10;
+  PREFERENCES_ACTION_CHECK_IF_PREFERENCES_BACKUP_FILE_EXISTS = 11;
+}
+
+// The status of the action to interact with preferences.
+// Used only for Windows App now.
+enum PreferencesActionStatus {
+  PREFERENCES_ACTION_STATUS_UNKNOWN = 0;
+  PREFERENCES_ACTION_STATUS_SUCCESS = 1;
+  PREFERENCES_ACTION_STATUS_FAIL = 2;
+}
+
+/** The distance of the found nearby fast init advertisement. */
+enum FastInitState {
+  FAST_INIT_UNKNOWN_STATE = 0;
+  // A device was found in close proximity.
+  // distance < fast_init_distance_close_centimeters(50 cm)
+  FAST_INIT_CLOSE_STATE = 1;
+  // A device was found in far proximity.
+  // distance < fast_init_distance_close_centimeters(10 m)
+  FAST_INIT_FAR_STATE = 2;
+  // No devices have been found nearby. The default state.
+  FAST_INIT_LOST_STATE = 3;
+}
+
+/** The type of FastInit advertisement. */
+enum FastInitType {
+  FAST_INIT_UNKNOWN_TYPE = 0;
+  // Show HUN to notify the user.
+  FAST_INIT_NOTIFY_TYPE = 1;
+  // Not notify the user.
+  FAST_INIT_SILENT_TYPE = 2;
+}
+
+// LINT.IfChange
+/** The type of desktop notification event. */
+enum DesktopNotification {
+  DESKTOP_NOTIFICATION_UNKNOWN = 0;
+  DESKTOP_NOTIFICATION_CONNECTING = 1;
+  DESKTOP_NOTIFICATION_PROGRESS = 2;
+  DESKTOP_NOTIFICATION_ACCEPT = 3;
+  DESKTOP_NOTIFICATION_RECEIVED = 4;
+  DESKTOP_NOTIFICATION_ERROR = 5;
+}
+
+enum DesktopTransferEventType {
+  DESKTOP_TRANSFER_EVENT_TYPE_UNKNOWN = 0;
+
+  // Receive attachments.
+  DESKTOP_TRANSFER_EVENT_RECEIVE_TYPE_ACCEPT = 1;
+  DESKTOP_TRANSFER_EVENT_RECEIVE_TYPE_PROGRESS = 2;
+  DESKTOP_TRANSFER_EVENT_RECEIVE_TYPE_RECEIVED = 3;
+  DESKTOP_TRANSFER_EVENT_RECEIVE_TYPE_ERROR = 4;
+
+  // Send attachments.
+  DESKTOP_TRANSFER_EVENT_SEND_TYPE_START = 5;
+  DESKTOP_TRANSFER_EVENT_SEND_TYPE_SELECT_A_DEVICE = 6;
+  DESKTOP_TRANSFER_EVENT_SEND_TYPE_PROGRESS = 7;
+  DESKTOP_TRANSFER_EVENT_SEND_TYPE_SENT = 8;
+  DESKTOP_TRANSFER_EVENT_SEND_TYPE_ERROR = 9;
+}
+
+enum DecryptCertificateFailureStatus {
+  DECRYPT_CERT_UNKNOWN_FAILURE = 0;
+  DECRYPT_CERT_NO_SUCH_ALGORITHM_FAILURE = 1;
+  DECRYPT_CERT_NO_SUCH_PADDING_FAILURE = 2;
+  DECRYPT_CERT_INVALID_KEY_FAILURE = 3;
+  DECRYPT_CERT_INVALID_ALGORITHM_PARAMETER_FAILURE = 4;
+  DECRYPT_CERT_ILLEGAL_BLOCK_SIZE_FAILURE = 5;
+  DECRYPT_CERT_BAD_PADDING_FAILURE = 6;
+}
+
+// Refer to go/qs-contacts-consent-2024 for the detail.
+enum ContactAccess {
+  CONTACT_ACCESS_UNKNOWN = 0;
+
+  CONTACT_ACCESS_NO_CONTACT_UPLOADED = 1;
+  CONTACT_ACCESS_ONLY_UPLOAD_GOOGLE_CONTACT = 2;
+  CONTACT_ACCESS_UPLOAD_CONTACT_FOR_DEVICE_CONTACT_CONSENT = 3;
+  CONTACT_ACCESS_UPLOAD_CONTACT_FOR_QUICK_SHARE_CONSENT = 4;
+}
+
+// Refer to go/qs-contacts-consent-2024 for the detail.
+enum IdentityVerification {
+  IDENTITY_VERIFICATION_UNKNOWN = 0;
+
+  IDENTITY_VERIFICATION_NO_PHONE_NUMBER_VERIFIED = 1;
+  IDENTITY_VERIFICATION_PHONE_NUMBER_VERIFIED_NOT_LINKED_TO_GAIA = 2;
+  IDENTITY_VERIFICATION_PHONE_NUMBER_VERIFIED_LINKED_TO_QS_GAIA = 3;
+}
+
+enum ButtonStatus {
+  BUTTON_STATUS_UNKNOWN = 0;
+  BUTTON_STATUS_CLICK_ACCEPT = 1;
+  BUTTON_STATUS_CLICK_REJECT = 2;
+  BUTTON_STATUS_IGNORE = 3;
+}
+// LINT.ThenChange(
+//   //depot/google3/location/nearby/cpp/sharing/clients/dart/platform/lib/types/models.dart
+// )

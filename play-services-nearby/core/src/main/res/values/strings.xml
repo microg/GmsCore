@@ -74,4 +74,22 @@ Your identity or test result won&apos;t be shared with other people."</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Tap to grant required permissions to Exposure Notifications</string>
     <string name="exposure_grant_background_location_description">Almost there! You will need to enable background location access by selecting the \'Allow all the time\' option on the next screen. Then press back.</string>
     <string name="exposure_grant_background_location_button">Update Settings</string>
+
+    <!-- Nearby Share / Quick Share -->
+    <string name="nearby_share_title">Quick Share</string>
+    <string name="nearby_share_searching">Looking for nearby devices…</string>
+    <string name="nearby_share_no_devices">No nearby devices found</string>
+    <string name="nearby_share_connecting">Connecting to %1$s…</string>
+    <string name="nearby_share_verify_pin">PIN: %1$s</string>
+    <string name="nearby_share_sending">Sending…</string>
+    <string name="nearby_share_sent">Transfer complete</string>
+    <string name="nearby_share_receiving">Receiving from %1$s…</string>
+    <string name="nearby_share_waiting_receive">Visible as %1$s</string>
+    <string name="nearby_share_ready_to_receive">Ready to receive</string>
+    <string name="nearby_share_settings_title">Quick Share Settings</string>
+    <string name="nearby_share_device_name">Device name</string>
+    <string name="nearby_share_visibility">Device visibility</string>
+    <string name="nearby_share_visibility_everyone">Everyone</string>
+    <string name="nearby_share_visibility_contacts">Contacts</string>
+    <string name="nearby_share_visibility_hidden">Hidden</string>
 </resources>
