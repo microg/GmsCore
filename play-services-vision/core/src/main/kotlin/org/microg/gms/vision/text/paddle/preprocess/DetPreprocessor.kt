@@ -17,8 +17,28 @@ import kotlin.math.round
 data class DetPreprocessResult(val tensorData: FloatBuffer, val shape: LongArray)
 
 object DetPreprocessor {
-    private val mean = doubleArrayOf(0.485, 0.456, 0.406)
-    private val std = doubleArrayOf(0.229, 0.224, 0.225)
+    private val normalizationLut by lazy {
+        val mean = doubleArrayOf(0.485, 0.456, 0.406)
+        val std = doubleArrayOf(0.229, 0.224, 0.225)
+        val levels = FloatArray(256) { it.toFloat() }
+        val values = FloatArray(levels.size)
+        val interleaved = FloatArray(levels.size * 3)
+        val channel = Mat(1, levels.size, CvType.CV_32FC1)
+        try {
+            for (c in 0..2) {
+                // Generate the table with the same Float32 operations as the detector normalization.
+                channel.put(0, 0, levels)
+                Core.multiply(channel, Scalar(1.0 / 255.0), channel)
+                Core.subtract(channel, Scalar(mean[c]), channel)
+                Core.divide(channel, Scalar(std[c]), channel)
+                channel.get(0, 0, values)
+                for (i in values.indices) interleaved[3 * i + c] = values[i]
+            }
+        } finally {
+            channel.release()
+        }
+        Mat(1, levels.size, CvType.CV_32FC3).also { it.put(0, 0, interleaved) }
+    }
 
     fun preprocess(src: Mat, inputBuffer: (Int) -> FloatBuffer): DetPreprocessResult {
         // TextInputImage already limits the image size; the detector needs multiples of 32.
@@ -34,7 +54,7 @@ object DetPreprocessor {
                 Imgproc.resize(src, resized, Size(w.toDouble(), h.toDouble()), 0.0, 0.0, Imgproc.INTER_LINEAR)
                 resized
             }
-            input.convertTo(floatMat, CvType.CV_32F)
+            Core.LUT(input, normalizationLut, floatMat)
             resized.release()
             Core.split(floatMat, channels)
             floatMat.release()
@@ -42,9 +62,6 @@ object DetPreprocessor {
             val tensorData = inputBuffer(3 * channelSize)
             val values = FloatArray(channelSize)
             for (c in 0..2) {
-                Core.multiply(channels[c], Scalar(1.0 / 255.0), channels[c])
-                Core.subtract(channels[c], Scalar(mean[c]), channels[c])
-                Core.divide(channels[c], Scalar(std[c]), channels[c])
                 channels[c].get(0, 0, values)
                 tensorData.put(values)
             }

@@ -40,8 +40,11 @@ class OnnxSessionManager(context: Context) {
             options.setExecutionMode(OrtSession.SessionOptions.ExecutionMode.SEQUENTIAL)
             options.addConfigEntry("session.intra_op.allow_spinning", "0")
             detectionSession = loadModel(detModelAsset, options)
-            recognitionSession = loadModel(recModelAsset, options)
             if (orientationModelAsset != null) orientationSession = loadModel(orientationModelAsset, options)
+            // Only recognition benefits across the measured shapes. Stop its workers spinning after each run.
+            options.addConfigEntry("session.intra_op.allow_spinning", "1")
+            options.addConfigEntry("session.force_spinning_stop", "1")
+            recognitionSession = loadModel(recModelAsset, options)
         } catch (t: Throwable) {
             try {
                 release()
