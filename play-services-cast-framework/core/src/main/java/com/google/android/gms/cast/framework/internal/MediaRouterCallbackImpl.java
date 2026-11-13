@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.mediarouter.media.MediaRouter;
+
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.dynamic.IObjectWrapper;
@@ -63,6 +65,9 @@ public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     }
     @Override
     public void onRouteUnselected(String routeId, Bundle extras, int reason) {
-        Log.d(TAG, "unimplemented Method: onRouteUnselected");
+        SessionImpl session = this.castContext.getSessionManagerImpl().getCurrentSession();
+        if (session != null) {
+            session.end(reason == MediaRouter.UNSELECT_REASON_STOPPED);
+        }
     }
 }
