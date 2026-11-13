@@ -30,6 +30,7 @@ import com.google.zxing.client.result.SMSParsedResult
 import com.google.zxing.client.result.TelParsedResult
 import com.google.zxing.client.result.URIParsedResult
 import com.google.zxing.client.result.WifiParsedResult
+import org.microg.gms.vision.face.FaceFrameMapping
 import java.util.Calendar
 import java.util.Date
 import kotlin.collections.mapIndexed
@@ -212,12 +213,13 @@ fun Result.toMlKit(metadata: ImageMetadata? = null): Barcode {
     barcode.rawBytes = rawBytes
     barcode.rawValue = text
     barcode.cornerPoints = resultPoints.map {
-        when (metadata?.rotation ?: -1) {
-            1 -> Point(metadata!!.height - it.y.toInt(), it.x.toInt())
-            2 -> Point(metadata!!.width - it.x.toInt(), metadata.height - it.y.toInt())
-            3 -> Point(it.y.toInt(), metadata!!.width - it.x.toInt())
-            else -> Point(it.x.toInt(), it.y.toInt())
-        }
+        val rotation = metadata?.rotation ?: 0
+        val inputWidth = metadata?.width ?: 0
+        val inputHeight = metadata?.height ?: 0
+        Point(
+            FaceFrameMapping.mapX(it.x, it.y, rotation, inputWidth, inputHeight).toInt(),
+            FaceFrameMapping.mapY(it.x, it.y, rotation, inputWidth, inputHeight).toInt(),
+        )
     }.toTypedArray()
 
     val parsed = ResultParser.parseResult(this)
