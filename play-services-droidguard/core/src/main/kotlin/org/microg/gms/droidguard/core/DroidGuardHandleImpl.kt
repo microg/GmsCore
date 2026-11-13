@@ -33,7 +33,7 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
 
     @SuppressLint("SetWorldReadable")
     override fun initWithRequest(flow: String?, request: DroidGuardResultsRequest?): DroidGuardInitReply {
-        Log.d(TAG, "initWithRequest($flow, $request)")
+        Log.d(TAG, "initWithRequest($flow)")
         this.flow = flow
         var handleProxy: HandleProxy? = null
         try {
@@ -83,7 +83,7 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     }
 
     override fun snapshot(map: MutableMap<Any?, Any?>): ByteArray {
-        Log.d(TAG, "snapshot($map)")
+        Log.d(TAG, "snapshot()")
         condition.block()
         handleInitError?.let { return FallbackCreator.create(flow, context, map, it) }
         val handleProxy = this.handleProxy ?: return FallbackCreator.create(flow, context, map, IllegalStateException())
