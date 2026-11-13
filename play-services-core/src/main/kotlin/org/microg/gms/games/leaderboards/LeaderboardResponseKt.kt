@@ -218,11 +218,11 @@ fun JSONArray.toPlayerScore(): List<PlayerScore> {
 
 fun JSONObject.toListLeaderboardScoresResponse() = ListLeaderboardScoresResponse(
     optString("kind"),
-    optString("nextPageToken"),
-    optString("prevPageToken"),
+    optString("nextPageToken").takeIf { it.isNotEmpty() },
+    optString("prevPageToken").takeIf { it.isNotEmpty() },
     optString("numScores"),
     optJSONObject("playerScore")?.toLeaderboardEntry(),
-    getJSONArray("items").toLeaderboardEntryList(),
+    optJSONArray("items")?.toLeaderboardEntryList() ?: arrayListOf(),
 )
 
 fun JSONArray.toLeaderboardEntryList(): ArrayList<LeaderboardEntry> {

@@ -57,6 +57,17 @@ import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.achievements.AchievementsApiClient
+import org.microg.gms.games.leaderboards.LeaderboardDefinition
+import org.microg.gms.games.leaderboards.LeaderboardScoresRequest
+import org.microg.gms.games.leaderboards.LeaderboardsApiClient
+import org.microg.gms.games.leaderboards.buildLeaderboardDataHolder
+import org.microg.gms.games.leaderboards.buildLeaderboardScoresDataHolder
+import org.microg.gms.games.leaderboards.buildScoreSubmissionDataHolder
+import org.microg.gms.games.leaderboards.LoadedLeaderboardScores
+import org.microg.gms.games.leaderboards.getPageToken
+import org.microg.gms.games.leaderboards.toIncludeRankType
+import org.microg.gms.games.leaderboards.toLeaderboardScoresRequest
+import org.microg.gms.games.leaderboards.toScoreTimeSpan
 import org.microg.gms.games.snapshot.SnapshotsDataClient
 import org.microg.gms.games.utils.AccountPromptManager
 import org.microg.gms.utils.warnOnTransactionIssues
@@ -155,6 +166,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     private val pattern: Pattern = Pattern.compile("[0-9a-zA-Z-._~]{1,100}")
     private var saveName: String? = null
+    private val leaderboardDefinitions = HashMap<String, LeaderboardDefinition>()
+    private var loadedLeaderboardScores: LoadedLeaderboardScores? = null
 
     override fun clientDisconnecting(clientId: Long) {
         Log.d(TAG, "Not yet implemented: clientDisconnecting($clientId)")
@@ -229,7 +242,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun submitScore(callbacks: IGamesCallbacks?, leaderboardId: String?, score: Long) {
-        Log.d(TAG, "Not yet implemented: submitScore($leaderboardId, $score)")
+        submitLeaderboardScore(callbacks, leaderboardId, score, null)
     }
 
     override fun loadLeaderboards(callbacks: IGamesCallbacks?) {
@@ -248,7 +261,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
         maxResults: Int,
         forceReload: Boolean
     ) {
-        Log.d(TAG, "Not yet implemented: loadTopScores($leaderboardId, $span, $leaderboardCollection, $maxResults, $forceReload)")
+        Log.d(TAG, "Method loadTopScores($leaderboardId, $span, $leaderboardCollection, $maxResults, $forceReload) called")
+        loadLeaderboardScores(callbacks, leaderboardId, span, leaderboardCollection, maxResults, playerCentered = false)
     }
 
     override fun loadPlayerCenteredScores(
@@ -259,12 +273,77 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
         maxResults: Int,
         forceReload: Boolean
     ) {
-        Log.d(TAG, "Not yet implemented: loadPlayerCenteredScores($leaderboardId, $span, $leaderboardCollection, $maxResults, $forceReload)")
+        Log.d(TAG, "Method loadPlayerCenteredScores($leaderboardId, $span, $leaderboardCollection, $maxResults, $forceReload) called")
+        loadLeaderboardScores(callbacks, leaderboardId, span, leaderboardCollection, maxResults, playerCentered = true)
+    }
+
+    private fun loadLeaderboardScores(
+        callbacks: IGamesCallbacks?, leaderboardId: String?, span: Int, leaderboardCollection: Int, maxResults: Int, playerCentered: Boolean
+    ) {
+        if (leaderboardId.isNullOrEmpty()) {
+            callbacks?.onLeaderboardScoresLoaded(DataHolder.empty(CommonStatusCodes.DEVELOPER_ERROR), DataHolder.empty(CommonStatusCodes.DEVELOPER_ERROR))
+            return
+        }
+        loadLeaderboardScores(callbacks, LeaderboardScoresRequest(leaderboardId, span, leaderboardCollection, playerCentered), maxResults)
+    }
+
+    private fun loadLeaderboardScores(callbacks: IGamesCallbacks?, request: LeaderboardScoresRequest, maxResults: Int, pageDirection: Int? = null) {
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val authResponse = withContext(Dispatchers.IO) {
+                    AuthManager(context, account.name, packageName, SERVICE_GAMES_LITE).apply { isPermitted = true }.requestAuth(true)
+                }
+                val oauthToken = authResponse.auth ?: throw RuntimeException("oauthToken is null")
+                val definition = leaderboardDefinitions[request.leaderboardId]
+                    ?: LeaderboardsApiClient.getLeaderboardById(context, oauthToken, request.leaderboardId).also {
+                        leaderboardDefinitions[request.leaderboardId] = it
+                    }
+                // The API returns at most 30 scores per page
+                val pageSize = maxResults.coerceIn(1, 30)
+                val response = if (request.playerCentered) {
+                    LeaderboardsApiClient.requestLeaderboardScoresListWindowById(
+                        context, oauthToken, request.leaderboardId, request.collection.toIncludeRankType(),
+                        request.timeSpan.toScoreTimeSpan(), request.pageToken, pageSize
+                    )
+                } else {
+                    LeaderboardsApiClient.requestLeaderboardScoresById(
+                        context, oauthToken, request.leaderboardId, request.pageToken, request.collection.toIncludeRankType(),
+                        request.timeSpan.toScoreTimeSpan(), pageSize
+                    )
+                }
+                val key = request.copy(pageToken = null)
+                val previous = loadedLeaderboardScores?.takeIf { pageDirection != null && it.request == key }
+                val loaded = (previous ?: LoadedLeaderboardScores(key)).apply { add(response, if (previous != null) pageDirection else null) }
+                loadedLeaderboardScores = loaded
+                Log.d(TAG, "loadLeaderboardScores: ${response.items.size} score(s) for ${request.leaderboardId}, ${loaded.entries.size} in total")
+                callbacks?.onLeaderboardScoresLoaded(
+                    buildLeaderboardDataHolder(key, definition, response, loaded),
+                    buildLeaderboardScoresDataHolder(loaded.entries, GamesStatusCodes.OK.code, loaded.toHeader())
+                )
+            }.onFailure {
+                Log.w(TAG, "loadLeaderboardScores: error", it)
+                callbacks?.onLeaderboardScoresLoaded(
+                    buildLeaderboardDataHolder(request, leaderboardDefinitions[request.leaderboardId], null),
+                    buildLeaderboardScoresDataHolder(emptyList(), GamesStatusCodes.NETWORK_ERROR_NO_DATA.code)
+                )
+            }
+        }
     }
 
     override fun loadMoreScores(callbacks: IGamesCallbacks?, previousheader: Bundle?, maxResults: Int, pageDirection: Int) {
-        runCatching { previousheader?.keySet() }
-        Log.d(TAG, "Not yet implemented: loadMoreScores($previousheader, $maxResults, $pageDirection)")
+        Log.d(TAG, "Method loadMoreScores($maxResults, $pageDirection) called")
+        val request = runCatching { previousheader?.toLeaderboardScoresRequest() }.getOrNull()
+        val pageToken = runCatching { previousheader?.getPageToken(pageDirection) }.getOrNull()
+        if (request == null || pageToken == null) {
+            // No further page in that direction, return what was loaded so far
+            val loaded = loadedLeaderboardScores?.takeIf { it.request == request }
+            callbacks?.onLeaderboardScoresLoaded(
+                DataHolder.empty(GamesStatusCodes.OK.code),
+                buildLeaderboardScoresDataHolder(loaded?.entries.orEmpty(), GamesStatusCodes.OK.code, loaded?.toHeader() ?: previousheader)
+            )
+            return
+        }
+        loadLeaderboardScores(callbacks, request.copy(pageToken = pageToken), maxResults, pageDirection)
     }
 
     override fun loadAchievements(callbacks: IGamesCallbacks?) {
@@ -562,7 +641,25 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun submitLeaderboardScore(callbacks: IGamesCallbacks?, leaderboardId: String?, score: Long, scoreTag: String?) {
-        Log.d(TAG, "Not yet implemented: submitLeaderboardScore($leaderboardId, $score, $scoreTag)")
+        Log.d(TAG, "Method submitLeaderboardScore($leaderboardId, $score, $scoreTag) called")
+        if (leaderboardId.isNullOrEmpty()) {
+            callbacks?.onScoreSubmitted(DataHolder.empty(CommonStatusCodes.DEVELOPER_ERROR))
+            return
+        }
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val authResponse = withContext(Dispatchers.IO) {
+                    AuthManager(context, account.name, packageName, SERVICE_GAMES_LITE).apply { isPermitted = true }.requestAuth(true)
+                }
+                val oauthToken = authResponse.auth ?: throw RuntimeException("oauthToken is null")
+                val response = LeaderboardsApiClient.submitLeaderboardScores(context, oauthToken, leaderboardId, score.toString(), scoreTag)
+                Log.d(TAG, "submitLeaderboardScore: new best for ${response.beatenScoreTimeSpans}")
+                callbacks?.onScoreSubmitted(buildScoreSubmissionDataHolder(leaderboardId, player.playerId, score, scoreTag, response))
+            }.onFailure {
+                Log.w(TAG, "submitLeaderboardScore: error", it)
+                callbacks?.onScoreSubmitted(DataHolder.empty(GamesStatusCodes.NETWORK_ERROR_OPERATION_FAILED.code))
+            }
+        }
     }
 
     override fun setAchievementSteps(callbacks: IGamesCallbacks?, achievementId: String, numSteps: Int, windowToken: IBinder?, extras: Bundle?) {
