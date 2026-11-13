@@ -56,6 +56,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
     private Map<String, String> serviceCastIds = new HashMap<String, String>();
+    private Map<CastMediaRouteController, String> selectedRoutes = new HashMap<CastMediaRouteController, String>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
@@ -314,6 +315,16 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         return new CastMediaRouteController(this, routeId, castDevice.getAddress());
     }
 
+    void onRouteSelected(CastMediaRouteController controller, String routeId) {
+        this.selectedRoutes.put(controller, routeId);
+        publishRoutesInMainThread();
+    }
+
+    void onRouteUnselected(CastMediaRouteController controller) {
+        this.selectedRoutes.remove(controller);
+        publishRoutesInMainThread();
+    }
+
     private void publishRoutesInMainThread() {
         Handler mainHandler = new Handler(this.getContext().getMainLooper());
         mainHandler.post(new Runnable() {
@@ -338,6 +349,10 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
             Bundle extras = new Bundle();
             castDevice.putInBundle(extras);
+            int connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED;
+            if (this.selectedRoutes.containsValue(castDevice.getDeviceId())) {
+                connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_CONNECTED;
+            }
             MediaRouteDescriptor route = new MediaRouteDescriptor.Builder(
                 castDevice.getDeviceId(),
                 castDevice.getFriendlyName())
@@ -350,7 +365,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 .setVolume(0)
                 .setEnabled(true)
                 .setExtras(extras)
-                .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
+                .setConnectionState(connectionState)
                 .build();
             builder.addRoute(route);
         }

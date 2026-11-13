@@ -68,11 +68,11 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     }
 
     public void onRelease() {
-        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
+        this.provider.onRouteUnselected(this);
     }
 
     public void onSelect() {
-        Log.d(TAG, "unimplemented Method: onSelect: " + this.routeId);
+        this.provider.onRouteSelected(this, this.routeId);
     }
 
     public void onSetVolume(int volume) {
@@ -84,7 +84,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     }
 
     public void onUnselect(int reason) {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
+        this.provider.onRouteUnselected(this);
     }
 
     public void onUpdateVolume(int delta) {
