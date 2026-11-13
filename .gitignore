@@ -8,6 +8,7 @@ user.gradle
 local.properties
 .directory
 
+GitIngest.txt
 .settings
 .classpath
 .project
