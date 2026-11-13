@@ -1,0 +1,43 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.mlkit.vision.text.common"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-mlkit-text-recognition-common'
+
+dependencies {
+    api project(':play-services-base')
+    api project(':play-services-mlkit-common')
+    api project(':play-services-mlkit-vision-interfaces')
+    api project(':play-services-mlkit-vision-common')
+    api project(':play-services-odml-image')
+    annotationProcessor project(':safe-parcel-processor')
+}

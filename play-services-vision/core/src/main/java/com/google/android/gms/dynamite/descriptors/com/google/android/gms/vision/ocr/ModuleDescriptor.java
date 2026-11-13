@@ -1,0 +1,16 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package com.google.android.gms.dynamite.descriptors.com.google.android.gms.vision.ocr;
+
+import androidx.annotation.Keep;
+
+@Keep
+public final class ModuleDescriptor {
+    public static final String MODULE_ID = "com.google.android.gms.vision.ocr";
+    public static final int MODULE_VERSION = android.os.Build.VERSION.SDK_INT >= 26 ? 1 : 0;
+
+    private ModuleDescriptor() { }
+}

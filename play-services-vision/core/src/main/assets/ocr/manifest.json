@@ -1,0 +1,87 @@
+{
+  "upstream": "PaddlePaddle/PaddleOCR",
+  "license": "Apache-2.0",
+  "runtime": "ONNX Runtime CPU; OpenCV image processing",
+  "files": [
+    {
+      "path": "ppocrv6_tiny/det/inference.onnx",
+      "repo": "PaddlePaddle/PP-OCRv6_tiny_det_onnx",
+      "revision": "2ba1506c0380b8f0b03dd142459aac66d4421f6c",
+      "url": "https://huggingface.co/PaddlePaddle/PP-OCRv6_tiny_det_onnx/resolve/2ba1506c0380b8f0b03dd142459aac66d4421f6c/inference.onnx",
+      "bytes": 1780590,
+      "sha256": "193bab7a04fca699a6c82e6abb5b81bdb28177f0abd4062552b04908dafb19f8"
+    },
+    {
+      "path": "latin_ppocrv5_mobile/rec/inference.onnx",
+      "repo": "PaddlePaddle/latin_PP-OCRv5_mobile_rec_onnx",
+      "revision": "89d3a50e2c27e2e7cceeab0e944c25c807d5db4f",
+      "url": "https://huggingface.co/PaddlePaddle/latin_PP-OCRv5_mobile_rec_onnx/resolve/89d3a50e2c27e2e7cceeab0e944c25c807d5db4f/inference.onnx",
+      "bytes": 8042023,
+      "sha256": "7888113072263cb471b93f66dd5e2ad70548dc526fa1ace760d0d973dd121498"
+    },
+    {
+      "path": "latin_ppocrv5_mobile/rec/inference.yml",
+      "repo": "PaddlePaddle/latin_PP-OCRv5_mobile_rec_onnx",
+      "revision": "89d3a50e2c27e2e7cceeab0e944c25c807d5db4f",
+      "url": "https://huggingface.co/PaddlePaddle/latin_PP-OCRv5_mobile_rec_onnx/resolve/89d3a50e2c27e2e7cceeab0e944c25c807d5db4f/inference.yml",
+      "bytes": 6817,
+      "sha256": "0bbe984570f597af3638e50bdf2e8276f3ab26a61966096538b3b0d1849f5c84"
+    },
+    {
+      "path": "ppocrv6_small/rec/inference.onnx",
+      "repo": "PaddlePaddle/PP-OCRv6_small_rec_onnx",
+      "revision": "b8f84f0b80c529de40b4fbb3544b84fa7233a513",
+      "url": "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_rec_onnx/resolve/b8f84f0b80c529de40b4fbb3544b84fa7233a513/inference.onnx",
+      "bytes": 21159378,
+      "sha256": "5435fd747c9e0efe15a96d0b378d5bd157e9492ed8fd80edf08f30d02fa24634"
+    },
+    {
+      "path": "ppocrv6_small/rec/inference.yml",
+      "repo": "PaddlePaddle/PP-OCRv6_small_rec_onnx",
+      "revision": "b8f84f0b80c529de40b4fbb3544b84fa7233a513",
+      "url": "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_rec_onnx/resolve/b8f84f0b80c529de40b4fbb3544b84fa7233a513/inference.yml",
+      "bytes": 150579,
+      "sha256": "ab078671bb49f06228eadccd34f1bb501e157f7a047095ffb943ba81512c77d1"
+    },
+    {
+      "path": "korean_ppocrv5_mobile/rec/inference.onnx",
+      "repo": "PaddlePaddle/korean_PP-OCRv5_mobile_rec_onnx",
+      "revision": "5c6f574b8e2230adf4287b33e736d71b9fabd28e",
+      "url": "https://huggingface.co/PaddlePaddle/korean_PP-OCRv5_mobile_rec_onnx/resolve/5c6f574b8e2230adf4287b33e736d71b9fabd28e/inference.onnx",
+      "bytes": 13418787,
+      "sha256": "92f0b7785e64fc9090106a241cf4c1eb97472824558272751b88a2a4476d3a08"
+    },
+    {
+      "path": "korean_ppocrv5_mobile/rec/inference.yml",
+      "repo": "PaddlePaddle/korean_PP-OCRv5_mobile_rec_onnx",
+      "revision": "5c6f574b8e2230adf4287b33e736d71b9fabd28e",
+      "url": "https://huggingface.co/PaddlePaddle/korean_PP-OCRv5_mobile_rec_onnx/resolve/5c6f574b8e2230adf4287b33e736d71b9fabd28e/inference.yml",
+      "bytes": 96039,
+      "sha256": "f757fa1c40e99edcf27e9cce879b93eb2a51fa46f5ef39095689b8c37dd75998"
+    },
+    {
+      "path": "devanagari_ppocrv5_mobile/rec/inference.onnx",
+      "repo": "PaddlePaddle/devanagari_PP-OCRv5_mobile_rec_onnx",
+      "revision": "251aec19e36739540d35e2cc943f6aa7503b98e5",
+      "url": "https://huggingface.co/PaddlePaddle/devanagari_PP-OCRv5_mobile_rec_onnx/resolve/251aec19e36739540d35e2cc943f6aa7503b98e5/inference.onnx",
+      "bytes": 7912311,
+      "sha256": "cb789212ce96c69d3e74728ae4309d179281d68cb3945d0616b67cafab41c986"
+    },
+    {
+      "path": "devanagari_ppocrv5_mobile/rec/inference.yml",
+      "repo": "PaddlePaddle/devanagari_PP-OCRv5_mobile_rec_onnx",
+      "revision": "251aec19e36739540d35e2cc943f6aa7503b98e5",
+      "url": "https://huggingface.co/PaddlePaddle/devanagari_PP-OCRv5_mobile_rec_onnx/resolve/251aec19e36739540d35e2cc943f6aa7503b98e5/inference.yml",
+      "bytes": 5027,
+      "sha256": "9bd172dd26440c8ce94d1cde5d5baea6aefdc7cf3c5c8492e0beedef656d4e54"
+    },
+    {
+      "path": "pp_lcnet_x0_25_textline_ori/inference.onnx",
+      "repo": "PaddlePaddle/PP-LCNet_x0_25_textline_ori_onnx",
+      "revision": "aea1f18d97338aaf84b463f90192f2820524a00a",
+      "url": "https://huggingface.co/PaddlePaddle/PP-LCNet_x0_25_textline_ori_onnx/resolve/aea1f18d97338aaf84b463f90192f2820524a00a/inference.onnx",
+      "bytes": 1019454,
+      "sha256": "94a6a0a0425f2b5f08b5df72086f2d72abe40f1d22f6d12d2cd83674f11f2ff3"
+    }
+  ]
+}
