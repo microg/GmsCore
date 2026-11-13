@@ -194,6 +194,24 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     @Override
+    public void setVolume(double volume, double expectedLevel, boolean expectedMute) {
+        try {
+            this.chromecast.setVolume((float) volume);
+        } catch (IOException e) {
+            Log.w(TAG, "Error setting volume: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setMute(boolean mute, double expectedLevel, boolean expectedMute) {
+        try {
+            this.chromecast.setMuted(mute);
+        } catch (IOException e) {
+            Log.w(TAG, "Error setting mute: " + e.getMessage());
+        }
+    }
+
+    @Override
     public void registerNamespace(String namespace) {
         Log.d(TAG, "unimplemented Method: registerNamespace");
     }
