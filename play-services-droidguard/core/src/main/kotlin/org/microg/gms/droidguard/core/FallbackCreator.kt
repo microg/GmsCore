@@ -27,7 +27,13 @@ object FallbackCreator {
     }
 
     @JvmStatic
-    fun create(map: Map<Any?, Any?>, bytes: ByteArray?, flow: String?, context: Context, e: Throwable): ByteArray {
-        TODO("Not yet implemented")
+    fun create(map: Map<Any?, Any?>, bytes: ByteArray?, flow: String?, context: Context, e: Throwable?): ByteArray {
+        // A real offline fallback would need Google's offline-response format, which is
+        // not reproducible. Keep the established "ERROR :" contract so the VM receives
+        // error bytes instead of a host-side exception (the previous TODO crashed every
+        // non-FAST_FAIL fallback path; GuardCallback.a calls this directly with e=null,
+        // which threw on the non-null parameter check before reaching the TODO body).
+        Log.w("DGFallback", "create($flow, ${bytes?.size ?: 0} request bytes)", e)
+        return "ERROR : ${e?.message ?: "fallback not available"}".encodeToByteArray()
     }
 }
