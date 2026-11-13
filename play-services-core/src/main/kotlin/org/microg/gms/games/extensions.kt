@@ -13,6 +13,7 @@ import android.database.Cursor
 import android.net.Uri
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -56,6 +57,10 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 const val SERVICE_GAMES_LITE = "oauth2:https://www.googleapis.com/auth/games_lite"
+
+// Some Games API requests (e.g. a page of leaderboard scores) take several seconds; with Volley's default timeout of
+// 2.5 s every such request timed out once and was sent again.
+private const val GAMES_REQUEST_TIMEOUT_MS = 10000
 
 const val ACTION_START_1P = "com.google.android.play.games.service.START_1P"
 const val ACTION_VIEW_LEADERBOARDS = "com.google.android.gms.games.VIEW_LEADERBOARDS"
@@ -217,7 +222,7 @@ suspend fun requestGamesInfo(
         override fun getHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
             put("Authorization", "OAuth $oauthToken")
         }
-    })
+    }.setRetryPolicy(DefaultRetryPolicy(GAMES_REQUEST_TIMEOUT_MS, 1, 1f)))
 }
 
 suspend fun registerForGames(context: Context, account: Account) {
