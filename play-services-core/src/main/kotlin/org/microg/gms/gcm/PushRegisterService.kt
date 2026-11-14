@@ -177,7 +177,7 @@ class PushRegisterService : LifecycleService() {
     private suspend fun unregister(intent: Intent) {
         val packageName = intent.appPackageName ?: throw RuntimeException("No package provided")
         Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.extras)
-        val bundle = completeRegisterRequest(this, database, RegisterRequest()
+        val bundle = completeRegisterRequest(this, database, RegisterRequest().delete(true)
                 .build(this)
                 .sender(intent.getStringExtra(EXTRA_SENDER))
                 .checkin(LastCheckinInfo.read(this))
