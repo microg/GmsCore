@@ -6,7 +6,6 @@
 package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
-import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,19 +22,14 @@ public class AuthenticationExtensionsPrfOutputs extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "isEnabled")
     private final boolean enabled;
 
-    @Field(value = 2, getterName = "getFirst")
+    @Field(value = 2, getterName = "getResults")
     @Nullable
-    private final byte[] first;
-
-    @Field(value = 3, getterName = "getSecond")
-    @Nullable
-    private final byte[] second;
+    private final AuthenticationExtensionsPrfValues results;
 
     @Constructor
-    public AuthenticationExtensionsPrfOutputs(@Param(1) boolean enabled, @Param(2) @Nullable byte[] first, @Param(3) @Nullable byte[] second) {
+    public AuthenticationExtensionsPrfOutputs(@Param(1) boolean enabled, @Param(2) @Nullable AuthenticationExtensionsPrfValues results) {
         this.enabled = enabled;
-        this.first = first;
-        this.second = second;
+        this.results = results;
     }
 
     public boolean isEnabled() {
@@ -43,19 +37,11 @@ public class AuthenticationExtensionsPrfOutputs extends AbstractSafeParcelable {
     }
 
     @Nullable
-    public byte[] getFirst() {
-        return first;
+    public AuthenticationExtensionsPrfValues getResults() {
+        return results;
     }
 
     @Nullable
-    public byte[] getSecond() {
-        return second;
-    }
-
-    private String b64url(byte[] v) {
-        return Base64.encodeToString(v, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
-    }
-
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
@@ -65,6 +51,6 @@ public class AuthenticationExtensionsPrfOutputs extends AbstractSafeParcelable {
 
     @Override
     public String toString() {
-        return ToStringHelper.name("AuthenticationExtensionsPrfOutputs").field("enabled", enabled).field("first", first).field("second", second).end();
+        return ToStringHelper.name("AuthenticationExtensionsPrfOutputs").field("enabled", enabled).field("results", results).end();
     }
 }
