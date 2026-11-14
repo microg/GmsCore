@@ -22,6 +22,7 @@ private val ALLOWED_PERMISSIONS = setOf(
     Manifest.permission.RECEIVE_SMS,
     Manifest.permission.READ_CONTACTS,
     Manifest.permission.SEND_SMS,
+    Manifest.permission.READ_SMS,
 )
 
 class AskPermissionActivity : AppCompatActivity() {
