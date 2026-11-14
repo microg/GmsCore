@@ -107,7 +107,8 @@ private val ASSET_LINK_REL = listOf(
     "delegate_permission/common.get_login_creds",
     "delegate_permission/common.handle_all_urls"
 )
-private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, packageName: String?): Boolean {
+
+private suspend fun isAssetLinked(context: Context, rpId: String, fps: List<String>, packageName: String?): Boolean {
     try {
         val deferred = CompletableDeferred<JSONArray>()
         HttpURLConnection.setFollowRedirects(true)
@@ -121,7 +122,7 @@ private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, pa
             if (target.getString("namespace") != "android_app") continue
             if (packageName != null && target.getString("package_name") != packageName) continue
             for (fingerprint in target.getJSONArray("sha256_cert_fingerprints").map(JSONArray::getString)) {
-                if (fingerprint.equals(fp, ignoreCase = true)) return true
+                if (fps.any { fp -> fingerprint.equals(fp, ignoreCase = true) }) return true
             }
         }
         Log.w(TAG, "No matching asset link")
@@ -184,11 +185,13 @@ suspend fun RequestOptions.checkIsValid(context: Context, origin: String, packag
         // FIXME: Standard suggests doing additional checks, but this is already sensible enough
     } else if ((origin.startsWith("android:apk-key-hash:") || origin.startsWith("android:apk-key-hash-sha256:")) && packageName != null) {
         allApplicableFacetIds.addAll(getAllFacetIdCandidates(context, packageName, origin))
-        val sha256facetId = allApplicableFacetIds.firstOrNull { it.startsWith("android:apk-key-hash-sha256:") }
-            ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin")
-        val fp = Base64.decode(sha256facetId.substring(28), HASH_BASE64_FLAGS).toHexString(":")
-        if (!isAssetLinked(context, rpId, fp, packageName)) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin (expected fingerprint $fp)")
+        val sha256facetId = allApplicableFacetIds.filter { it.startsWith("android:apk-key-hash-sha256:") }
+        sha256facetId.ifEmpty {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin (apk key sha256-hash not found)")
+        }
+        val fps = sha256facetId.map { Base64.decode(it.substring(28), HASH_BASE64_FLAGS).toHexString(":") }
+        if (!isAssetLinked(context, rpId, fps, packageName)) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin (expected one fingerprint of $fps)")
         }
     } else {
         throw RequestHandlingException(NOT_SUPPORTED_ERR, "Origin $origin not supported")
@@ -231,15 +234,19 @@ fun getApkKeyHashOrigin(context: Context, packageName: String): String {
 }
 
 fun getAllFacetIdCandidates(context: Context, packageName: String, origin: String): List<String> {
-    val firstSignature = context.packageManager.getSignatures(packageName).firstOrNull()
-        ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
-    val sha1 = firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)
-    val sha256 = firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)
-    val candidates = arrayListOf(
-        "android:apk-key-hash:$sha1",
-        "android:apk-key-hash:$sha256",
-        "android:apk-key-hash-sha256:$sha256",
-    )
+    val candidates = mutableListOf<String>()
+    context.packageManager.getSignatures(packageName).forEach { signature ->
+        val sha1 = signature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)
+        val sha256 = signature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)
+        candidates.addAll(
+            listOf(
+                "android:apk-key-hash:$sha1",
+                "android:apk-key-hash:$sha256",
+                "android:apk-key-hash-sha256:$sha256"
+            )
+        )
+    }
+    if (candidates.isEmpty()) throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
     if (!candidates.contains(origin))
         throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName ($origin)")
     return candidates
