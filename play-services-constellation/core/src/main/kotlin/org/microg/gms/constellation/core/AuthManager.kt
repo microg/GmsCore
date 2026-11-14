@@ -103,6 +103,17 @@ class AuthManager private constructor(context: Context) {
         return kp
     }
 
+    @Synchronized
+    internal fun setPublicKeyAckedIfCurrent(expectedPublicKey: ByteArray): Boolean {
+        val currentPublicKey = getOrCreateKeyPair().public.encoded
+        if (!currentPublicKey.contentEquals(expectedPublicKey)) return false
+
+        sharedPrefs.edit {
+            putBoolean(KEY_PUBLIC_KEY_ACKED, true)
+        }
+        return true
+    }
+
     fun sign(content: String): ByteArray {
         val kp = getOrCreateKeyPair()
         val signature = Signature.getInstance("SHA256withECDSA")

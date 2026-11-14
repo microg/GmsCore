@@ -22,6 +22,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.proto.AsterismClient
 import org.microg.gms.constellation.core.proto.Consent
@@ -36,6 +37,7 @@ import org.microg.gms.constellation.core.proto.RcsState
 import org.microg.gms.constellation.core.proto.RequestHeader
 import org.microg.gms.constellation.core.proto.SetConsentRequest
 import org.microg.gms.constellation.core.proto.SyncRequest
+import org.microg.gms.constellation.core.proto.SyncResponse
 import org.microg.gms.constellation.core.proto.Verification
 import org.microg.gms.constellation.core.proto.VerifiedPhoneNumber
 import org.microg.gms.constellation.core.proto.builder.RequestBuildContext
@@ -50,6 +52,7 @@ import java.util.UUID
 import kotlin.coroutines.coroutineContext
 
 private const val TAG = "VerifyPhoneNumber"
+private const val PUBLIC_KEY_STATUS_ACKNOWLEDGED = 1
 
 internal enum class ReadCallbackMode {
     NONE,
@@ -421,7 +424,8 @@ private suspend fun runVerificationFlow(
             request,
             syncRequest,
             buildContext,
-            imsiToInfoMap
+            imsiToInfoMap,
+            callingPackage
         )
     } finally {
         MtSmsInboxRegistry.dispose()
@@ -481,17 +485,100 @@ private fun PhoneNumberVerification.toLegacyPhoneNumberInfoOrNull(): PhoneNumber
     return PhoneNumberInfo(1, phoneNumber, timestampMillis, extras)
 }
 
-private suspend fun executeSyncFlow(
+internal suspend fun executeSyncFlow(
     context: Context,
     sessionId: String,
     request: VerifyPhoneNumberRequest,
     syncRequest: SyncRequest,
     buildContext: RequestBuildContext,
-    imsiToInfoMap: Map<String, SubscriptionInfo>
+    imsiToInfoMap: Map<String, SubscriptionInfo>,
+    callingPackage: String,
+    syncCall: suspend (SyncRequest) -> SyncResponse = {
+        RpcClient.phoneDeviceVerificationClient.Sync().execute(it)
+    },
+    retryRequestBuilder: suspend () -> SyncRequest = {
+        SyncRequest(
+            context,
+            sessionId,
+            request,
+            buildContext,
+            imsiToInfoMap = imsiToInfoMap,
+            includeClientAuth = true,
+            callingPackage = callingPackage
+        )
+    }
 ): Array<PhoneNumberVerification> = withContext(Dispatchers.IO) {
+    val initiallyAuthenticated = syncRequest.header_?.client_auth != null
+    val initialPublicKey = syncRequest.header_?.client_info?.client_public_key
+    val firstResponse = executeSyncRpc(context, syncRequest, syncCall)
+    coroutineContext.ensureActive()
+    Log.d(TAG, "Sync response: ${firstResponse.responses.size} verifications")
+    ConstellationStateStore.storeSyncResponse(context, firstResponse)
+
+    val keyStatus = firstResponse.client_auth_status
+    val acknowledgementMatchesRequest =
+        keyStatus?.public_key_status?.status == PUBLIC_KEY_STATUS_ACKNOWLEDGED &&
+            (keyStatus.session_id.isNullOrEmpty() || keyStatus.session_id == sessionId)
+    val validKeyAcknowledgement = initialPublicKey != null &&
+        acknowledgementMatchesRequest &&
+        context.authManager.setPublicKeyAckedIfCurrent(initialPublicKey.toByteArray())
+
+    if (validKeyAcknowledgement) {
+        Log.d(TAG, "Server acknowledged client public key")
+    }
+
+    val syncResponse = if (
+        !initiallyAuthenticated &&
+        validKeyAcknowledgement &&
+        shouldRetryAfterKeyAcknowledgement(request, firstResponse)
+    ) {
+        coroutineContext.ensureActive()
+        val retryRequest = retryRequestBuilder()
+        val retryHeader = retryRequest.header_
+        val retryPublicKey = retryHeader?.client_info?.client_public_key
+        val retryAuth = retryHeader?.client_auth
+            ?: throw IllegalStateException("Authenticated Sync retry has no client_auth")
+        require(retryAuth.signature.size > 0) { "Authenticated Sync retry has an empty signature" }
+
+        val keyStillMatches =
+            retryHeader?.session_id == sessionId &&
+                retryPublicKey == initialPublicKey &&
+                context.authManager.getOrCreateKeyPair().public.encoded.toByteString() ==
+                initialPublicKey
+        if (!keyStillMatches) {
+            Log.w(TAG, "Skipping authenticated Sync retry because the client key changed")
+            firstResponse
+        } else {
+            Log.i(TAG, "Retrying Sync once after a new client public key acknowledgement")
+            executeSyncRpc(context, retryRequest, syncCall).also {
+                coroutineContext.ensureActive()
+                ConstellationStateStore.storeSyncResponse(context, it)
+            }.let { retryResponse ->
+                mergeUnknownSyncResults(firstResponse, retryResponse)
+            }
+        }
+    } else {
+        firstResponse
+    }
+
+    processSyncResponse(
+        context,
+        sessionId,
+        request,
+        syncResponse,
+        buildContext,
+        imsiToInfoMap
+    )
+}
+
+private suspend fun executeSyncRpc(
+    context: Context,
+    request: SyncRequest,
+    syncCall: suspend (SyncRequest) -> SyncResponse
+): SyncResponse {
     Log.d(TAG, "Sending Sync request")
-    val syncResponse = try {
-        RpcClient.phoneDeviceVerificationClient.Sync().execute(syncRequest)
+    return try {
+        syncCall(request)
     } catch (e: GrpcException) {
         if (e.grpcStatus == GrpcStatus.PERMISSION_DENIED ||
             e.grpcStatus == GrpcStatus.UNAUTHENTICATED
@@ -504,10 +591,86 @@ private suspend fun executeSyncFlow(
         }
         throw e
     }
-    Log.d(TAG, "Sync response: ${syncResponse.responses.size} verifications")
-    ConstellationStateStore.storeSyncResponse(context, syncResponse)
+}
 
-    val isPublicKeyAcked = syncResponse.header_?.status?.code == 1
+internal fun shouldRetryAfterKeyAcknowledgement(
+    request: VerifyPhoneNumberRequest,
+    response: SyncResponse
+): Boolean {
+    if (response.responses.isEmpty()) return false
+    if (response.responses.any { it.error?.code?.let { code -> code != 0 } == true }) return false
+
+    val verifications = response.responses.mapNotNull { it.verification }
+    if (verifications.size != response.responses.size) return false
+    if (verifications.any { it.state != Verification.State.UNKNOWN }) return false
+
+    val targetedImsis = request.targetedSims
+        .mapNotNull { it.imsi?.takeIf(String::isNotEmpty) }
+        .toSet()
+    if (targetedImsis.isNotEmpty()) {
+        val responseImsis = verifications
+            .flatMap { it.association?.sim?.sim_info?.imsi.orEmpty() }
+            .toSet()
+        if (!responseImsis.containsAll(targetedImsis)) return false
+    }
+
+    return true
+}
+
+internal fun mergeUnknownSyncResults(
+    first: SyncResponse,
+    retry: SyncResponse
+): SyncResponse {
+    if (retry.responses.isEmpty() || retry.responses.any {
+            it.error?.code?.let { code -> code != 0 } == true
+        }
+    ) {
+        return retry.copy(responses = retry.responses.ifEmpty { first.responses })
+    }
+
+    val retryImsis = retry.responses.flatMap { result ->
+        result.verification?.association?.sim?.sim_info?.imsi.orEmpty()
+    }.toSet()
+    val hasUnassociatedRetryResult = retry.responses.any { result ->
+        result.verification?.association?.sim?.sim_info?.imsi.isNullOrEmpty() &&
+            result.verification != null
+    }
+    val retainedFirstResults = first.responses.mapNotNull { result ->
+        val verification = result.verification ?: return@mapNotNull null
+        val sim = verification.association?.sim
+        if (sim == null) {
+            return@mapNotNull if (hasUnassociatedRetryResult) null else result
+        }
+        val simInfo = sim.sim_info
+        if (simInfo == null) {
+            return@mapNotNull if (hasUnassociatedRetryResult) null else result
+        }
+        val uncoveredImsis = simInfo.imsi.filterNot { it in retryImsis }
+        if (uncoveredImsis.isEmpty()) {
+            null
+        } else if (uncoveredImsis.size == simInfo.imsi.size) {
+            result
+        } else {
+            result.copy(
+                verification = verification.copy(
+                    association = verification.association?.copy(
+                        sim = sim.copy(sim_info = simInfo.copy(imsi = uncoveredImsis))
+                    )
+                )
+            )
+        }
+    }
+    return retry.copy(responses = retry.responses + retainedFirstResults)
+}
+
+private suspend fun processSyncResponse(
+    context: Context,
+    sessionId: String,
+    request: VerifyPhoneNumberRequest,
+    syncResponse: SyncResponse,
+    buildContext: RequestBuildContext,
+    imsiToInfoMap: Map<String, SubscriptionInfo>
+): Array<PhoneNumberVerification> {
     val imsiToSlotMap = imsiToInfoMap.mapValues { it.value.simSlotIndex }
     val requestedImsis = request.targetedSims.map { it.imsi }.toSet()
 
@@ -590,12 +753,7 @@ private suspend fun executeSyncFlow(
         refreshedImsis = refreshedImsis
     )
 
-    if (isPublicKeyAcked) {
-        Log.d(TAG, "Server acknowledged client public key")
-        ConstellationStateStore.setPublicKeyAcked(context, true)
-    }
-
-    verifications
+    return verifications
 }
 
 suspend fun getConsent(

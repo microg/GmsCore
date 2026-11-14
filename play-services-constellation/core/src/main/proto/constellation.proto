@@ -23,18 +23,14 @@ message RequestHeader {
   RequestTrigger trigger = 4;
 }
 
-message ResponseHeader {
-  StatusProtoSimple status = 1;
+message ClientAuthStatus {
+  PublicKeyStatus public_key_status = 1;
+  string session_id = 2;
+  string server_build = 3;
 }
 
-message StatusProtoSimple {
-  int32 code = 1;
-}
-
-enum StatusCode {
-  STATUS_CODE_UNSPECIFIED = 0;
-  STATUS_CODE_OK = 1;
-  STATUS_CODE_ERROR = 2;
+message PublicKeyStatus {
+  int32 status = 1;
 }
 
 message ClientInfo {
@@ -225,7 +221,7 @@ message SyncRequest {
 message SyncResponse {
   repeated VerificationResponse responses = 1;
   ServerTimestamp next_sync_time = 2;
-  ResponseHeader header = 3;
+  ClientAuthStatus client_auth_status = 3;
   DroidguardToken droidguard_token = 4;
   repeated VerificationToken verification_tokens = 5;
 }
@@ -238,7 +234,7 @@ message ProceedRequest {
 
 message ProceedResponse {
   Verification verification = 1;
-  ResponseHeader header = 2;
+  ClientAuthStatus client_auth_status = 2;
   ServerTimestamp next_sync_time = 3;
   DroidguardToken droidguard_token = 4;
 }
