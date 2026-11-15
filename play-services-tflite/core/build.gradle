@@ -1,0 +1,82 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+configurations {
+    liteRtRuntime {
+        canBeConsumed = false
+        transitive = false
+    }
+}
+
+def liteRtRuntimeDir = layout.buildDirectory.dir('generated/litert-runtime')
+def liteRtContents = zipTree(configurations.liteRtRuntime.elements.map { it.iterator().next().asFile })
+def prepareLiteRtRuntime = tasks.register('prepareLiteRtRuntime', Sync) {
+    from(liteRtContents) {
+        include 'jni/**'
+    }
+    from(liteRtContents) {
+        include 'LICENSE', 'THIRD_PARTY_NOTICE.txt'
+        into 'assets/licenses/litert'
+    }
+    into liteRtRuntimeDir
+}
+def liteRtAssetsDir = objects.directoryProperty()
+liteRtAssetsDir.set(prepareLiteRtRuntime.map { liteRtRuntimeDir.get().dir('assets') })
+
+android {
+    namespace "org.microg.gms.tflite.core"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+    ndkVersion '27.0.12077973'
+    // The NDK requires API 21, while the app retains its API 19 baseline.
+    experimentalProperties['android.ndk.suppressMinSdkVersionError'] = 21
+
+    defaultConfig {
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=c++_static', "-DLITERT_RUNTIME_DIR=${liteRtRuntimeDir.get().asFile.absolutePath.replace('\\', '/')}"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+androidComponents.onVariants(androidComponents.selector().all()) { variant ->
+    variant.sources.assets.addGeneratedSourceDirectory(prepareLiteRtRuntime) { liteRtAssetsDir }
+}
+
+tasks.configureEach {
+    if (name.startsWith('configureCMake')) {
+        dependsOn prepareLiteRtRuntime
+    }
+}
+
+dependencies {
+    api project(':play-services-tflite')
+    implementation project(':play-services-base-core')
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    liteRtRuntime 'com.google.ai.edge.litert:litert:2.3.0@aar'
+}
+
+description = 'microG CPU implementation of the TensorFlow Lite Dynamite runtime'
