@@ -1,0 +1,17 @@
+Constellation, Android 15/API 35:
+org.microg.gms.constellation.core.AuthManagerKeyAcknowledgementTest:..
+org.microg.gms.constellation.core.AuthManagerTest:.
+org.microg.gms.constellation.core.ConstellationAidlTransportTest:..
+org.microg.gms.constellation.core.GetIidTokenTest:...
+org.microg.gms.constellation.core.GetVerifiedPhoneNumbersTest:.....
+
+Time: 3.2
+
+OK (13 tests)
+
+Asterism, Android 15/API 35:
+org.microg.gms.asterism.core.AsterismAidlTransportTest:..
+
+Time: 0.795
+
+OK (2 tests)

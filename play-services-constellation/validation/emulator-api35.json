@@ -1,0 +1,66 @@
+{
+  "android_api": 35,
+  "android_release": "15",
+  "emulator_acceleration": "software (no KVM)",
+  "shell_identity": "uid=2000(shell) gid=2000(shell) groups=2000(shell),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs) context=u:r:shell:s0",
+  "app_uid": 10148,
+  "app_version_code": 254500037,
+  "installation": "success, normal data/app package",
+  "instrumentation_tests": {
+    "constellation": 13,
+    "asterism": 2
+  },
+  "permission_ui": {
+    "status": "passed",
+    "checks": [
+      "Android Phone permission prompt observed after enabling verification",
+      "Denying Phone keeps verification off and SMS option disabled",
+      "Allowing Phone enables verification; SMS remains ungranted",
+      "SMS permission is requested only after the separate SMS opt-in",
+      "Denying SMS leaves SMS verification off and Phone verification enabled",
+      "Package Manager confirms Phone granted and all three SMS permissions denied",
+      "Verification disabled again after the test"
+    ],
+    "runtime_permissions": {
+      "READ_PHONE_STATE": true,
+      "READ_SMS": false,
+      "RECEIVE_SMS": false,
+      "SEND_SMS": false
+    }
+  },
+  "google_messages_tested": false,
+  "real_sim_tested": false,
+  "physical_locked_bootloader_tested": false,
+  "limitations": [
+    "Software-emulator cold startup produced System UI and DEX-verification startup ANRs. Android package compile -m verify was run; settings and permission checks subsequently passed.",
+    "Module instrumentation uses injected credentials/backend seams, not real carrier provisioning.",
+    "An ordinary stock installation of Google Play services cannot be replaced by this differently signed package."
+  ],
+  "validation_date": "2026-11-15",
+  "base_commit": "f686900c68aa84d1605b52304f6615f3593c6f50",
+  "reference_pr_commit": "d66138ba5714a5b1d87646c83cff6a11f6261d1e",
+  "unit_tests": {
+    "constellation": 134,
+    "asterism": 17,
+    "phenotype": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sms_retriever": "NO-SOURCE"
+  },
+  "apk": {
+    "name": "com.google.android.gms-254500037.apk",
+    "bytes": 108406033,
+    "sha256": "bef5c7a730a5488ef61cbe4f385cd88d07f7329f73c46efac5c1c85eefbb36c5",
+    "version_name": "0.3.18.254500-dirty",
+    "version_code": 254500037,
+    "signer_certificate_sha256": "c807db3e94d62a59d07e372d69c735dd820bb81b3a5ea47f8063d2994c738614"
+  },
+  "arm64_apk": {
+    "name": "com.google.android.gms-254500037-arm64.apk",
+    "bytes": 42070829,
+    "sha256": "aadf38b75287f643e5336c6ce592d1e5e3f4620146879c2a21f43bbf9b878e3b",
+    "physical_arm64_tested": false,
+    "note": "Architecture-filtered/re-signed package; DEX/resources/ARM64 libraries match tested universal APK."
+  }
+}

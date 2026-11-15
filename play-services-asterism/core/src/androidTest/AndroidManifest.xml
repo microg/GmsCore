@@ -1,0 +1,8 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <uses-sdk tools:overrideLibrary="okhttp.okhttp3,androidx.startup" />
+</manifest>
