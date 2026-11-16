@@ -24,6 +24,7 @@ import android.util.Log;
 
 import androidx.mediarouter.media.MediaControlIntent;
 import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 
 import com.google.android.gms.cast.CastMediaControlIntent;
 import com.google.android.gms.cast.framework.CastOptions;
@@ -35,8 +36,8 @@ import com.google.android.gms.cast.framework.ISessionProvider;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CastContextImpl extends ICastContext.Stub {
     private static final String TAG = CastContextImpl.class.getSimpleName();
@@ -56,21 +57,51 @@ public class CastContextImpl extends ICastContext.Stub {
         this.context = (Context) ObjectWrapper.unwrap(context);
         this.options = options;
         this.router = router;
+
         for (Map.Entry<String, IBinder> entry : sessionProviders.entrySet()) {
-            this.sessionProviders.put(entry.getKey(), ISessionProvider.Stub.asInterface(entry.getValue()));
+            this.sessionProviders.put(
+                    entry.getKey(),
+                    ISessionProvider.Stub.asInterface(entry.getValue())
+            );
         }
 
         String receiverApplicationId = options.getReceiverApplicationId();
         String defaultCategory = CastMediaControlIntent.categoryForCast(receiverApplicationId);
 
+        // Direct lookup
         this.defaultSessionProvider = this.sessionProviders.get(defaultCategory);
+
+        // Prefix fallback
+        if (this.defaultSessionProvider == null) {
+            for (Map.Entry<String, ISessionProvider> entry : this.sessionProviders.entrySet()) {
+                if (entry.getKey() != null && entry.getKey().startsWith(defaultCategory)) {
+                    this.defaultSessionProvider = entry.getValue();
+                    break;
+                }
+            }
+        }
 
         // TODO: This should incorporate passed options
         this.mergedSelector = new MediaRouteSelector.Builder()
-            .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
-            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-            .addControlCategory(defaultCategory)
-            .build();
+                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .addControlCategory(defaultCategory)
+                .build();
+
+        // Always register the media router callback
+        try {
+            this.router.registerMediaRouterCallbackImpl(
+                    this.mergedSelector.asBundle(),
+                    new MediaRouterCallbackImpl(this)
+            );
+
+            this.router.addCallback(
+                    this.mergedSelector.asBundle(),
+                    MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY
+            );
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to register media router callback: " + e.getMessage());
+        }
     }
 
     @Override
@@ -118,7 +149,6 @@ public class CastContextImpl extends ICastContext.Stub {
     @Override
     public void onActivityResumed(IObjectWrapper activity) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onActivityResumed");
-
     }
 
     @Override
