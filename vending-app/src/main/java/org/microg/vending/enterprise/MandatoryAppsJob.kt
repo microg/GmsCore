@@ -23,7 +23,7 @@ object MandatoryAppsJob {
 
     private const val EXTRA_CONSTRAINTS = "constraints"
 
-    private val PERIOD_MILLIS = TimeUnit.HOURS.toMillis(6)
+    private val PERIOD_MILLIS = TimeUnit.MINUTES.toMillis(15)
 
     fun schedule(context: Context) {
         val scheduler = context.jobScheduler()
