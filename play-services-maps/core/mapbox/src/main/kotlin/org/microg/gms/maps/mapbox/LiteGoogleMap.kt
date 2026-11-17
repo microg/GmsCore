@@ -261,7 +261,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
                     PropertyFactory.lineCap(Property.LINE_CAP_ROUND)
                 )
             ).withSource(
-                GeoJsonSource(polyline.id, polyline.annotationOptions.geometry)
+                GeoJsonSource(polyline.id, polyline.baseAnnotationOptions.geometry)
             )
         }
 
@@ -281,7 +281,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
                     withProperties(PropertyFactory.linePattern(name))
                     styleBuilder.withImage(name, it.makeBitmap(circle.strokeColor, circle.strokeWidth, dpi))
                 }
-            }).withSource(GeoJsonSource("${circle.id}s", circle.line.annotationOptions.geometry))
+            }).withSource(GeoJsonSource("${circle.id}s", circle.line.annotations.first().options.geometry))
         }
 
         // Add markers
