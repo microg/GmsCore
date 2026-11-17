@@ -34,9 +34,9 @@ interface IMeasurementService {
 
 
 //    void f24(in AppMetadata app, in Bundle bundle) = 23;
-//    void sendStorageConsentSettings(in AppMetadata app) = 24;
-//    void sendDmaConsentSettings(in AppMetadata app) = 25;
-//    void sendAppBackgrounded(in AppMetadata app) = 26;
+    void sendStorageConsentSettings(in AppMetadata app) = 24;
+    void sendDmaConsentSettings(in AppMetadata app) = 25;
+    void sendAppBackgrounded(in AppMetadata app) = 26;
 
 //    void getUploadBatches(in AppMetadata app, in UploadBatchesCriteria criteria, IUploadBatchesCallback callback) = 28;
 //    void discardUploadData(in AppMetadata app, in BatchUploadStatusParcel status) = 29;

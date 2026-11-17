@@ -91,5 +91,17 @@ class MeasurementServiceImpl : IMeasurementService.Stub() {
         Log.d(TAG, "sendConsentSettings() for $app")
     }
 
+    override fun sendStorageConsentSettings(app: AppMetadata) {
+        Log.d(TAG, "sendStorageConsentSettings() for $app")
+    }
+
+    override fun sendDmaConsentSettings(app: AppMetadata) {
+        Log.d(TAG, "sendDmaConsentSettings() for $app")
+    }
+
+    override fun sendAppBackgrounded(app: AppMetadata) {
+        Log.d(TAG, "sendAppBackgrounded() for $app")
+    }
+
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }
