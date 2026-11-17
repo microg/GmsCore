@@ -281,7 +281,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
         postMain(callbacks, () -> {
             List<NodeParcelable> nodes = new ArrayList<>();
             for (String host : capabilities.getNodesForCapability(capability)) {
@@ -300,7 +299,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -311,7 +309,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
