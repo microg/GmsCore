@@ -59,7 +59,7 @@ fun BillingUiPage(viewModel: InAppBillingViewModel) {
     InAppBillingTheme {
         SetStatusBarColor(MaterialTheme.colorScheme.background)
         CompositionLocalProvider(LocalBillingUiViewState provides viewModel.billingUiViewState) {
-            BillingUiView(viewModel.billingUiViewState)
+            BillingUiView(viewModel.billingUiViewState, onBack = viewModel::close)
         }
         LoadingDialog(viewModel.loadingDialogVisible)
         PasswdInputDialog(viewModel.passwdInputViewState)
@@ -67,11 +67,12 @@ fun BillingUiPage(viewModel: InAppBillingViewModel) {
 }
 
 @Composable
-private fun BillingUiView(viewState: BillingUiViewState) {
+private fun BillingUiView(viewState: BillingUiViewState, onBack: () -> Unit) {
     if (!viewState.visible)
         return
     BackHandler(true) {
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "OnBackPressed")
+        onBack()
     }
     Surface(
         modifier = Modifier
