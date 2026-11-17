@@ -50,7 +50,7 @@ public class RcsService extends BaseService {
         String caller = PackageUtils.getAndCheckCallingPackage(this, request.packageName);
         trace.record(service.name(), caller, 0, "bind", 0);
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS,
-                new RcsTraceBinder(trace, service.name(), caller).asBinder(), null);
+                new RcsTraceBinder(trace, service.name(), caller), null);
     }
 
     @Override
