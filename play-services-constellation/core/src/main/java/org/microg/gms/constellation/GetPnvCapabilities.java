@@ -119,7 +119,11 @@ public final class GetPnvCapabilities {
 
         String subscriberIdDigest = digestSubscriberId(getSubscriberIdSafe(telephonyManager));
         String operatorName = telephonyManager.getSimOperatorName();
-        return new SimCapability(info.getSimSlotIndex(), subscriberIdDigest, carrierId,
+        // getSimSlotIndex() needs API 22. The caller only runs this method on
+        // API 22+, but lint checks this call site directly, so guard it here too.
+        int simSlotIndex = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+                ? info.getSimSlotIndex() : -1;
+        return new SimCapability(simSlotIndex, subscriberIdDigest, carrierId,
                 operatorName != null ? operatorName : "", capabilities);
     }
 
