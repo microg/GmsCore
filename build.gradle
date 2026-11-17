@@ -118,6 +118,9 @@ allprojects {
     ext.appVersionCode = ourGmsVersionCode
     ext.isReleaseVersion = false
 }
+ext {
+    GRADLE_MICROG_VERSION_WITHOUT_GIT = 1
+}
 
 subprojects {
     repositories {
