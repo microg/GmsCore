@@ -165,7 +165,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 tag = "GoogleMapZoomOutButton"
                 visibility = GONE
             }
-            private val fakeMyLocationButton = View(mapContext).apply {
+            private val fakeMyLocationButton = ImageView(mapContext).apply {
                 tag = "GoogleMapMyLocationButton"
                 visibility = GONE
             }
