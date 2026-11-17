@@ -592,8 +592,12 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         }
 
         coreResult.let { detailsResult ->
-            val details = ArrayList(detailsResult.skuDetailsList.map { it.jsonDetails })
             if (detailsResult.getCode() == BillingResponseCode.OK) {
+                val responseFormat = extraParams?.getString("SKU_DETAILS_RESPONSE_FORMAT")
+                val multipleOfferTypes = extraParams?.getStringArrayList("PRODUCT_TYPES_TO_RETURN_MULTIPLE_OFFERS")
+                val details = ArrayList(detailsResult.skuDetailsList.map {
+                    normalizeProductDetails(it.jsonDetails, type, responseFormat, multipleOfferTypes)
+                })
                 return resultBundle(BillingResponseCode.OK, "", bundleOf("DETAILS_LIST" to details))
             } else {
                 return resultBundle(detailsResult.getCode(), detailsResult.getMessage())
