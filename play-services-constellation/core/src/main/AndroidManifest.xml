@@ -20,7 +20,7 @@
         tools:ignore="SmsAndCallLogPolicy" />
 
     <application>
-        <service android:name=".ConstellationApiService">
+        <service android:name="org.microg.gms.constellation.ConstellationApiService">
             <intent-filter>
                 <action android:name="com.google.android.gms.constellation.service.START" />
             </intent-filter>
