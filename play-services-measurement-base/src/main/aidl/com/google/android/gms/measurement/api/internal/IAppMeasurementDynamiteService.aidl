@@ -67,4 +67,7 @@ interface IAppMeasurementDynamiteService {
     void onActivityResumedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 55;
     void onActivitySaveInstanceStateByScionActivityInfo(in ScionActivityInfo info, IBundleReceiver receiver, long eventElapsedRealtime) = 56;
     void retrieveAndUploadBatches(IDynamiteUploadBatchesCallback callback) = 57;
+    void logEventWithElapsedTime(String origin, String name, in Bundle params, boolean isInternalEvent, boolean allowInterceptor, long eventTimeMillis, long eventElapsedRealtime) = 58;
+    void initializeWithElapsedTime(in IObjectWrapper context, in InitializationParams params, long eventTimeMillis, long eventElapsedRealtime) = 59;
+    void resetAnalyticsDataWithElapsedTime(long eventTimeMillis, long eventElapsedRealtime) = 60;
 }
