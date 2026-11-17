@@ -25,7 +25,9 @@ import java.io.PrintWriter;
  * {@code RCS}, {@code CARRIER_AUTH}, {@code CONSTELLATION} and {@code ASTERISM}. Until
  * recently all four were answered by {@code DummyService} with {@code API_DISABLED}, so
  * the RCS setup flow in Messages died immediately and left no trace of what it actually
- * tried to call.
+ * tried to call. Constellation has since moved to its own service
+ * ({@code org.microg.gms.constellation.ConstellationApiService}); this service still
+ * covers the remaining three.
  *
  * <p>This service changes only that: binding now succeeds and returns a
  * {@link RcsTraceBinder} that records which methods Messages attempts to call, so the
@@ -42,7 +44,7 @@ public class RcsService extends BaseService {
     private final RcsTrace trace = new RcsTrace();
 
     public RcsService() {
-        super("GmsRcsSvc", GmsService.RCS, GmsService.CARRIER_AUTH, GmsService.CONSTELLATION, GmsService.ASTERISM);
+        super("GmsRcsSvc", GmsService.RCS, GmsService.CARRIER_AUTH, GmsService.ASTERISM);
     }
 
     @Override
