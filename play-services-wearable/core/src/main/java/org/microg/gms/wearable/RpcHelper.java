@@ -26,14 +26,15 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class RpcHelper {
     private final Map<String, RpcConnectionState> rpcStateMap = new HashMap<String, RpcConnectionState>();
     private final SharedPreferences preferences;
     private final Context context;
 
-    private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
-    private final Map<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -88,22 +89,41 @@ public class RpcHelper {
     }
 
     public void addResponseListener(String peerNodeId, int requestId, long timeoutMs,
-                                    RpcResponseCallback onResponse,
-                                    RpcTimeoutCallback onTimeout) {
-        String key = rpcListenerKey(peerNodeId, requestId);
-        rpcListeners.put(key, new PendingRpcListener(requestId, onResponse, onTimeout));
-        mainHandler.postDelayed(() -> {
-            if (rpcListeners.remove(key) != null) {
-                onTimeout.onTimeout();
-            }
-        }, timeoutMs);
+                                    RpcResponseCallback onResponse, RpcTimeoutCallback onTimeout) {
+        final String key = rpcListenerKey(peerNodeId, requestId);
+        final PendingRpcListener l = new PendingRpcListener(onResponse, onTimeout);
+        l.timeoutTask = () -> { if (rpcListeners.remove(key, l)) onTimeout.onTimeout(); };
+
+        PendingRpcListener old = rpcListeners.put(key, l);
+        if (old != null) {
+            mainHandler.removeCallbacks(old.timeoutTask);
+            mainHandler.post(old.timeout::onTimeout);
+        }
+        mainHandler.postDelayed(l.timeoutTask, timeoutMs);
     }
 
     public boolean deliverRpcResponse(String peerNodeId, int senderRequestId, @Nullable byte[] data) {
-        PendingRpcListener listener = rpcListeners.remove(rpcListenerKey(peerNodeId, senderRequestId));
-        if (listener == null) return false;
-        listener.callback.onResponse(data);
+        PendingRpcListener l = rpcListeners.remove(rpcListenerKey(peerNodeId, senderRequestId));
+        if (l == null) return false;
+        mainHandler.removeCallbacks(l.timeoutTask);
+        l.callback.onResponse(data);
         return true;
+    }
+
+    public void removeResponseListener(String peerNodeId, int requestId) {
+        PendingRpcListener l = rpcListeners.remove(rpcListenerKey(peerNodeId, requestId));
+        if (l != null) mainHandler.removeCallbacks(l.timeoutTask);
+    }
+
+    public void failPeer(String peerNodeId) {
+        final String prefix = peerNodeId + ":";
+        for (Map.Entry<String, PendingRpcListener> e : rpcListeners.entrySet()) {
+            if (e.getKey().startsWith(prefix) && rpcListeners.remove(e.getKey(), e.getValue())) {
+                mainHandler.removeCallbacks(e.getValue().timeoutTask);
+                final PendingRpcListener dead = e.getValue();
+                mainHandler.post(dead.timeout::onTimeout);
+            }
+        }
     }
 
 
@@ -116,12 +136,11 @@ public class RpcHelper {
     }
 
     private static final class PendingRpcListener {
-        final int reqId;
         final RpcResponseCallback callback;
         final RpcTimeoutCallback timeout;
+        volatile Runnable timeoutTask;
 
-        PendingRpcListener(int reqId, RpcResponseCallback rc, RpcTimeoutCallback tc) {
-            this.reqId = reqId;
+        PendingRpcListener(RpcResponseCallback rc, RpcTimeoutCallback tc) {
             this.callback = rc;
             this.timeout = tc;
         }

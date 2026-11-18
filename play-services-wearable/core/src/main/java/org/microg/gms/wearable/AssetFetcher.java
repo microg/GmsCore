@@ -2,6 +2,7 @@ package org.microg.gms.wearable;
 
 import android.database.Cursor;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class AssetFetcher {
     private static final String TAG = "GmsWearAssetFetch";
@@ -24,7 +26,7 @@ public class AssetFetcher {
     private final NodeDatabaseHelper nodeDatabase;
     private final Handler networkHandler;
 
-    private final Set<String> fetchingAssets = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+    private final ConcurrentMap<String, Long> fetchingAssets = new ConcurrentHashMap<>();
 
     private final Map<String, AssetFetchAttempt> failedAssets = new ConcurrentHashMap<>();
 
@@ -34,6 +36,9 @@ public class AssetFetcher {
     private static final long FAILED_ASSET_EXPIRY_MS = 300000; // 5 minutes
     private static final int MAX_INFLIGHT_FETCHES = 8;
     private static final long INFLIGHT_RETRY_DELAY_MS = 750;
+
+    private static final long FETCH_TIMEOUT_MS = 30_000;
+
 
     public AssetFetcher(NodeDatabaseHelper nodeDatabase, Handler networkHandler) {
         this.nodeDatabase = nodeDatabase;
@@ -85,7 +90,7 @@ public class AssetFetcher {
                 String packageName = cursor.getString(colPackageName);
                 String signatureDigest = cursor.getString(colSignatureDigest);
 
-                if (fetchingAssets.contains(assetDigest)) {
+                if (isFetching(assetDigest)) {
                     alreadyFetchingCount++;
                     continue;
                 }
@@ -105,7 +110,7 @@ public class AssetFetcher {
                 }
 
                 try {
-                    fetchingAssets.add(assetDigest);
+                    fetchingAssets.put(assetDigest, SystemClock.elapsedRealtime());
 
                     connection.writeMessage(new RootMessage.Builder()
                             .fetchAsset(new FetchAsset.Builder()
@@ -167,7 +172,7 @@ public class AssetFetcher {
         for (Asset asset : missingAssets) {
             String digest = asset.getDigest();
 
-            if (fetchingAssets.contains(digest)) {
+            if (isFetching(digest)) {
                 skipCount++;
                 continue;
             }
@@ -190,7 +195,7 @@ public class AssetFetcher {
             try {
                 Log.d(TAG, "Fetching missing asset for record: " + digest);
 
-                fetchingAssets.add(digest);
+                fetchingAssets.put(digest, SystemClock.elapsedRealtime());
 
                 FetchAsset fetchAsset = new FetchAsset.Builder()
                         .assetName(digest)
@@ -249,6 +254,25 @@ public class AssetFetcher {
                 message.contains("Broken pipe") ||
                 message.contains("Socket closed") ||
                 message.contains("Connection reset");
+    }
+
+    private boolean isFetching(String digest) {
+        Long t = fetchingAssets.get(digest);
+        if (t == null) return false;
+        if (SystemClock.elapsedRealtime() - t > FETCH_TIMEOUT_MS) {
+            if (fetchingAssets.remove(digest, t)) recordFailure(digest);
+            return false;
+        }
+        return true;
+    }
+
+    private int inFlightCount() {
+        for (String d : fetchingAssets.keySet()) isFetching(d);   // purge expired
+        return fetchingAssets.size();
+    }
+
+    public void onEmptyResponse(String digest) {
+        if (fetchingAssets.remove(digest) != null) recordFailure(digest);   // only if we were waiting on it
     }
 
     private void cleanupExpiredFailures() {

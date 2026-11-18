@@ -269,6 +269,7 @@ public class WearableImpl {
             } catch (java.io.IOException ignored) {
             }
             activeConnections.remove(nodeId);
+            onRpcPeerGone(nodeId);
             onPeerDisconnected(new com.google.android.gms.wearable.internal.NodeParcelable(nodeId, target.name));
         }
 
@@ -303,7 +304,7 @@ public class WearableImpl {
         Log.d(TAG, "registerPeerWriter for " + peerNodeId);
 
         peerWriters.put(peerNodeId, writer);
-        assetManager.addWriter(peerNodeId, writer);
+//        assetManager.addWriter(peerNodeId, writer);
     }
 
     public DataTransport getDataTransport(String peerNodeId) {
@@ -955,6 +956,7 @@ public class WearableImpl {
             channelManager.sendCloseForAllChannels(connect.id);
 
         activeConnections.remove(connect.id);
+        onRpcPeerGone(connect.id);
 
         DataTransport dt = peerTransports.remove(connect.id);
         if (dt != null) {
@@ -962,7 +964,7 @@ public class WearableImpl {
         }
 
         peerWriters.remove(connect.id);
-        assetManager.removeWriter(connect.id);
+//        assetManager.removeWriter(connect.id);
 
         if (channelManager != null) {
             channelManager.onNodeDisconnected(connect.id);
@@ -1661,6 +1663,7 @@ public class WearableImpl {
 
     private void closeConnection(String nodeId) {
         WearableConnection connection = activeConnections.remove(nodeId);
+        onRpcPeerGone(nodeId);
         nodeRestrictions.remove(nodeId);
         if (connection != null) {
             try {
@@ -1792,20 +1795,31 @@ public class WearableImpl {
     public void unregisterPeerTransport(String peerNodeId) {
         peerTransports.remove(peerNodeId);
         peerWriters.remove(peerNodeId);
-        assetManager.removeWriter(peerNodeId);
+//        assetManager.removeWriter(peerNodeId);
         assetFetcher.resetTracking();
         Log.d(TAG, "unregisterPeerTransport: " + peerNodeId);
     }
 
-    public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
-        return sendInternal(packageName, targetNodeId, path, data, options, false);
-    }
-
     public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
-        return sendInternal(packageName, targetNodeId, path, data, options, true);
+        return sendInternal(packageName, targetNodeId, path, data, options, true, null);
     }
 
-    public int sendInternal(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options, boolean requiresResponse) {
+    public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
+        return sendInternal(packageName, targetNodeId, path, data, options, false, null);
+    }
+
+    public int sendRequest(String packageName, String targetNodeId, String path, byte[] data,
+                           MessageOptions options, RpcMessageTransport.IdListener before) {
+        return sendInternal(packageName, targetNodeId, path, data, options, true, before);
+    }
+
+
+
+    public int sendInternal(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options, boolean requiresResponse, RpcMessageTransport.IdListener before) {
+        if (requiresResponse && "*".equals(targetNodeId)) {
+            Log.w(TAG, "sendInternal: refusing broadcast request for " + path);
+            return -1;
+        }
         targetNodeId = resolveToWearableNodeId(targetNodeId);
 
         if (activeConnections.containsKey(targetNodeId)) {
@@ -1830,7 +1844,7 @@ public class WearableImpl {
             }
 
             WearableConnection connection = activeConnections.get(targetNodeId);
-            return writeToConnection(packageName, targetNodeId, connection, path, data, options, requiresResponse);
+            return writeToConnection(packageName, targetNodeId, connection, path, data, options, requiresResponse, before);
         }
 
         if ("*".equals(targetNodeId)) {
@@ -1844,7 +1858,7 @@ public class WearableImpl {
                     }
                 }
                 if (nearby && isPackageAllowedForNode(e.getKey(), packageName)) {
-                    lastResult = writeToConnection(packageName, e.getKey(), e.getValue(), path, data, options, requiresResponse);
+                    lastResult = writeToConnection(packageName, e.getKey(), e.getValue(), path, data, options, requiresResponse, before);
                 }
             }
             return lastResult;
@@ -1855,7 +1869,7 @@ public class WearableImpl {
     }
 
     private int writeToConnection(String packageName, String nodeId, WearableConnection connection,
-                                  String path, byte[] data, MessageOptions options, boolean requiresResponse) {
+                                  String path, byte[] data, MessageOptions options, boolean requiresResponse, RpcMessageTransport.IdListener before) {
         PendingRpcRequest pending = requiresResponse ? null : consumePendingRpcRequest(nodeId, path, packageName);
         Log.d(TAG, "writeToConnection: node=" + nodeId + " path=" + path
                 + " package=" + packageName + " pending=" + (pending != null));
@@ -1868,11 +1882,11 @@ public class WearableImpl {
             return rpcTransport.sendResponse(pending.packageName, pending.signatureDigest,
                     nodeId, path, data, pending.reqId);
         }
-        return writeToConnectionWithoutPending(packageName, nodeId, connection, path, data, options, requiresResponse);
+        return writeToConnectionWithoutPending(packageName, nodeId, connection, path, data, options, requiresResponse, before);
     }
 
     private int writeToConnectionWithoutPending(String packageName, String nodeId, WearableConnection connection,
-                                                String path, byte[] data, MessageOptions options, boolean requiresResponse) {
+                                                String path, byte[] data, MessageOptions options, boolean requiresResponse, RpcMessageTransport.IdListener before) {
         String digest = PackageUtils.firstSignatureDigest(context, packageName);
         if (TextUtils.isEmpty(packageName) || TextUtils.isEmpty(digest)) {
             Log.w(TAG, "writeToConnectionWithoutPending: no signature digest for " + packageName
@@ -1880,8 +1894,14 @@ public class WearableImpl {
             return -1;
         }
         return requiresResponse
-                ? rpcTransport.sendRequest(packageName, digest, nodeId, path, data, options)
+                ? rpcTransport.sendRequest(packageName, digest, nodeId, path, data, options, before)
                 : rpcTransport.sendMessage(packageName, digest, nodeId, path, data, options);
+    }
+
+    private void onRpcPeerGone(String peerNodeId) {
+        if (peerNodeId == null) return;
+        clearPendingRpcRequestsForPeer(peerNodeId);
+        rpcHelper.failPeer(peerNodeId);
     }
 
     public void sendRpcResponse(PendingRpcRequest p, byte[] data) {

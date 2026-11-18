@@ -76,6 +76,10 @@ public class MessageHandler extends ServerMessageListener {
     private final AccountMatching accountMatching;
     private String peerNodeId;
 
+    private static final long NO_LISTENER_ACK_MS = 500;
+    private static final long DECLINED_ACK_MS = 10_000;
+
+
     public MessageHandler(Context ctx, WearableImpl wearable, ConnectionConfiguration config) {
         super(buildConnect(ctx, wearable, config));
         this.wearable = wearable;
@@ -198,7 +202,7 @@ public class MessageHandler extends ServerMessageListener {
     }
 
     @Override
-    public void onSetAsset(SetAsset setAsset) {
+    public void onSetAsset(SetAsset setAsset, boolean fileFollows) {
         Log.d(TAG, "onSetAsset: " + setAsset);
         if (setAsset.data == null && setAsset.digest != null) {
             String fileName = WearableConnection.calculateDigest(
@@ -214,6 +218,10 @@ public class MessageHandler extends ServerMessageListener {
                     Log.w(TAG, "onSetAsset: failed to delete stale temp file " + staleTemp);
                 }
             }
+            sendAssetAck(setAsset.digest);
+        } else if (!fileFollows && setAsset.digest != null) {
+            wearable.getAssetFetcher().onEmptyResponse(setAsset.digest);
+            sendAssetAck(setAsset.digest);
         }
         Asset asset;
         if (setAsset.data != null) {
@@ -282,14 +290,43 @@ public class MessageHandler extends ServerMessageListener {
         for (DataItemRecord r : nowReady) wearable.dispatchDataChanged(r);
     }
 
+    private void scheduleAutoAck(final WearableImpl.PendingRpcRequest pending,
+                                 final RpcMessageTransport transport, long delayMs) {
+        wearable.networkHandler.postDelayed(() -> {
+            if (!wearable.removePendingRpcRequest(pending)) return; // already answered
+            if (TextUtils.isEmpty(pending.packageName) || TextUtils.isEmpty(pending.signatureDigest)) {
+                Log.w(TAG, "auto-ACK skipped; request lacks package/signatureDigest");
+                return;
+            }
+            try {
+                Request ack = transport.buildRequest(pending.packageName, pending.signatureDigest,
+                        pending.peerNodeId, pending.path, null, null, false, pending.reqId, null);
+                pending.connection.writeMessage(RpcMessageTransport.wrap(ack));
+            } catch (IOException e) {
+                Log.w(TAG, "auto-ACK failed path=" + pending.path, e);
+            }
+        }, delayMs);
+    }
+
     @Override
     public void onAckAsset(AckAsset ackAsset) {
         Log.d(TAG, "onAckAsset: " + ackAsset);
+        wearable.getAssetManager().onAckReceived(peerNodeId, ackAsset.digest);
     }
 
     @Override
     public void onFetchAsset(FetchAsset fetchAsset) {
         Log.d(TAG, "onFetchAsset: " + fetchAsset);
+        wearable.getAssetManager().handleFetchAsset(getConnection(), peerNodeId, fetchAsset);
+    }
+
+    private void sendAssetAck(String digest) {
+        if (digest == null) return;
+        try {
+            getConnection().writeMessage(new RootMessage.Builder().ackAsset(new AckAsset(digest)).build());
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to send asset ACK for " + digest, e);
+        }
     }
 
     @Override
@@ -302,7 +339,7 @@ public class MessageHandler extends ServerMessageListener {
             Log.e(TAG, "onSyncStart: no DataTransport for " + peerNodeId);
 //            if (syncStart.syncTable != null) {
 //                for (SyncTableEntry e : syncStart.syncTable) {
-//                    wearable.syncToPeer(peerNodeId, e.key, e.value);
+//                    wearable.syncToPeer(peerNodeId, e.key, e.value);FetchAsset
 //                }
 //            }
         }
@@ -341,18 +378,12 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (!Boolean.TRUE.equals(request.requiresResponse) && request.senderRequestId != null && peerNodeId != null) {
-
             byte[] responseData = request.rawData != null ? request.rawData.toByteArray() : null;
-
-            boolean consumed = wearable.getRpcHelper().deliverRpcResponse(peerNodeId, request.senderRequestId, responseData);
-
-            if (consumed) {
-                return;
+            if (!wearable.getRpcHelper().deliverRpcResponse(peerNodeId, request.senderRequestId, responseData)) {
+                Log.w(TAG, "onRpcRequest: dropping unmatched response senderRequestId="
+                        + request.senderRequestId + " path=" + path + " peer=" + peerNodeId);
             }
-
-            Log.w(TAG, "onRpcRequest: unmatched response "
-                    + "senderRequestId=" + request.senderRequestId
-                    + " path=" + path + " peer=" + peerNodeId);
+            return;
         }
 
         if (Boolean.TRUE.equals(request.requiresResponse)
@@ -383,8 +414,9 @@ public class MessageHandler extends ServerMessageListener {
                 intent.setData(new Uri.Builder().scheme("wear").authority(sourceNodeId).path(path).build());
 
                 final boolean dispatched = wearable.dispatchRpcRequest(intent, event, pending, () -> {
-                    Log.d(TAG, "onRpcRequest: REQUEST_RECEIVED " + "listener declined path=" + path);
+                    Log.d(TAG, "onRpcRequest: REQUEST_RECEIVED listener declined path=" + path);
                     wearable.storePendingRpcRequest(pending);
+                    scheduleAutoAck(pending, transport, DECLINED_ACK_MS);
                     sendMessageReceived(packageName, event);
                 });
 
@@ -399,40 +431,7 @@ public class MessageHandler extends ServerMessageListener {
             }
 
             wearable.storePendingRpcRequest(pending);
-
-            final String pendingPeer = peerNodeId;
-            final String pendingPath = path;
-
-            wearable.networkHandler.postDelayed(() -> {
-                if (!wearable.removePendingRpcRequest(pending)) {
-                    return;
-                }
-
-                final WearableImpl.PendingRpcRequest stillPending = pending;
-
-                Log.d(TAG, "onRpcRequest: auto-ACK path=" + pendingPath + " requestId=" + requestId);
-
-                if (TextUtils.isEmpty(stillPending.packageName) || TextUtils.isEmpty(stillPending.signatureDigest)) {
-                    Log.w(TAG, "onRpcRequest: auto-ACK skipped; " + "request lacks package/signatureDigest");
-                    return;
-                }
-
-                try {
-                    Request ack = transport.buildRequest(
-                            stillPending.packageName,
-                            stillPending.signatureDigest,
-                            stillPending.peerNodeId,
-                            stillPending.path,
-                            null, null, false,
-                            stillPending.reqId, null);
-
-                    stillPending.connection.writeMessage(RpcMessageTransport.wrap(ack));
-
-                } catch (IOException e) {
-                    Log.w(TAG, "onRpcRequest: auto-ACK failed path=" + pendingPath, e);
-                }
-            }, 500);
-
+            scheduleAutoAck(pending, transport, NO_LISTENER_ACK_MS);
             return;
         }
 
@@ -467,7 +466,9 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onFilePiece(FilePiece filePiece) {
         Log.d(TAG, "onFilePiece: " + filePiece);
-        handleFilePiece(getConnection(), filePiece.fileName, filePiece.piece.toByteArray(), filePiece.finalPiece ? filePiece.digest : null);
+        handleFilePiece(getConnection(), filePiece.fileName,
+                filePiece.piece != null ? filePiece.piece.toByteArray() : new byte[0],
+                filePiece.finalPiece ? filePiece.digest : null);
     }
 
     @Override

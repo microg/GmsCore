@@ -3,6 +3,8 @@ package org.microg.gms.wearable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.wearable.MessageOptions;
 
 import org.microg.gms.wearable.proto.ChannelRequest;
@@ -128,10 +130,19 @@ public class RpcMessageTransport {
                 null, false, null, options));
     }
 
+    public interface IdListener { void onIdAssigned(int requestId); }
+
+    public int sendRequest(String packageName, String signatureDigest, String nodeId,
+                           String path, byte[] data, MessageOptions options, @Nullable IdListener before) {
+        Request r = buildRequest(packageName, signatureDigest, nodeId, path, data,
+                null, true, null, options);
+        if (before != null) before.onIdAssigned(idOf(r));
+        return send(nodeId, r);
+    }
+
     public int sendRequest(String packageName, String signatureDigest, String nodeId,
                            String path, byte[] data, MessageOptions options) {
-        return send(nodeId, buildRequest(packageName, signatureDigest, nodeId, path, data,
-                null, true, null, options));
+        return sendRequest(packageName, signatureDigest, nodeId, path, data, options, null);
     }
 
     public int sendResponse(String packageName, String signatureDigest, String peerNodeId,

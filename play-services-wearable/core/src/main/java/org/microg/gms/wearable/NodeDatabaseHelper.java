@@ -549,6 +549,18 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{nodeId, Long.toString(seqId)});
     }
 
+    public boolean isAssetAllowedFor(String digest, String packageName, String signatureDigest) {
+        Cursor c = getReadableDatabase().rawQuery(
+                "SELECT 1 FROM assetsacls a JOIN appkeys k ON a.appkeys_id = k._id " +
+                        "WHERE a.assets_digest = ? AND k.packageName = ? AND k.signatureDigest = ? LIMIT 1",
+                new String[]{digest, packageName, signatureDigest});
+        try {
+            return c.moveToFirst();
+        } finally {
+            c.close();
+        }
+    }
+
     public synchronized List<DataItemRecord> deleteDataItems(String packageName, String signatureDigest, String host, String path) {
         List<DataItemRecord> updated = new ArrayList<DataItemRecord>();
         SQLiteDatabase db = getWritableDatabase();

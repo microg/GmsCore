@@ -460,45 +460,45 @@ public class WearableServiceImpl extends IWearableService.Stub {
         sendRequestWithOptions(callbacks, targetNodeId, path, data, new MessageOptions(0));
     }
 
+    private void postRpcResponse(IWearableCallbacks callbacks, int status, int requestId, byte[] data) {
+        mainHandler.post(() -> {
+            try {
+                callbacks.onRpcResponse(new RpcResponse(status, requestId, data));
+            } catch (RemoteException e) {
+                Log.w(TAG, "onRpcResponse failed", e);
+            }
+        });
+    }
+
     @Override
     public void sendRequestWithOptions(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data, MessageOptions options) throws RemoteException {
         Log.d(TAG, "sendRequest: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                final int messageId = wearable.sendRequest(packageName, targetNodeId, path, data, options);
+                final String routedNode = wearable.resolveToWearableNodeId(targetNodeId);
+                final int[] registeredId = {-1};
+
+                final int messageId = wearable.sendRequest(packageName, targetNodeId, path, data, options, id -> {
+                    registeredId[0] = id;
+                    wearable.getRpcHelper().addResponseListener(routedNode, id, SEND_REQUEST_TIMEOUT_MS,
+                            responseData -> postRpcResponse(callbacks, CommonStatusCodes.SUCCESS, id,
+                                    responseData != null ? responseData : new byte[0]),
+                            () -> {
+                                Log.w(TAG, "sendRequest timeout: " + path + " node=" + targetNodeId);
+                                postRpcResponse(callbacks, CommonStatusCodes.TIMEOUT, -1, new byte[0]);
+                            });
+                });
 
                 if (messageId == -1) {
+                    if (registeredId[0] != -1) {
+                        wearable.getRpcHelper().removeResponseListener(routedNode, registeredId[0]);
+                    }
                     Log.w(TAG, "sendRequest: no route to " + targetNodeId + " for " + path);
-                    mainHandler.post(() -> {
-                        try {
-                            callbacks.onRpcResponse(new RpcResponse(4004, -1, new byte[0]));
-                        } catch (RemoteException e) { e.printStackTrace(); }
-                    });
-                    return;
+                    postRpcResponse(callbacks, WearableStatusCodes.TARGET_NODE_NOT_CONNECTED, -1, new byte[0]);
                 }
-
-                final String routedNode = wearable.resolveToWearableNodeId(targetNodeId);
-                wearable.getRpcHelper().addResponseListener(
-                        routedNode,
-                        messageId,
-                        SEND_REQUEST_TIMEOUT_MS,
-                        responseData -> mainHandler.post(() -> {
-                            try {
-                                callbacks.onRpcResponse(new RpcResponse(
-                                        0, messageId,
-                                        responseData != null ? responseData : new byte[0]));
-                            } catch (RemoteException e) { e.printStackTrace(); }
-                        }),
-                        () -> {
-                            Log.w(TAG, "sendRequest timeout: " + path + " node=" + targetNodeId);
-                            mainHandler.post(() -> {
-                                try {
-                                    callbacks.onRpcResponse(new RpcResponse(15, -1, new byte[0]));
-                                } catch (RemoteException e) { e.printStackTrace(); }
-                            });
-                        });
             }
+
         });
     }
 
@@ -2338,7 +2338,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void readChannelOutputFromFd(IWearableCallbacks callbacks, String channelToken, ParcelFileDescriptor fd, long startOffset, long length) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: readChannelOutputFromFd: " + channelToken + ", " + startOffset + ", " + length);
+        Log.d(TAG, "readChannelOutputFromFd: " + channelToken + ", " + startOffset + ", " + length);
 
         ChannelManager channelManager = getChannelManager();
         if (channelManager == null) {

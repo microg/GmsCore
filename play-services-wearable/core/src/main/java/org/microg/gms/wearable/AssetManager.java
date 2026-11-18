@@ -1,5 +1,6 @@
 package org.microg.gms.wearable;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.gms.wearable.Wearable;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -44,6 +46,9 @@ public class AssetManager {
     private final Map<String, FetchEntry> entries = new ConcurrentHashMap<>();
     private final Map<String, WearableWriter> writers = new ConcurrentHashMap<>();
     private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
+
+    private static final long SEND_DEDUPE_MS = 60_000;
+    private final ConcurrentMap<String, Long> sends = new ConcurrentHashMap<>();
 
     public AssetManager(WearableImpl wearable) {
         this.wearable = wearable;
@@ -115,29 +120,70 @@ public class AssetManager {
         checkCompletion();
     }
 
-    public void handleFetchAsset(WearableConnection connection, String sourceNodeId, FetchAsset fetchAsset) {
-        if (fetchAsset == null || fetchAsset.assetName == null) return;
-        boolean permission = Boolean.TRUE.equals(fetchAsset.permission);
-        Log.d(TAG, "handleFetchAsset: digest=" + fetchAsset.assetName
-            + " permission=" + permission + " from=" + sourceNodeId);
+    private boolean beginSend(String peer, String digest) {
+        String key = peer + "|" + digest;
+        long now = SystemClock.elapsedRealtime();
+        Long prev = sends.putIfAbsent(key, now);
+        if (prev == null) return true;
+        if (now - prev < SEND_DEDUPE_MS) return false;   // already sending (Google ignores it too)
+        return sends.replace(key, prev, now);            // stale entry, e.g. peer never acked
+    }
+
+    public void onAckReceived(String peerNodeId, String digest) {
+        if (peerNodeId != null && digest != null) sends.remove(peerNodeId + "|" + digest);
+    }
+
+    public void onPeerGone(String peerNodeId) {
+        String prefix = peerNodeId + "|";
+        for (String k : sends.keySet()) if (k.startsWith(prefix)) sends.remove(k);
+    }
+
+    public void handleFetchAsset(final WearableConnection connection, final String peerNodeId,
+                                 final FetchAsset f) {
+        if (f == null || f.assetName == null || peerNodeId == null) return;
+        final String digest = f.assetName;
+        final String pkg = f.packageName != null ? f.packageName : "";
+        final String sig = f.signatureDigest != null ? f.signatureDigest : "";
+        final boolean permissionOnly = Boolean.TRUE.equals(f.permission);
+
+        if (!beginSend(peerNodeId, digest)) {
+            Log.d(TAG, "handleFetchAsset: already sending " + digest + " to " + peerNodeId);
+            return;
+        }
 
         ioExecutor.execute(() -> {
-            String digest = fetchAsset.assetName;
-            File assetFile = wearable.createAssetFile(digest);
-
-            if (!assetFile.exists()){
-                Log.d(TAG, "handleFetchAsset: asset not found locally, ignoring: " + digest);
-                return;
-            }
-
-            AppKeys appKeys = resolveAppKeys(digest, fetchAsset.packageName, fetchAsset.signatureDigest);
-
-            if (permission) {
-                sendPermissionConfirmation(connection, digest, appKeys);
-            } else {
-                sendFullAsset(connection, digest, assetFile, appKeys);
+            boolean ok = false;
+            try {
+                if (!wearable.getNodeDatabase().isAssetAllowedFor(digest, pkg, sig)) {
+                    Log.w(TAG, "handleFetchAsset: " + pkg + " not allowed for " + digest + ", empty reply");
+                    writeSetAsset(connection, digest, new AppKeys(Collections.<AppKey>emptyList()), false);
+                    ok = true;
+                    return;
+                }
+                AppKeys keys = new AppKeys(Collections.singletonList(new AppKey(pkg, sig)));
+                File file = wearable.createAssetFile(digest);
+                if (permissionOnly || !file.isFile()) {
+                    writeSetAsset(connection, digest, keys, false);
+                } else {
+                    RootMessage msg = writeSetAsset(connection, digest, keys, true);
+                    streamFilePieces(connection, file, WearableConnection.calculateDigest(msg.encode()), digest);
+                }
+                ok = true;
+            } catch (IOException e) {
+                Log.w(TAG, "handleFetchAsset: failed for " + digest + ": " + e.getMessage());
+            } finally {
+                if (!ok) sends.remove(peerNodeId + "|" + digest);   // failed: allow a retry
             }
         });
+    }
+
+    private RootMessage writeSetAsset(WearableConnection c, String digest, AppKeys keys, boolean hasAsset)
+            throws IOException {
+        RootMessage msg = new RootMessage.Builder()
+                .setAsset(new SetAsset.Builder().digest(digest).appkeys(keys).build())
+                .hasAsset(hasAsset).build();
+        c.writeMessage(msg);
+        return msg;
     }
 
     private void sendPermissionConfirmation(WearableConnection connection,
@@ -175,7 +221,7 @@ public class AssetManager {
             connection.writeMessage(msg);
 
             String fileName = WearableConnection.calculateDigest(msg.encode());
-            streamFilePeces(connection, assetFile, fileName, digest);
+            streamFilePieces(connection, assetFile, fileName, digest);
 
             Log.d(TAG, "sendFullAsset: competed for " + digest);
         } catch (IOException e) {
@@ -183,8 +229,8 @@ public class AssetManager {
         }
     }
 
-    private void streamFilePeces(WearableConnection connection, File file,
-                                 String fileName, String digest) throws IOException {
+    private void streamFilePieces(WearableConnection connection, File file,
+                                  String fileName, String digest) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] buf = new byte[CHUNK_SIZE];
             ByteString pending = null;
@@ -192,23 +238,19 @@ public class AssetManager {
 
             while ((n = fis.read(buf)) > 0) {
                 if (pending != null) {
-                    connection.writeMessage(
-                            new RootMessage.Builder()
-                                    .filePiece(
-                                            new FilePiece(fileName, false, pending, null)
-                                    )
-                                    .build()
-                    );
+                    connection.writeMessage(piece(fileName, false, pending, null));
                 }
                 pending = ByteString.of(buf, 0, n);
             }
-
-            connection.writeMessage(
-                    new RootMessage.Builder()
-                            .filePiece(new FilePiece(fileName, true, pending, digest))
-                            .build()
-            );
+            if (pending == null) pending = ByteString.EMPTY;   // empty file: still send a final piece
+            connection.writeMessage(piece(fileName, true, pending, digest));
         }
+    }
+
+    private static RootMessage piece(String fileName, boolean last, ByteString data, String digest) {
+        return new RootMessage.Builder()
+                .filePiece(new FilePiece(fileName, last, data, digest))
+                .build();
     }
 
     public void addCompletionListener(Runnable listener) {

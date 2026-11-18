@@ -38,7 +38,7 @@ public abstract class MessageListener implements WearableConnection.Listener {
     @Override
     public void onMessage(WearableConnection connection, RootMessage message) {
         if (message.setAsset != null) {
-            onSetAsset(message.setAsset);
+            onSetAsset(message.setAsset, Boolean.TRUE.equals(message.hasAsset));
         } else if (message.ackAsset != null) {
             onAckAsset(message.ackAsset);
         } else if (message.fetchAsset != null) {
@@ -68,7 +68,7 @@ public abstract class MessageListener implements WearableConnection.Listener {
         }
     }
 
-    public abstract void onSetAsset(SetAsset setAsset);
+    public abstract void onSetAsset(SetAsset setAsset, boolean fileFollows);
 
     public abstract void onAckAsset(AckAsset ackAsset);
 
