@@ -403,4 +403,23 @@
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">ผสม</string>
     <string name="pref_passkey_manager_credential_id_format_internal">รหัสประจำตัว: %1$s</string>
+    <string name="in_app_reach_storage_usage">ใช้ไปแล้ว %1$d%% จาก %2$s</string>
+    <string name="in_app_reach_get_storage">ซื้อพื้นที่เพิ่ม</string>
+    <string name="in_app_reach_clean_up_storage">ล้างพื้นที่เก็บข้อมูล</string>
+    <string name="pref_account_details_title">รายละเอียดบัญชี</string>
+    <string name="pref_account_type_google">บัญชี Google</string>
+    <string name="prefcat_account_timeline_title">ไทม์ไลน์ของ Google Maps</string>
+    <string name="pref_account_timeline_title">เปิดใช้งานประวัติสถานที่</string>
+    <string name="pref_account_timeline_summary">บันทึกประวัติสถานที่ของบัญชีนี้เป็นระยะ เพื่อให้ไทม์ไลน์ของ Google Maps ทำงานได้</string>
+    <string name="pref_account_timeline_upload_title">อนุญาตให้ซิงค์ไปยังเซิร์ฟเวอร์</string>
+    <string name="pref_account_timeline_upload_summary">อนุญาตให้อุปกรณ์นี้อัปโหลดประวัติสถานที่ของบัญชีนี้ไปยังเซิร์ฟเวอร์ของ Google เป็นระยะ</string>
+    <string name="pref_account_timeline_cloud_notice">ประวัติสถานที่ซิงค์อยู่กับบัญชี Google นี้ การอนุญาตให้อัปโหลดมีผลกับอุปกรณ์นี้เท่านั้น</string>
+    <string name="prefcat_account_settings_title">ตั้งค่า</string>
+    <string name="pref_account_system_sync_title">ตั้งค่าการซิงค์บัญชีของระบบ</string>
+    <string name="pref_account_timeline_loading">กำลังโหลดการตั้งค่าบัญชี…</string>
+    <string name="pref_account_timeline_unavailable">ไม่สามารถใช้การตั้งค่าบัญชีได้ในขณะนี้</string>
+    <string name="pref_account_timeline_restricted">การตั้งค่านี้ถูกจำกัดสำหรับบัญชีนี้</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">อุปกรณ์นี้ปิดการซิงค์ไปยังเซิร์ฟเวอร์ของ Google ไว้ในการตั้งค่าตำแหน่ง การตั้งค่าการอัปโหลดด้านบนจะไม่มีผลกับอุปกรณ์นี้จนกว่าจะเปิดการซิงค์</string>
+    <string name="pref_account_timeline_disabled_on_device">อุปกรณ์นี้ปิดไทม์ไลน์ไว้ในการตั้งค่าตำแหน่ง การตั้งค่าด้านบนจะไม่มีผลกับอุปกรณ์นี้จนกว่าจะเปิดไทม์ไลน์</string>
+    <string name="pref_account_timeline_update_failed">บันทึกการตั้งค่าการอัปโหลดในอุปกรณ์นี้แล้ว แต่ไม่สามารถยืนยันการตั้งค่าของบัญชีได้ โปรดรีเฟรชแล้วลองอีกครั้ง</string>
 </resources>

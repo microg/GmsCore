@@ -201,7 +201,10 @@ fun JSONObject.parsePublicKeyCredentialCreationOptions(): PublicKeyCredentialCre
     val pubKeyCredParams = getJSONArray("pubKeyCredParams")
     val parameters = arrayListOf<PublicKeyCredentialParameters>()
     for (i in 0..<pubKeyCredParams.length()) {
-        parameters.add(pubKeyCredParams.getJSONObject(i).parsePublicKeyCredentialParameters())
+        // Ignore keys with unknown alg id
+        runCatching {
+            parameters.add(pubKeyCredParams.getJSONObject(i).parsePublicKeyCredentialParameters())
+        }
     }
     builder.setParameters(parameters)
     if (has("timeout")) {

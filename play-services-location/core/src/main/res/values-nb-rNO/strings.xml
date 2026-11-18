@@ -45,4 +45,11 @@
     <string name="notification_config_required_text_online_sources">For å fortsette å bruke nettbaserte stedstjenester, må du velge en lokasjonsdatatjeneste.</string>
     <string name="location_data_export_wifi_title">Eksporter lokal Wi-Fi-lokasjonsdatabase</string>
     <string name="location_data_export_cell_title">Eksporter lokal mobilmast-lokasjonsdatabase</string>
+    <string name="prefcat_location_timeline_title">Google Maps-tidslinje</string>
+    <string name="pref_location_timeline_title">Aktiver lokasjonshistorikk</string>
+    <string name="pref_location_timeline_summary">Periodisk lagre lokasjonen din og gjør den tilgjengelig til Google Maps-tidslinjen.</string>
+    <string name="pref_location_timeline_upload_title">Synkroniser med Google-konto</string>
+    <string name="pref_location_timeline_upload_summary">Synkroniser lokasjonshistorikk med Googles servere, så den kan vises på andre enheter.</string>
+    <string name="pref_location_timeline_accounts_title">Håndter etter Google-konto</string>
+    <string name="pref_location_timeline_accounts_summary">Velg en konto for å håndtere tidslinjen forbundet med den og serversynkroniseringsinnstillinger.</string>
 </resources>

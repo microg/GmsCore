@@ -73,7 +73,9 @@ class AuthenticatorMakeCredentialRequest(
             clientDataHash = obj.get(0x01).GetByteString(),
             rp = obj.get(0x02).decodeAsPublicKeyCredentialRpEntity(),
             user = obj.get(0x03).decodeAsPublicKeyCredentialUserEntity(),
-            pubKeyCredParams = obj.get(0x04).values.map { it.decodeAsPublicKeyCredentialParameters() },
+            pubKeyCredParams = obj.get(0x04).values.mapNotNull {
+                runCatching { it.decodeAsPublicKeyCredentialParameters() }.getOrNull()
+            },
             excludeList = obj.get(0x05)?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() }.orEmpty(),
             extensions = obj.get(0x06)?.let { extObj -> extObj.keys.associate { it.AsString() to extObj.get(it) } }.orEmpty(),
             options = obj.get(0x07)?.let { optObj ->

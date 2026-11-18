@@ -97,5 +97,10 @@
             android:summary="@string/pref_location_timeline_upload_summary"
             android:title="@string/pref_location_timeline_upload_title"
             app:iconSpaceReserved="false" />
+        <Preference
+            android:key="pref_location_timeline_accounts"
+            android:summary="@string/pref_location_timeline_accounts_summary"
+            android:title="@string/pref_location_timeline_accounts_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

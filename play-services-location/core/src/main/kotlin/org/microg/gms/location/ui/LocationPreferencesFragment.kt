@@ -20,6 +20,7 @@ import android.view.*
 import android.view.Menu.NONE
 import android.widget.*
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
@@ -58,6 +59,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var database: LocationAppsDatabase
     private lateinit var timelineEnabled: TwoStatePreference
     private lateinit var timelineUpload: TwoStatePreference
+    private lateinit var timelineAccounts: Preference
 
     init {
         setHasOptionsMenu(true)
@@ -275,6 +277,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
         timelineEnabled = preferenceScreen.findPreference("pref_location_timeline") ?: timelineEnabled
         timelineUpload = preferenceScreen.findPreference("pref_location_timeline_upload") ?: timelineUpload
+        timelineAccounts = preferenceScreen.findPreference("pref_location_timeline_accounts") ?: timelineAccounts
 
         locationAppsAll.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
@@ -329,6 +332,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             }
         }
         configureChangeListener(timelineUpload) { LocationSettings(requireContext()).mapsTimelineUpload = it }
+        timelineAccounts.setOnPreferenceClickListener {
+            findNavController().navigate("x-gms-settings://accounts".toUri())
+            true
+        }
 
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
         wifiLearning.isVisible =
