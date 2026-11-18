@@ -1,0 +1,54 @@
+/*
+ * SPDX-FileCopyrightText: 2026 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+option java_package = "org.microg.vending.enterprise.proto";
+option java_multiple_files = true;
+
+message ManagedConfigurationsRequest {
+    repeated ManagedConfigurationRequestApp apps = 1;
+    optional bool fullSync = 2;
+}
+
+message ManagedConfigurationRequestApp {
+    optional string packageName = 1;
+    optional int32 versionCode = 2;
+    optional bytes configurationHash = 3;
+}
+
+message ManagedConfigurationsResponse {
+    repeated ManagedConfiguration configurations = 1;
+}
+
+message ManagedConfiguration {
+    optional string packageName = 1;
+    repeated ManagedConfigurationEntry entries = 2;
+    optional bytes configurationHash = 3;
+}
+
+message ManagedConfigurationEntry {
+    optional string key = 1;
+    oneof value {
+        bool boolValue = 2;
+        int32 intValue = 3;
+        string stringValue = 4;
+        ManagedConfigurationStringList stringListValue = 5;
+        ManagedConfigurationBundle bundleValue = 6;
+        ManagedConfigurationBundleArray bundleArrayValue = 7;
+    }
+}
+
+message ManagedConfigurationStringList {
+    repeated string values = 1;
+}
+
+message ManagedConfigurationBundle {
+    repeated ManagedConfigurationEntry entries = 1;
+}
+
+message ManagedConfigurationBundleArray {
+    repeated ManagedConfigurationBundle bundles = 1;
+}

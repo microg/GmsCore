@@ -41,6 +41,7 @@
         android:maxSdkVersion="22" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <queries>
         <intent>
@@ -269,6 +270,20 @@
             android:foregroundServiceType="dataSync"
             android:exported="false"
             tools:targetApi="21" />
+
+        <service
+            android:name="org.microg.vending.enterprise.MandatoryAppsJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            tools:targetApi="21" />
+
+        <receiver android:name="org.microg.vending.enterprise.ManagingAppChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_OWNER_CHANGED" />
+                <action android:name="android.app.action.PROFILE_OWNER_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name="org.microg.vending.WorkAccountChangedReceiver"
             android:exported="true">

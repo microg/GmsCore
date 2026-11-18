@@ -14,5 +14,13 @@ class EnterpriseApp(
     iconUrl: String?,
     deliveryToken: String?,
     dependencies: List<App>,
-    val policy: AppInstallPolicy
-) : App(packageName, versionCode, displayName, iconUrl, dependencies, deliveryToken)
+    val policy: AppInstallPolicy,
+    val installConstraints: List<InstallConstraints> = listOf(InstallConstraints.NONE)
+) : App(packageName, versionCode, displayName, iconUrl, dependencies, deliveryToken) {
+
+    val isRequired: Boolean
+        get() = policy == AppInstallPolicy.MANDATORY || policy == AppInstallPolicy.FORCE_INSTALLED
+
+    fun canBeInstalledUnder(available: InstallConstraints): Boolean =
+        installConstraints.any { it.isSatisfiedBy(available) }
+}

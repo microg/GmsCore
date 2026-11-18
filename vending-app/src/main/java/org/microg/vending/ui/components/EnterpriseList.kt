@@ -45,7 +45,7 @@ internal fun EnterpriseList(appStates: Map<EnterpriseApp, AppState>, install: (a
     if (appStates.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
 
         val apps = appStates.keys
-        val requiredApps = apps.filter { it.policy == AppInstallPolicy.MANDATORY }
+        val requiredApps = apps.filter { it.isRequired }
         if (requiredApps.isNotEmpty()) {
             item { InListHeading(R.string.vending_overview_enterprise_row_mandatory) }
             item { InListWarning(R.string.vending_overview_enterprise_row_mandatory_hint) }
