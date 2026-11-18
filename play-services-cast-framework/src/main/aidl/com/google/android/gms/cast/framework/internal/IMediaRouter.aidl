@@ -11,9 +11,12 @@ interface IMediaRouter {
     boolean isRouteAvailable(in Bundle selector, int flags) = 3;
     void selectRouteById(String routeId) = 4;
     void selectDefaultRoute() = 5;
-    boolean isDefaultRouteSelected() = 6; // Maybe?
+    boolean isDefaultRouteSelected() = 6;
     Bundle getRouteInfoExtrasById(String routeId) = 7;
-    String getSelectedRouteId() = 8; // Maybe?
+    String getSelectedRouteId() = 8;
     int getSupportedVersion() = 9;
     void clearCallbacks() = 10;
+    boolean isBluetoothRouteSelected() = 11;
+    void unselect(int reason) = 12;
+    void disconnectRoute(String routeId) = 13;
 }

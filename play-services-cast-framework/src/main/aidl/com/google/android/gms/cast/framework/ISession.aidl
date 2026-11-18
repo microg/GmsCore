@@ -19,4 +19,6 @@ interface ISession {
     void notifySessionResumed(boolean wasSuspended) = 13;
     void notifyFailedToResumeSession(int error) = 14;
     void notifySessionSuspended(int reason) = 15;
+    int getSupportedVersion() = 16;
+    int getSessionStartType() = 17;
 }
