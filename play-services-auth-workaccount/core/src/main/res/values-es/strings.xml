@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2024 e foundation
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="auth_work_authenticator_label">Cuenta gestionada de Google for Work</string>
+    <string name="auth_work_authenticator_add_manual_error">El administrador de su perfil crea automáticamente este tipo de cuenta cuando es necesario.</string>
+    <string name="auth_work_authenticator_disabled_error">La creación de cuentas laborales está desactivada en la configuración de microG.</string>
+
+</resources>

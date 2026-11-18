@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="document_scanner_camera_permission_title">Se requiere el permiso de la cámara</string>
+    <string name="document_scanner_camera_permission_message">Los servicios de microG necesitan acceder a la cámara del dispositivo para escanear documentos en nombre de %1$s.\n\nPara activar esta función, conceda permiso de cámara a los servicios de microG en Configuración.</string>
+    <string name="document_scanner_capture">Capturar página</string>
+    <string name="document_scanner_import">Importar</string>
+    <string name="document_scanner_done">Listo (%1$d)</string>
+    <string name="document_scanner_retake">Repetir</string>
+    <string name="document_scanner_apply">Aplicar</string>
+    <string name="document_scanner_flash">Flash</string>
+    <string name="document_scanner_auto_crop">Recorte automático</string>
+    <string name="document_scanner_no_crop">Sin recorte</string>
+    <string name="document_scanner_rotate">Girar</string>
+    <string name="document_scanner_manual">Manual</string>
+    <string name="document_scanner_auto_capture">Captura automática</string>
+    <string name="document_scanner_hold_steady">Escaneando… mantenga el dispositivo quieto</string>
+    <string name="document_scanner_preview">Vista previa</string>
+    <string name="document_scanner_finish">Listo</string>
+    <string name="document_scanner_page_counter">%1$d/%2$d</string>
+    <string name="document_scanner_add_page">Añadir página</string>
+    <string name="document_scanner_crop_rotate">Recortar y girar</string>
+    <string name="document_scanner_delete">Eliminar</string>
+    <string name="document_scanner_filter">Filtro</string>
+    <string name="document_scanner_filter_original">Original</string>
+    <string name="document_scanner_filter_auto">Automático</string>
+    <string name="document_scanner_filter_grayscale">Escala de grises</string>
+    <string name="document_scanner_filter_black_white">Blanco y negro</string>
+    <string name="document_scanner_capture_failed">No se ha podido capturar la página</string>
+    <string name="document_scanner_brand">%1$s solo tendrá acceso a las imágenes que escanee</string>
+    <string name="document_scanner_discard_title">¿Descartar escaneo?</string>
+    <string name="document_scanner_discard_message">Si sale ahora, perderá el progreso</string>
+    <string name="document_scanner_continue_scanning">Seguir escaneando</string>
+    <string name="document_scanner_discard">Descartar</string>
+    <string name="document_scanner_info_button_description">Abrir cuadro de información</string>
+    <string name="document_scanner_info_content">%1$s solicita que los Servicios de microG escaneen documentos en su nombre.\n\nEl escaneo se realiza en el dispositivo y solo se compartirán con %1$s las imágenes escaneadas finales.</string>
+</resources>
