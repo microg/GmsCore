@@ -177,6 +177,16 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.videos" to arrayOf(
         Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
     ),
+    "com.google.android.apps.work.clouddpc" to arrayOf(
+        // Checked after each commit to make sure the configuration was applied, without and with an EMM ID
+        Flag("PHENOTYPE__always_enabled", true, 0),
+        Flag("PHENOTYPE__enabled_with_emm_id", true, 0),
+        // Enable the installation of custom apps pushed by the MDM (Android Management API)
+        Flag("CustomApp__enable_custom_app", true, 0),
+        Flag("CustomApp__enable_custom_apps_in_work_profile", true, 0),
+        // Report all installed apps to the MDM agent so it can see the custom apps it installed
+        Flag("OnDeviceDevicePosture__allow_extensibility_app_for_device_posture", true, 0),
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
