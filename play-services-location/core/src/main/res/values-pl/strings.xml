@@ -50,4 +50,6 @@
     <string name="pref_location_timeline_summary">Okresowo rejestruj informacje o swojej lokalizacji i udostępniaj je w funkcji „Oś czasu” w Mapach Google.</string>
     <string name="pref_location_timeline_upload_title">Zsynchronizuj z kontem Google</string>
     <string name="pref_location_timeline_upload_summary">Zsynchronizuj historię lokalizacji z serwerami Google, aby można ją było wyświetlać na innych urządzeniach.</string>
+    <string name="pref_location_timeline_accounts_title">Zarządzaj za pomocą konta Google</string>
+    <string name="pref_location_timeline_accounts_summary">Wybierz konto, aby zarządzać jego ustawieniami osi czasu i synchronizacji z serwerem.</string>
 </resources>

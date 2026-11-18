@@ -429,4 +429,23 @@
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Гібридний</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="in_app_reach_storage_usage">%1$d%% з %2$s використаний</string>
+    <string name="in_app_reach_get_storage">Отримати сховище</string>
+    <string name="in_app_reach_clean_up_storage">Очистити сховище</string>
+    <string name="pref_account_details_title">Деталі аккаунту</string>
+    <string name="pref_account_type_google">Обліковий запис Google</string>
+    <string name="prefcat_account_timeline_title">Google Maps Хронологія</string>
+    <string name="pref_account_timeline_title">Включити історію розташування</string>
+    <string name="pref_account_timeline_summary">Періодично зберігати історію місцезнаходження цього облікового запису, щоб Хронологія Google Maps могла працювати.</string>
+    <string name="pref_account_timeline_upload_title">Дозволити синхронізацію з сервером</string>
+    <string name="pref_account_timeline_upload_summary">Дозволити цьому пристрою періодично завантажувати історію місцезнаходжень цього облікового запису на сервери Google.</string>
+    <string name="pref_account_timeline_cloud_notice">Історію місцезнаходжень синхронізовано з цим обліковим записом Google. Дозвіл на завантаження застосовується лише до цього пристрою.</string>
+    <string name="prefcat_account_settings_title">Налаштування</string>
+    <string name="pref_account_system_sync_title">Налаштування синхронізації системного облікового запису</string>
+    <string name="pref_account_timeline_loading">Завантаження налаштувань облікового запису…</string>
+    <string name="pref_account_timeline_unavailable">Налаштування облікового запису наразі недоступні.</string>
+    <string name="pref_account_timeline_restricted">Цей параметр обмежений для цього облікового запису.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">Синхронізацію із серверами Google вимкнено для цього пристрою в налаштуваннях місцезнаходження. Наведене вище налаштування завантаження не впливає на цей пристрій, доки його не ввімкнути.</string>
+    <string name="pref_account_timeline_disabled_on_device">Хронологію вимкнено для цього пристрою в налаштуваннях місцезнаходження. Вищезазначені налаштування не впливають на цей пристрій, доки його не ввімкнути.</string>
+    <string name="pref_account_timeline_update_failed">Налаштування локального завантаження збережено, але налаштування облікового запису не вдалося підтвердити. Оновіть сторінку та повторіть спробу.</string>
 </resources>

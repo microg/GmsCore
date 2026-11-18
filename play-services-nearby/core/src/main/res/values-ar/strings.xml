@@ -40,4 +40,14 @@
     <string name="exposure_confirm_stop_button">إطفاء</string>
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>، درجة المخاطرة <xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_encounters_suffix">ملاحظة: يتم تحديد درجة المخاطرة بواسطة التطبيق. قد تشير الأرقام المرتفعة إلى مخاطرة منخفضة والعكس صحيح.</string>
+    <string name="exposure_confirm_permission_button">إعطاء</string>
+    <string name="exposure_confirm_keys_button">مشاركة</string>
+    <string name="exposure_confirm_button">تفعيل</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">أذونات جُدد مطلوبة</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> يحتاج لأذونات إضافية.</string>
+    <string name="exposure_confirm_bluetooth_description">يحتاج البلوتوث أن يكون مفعلًا.</string>
+    <string name="exposure_confirm_location_description">الوصول إلى الموقع مطلوب.</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">اضغط لمنح الأذونات المطلوبة لإشعارات التعرض</string>
+    <string name="exposure_grant_background_location_description">أوشكت على الانتهاء! ستحتاج إلى تمكين الوصول إلى الموقع في الخلفية عن طريق تحديد الخيار \'السماح طوال الوقت\' على الشاشة التالية. ثم الضغط على الرجوع.</string>
+    <string name="exposure_grant_background_location_button">تحديث الإعدادات</string>
 </resources>

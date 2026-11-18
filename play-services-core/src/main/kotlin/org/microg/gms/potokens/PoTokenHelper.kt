@@ -6,7 +6,7 @@
 package org.microg.gms.potokens
 
 import android.content.Context
-import android.text.TextUtils
+import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import com.android.volley.NetworkError
@@ -56,9 +56,14 @@ import kotlin.math.abs
 
 private const val PO_TOKEN_REQUEST_TIMEOUT_SECONDS = 60L
 
+private class InvalidDroidGuardResultException(size: Int?) : Exception(
+    "DroidGuard result is null or shorter than 100 bytes (size=$size)"
+)
+
 class PoTokenHelper(val context: Context) {
     private var accessTokenLimitCount = 0
     private var accessTokenLimitIntervalCount = 0
+    private var lastIntervalTriggerTime: Long? = null
     private val poTokenMutex = Mutex()
     private val volleyQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     private val poTokenStore = singleInstanceOf { PoTokenStore(context.applicationContext) }
@@ -133,8 +138,10 @@ class PoTokenHelper(val context: Context) {
             map["b"] = randKey
             val dgResult =
                 getDroidGuardResult(context, droidGuardResultsRequest, map)?.encodeToByteArray()?.toByteString()
-            if (dgResult == null || dgResult.size == 0) {
-                Log.w(TAG, "getPoIntegrityToken: dgResult is null or empty")
+            // Normal DroidGuard results are expected to exceed 100 bytes.
+            // Treat results smaller than 100 bytes as potentially invalid.
+            if (dgResult == null || dgResult.size < 100) {
+                throw InvalidDroidGuardResultException(dgResult?.size)
             }
             val tokenRequest =
                 GetPoIntegrityTokenRequest(dgResult = dgResult, dgRandKey = randKeyBuf.toByteString(), mode = 1)
@@ -196,18 +203,29 @@ class PoTokenHelper(val context: Context) {
         var tokenInfo = poTokenStore.loadUsedIntegrityTokenInfo()
         val lastUpdateTime = poTokenStore.getLastUpdateTime()
         val flag = poTokenStore.getIntervalFlag()
+        val nowElapsed = SystemClock.elapsedRealtime()
         var nextAccessTokenLimitCount = accessTokenLimitCount
         var nextAccessTokenLimitIntervalCount = accessTokenLimitIntervalCount
+        var nextLastIntervalTriggerTime = lastIntervalTriggerTime
         var nextIntervalFlag: Boolean? = null
         var updateAccessTime = false
         Log.d(TAG, "callPoToken start lastUpdateTime: $lastUpdateTime")
-        if (flag || accessTokenLimitIntervalCount > PO_TOKEN_ACCESS_LIMIT_COUNT) {
+        if (!flag && lastIntervalTriggerTime != null &&
+            nowElapsed - lastIntervalTriggerTime!! >= PO_TOKEN_ACCESS_INTERVAL_COUNT_RESET_TIME
+        ) {
+            Log.w(TAG,"callPoToken: resetting interval count after inactivity " +
+                        "(count=$nextAccessTokenLimitIntervalCount)")
+            nextAccessTokenLimitIntervalCount = 0
+            nextLastIntervalTriggerTime = null
+        }
+        if (flag || nextAccessTokenLimitIntervalCount > PO_TOKEN_ACCESS_LIMIT_COUNT) {
             nextIntervalFlag = true
             val intervalTime = System.currentTimeMillis() - lastUpdateTime
             Log.d(TAG, "callPoToken run Interval: $intervalTime")
             if (intervalTime > PO_TOKEN_ACCESS_INTERVAL_TIME) {
                 nextIntervalFlag = false
                 nextAccessTokenLimitIntervalCount = 0
+                nextLastIntervalTriggerTime = null
                 tokenInfo = null
                 Log.d(TAG, "callPoToken run Interval over")
             }
@@ -218,6 +236,7 @@ class PoTokenHelper(val context: Context) {
                     nextAccessTokenLimitCount++
                 } else {
                     nextAccessTokenLimitIntervalCount++
+                    nextLastIntervalTriggerTime = nowElapsed
                     nextAccessTokenLimitCount = 0
                     tokenInfo = null
                 }
@@ -227,25 +246,17 @@ class PoTokenHelper(val context: Context) {
             updateAccessTime = true
         }
 
-        var recordAccess = false
-        try {
-            val potokenResultByte = poTokenStore.buildPoToken(tokenInfo, packageName, inputData)
-            recordAccess = true
-            potokenResultByte
-        } catch (e: Exception) {
-            recordAccess = e !is CancellationException && !isNetworkOrTimeoutFailure(e)
-            Log.d(TAG, "callPoToken: error: ", e)
-            PoTokenResultWrap().encode()
-        } finally {
-            if (recordAccess) {
-                accessTokenLimitCount = nextAccessTokenLimitCount
-                accessTokenLimitIntervalCount = nextAccessTokenLimitIntervalCount
-                nextIntervalFlag?.let { poTokenStore.updateIntervalFlag(it) }
-                if (updateAccessTime) {
-                    poTokenStore.updateLastUpdateTime()
-                }
+        val (poTokenResultBytes, recordAccess) = poTokenStore.buildPoToken(tokenInfo, packageName, inputData)
+        if (recordAccess) {
+            accessTokenLimitCount = nextAccessTokenLimitCount
+            accessTokenLimitIntervalCount = nextAccessTokenLimitIntervalCount
+            lastIntervalTriggerTime = nextLastIntervalTriggerTime
+            nextIntervalFlag?.let { poTokenStore.updateIntervalFlag(it) }
+            if (updateAccessTime) {
+                poTokenStore.updateLastUpdateTime()
             }
         }
+        poTokenResultBytes
     }
 
     private suspend fun refreshIntegrityToken(store: PoTokenStore): IntegrityTokenInfo = refresh {
@@ -254,8 +265,8 @@ class PoTokenHelper(val context: Context) {
         val response = withContext(Dispatchers.IO) { getPoIntegrityToken(keySet) }
         val desc = response?.desc
         val backup = response?.backup
-        if (response == null || desc == null || backup == null) {
-            throw RuntimeException("buildPoToken -> response is null")
+        if (desc == null || desc.size == 0 || backup == null || backup.size == 0) {
+            throw RuntimeException("buildPoToken -> response token data is missing or empty")
         }
         val tokenInfo = IntegrityTokenInfo(
             Base64.encodeToString(keySet.encode(), Base64.DEFAULT),
@@ -269,27 +280,42 @@ class PoTokenHelper(val context: Context) {
         tokenInfo
     }
 
-    suspend fun PoTokenStore.buildPoToken(tokenInfo: IntegrityTokenInfo?, packageName: String, inputData: ByteArray): ByteArray {
-        var tokenDesc: String? = tokenInfo?.token
-        var tokenBackup: String? = tokenInfo?.tokenBackUp
-        var keySetStr: String? = tokenInfo?.key
-
-        val keySet = if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup) || TextUtils.isEmpty(keySetStr)) {
-            val refreshedInfo = refreshIntegrityToken(this)
-            tokenDesc = refreshedInfo.token
-            tokenBackup = refreshedInfo.tokenBackUp
-            keySetStr = refreshedInfo.key
-            KeySet.ADAPTER.decode(Base64.decode(keySetStr, Base64.DEFAULT))
+    suspend fun PoTokenStore.buildPoToken(tokenInfo: IntegrityTokenInfo?,packageName: String, inputData: ByteArray): Pair<ByteArray, Boolean> = try {
+        val currentTokenInfo = if (tokenInfo == null || tokenInfo.token.isNullOrEmpty() ||
+            tokenInfo.tokenBackUp.isNullOrEmpty() || tokenInfo.key.isNullOrEmpty()) {
+            refreshIntegrityToken(this)
         } else {
-            val result = Base64.decode(keySetStr, Base64.DEFAULT)
             Log.d(TAG, "PoTokenHelper buildPoToken used old keySet")
-            KeySet.ADAPTER.decode(result)
+            tokenInfo
         }
 
-        Log.d(TAG, "buildPoToken: keySetStr: $keySetStr tokenDesc: $tokenDesc tokenBackup: $tokenBackup")
-        if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup)) {
-            throw RuntimeException("buildPoToken -> tokenDesc or tokenBackup is null")
+        buildPoTokenFromInfo(currentTokenInfo, packageName, inputData) to true
+    } catch (e: Exception) {
+        val recordAccess = e !is CancellationException && e !is InvalidDroidGuardResultException &&
+                !isNetworkOrTimeoutFailure(e)
+        Log.w(TAG, "buildPoToken: error: ", e)
+        val cachedResult = try {
+            val cachedTokenInfo = loadUsedIntegrityTokenInfo() ?: tokenInfo
+            cachedTokenInfo?.let { buildPoTokenFromInfo(it, packageName, inputData) }
+        } catch (cacheError: Exception) {
+            Log.w(TAG, "buildPoToken: cached integrity token could not be used", cacheError)
+            null
         }
+        if (cachedResult != null) {
+            Log.d(TAG, "buildPoToken: using cached integrity token after failure")
+        }
+        (cachedResult ?: PoTokenResultWrap().encode()) to recordAccess
+    }
+
+    private fun buildPoTokenFromInfo(tokenInfo: IntegrityTokenInfo, packageName: String, inputData: ByteArray): ByteArray {
+        val tokenDesc = tokenInfo.token
+        val tokenBackup = tokenInfo.tokenBackUp
+        val keySetStr = tokenInfo.key
+        require(!tokenDesc.isNullOrEmpty() && !tokenBackup.isNullOrEmpty() && !keySetStr.isNullOrEmpty()) {
+            "buildPoToken -> token data is missing or empty"
+        }
+        val keySet = KeySet.ADAPTER.decode(Base64.decode(keySetStr, Base64.DEFAULT))
+        Log.d(TAG, "buildPoToken: keySetStr: $keySetStr tokenDesc: $tokenDesc tokenBackup: $tokenBackup")
 
         val poTokenInfoData: ByteArray = PoTokenInfo(
             inputData = inputData.toByteString(),
@@ -304,6 +330,7 @@ class PoTokenHelper(val context: Context) {
         val iv = ByteArray(12).also { SecureRandom().nextBytes(it) }
 
         var data = aesEncrypt(key, iv, poTokenInfoData)
+        check(data.isNotEmpty()) { "buildPoToken -> encryption failed" }
         keyId?.let { data = concatCipherIdentifier(it, data) }
 
         val poTokenResult = PoTokenResult(
