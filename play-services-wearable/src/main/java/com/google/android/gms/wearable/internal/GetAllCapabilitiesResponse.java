@@ -29,5 +29,12 @@ public class GetAllCapabilitiesResponse extends AutoSafeParcelable {
     @Field(3)
     public List<CapabilityInfoParcelable> capabilities;
 
+    private GetAllCapabilitiesResponse() {}
+
+    public GetAllCapabilitiesResponse(int statusCode, List<CapabilityInfoParcelable> capabilities) {
+        this.statusCode = statusCode;
+        this.capabilities = capabilities;
+    }
+
     public static final Creator<GetAllCapabilitiesResponse> CREATOR = findCreator(GetAllCapabilitiesResponse.class);
 }

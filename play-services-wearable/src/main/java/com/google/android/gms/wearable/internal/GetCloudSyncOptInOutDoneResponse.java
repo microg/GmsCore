@@ -22,5 +22,17 @@ import org.microg.safeparcel.SafeParceled;
 public class GetCloudSyncOptInOutDoneResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
+    @SafeParceled(2)
+    public int statusCode;
+    @SafeParceled(3)
+    public boolean isOptedIn;
+
+    public GetCloudSyncOptInOutDoneResponse() {}
+
+    public GetCloudSyncOptInOutDoneResponse(int statusCode, boolean isOptedIn) {
+        this.statusCode = statusCode;
+        this.isOptedIn = isOptedIn;
+    }
+
     public static final Creator<GetCloudSyncOptInOutDoneResponse> CREATOR = new AutoCreator<GetCloudSyncOptInOutDoneResponse>(GetCloudSyncOptInOutDoneResponse.class);
 }

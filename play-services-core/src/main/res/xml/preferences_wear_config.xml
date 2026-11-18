@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <org.microg.gms.ui.AppHeadingPreference
+        android:key="pref_wear_config_heading"
+        app:allowDividerBelow="false"
+        tools:icon="@android:mipmap/sym_def_app_icon"
+        tools:title="@tools:sample/lorem" />
+
+    <PreferenceCategory
+        android:key="prefcat_wear_config_settings"
+        android:layout="@layout/preference_category_no_label"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:persistent="false"
+            android:title="@string/pref_wear_config_name_title"
+            app:enabled="false"
+            app:iconSpaceReserved="false"
+            app:key="pref_wear_config_name"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_wear_config_enabled"
+            android:persistent="false"
+            android:summary="@string/pref_wear_config_enabled_summary"
+            android:title="@string/pref_wear_config_enabled_title"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:persistent="false"
+            android:title="@string/pref_wear_config_address_title"
+            app:iconSpaceReserved="false"
+            app:key="pref_wear_config_address"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:persistent="false"
+            android:title="@string/pref_wear_config_package_name_title"
+            app:iconSpaceReserved="false"
+            app:key="pref_wear_config_package_name"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="prefcat_wear_config_delete"
+        android:layout="@layout/preference_category_no_label"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="pref_wear_config_delete"
+            android:title="@string/pref_wear_config_delete_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -22,27 +22,42 @@ import android.util.Log;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.internal.AddLocalCapabilityResponse;
+import com.google.android.gms.wearable.internal.AppRecommendationsResponse;
+import com.google.android.gms.wearable.internal.BooleanResponse;
 import com.google.android.gms.wearable.internal.ChannelReceiveFileResponse;
 import com.google.android.gms.wearable.internal.ChannelSendFileResponse;
 import com.google.android.gms.wearable.internal.CloseChannelResponse;
+import com.google.android.gms.wearable.internal.ConsentResponse;
 import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
 import com.google.android.gms.wearable.internal.GetAllCapabilitiesResponse;
+import com.google.android.gms.wearable.internal.GetAppThemeResponse;
+import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
 import com.google.android.gms.wearable.internal.GetCapabilityResponse;
 import com.google.android.gms.wearable.internal.GetChannelInputStreamResponse;
 import com.google.android.gms.wearable.internal.GetChannelOutputStreamResponse;
 import com.google.android.gms.wearable.internal.GetCloudSyncOptInOutDoneResponse;
 import com.google.android.gms.wearable.internal.GetCloudSyncOptInStatusResponse;
 import com.google.android.gms.wearable.internal.GetCloudSyncSettingResponse;
+import com.google.android.gms.wearable.internal.GetCompanionPackageForNodeResponse;
 import com.google.android.gms.wearable.internal.GetConfigResponse;
 import com.google.android.gms.wearable.internal.GetConfigsResponse;
 import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
 import com.google.android.gms.wearable.internal.GetDataItemResponse;
+import com.google.android.gms.wearable.internal.GetEapIdResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeyByAccountResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeysResponse;
 import com.google.android.gms.wearable.internal.GetFdForAssetResponse;
 import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+import com.google.android.gms.wearable.internal.GetNodeIdResponse;
+import com.google.android.gms.wearable.internal.GetRestoreStateResponse;
+import com.google.android.gms.wearable.internal.GetRestoreSupportedResponse;
+import com.google.android.gms.wearable.internal.GetTermsResponse;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.OpenChannelResponse;
+import com.google.android.gms.wearable.internal.PerformEapAkaResponse;
 import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
+import com.google.android.gms.wearable.internal.RpcResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
 
@@ -116,6 +131,12 @@ public class BaseWearableCallbacks extends IWearableCallbacks.Stub {
     }
 
     @Override
+    public void onCloseChannelResponse2(CloseChannelResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onCloseChannelResponse2");
+
+    }
+
+    @Override
     public void onGetChannelInputStreamResponse(GetChannelInputStreamResponse response) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onGetChannelInputStreamResponse");
 
@@ -173,6 +194,82 @@ public class BaseWearableCallbacks extends IWearableCallbacks.Stub {
     public void onRemoveLocalCapabilityResponse(RemoveLocalCapabilityResponse response) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onRemoveLocalCapabilityResponse");
 
+    }
+
+    @Override
+    public void onGetTermsResponse(GetTermsResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetTermsResponse");
+
+    }
+
+    @Override
+    public void onConsentResponse(ConsentResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onConsentResponse");
+    }
+
+    @Override
+    public void onGetFastpairAccountKeyByAccountResponse(GetFastpairAccountKeyByAccountResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetFastpairAccountKeyByAccountResponse");
+    }
+
+    @Override
+    public void onGetFastpairAccountKeysResponse(GetFastpairAccountKeysResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetFastpairAccountKeysResponse");
+    }
+
+    @Override
+    public void onGetRestoreStateResponse(GetRestoreStateResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetRestoreStateResponse");
+    }
+
+    @Override
+    public void onBooleanResponse(BooleanResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onBooleanResponse");
+    }
+
+    @Override
+    public void onGetCompanionPackageForNodeResponse(GetCompanionPackageForNodeResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetCompanionPackageForNodeResponse");
+    }
+
+    @Override
+    public void onRpcResponse(RpcResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onRpcResponse");
+    }
+
+    @Override
+    public void onGetEapIdResponse(GetEapIdResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetEapIdResponse");
+    }
+
+    @Override
+    public void onPerformEapAkaResponse(PerformEapAkaResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onPerformEapAkaResponse");
+    }
+
+    @Override
+    public void onGetNodeIdResponse(GetNodeIdResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetNodeIdResponse");
+    }
+
+    @Override
+    public void onAppRecommendationsResponse(AppRecommendationsResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onAppRecommendationsResponse");
+    }
+
+    @Override
+    public void onGetAppThemeResponse(GetAppThemeResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetAppThemeResponse");
+    }
+
+    @Override
+    public void onGetBackupSettingsSupportedResponse(GetBackupSettingsSupportedResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetBackupSettingsSupportedResponse");
+    }
+
+    @Override
+    public void onGetRestoreSupportedResponse(GetRestoreSupportedResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetRestoreSupportedResponse");
     }
 
     @Override

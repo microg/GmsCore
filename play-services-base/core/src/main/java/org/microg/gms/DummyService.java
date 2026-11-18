@@ -17,6 +17,7 @@
 package org.microg.gms;
 
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -32,6 +33,7 @@ public class DummyService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
+        Log.w("GmsDummySvc", "Service not implemented: " + service + " requested by " + request.packageName);
         callback.onPostInitComplete(ConnectionResult.API_DISABLED, null, null);
     }
 }

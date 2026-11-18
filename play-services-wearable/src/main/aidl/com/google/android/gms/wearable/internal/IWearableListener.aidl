@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
+import com.google.android.gms.wearable.internal.IRpcResponseCallback;
 
 interface IWearableListener {
     void onDataChanged(in DataHolder data) = 0;
@@ -18,4 +19,5 @@ interface IWearableListener {
     void onChannelEvent(in ChannelEventParcelable channelEvent) = 6;
     void onConnectedCapabilityChanged(in CapabilityInfoParcelable capabilityInfo) = 7;
     void onEntityUpdate(in AmsEntityUpdateParcelable update) = 8;
+    void onRequest(in MessageEventParcelable messageEvent, IRpcResponseCallback callback) = 12;
 }
