@@ -19,6 +19,7 @@ package org.microg.gms.wearable;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -2009,9 +2010,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     private void legacyTelephonyCallControl(String... methodNames) throws Exception {
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
+            throw new UnsupportedOperationException(
+                    "ITelephony call control is not available on API " + android.os.Build.VERSION.SDK_INT);
+        }
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null) throw new IllegalStateException("No TelephonyManager");
-        Method getITelephony = TelephonyManager.class.getDeclaredMethod("getITelephony");
+        @SuppressLint("SoonBlockedPrivateApi") Method getITelephony = TelephonyManager.class.getDeclaredMethod("getITelephony");
         getITelephony.setAccessible(true);
         Object telephony = getITelephony.invoke(tm);
         if (telephony == null) throw new IllegalStateException("getITelephony() returned null");
@@ -2028,23 +2033,33 @@ public class WearableServiceImpl extends IWearableService.Stub {
         if (lastNotFound != null) throw lastNotFound;
     }
 
+    private boolean invokeTelecom(String methodName) {
+        if (android.os.Build.VERSION.SDK_INT < 21) return false;
+        try {
+            Object tm = context.getSystemService(Context.TELECOM_SERVICE);
+            if (tm == null) return false;
+            tm.getClass().getMethod(methodName).invoke(tm);
+            return true;
+        } catch (ReflectiveOperationException | SecurityException e) {
+            Log.d(TAG, methodName + ": TelecomManager path unavailable, falling back", e);
+            return false;
+        }
+    }
+
     @RequiresPermission(Manifest.permission.ANSWER_PHONE_CALLS)
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
         postMain(callbacks, () -> {
             try {
                 boolean handled = false;
-                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                if (android.os.Build.VERSION.SDK_INT >= 28) {
                     TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
-                    if (tm != null) {
-                        try {
-                            tm.endCall();
-                            handled = true;
-                        } catch (NoSuchMethodError ignored) {
-                        }
-                    }
+                    if (tm != null) handled = tm.endCall();   // returns boolean
+                } else {
+                    handled = invokeTelecom("endCall");
                 }
-                if (!handled) legacyTelephonyCallControl("endCall");
+                if (!handled)
+                    legacyTelephonyCallControl("endCall");
                 callbacks.onStatus(Status.SUCCESS);
             } catch (Exception e) {
                 Log.e(TAG, "endCall: exception during processing", e);
@@ -2059,17 +2074,17 @@ public class WearableServiceImpl extends IWearableService.Stub {
         postMain(callbacks, () -> {
             try {
                 boolean handled = false;
-                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                if (android.os.Build.VERSION.SDK_INT >= 26) {
                     TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                     if (tm != null) {
-                        try {
-                            tm.acceptRingingCall();
-                            handled = true;
-                        } catch (NoSuchMethodError ignored) {
-                        }
+                        tm.acceptRingingCall();
+                        handled = true;
                     }
+                } else {
+                    handled = invokeTelecom("acceptRingingCall");
                 }
-                if (!handled) legacyTelephonyCallControl("answerRingingCall");
+                if (!handled)
+                    legacyTelephonyCallControl("answerRingingCall");
                 callbacks.onStatus(Status.SUCCESS);
             } catch (Exception e) {
                 Log.e(TAG, "acceptRingingCall: exception during processing", e);
@@ -2078,24 +2093,25 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    @RequiresPermission(Manifest.permission.MODIFY_PHONE_STATE)
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
         postMain(callbacks, () -> {
             try {
                 boolean handled = false;
-                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                if (android.os.Build.VERSION.SDK_INT >= 26) {
                     TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                     if (tm != null) {
-                        try {
-                            tm.silenceRinger();
-                            handled = true;
-                        } catch (NoSuchMethodError ignored) {
-                        }
+                        tm.silenceRinger();
+                        handled = true;
                     }
+                } else {
+                    handled = invokeTelecom("silenceRinger");
                 }
-                if (!handled) legacyTelephonyCallControl("silenceRinger");
+                if (!handled)
+                    legacyTelephonyCallControl("silenceRinger");
                 callbacks.onStatus(Status.SUCCESS);
-            } catch (Exception | NoSuchMethodError e) {
+            } catch (Exception e) {
                 Log.e(TAG, "silenceRinger: exception during processing", e);
                 callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
             }

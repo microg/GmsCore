@@ -78,7 +78,11 @@ public class BleManager implements Closeable {
         BleClientConnection c = clients.remove(config.address);
         if (c != null) {
             Log.d(TAG, "disableClient: stopping BleClientConnection for " + config.address);
-            c.close();
+            try {
+                c.close();
+            } catch (SecurityException e) {
+                Log.w(TAG, "Missing Bluetooth permission while closing connection", e);
+            }
         }
     }
 
@@ -88,7 +92,11 @@ public class BleManager implements Closeable {
         BleClientConnection c = clients.remove(config.address);
         if (c != null) {
             Log.d(TAG, "disable: stopping BleClientConnection for " + config.address);
-            c.close();
+            try {
+                c.close();
+            } catch (SecurityException e) {
+                Log.w(TAG, "Missing Bluetooth permission while closing connection", e);
+            }
         }
 
         Entry e = entries.remove(config.address);
@@ -106,7 +114,11 @@ public class BleManager implements Closeable {
         }
         entries.clear();
         for (BleClientConnection c : clients.values()) {
-            c.close();
+            try {
+                c.close();
+            } catch (SecurityException e) {
+                Log.w(TAG, "Missing Bluetooth permission while closing connection", e);
+            }
         }
         clients.clear();
     }

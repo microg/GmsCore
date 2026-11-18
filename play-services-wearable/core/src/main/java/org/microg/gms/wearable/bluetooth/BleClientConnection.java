@@ -56,7 +56,14 @@ public class BleClientConnection implements Closeable {
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private final Runnable psmTimeoutRunnable = () -> {
         Log.w(TAG, "PSM characteristic read timed out, disconnecting");
-        if (gatt != null) gatt.disconnect();
+
+        if (gatt != null) {
+            try {
+                gatt.disconnect();
+            } catch (SecurityException e){
+                Log.w(TAG, "Missing Bluetooth permission", e);
+            }
+        }
     };
 
     public BleClientConnection(Context context, WearableImpl wearable,
