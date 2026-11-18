@@ -14,6 +14,7 @@ import com.google.android.gms.ads.internal.client.IVideoController;
 import com.google.android.gms.ads.internal.client.IOnPaidEventListener;
 import com.google.android.gms.ads.internal.client.IAdLoadCallback;
 import com.google.android.gms.ads.internal.client.IFullScreenContentCallback;
+import com.google.android.gms.ads.internal.appopen.client.IAppOpenAdLoadCallback;
 import com.google.android.gms.dynamic.IObjectWrapper;
 
 interface IAdManager {
@@ -30,6 +31,7 @@ interface IAdManager {
     void setManualImpressionFlag(int flag) = 21;
     IVideoController getVideoController() = 25;
     void setManualImpressionsEnabled(boolean enabled) = 33;
+    void setAppOpenAdLoadCallback(IAppOpenAdLoadCallback callback) = 39;
     void setOnPaidEventListener(IOnPaidEventListener listener) = 41;
     void loadAdWithCallback(in AdRequestParcel request, IAdLoadCallback callback) = 42;
     void showInterstitial(IObjectWrapper activityWrapper) = 43;

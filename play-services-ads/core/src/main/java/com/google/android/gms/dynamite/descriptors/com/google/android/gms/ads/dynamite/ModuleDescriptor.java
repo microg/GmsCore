@@ -21,7 +21,7 @@ import static android.os.Build.VERSION.RELEASE;
 @Keep
 public class ModuleDescriptor {
     public static final String MODULE_ID = "com.google.android.gms.ads.dynamite";
-    public static final int MODULE_VERSION = 230500001;
+    public static final int MODULE_VERSION = 262180000;
     private static final String TAG = "AdsDynamiteModule";
 
     /**
