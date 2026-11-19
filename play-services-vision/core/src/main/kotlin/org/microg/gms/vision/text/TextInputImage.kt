@@ -7,24 +7,22 @@ package org.microg.gms.vision.text
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.ImageFormat
 import android.graphics.Paint
 import android.graphics.Picture
 import android.graphics.Rect
 import android.media.Image
-import org.opencv.android.Utils
-import org.opencv.core.CvType
-import org.opencv.core.Mat
-import org.opencv.imgproc.Imgproc
 import java.nio.ByteBuffer
 import kotlin.math.roundToInt
 
-internal object TextInputImage {
+object TextInputImage {
     private const val MAX_PIXELS = 16_000_000L
     private const val MAX_SIDE_LENGTH = 1600
 
-    data class PreparedImage(val mat: Mat, val scaleX: Float, val scaleY: Float, val offsetX: Int, val offsetY: Int)
+    data class PreparedImage(val bitmap: Bitmap, val scaleX: Float, val scaleY: Float, val offsetX: Int, val offsetY: Int)
 
+    /** The caller recycles the returned bitmap only when it differs from [source]. */
     fun prepare(source: Any, format: Int, width: Int, height: Int, rotation: Int, region: Rect? = null): PreparedImage? {
         require(width > 0 && height > 0 && width.toLong() * height <= MAX_PIXELS) { "Invalid or oversized OCR image" }
         require(rotation in 0..3) { "Invalid OCR rotation: $rotation" }
@@ -53,22 +51,19 @@ internal object TextInputImage {
         val scaledHeight = (sourceRegion.height() * ratio).roundToInt().coerceAtLeast(1)
         val outputWidth = if (swapAxes) scaledHeight else scaledWidth
         val outputHeight = if (swapAxes) scaledWidth else scaledHeight
-        val mat = when (format) {
+        val preparedBitmap = when (format) {
             -1 -> {
                 val bitmap = source as? Bitmap ?: throw IllegalArgumentException("Expected Bitmap")
                 require(bitmap.width == width && bitmap.height == height) { "Bitmap dimensions do not match metadata" }
                 if (uprightRegion.isEmpty) return null
-                val hardware = android.os.Build.VERSION.SDK_INT >= 26 && bitmap.config == Bitmap.Config.HARDWARE
-                val canReadDirectly =
-                    rotation == 0 && scaledWidth == sourceRegion.width() && scaledHeight == sourceRegion.height() && bitmap.config == Bitmap.Config.ARGB_8888 && !bitmap.hasAlpha() && (android.os.Build.VERSION.SDK_INT < 26 || bitmap.colorSpace?.isSrgb == true)
-                if (canReadDirectly) {
-                    if (sourceRegion.width() == width && sourceRegion.height() == height) {
-                        bitmapToBgrMat(bitmap)
-                    } else {
-                        bitmapRegionToBgrMat(bitmap, sourceRegion)
-                    }
+                val canReuse = rotation == 0 && outputWidth == width && outputHeight == height &&
+                    bitmap.config == Bitmap.Config.ARGB_8888 && !bitmap.hasAlpha() &&
+                    (android.os.Build.VERSION.SDK_INT < 26 || bitmap.colorSpace?.isSrgb == true)
+                if (canReuse) {
+                    bitmap
                 } else {
-                    val ownedBitmap = if (android.os.Build.VERSION.SDK_INT >= 28 && hardware) {
+                    val hardware = android.os.Build.VERSION.SDK_INT >= 26 && bitmap.config == Bitmap.Config.HARDWARE
+                    if (android.os.Build.VERSION.SDK_INT >= 28 && hardware) {
                         val picture = Picture()
                         val canvas = picture.beginRecording(outputWidth, outputHeight)
                         try {
@@ -96,11 +91,6 @@ internal object TextInputImage {
                             if (drawable !== bitmap) drawable.recycle()
                         }
                     }
-                    try {
-                        bitmapToBgrMat(ownedBitmap)
-                    } finally {
-                        ownedBitmap.recycle()
-                    }
                 }
             }
 
@@ -125,7 +115,7 @@ internal object TextInputImage {
                 val requiredByteCount = yPlaneSize + chromaPlaneSize * (if (format == ImageFormat.YV12) 2 else 1)
                 require(data.remaining() >= requiredByteCount) { "YUV buffer is truncated" }
                 if (uprightRegion.isEmpty) return null
-                yuvToBgrMat(sourceRegion, scaledWidth, scaledHeight, rotation) { x, y ->
+                yuvToBitmap(sourceRegion, scaledWidth, scaledHeight, rotation) { x, y ->
                     val luminance = data.get(y * yStride + x).toInt() and 255
                     val u: Int
                     val v: Int
@@ -153,7 +143,7 @@ internal object TextInputImage {
                 val positions = IntArray(3) { buffers[it].position() }
                 val rowStrides = IntArray(3) { planes[it].rowStride }
                 val pixelStrides = IntArray(3) { planes[it].pixelStride }
-                yuvToBgrMat(sourceRegion, scaledWidth, scaledHeight, rotation) { x, y ->
+                yuvToBitmap(sourceRegion, scaledWidth, scaledHeight, rotation) { x, y ->
                     var packed = 0
                     for (index in 0..2) {
                         val planeX: Int
@@ -177,7 +167,7 @@ internal object TextInputImage {
             else -> throw IllegalArgumentException("Unsupported OCR image format: ${format}")
         }
         return PreparedImage(
-            mat,
+            preparedBitmap,
             uprightRegion.width().toFloat() / outputWidth,
             uprightRegion.height().toFloat() / outputHeight,
             uprightRegion.left,
@@ -186,6 +176,8 @@ internal object TextInputImage {
     }
 
     private fun drawBitmap(canvas: Canvas, bitmap: Bitmap, region: Rect, width: Int, height: Int, rotation: Int) {
+        // Match the opaque pixels produced by dropping premultiplied alpha.
+        canvas.drawColor(Color.BLACK)
         when (rotation) {
             1 -> canvas.translate(height.toFloat(), 0f)
             2 -> canvas.translate(width.toFloat(), height.toFloat())
@@ -195,97 +187,51 @@ internal object TextInputImage {
         canvas.drawBitmap(bitmap, region, Rect(0, 0, width, height), Paint(Paint.FILTER_BITMAP_FLAG))
     }
 
-    private fun bitmapRegionToBgrMat(bitmap: Bitmap, region: Rect): Mat {
-        val width = region.width()
-        val height = region.height()
-        // Copy only a band of pixels at a time so the ROI does not need a full-size Java buffer.
-        val rowsPerBand = (64 * 1024 / (width * (Int.SIZE_BYTES + 3))).coerceIn(1, height)
-        val colors = IntArray(width * rowsPerBand)
-        val pixels = ByteArray(colors.size * 3)
-        val bgr = Mat()
-        return try {
-            bgr.create(height, width, CvType.CV_8UC3)
-            for (row in 0 until height step rowsPerBand) {
-                val rows = minOf(rowsPerBand, height - row)
-                bitmap.getPixels(colors, 0, width, region.left, region.top + row, width, rows)
-                val count = width * rows
-                for (index in 0 until count) {
-                    val color = colors[index]
-                    val offset = index * 3
-                    pixels[offset] = color.toByte()
-                    pixels[offset + 1] = (color ushr 8).toByte()
-                    pixels[offset + 2] = (color ushr 16).toByte()
-                }
-                check(bgr.put(row, 0, pixels, 0, count * 3) == count * 3) { "OCR input pixels are truncated" }
-            }
-            bgr
-        } catch (t: Throwable) {
-            bgr.release()
-            throw t
-        }
-    }
-
-    private fun bitmapToBgrMat(bitmap: Bitmap): Mat {
-        val bgr = Mat()
-        return try {
-            val rgba = Mat()
-            try {
-                Utils.bitmapToMat(bitmap, rgba)
-                Imgproc.cvtColor(rgba, bgr, Imgproc.COLOR_RGBA2BGR)
-                bgr
-            } finally {
-                rgba.release()
-            }
-        } catch (t: Throwable) {
-            bgr.release()
-            throw t
-        }
-    }
-
-    private inline fun yuvToBgrMat(
+    private inline fun yuvToBitmap(
         region: Rect,
         scaledWidth: Int,
         scaledHeight: Int,
         rotation: Int,
         sample: (Int, Int) -> Int,
-    ): Mat {
+    ): Bitmap {
         val swapAxes = rotation % 2 != 0
         val outputWidth = if (swapAxes) scaledHeight else scaledWidth
         val outputHeight = if (swapAxes) scaledWidth else scaledHeight
-        // Sample directly into the bounded, upright image without copying the full YUV planes.
-        val pixels = ByteArray(outputWidth * outputHeight * 3)
+        val rowsPerBand = (64 * 1024 / (outputWidth * Int.SIZE_BYTES)).coerceIn(1, outputHeight)
+        val pixels = IntArray(outputWidth * rowsPerBand)
         val sourceX = IntArray(scaledWidth) { x ->
             region.left + ((x + 0.5) * region.width() / scaledWidth).toInt().coerceAtMost(region.width() - 1)
         }
-        for (y in 0 until scaledHeight) {
-            val sourceY = region.top + ((y + 0.5) * region.height() / scaledHeight).toInt().coerceAtMost(region.height() - 1)
-            for (x in 0 until scaledWidth) {
-                val values = sample(sourceX[x], sourceY)
-                val luminance = ((values ushr 16) - 16).coerceAtLeast(0)
-                val u = ((values ushr 8) and 255) - 128
-                val v = (values and 255) - 128
-                val red = ((298 * luminance + 409 * v + 128) shr 8).coerceIn(0, 255)
-                val green = ((298 * luminance - 100 * u - 208 * v + 128) shr 8).coerceIn(0, 255)
-                val blue = ((298 * luminance + 516 * u + 128) shr 8).coerceIn(0, 255)
-                val offset = when (rotation) {
-                    1 -> x * outputWidth + scaledHeight - 1 - y
-                    2 -> (scaledHeight - 1 - y) * outputWidth + scaledWidth - 1 - x
-                    3 -> (scaledWidth - 1 - x) * outputWidth + y
-                    else -> y * outputWidth + x
-                }
-                val byteOffset = offset * 3
-                pixels[byteOffset] = blue.toByte()
-                pixels[byteOffset + 1] = green.toByte()
-                pixels[byteOffset + 2] = red.toByte()
-            }
+        val sourceY = IntArray(scaledHeight) { y ->
+            region.top + ((y + 0.5) * region.height() / scaledHeight).toInt().coerceAtMost(region.height() - 1)
         }
-        val mat = Mat()
+        val bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888)
         return try {
-            mat.create(outputHeight, outputWidth, CvType.CV_8UC3)
-            check(mat.put(0, 0, pixels) == pixels.size) { "OCR input pixels are truncated" }
-            mat
+            for (bandStart in 0 until outputHeight step rowsPerBand) {
+                val rows = minOf(rowsPerBand, outputHeight - bandStart)
+                for (row in 0 until rows) {
+                    val y = bandStart + row
+                    for (x in 0 until outputWidth) {
+                        val values = when (rotation) {
+                            1 -> sample(sourceX[y], sourceY[scaledHeight - 1 - x])
+                            2 -> sample(sourceX[scaledWidth - 1 - x], sourceY[scaledHeight - 1 - y])
+                            3 -> sample(sourceX[scaledWidth - 1 - y], sourceY[x])
+                            else -> sample(sourceX[x], sourceY[y])
+                        }
+                        val luminance = ((values ushr 16) - 16).coerceAtLeast(0)
+                        val u = ((values ushr 8) and 255) - 128
+                        val v = (values and 255) - 128
+                        val red = ((298 * luminance + 409 * v + 128) shr 8).coerceIn(0, 255)
+                        val green = ((298 * luminance - 100 * u - 208 * v + 128) shr 8).coerceIn(0, 255)
+                        val blue = ((298 * luminance + 516 * u + 128) shr 8).coerceIn(0, 255)
+                        pixels[row * outputWidth + x] = Color.rgb(red, green, blue)
+                    }
+                }
+                bitmap.setPixels(pixels, 0, outputWidth, 0, bandStart, outputWidth, rows)
+            }
+            bitmap
         } catch (t: Throwable) {
-            mat.release()
+            bitmap.recycle()
             throw t
         }
     }

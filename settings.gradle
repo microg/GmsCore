@@ -132,6 +132,7 @@ sublude ':play-services-recaptcha:core'
 sublude ':play-services-tapandpay:core'
 sublude ':play-services-threadnetwork:core'
 sublude ':play-services-vision:core'
+if (hasModule("hms", false)) sublude ':play-services-vision:core:hms'
 sublude ':play-services-wearable:core'
 
 sublude ':firebase-auth:core'

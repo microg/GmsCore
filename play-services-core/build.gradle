@@ -78,7 +78,10 @@ dependencies {
     defaultRuntimeOnly project(':play-services-location-core-provider')
 
     if (hasModule("nearby", true)) runtimeOnly project(':play-services-nearby-core-package')
-    if (hasModule("hms", false)) hmsRuntimeOnly project(':play-services-maps-core-hms')
+    if (hasModule("hms", false)) {
+        hmsRuntimeOnly project(':play-services-maps-core-hms')
+        hmsRuntimeOnly project(':play-services-vision-core-hms')
+    }
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"

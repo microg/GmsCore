@@ -75,19 +75,19 @@ public class DynamiteContextFactory {
         if (!moduleInfo.getMergedClasses().isEmpty() || !moduleInfo.getMergedPackages().isEmpty()) {
             return false;
         }
-        // Face detection and OCR must share the classes that load their native libraries.
+        // Keep each recognition backend's Dynamite aliases on the same native runtime.
         switch (moduleInfo.getModuleId()) {
             case "com.google.android.gms.vision.dynamite":
             case "com.google.android.gms.vision.face":
             case "com.google.android.gms.vision.dynamite.face":
             case "com.google.mlkit.dynamite.face":
+                return true;
             case "com.google.android.gms.vision.ocr":
             case "com.google.android.gms.vision.dynamite.ocr":
             case "com.google.android.gms.mlkit_ocr_chinese":
-            case "com.google.android.gms.mlkit_ocr_devanagari":
             case "com.google.android.gms.mlkit_ocr_japanese":
             case "com.google.android.gms.mlkit_ocr_korean":
-                return true;
+                return moduleInfo.getVersion() > 0;
             default:
                 return false;
         }
