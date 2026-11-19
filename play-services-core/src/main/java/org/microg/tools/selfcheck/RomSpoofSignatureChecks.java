@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.R;
 
@@ -31,7 +30,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
@@ -72,7 +70,7 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
                     context.getString(R.string.self_check_name_system_spoofs),
                     spoofsSignature ? Positive : Negative,
                     context.getString(R.string.self_check_resolution_system_spoofs),
-                    fragment -> fragment.requestPermissions(new String[]{FAKE_SIGNATURE_PERMISSION}, 0)
+                    new DocumentationResolver("Signature-Spoofing")
             );
         }
         return spoofsSignature;

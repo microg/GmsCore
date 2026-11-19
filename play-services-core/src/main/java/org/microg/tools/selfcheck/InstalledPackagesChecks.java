@@ -82,7 +82,8 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
             packageExists = false;
         }
         collector.addResult(context.getString(R.string.self_check_name_app_installed, nicePackageName), packageExists ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_app_installed, nicePackageName));
+                context.getString(R.string.self_check_resolution_app_installed, nicePackageName),
+                new DocumentationResolver("Installation"));
         return packageExists;
     }
 }
