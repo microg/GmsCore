@@ -21,7 +21,7 @@
     <string name="allow">سماح</string>
     <string name="deny">رفض</string>
     <string name="auth_notification_title">المصادقة مطلوبة</string>
-    <string name="auth_package_override_request_title">أتسمح &lt;b&gt;لـ&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; بالحصول على وصول مميز إلى &lt;xliffexample=\"account@example.com\"&gt;%2$s&lt;/xliff&gt;؟</string>
+    <string name="auth_package_override_request_title">أتسمح لـ &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; بالحصول على وصول مميز إلى &lt;xliffexample=\"account@example.com\"&gt;%2$s&lt;/xliff&gt;؟</string>
     <string name="signin_picker_title">اختر حسابًا</string>
     <string name="signin_picker_subtitle">للمتابعة إلى <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_picker_add_account_label">أضف حسابًا آخر</string>
@@ -52,7 +52,7 @@
     <string name="pick_place_title">اختر مكانًا</string>
     <string name="pick_place_desc">أداة اختيار المكان غير متاحة بعد.</string>
     <string name="place_picker_select_title">حدد هذا الموقع</string>
-    <string name="lacking_permission_toast">خدمات مايكرو-جي: بحاجة إذن ل<xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">خدمات مايكرو-جي: تتطلب إذن ل<xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="place_picker_location_lat_lng">‭(%1$.7f, %2$.7f)</string>
     <string name="network_type_mobile">الشبكة الخلوية</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -184,10 +184,10 @@
     <string name="auth_action_step_perform_content_description">انقر لتنفيذ الخطوة</string>
     <string name="auth_action_step_enable_lockscreen_description">تتم إدارة حسابك على جوجل بواسطة مكان عملك أو مؤسستك التعليمية. قرر مسؤولك أن الأجهزة تحتاج إلى قفل شاشة آمن قبل أن تتمكن من الوصول إلى بيانات الحساب.\n\nيُرجى إعداد كلمة مرور أو رقم تعريف شخصي أو قفل شاشة بنمط معين.</string>
     <string name="safetynet_intro">نظام جوجل سيفتي-نت هو نظام اعتماد للجهاز، يضمن أن الجهاز مؤَمْن بشكل صحيح ومتوافق مع نظام اندرويد CTS. تستخدم بعض التطبيقات سيفتي-نت لأسباب أمنية أو كشرط أساسي للحماية من العبث.\n\nيحتوي مايكرو-جي GmsCore على تطبيق مجاني لسيفتي-نت، لكن الخادم الرسمي يتطلب توقيع طلبات سيفتي-نت باستخدام نظام درويد-جارد الإحتكاري.</string>
-    <string name="auth_action_reauth_notification_title">إجراء الحساب مطلوب</string>
+    <string name="auth_action_reauth_notification_title">يتطل القيام بإجراء على الحساب</string>
     <string name="push_notifications_summary_values_seconds">%s ثانية</string>
     <string name="push_notifications_summary_values_minutes">%s دقيقة</string>
-    <string name="push_notifications_summary_off">معطل</string>
+    <string name="push_notifications_summary_off">إيقاف</string>
     <string name="push_notifications_summary_automatic">مفعل / تلقائي: %s</string>
     <string name="push_notifications_summary_manual">مفعل / يدوي: %s</string>
     <string name="pref_safetynet_recent_copied">تم النسخ إلى الحافظة!</string>
@@ -195,6 +195,28 @@
     <string name="games_delete_snapshot_dialog_ok">موافق</string>
     <string name="games_change_per_game_dialog_option_sign_out">تسجيل الخروج</string>
     <string name="family_management_input_pwd">يرجى إدخال كلمة المرور الخاصة بك</string>
-    <string name="camera_permission_dialog_button">موافق</string>
+    <string name="camera_permission_dialog_button">حسنًا</string>
     <string name="family_management_delete_group_confirm">موافق</string>
+    <string name="service_name_device_attestation">إقرار الجهاز</string>
+    <string name="pref_auth_two_step_verification_title">تلقي إشعارات التحقق بخطوتين</string>
+    <string name="pref_safetynet_recent_advice">نصيحة</string>
+    <string name="credentials_assisted_continue">استكمال</string>
+    <string name="games_achievement_list_title">إنجازات</string>
+    <string name="games_achievement_locked_content_description">مغلق</string>
+    <string name="games_achievement_unlocked_content_description">مفتوح</string>
+    <string name="games_snapshot_choose_btn_text">اختيار</string>
+    <string name="games_leaderboard_list_title">الترتيبات</string>
+    <string name="games_snapshot_delete_btn_text">حذف</string>
+    <string name="games_delete_snapshot_dialog_cancel">إلغاء</string>
+    <string name="games_state_description_delete">حذف</string>
+    <string name="pref_auth_two_step_verification_summary">عند التفعيل، يتمكن الجهاز من تلقي إشعارات التحقق بخطوتين من جوجل (تتطلب تفعيل المراسلة السحابية)</string>
+    <string name="pref_auth_allow_find_devices_title">السماح بالاستجابة لخدمة العثور على جهازي من جوجل</string>
+    <string name="pref_auth_allow_find_devices_summary">عند التفعيل، يتمكن الجهاز من الاستجابة لإشعارات العثور على جهازي من جوجل (تتطلب تفعيل المراسلة السحابية)</string>
+    <string name="pref_game_accounts_title">حسابات ألعاب جوجل</string>
+    <string name="safetynet_enable_switch">السماح بإقرار الجهاز</string>
+    <string name="pref_safetynet_test_title">اختبار إقرار سيفتي-نت</string>
+    <string name="prefcat_device_attestation_apps_title">التطبيقات المستخدمة لخدمة إقرار الجهاز</string>
+    <string name="pref_device_attestation_app_allow_requests_title">السماح بالطلبات</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">السماح للجهاز بطلب إقرار الجهاز</string>
+    <string name="pref_safetynet_recent_attestation_summary">إقرار: %s</string>
 </resources>

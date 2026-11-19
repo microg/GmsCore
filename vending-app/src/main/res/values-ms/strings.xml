@@ -24,4 +24,11 @@
     <string name="app_install_allow_to_install_third_app">Benarkan \"microG Companion\" memasang aplikasi yang dimuat turun daripada \"%1$s\"</string>
     <string name="app_install_refuse_permission_remind">Jika anda menolak, pemasangan aplikasi akan gagal.</string>
     <string name="app_install_not_remind_again">Kekalkan pilihan ini dan jangan tanya lagi</string>
+    <string name="license_notification_channel_name">Pemberitahuan lesen</string>
+    <string name="license_notification_channel_description">Memberitahu apabila aplikasi cuba mengesahkan lesennya, tetapi anda tidak log masuk ke mana-mana akaun Google.</string>
+    <string name="license_notification_title">%1$s tidak dapat mengesahkan lesen</string>
+    <string name="license_notification_body">Jika aplikasi tidak berfungsi dengan baik, log masuk ke akaun Google yang anda gunakan untuk membeli aplikasi tersebut.</string>
+    <string name="license_notification_sign_in">Daftar Masuk</string>
+    <string name="license_notification_ignore">Abaikan</string>
+    <string name="vending_overview_enterprise_row_mandatory">Pemasangan diperlukan</string>
 </resources>
