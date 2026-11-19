@@ -47,6 +47,8 @@ import androidx.annotation.StringRes;
 import androidx.webkit.WebViewClientCompat;
 
 import com.google.android.gms.R;
+import com.google.android.gms.droidguard.DroidGuardClient;
+import com.google.android.gms.tasks.Tasks;
 
 import org.json.JSONArray;
 import org.microg.gms.accountaction.AccountNotificationKt;
@@ -60,13 +62,18 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+import org.microg.gms.droidguard.core.DroidGuardPreferences;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
@@ -116,6 +123,9 @@ public class LoginActivity extends AssistantActivity {
     private int state = 0;
     private boolean isReAuth = false;
     private Account reAuthAccount;
+    private volatile boolean authDroidGuardResultLoaded = false;
+    @Nullable
+    private volatile String authDroidGuardResult;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -346,35 +356,39 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void retrieveRtToken(String oAuthToken) {
-        new AuthRequest().fromContext(this)
-                .appIsGms()
-                .callerIsGms()
-                .service("ac2dm")
-                .token(oAuthToken).isAccessToken()
-                .addAccount()
-                .getAccountId()
-                .droidguardResults("null" /*TODO*/)
-                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
-                    @Override
-                    public void onResponse(AuthResponse response) {
-                        Account account = new Account(response.email, accountType);
-                        if (isReAuth && reAuthAccount != null && reAuthAccount.name.equals(account.name)) {
-                            accountManager.removeAccount(account, future -> saveAccount(account, response), null);
-                        } else {
-                            saveAccount(account, response);
+        new Thread(() -> {
+            String droidGuardResults = getAuthDroidGuardResultOrNullString();
+            Log.i(TAG, "droidGuardResults:" + droidGuardResults);
+            new AuthRequest().fromContext(this)
+                    .appIsGms()
+                    .callerIsGms()
+                    .service("ac2dm")
+                    .token(oAuthToken).isAccessToken()
+                    .addAccount()
+                    .getAccountId()
+                    .droidguardResults(droidGuardResults)
+                    .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
+                        @Override
+                        public void onResponse(AuthResponse response) {
+                            Account account = new Account(response.email, accountType);
+                            if (isReAuth && reAuthAccount != null && reAuthAccount.name.equals(account.name)) {
+                                accountManager.removeAccount(account, future -> saveAccount(account, response), null);
+                            } else {
+                                saveAccount(account, response);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onException(Exception exception) {
-                        Log.w(TAG, "onException", exception);
-                        runOnUiThread(() -> {
-                            showError(R.string.auth_general_error_desc);
-                            setNextButtonText(android.R.string.ok);
-                        });
-                        state = -2;
-                    }
-                });
+                        @Override
+                        public void onException(Exception exception) {
+                            Log.w(TAG, "onException", exception);
+                            runOnUiThread(() -> {
+                                showError(R.string.auth_general_error_desc);
+                                setNextButtonText(android.R.string.ok);
+                            });
+                            state = -2;
+                        }
+                    });
+        }).start();
     }
 
     private void saveAccount(Account account, AuthResponse response) {
@@ -420,43 +434,46 @@ public class LoginActivity extends AssistantActivity {
     private void retrieveGmsToken(final Account account) {
         final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");
         authManager.setPermitted(true);
-        new AuthRequest().fromContext(this)
-                .appIsGms()
-                .callerIsGms()
-                .service(authManager.getService())
-                .email(account.name)
-                .token(AccountManager.get(this).getPassword(account))
-                .systemPartition(true)
-                .hasPermission(true)
-                .addAccount()
-                .getAccountId()
-                .droidguardResults("null")
-                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
-                    @Override
-                    public void onResponse(AuthResponse response) {
-                        authManager.storeResponse(response);
-                        String accountId = PeopleManager.loadUserInfo(LoginActivity.this, account);
-                        if (!TextUtils.isEmpty(accountId))
-                            accountManager.setUserData(account, "GoogleUserId", accountId);
-                        if (isAuthVisible(LoginActivity.this) && SDK_INT >= 26) {
-                            accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
+        new Thread(() -> {
+            String droidGuardResults = getAuthDroidGuardResultOrNullString();
+            new AuthRequest().fromContext(this)
+                    .appIsGms()
+                    .callerIsGms()
+                    .service(authManager.getService())
+                    .email(account.name)
+                    .token(AccountManager.get(this).getPassword(account))
+                    .systemPartition(true)
+                    .hasPermission(true)
+                    .addAccount()
+                    .getAccountId()
+                    .droidguardResults(droidGuardResults)
+                    .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
+                        @Override
+                        public void onResponse(AuthResponse response) {
+                            authManager.storeResponse(response);
+                            String accountId = PeopleManager.loadUserInfo(LoginActivity.this, account);
+                            if (!TextUtils.isEmpty(accountId))
+                                accountManager.setUserData(account, "GoogleUserId", accountId);
+                            if (isAuthVisible(LoginActivity.this) && SDK_INT >= 26) {
+                                accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
+                            }
+                            checkin(true);
+                            returnSuccessResponse(account);
+                            notifyGcmGroupUpdate(account.name);
+                            if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
                         }
-                        checkin(true);
-                        returnSuccessResponse(account);
-                        notifyGcmGroupUpdate(account.name);
-                        if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
-                    }
 
-                    @Override
-                    public void onException(Exception exception) {
-                        Log.w(TAG, "onException", exception);
-                        runOnUiThread(() -> {
-                            showError(R.string.auth_general_error_desc);
-                            setNextButtonText(android.R.string.ok);
-                        });
-                        state = -2;
-                    }
-                });
+                        @Override
+                        public void onException(Exception exception) {
+                            Log.w(TAG, "onException", exception);
+                            runOnUiThread(() -> {
+                                showError(R.string.auth_general_error_desc);
+                                setNextButtonText(android.R.string.ok);
+                            });
+                            state = -2;
+                        }
+                    });
+        }).start();
     }
 
     private void notifyGcmGroupUpdate(String accountName) {
@@ -499,6 +516,53 @@ public class LoginActivity extends AssistantActivity {
             builder.appendQueryParameter("Email", reAuthAccount.name);
         }
         return builder.build().toString();
+    }
+
+    private String getAuthDroidGuardResultOrNullString() {
+        String result = getAuthDroidGuardResult();
+        return result != null ? result : "null";
+    }
+
+    @Nullable
+    private synchronized String getAuthDroidGuardResult() {
+        if (authDroidGuardResultLoaded) {
+            return authDroidGuardResult;
+        }
+
+        authDroidGuardResultLoaded = true;
+        if (!DroidGuardPreferences.isAvailable(this)) {
+            return null;
+        }
+
+        Map<String, String> data = buildAuthDroidGuardData();
+        authDroidGuardResult = tryDroidGuardResult("auth", data);
+        if (authDroidGuardResult == null) {
+            authDroidGuardResult = tryDroidGuardResult("checkin", data);
+        }
+        return authDroidGuardResult;
+    }
+
+    @Nullable
+    private String tryDroidGuardResult(String flow, Map<String, String> data) {
+        try {
+            return Tasks.await(DroidGuardClient.getResults(this, flow, data), 15, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            Log.w(TAG, "DroidGuard auth flow failed: " + flow, e);
+            return null;
+        }
+    }
+
+    private Map<String, String> buildAuthDroidGuardData() {
+        Map<String, String> data = new HashMap<>();
+        long androidId = LastCheckinInfo.read(this).getAndroidId();
+        if (androidId != 0 && androidId != -1) {
+            data.put("dg_androidId", Long.toHexString(androidId));
+        }
+
+        data.put("dg_gmsCoreVersion", Integer.toString(GMS_VERSION_CODE));
+        data.put("dg_sdkVersion", Integer.toString(Build.VERSION.SDK_INT));
+        data.put("dg_session", Long.toHexString(new Random().nextLong()));
+        return data;
     }
 
     private class JsBridge {
