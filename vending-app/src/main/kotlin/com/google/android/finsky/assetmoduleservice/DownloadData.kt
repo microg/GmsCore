@@ -6,16 +6,15 @@
 package com.google.android.finsky.assetmoduleservice
 
 import android.content.Context
-import android.util.Log
 import com.google.android.finsky.getChunkFile
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import com.google.android.play.core.assetpacks.protocol.CompressionFormat
-import java.io.File
 import java.io.Serializable
 
 data class DownloadData(
     var packageName: String = "",
     var errorCode: Int = 0,
+    var sessionId: Int = 0,
     var sessionIds: Map<String, Int> = emptyMap(),
     var status: Int = 0,
     var moduleNames: Set<String> = emptySet(),
@@ -48,7 +47,11 @@ fun DownloadData?.merge(data: DownloadData?): DownloadData? {
     if (this == null) return data
     if (data == null) return this
     moduleNames += data.moduleNames
-    sessionIds += data.sessionIds.filter { it.key !in sessionIds.keys }
+    // Overwrite session mapping for modules present in incoming data (new startDownload session)
+    sessionIds = sessionIds + data.sessionIds
+    if (data.sessionId != 0) {
+        sessionId = data.sessionId
+    }
     moduleDataMap += data.moduleDataMap.filter { it.key !in moduleDataMap.keys }
     return this
 }
