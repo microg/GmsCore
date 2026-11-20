@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-sdk tools:overrideLibrary="ai.onnxruntime" />
+
+    <application>
+        <meta-data
+            android:name="org.microg.gms.ui.settings.entry:ocr-models"
+            android:value="org.microg.gms.vision.ocr.ui.OcrModelsSettingsProvider" />
+        <activity
+            android:name="org.microg.gms.vision.ocr.ui.OcrModelsActivity"
+            android:exported="false"
+            android:label="@string/ocr_models_title" />
+        <provider
+            android:name="org.microg.gms.vision.ocr.models.OcrModelProvider"
+            android:authorities="${applicationId}.ocr.models"
+            android:exported="true" />
+    </application>
+</manifest>

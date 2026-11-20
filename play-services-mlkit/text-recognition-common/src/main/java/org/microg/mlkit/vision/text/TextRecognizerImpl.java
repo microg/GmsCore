@@ -218,7 +218,11 @@ public final class TextRecognizerImpl implements TextRecognizer {
                 } catch (OutOfMemoryError e) {
                     completion.trySetException(new MlKitException("Insufficient memory for text recognition", MlKitException.RESOURCE_EXHAUSTED, e));
                 } catch (Exception | LinkageError e) {
-                    completion.trySetException(new MlKitException("Text recognition failed", MlKitException.INTERNAL, e));
+                    if (e instanceof IllegalStateException && "OCR model is not installed".equals(e.getMessage())) {
+                        completion.trySetException(new MlKitException("Text recognition model is unavailable", MlKitException.UNAVAILABLE, e));
+                    } else {
+                        completion.trySetException(new MlKitException("Text recognition failed", MlKitException.INTERNAL, e));
+                    }
                 } finally {
                     if (release != null) release.run();
                 }
@@ -297,6 +301,13 @@ public final class TextRecognizerImpl implements TextRecognizer {
         Class<?> descriptor = loader.loadClass("com.google.android.gms.dynamite.descriptors." + options.getModuleId() + ".ModuleDescriptor");
         if (descriptor.getField("MODULE_VERSION").getInt(null) <= 0) {
             throw new IllegalStateException("OCR module is not supported on this Android version");
+        }
+        try {
+            if (Boolean.FALSE.equals(descriptor.getDeclaredMethod("isAvailable", Context.class).invoke(null, context))) {
+                throw new IllegalStateException("OCR model is unavailable");
+            }
+        } catch (NoSuchMethodException ignored) {
+            // Backends with no separate model download expose only a module version.
         }
         IBinder binder = (IBinder) loader.loadClass("com.google.android.gms.vision.text.mlkit.TextRecognizerCreator")
                 .getConstructor().newInstance();

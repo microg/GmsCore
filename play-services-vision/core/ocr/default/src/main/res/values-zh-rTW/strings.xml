@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="ocr_models_title">OCR 模型</string>
+    <string name="ocr_models_latin">拉丁文</string>
+    <string name="ocr_models_cjk">中文與日文</string>
+    <string name="ocr_models_korean">韓文</string>
+    <string name="ocr_models_devanagari">天城文</string>
+    <string name="ocr_models_notice_title">需要%1$s OCR 模型</string>
+    <string name="ocr_models_notice_text">輕觸以查看下載選項。下載 %1$s 後即可離線辨識文字。</string>
+    <string name="ocr_models_confirm">下載%1$s OCR 模型（%2$s）？</string>
+    <string name="ocr_models_unmetered">僅使用不計量的網路</string>
+    <string name="ocr_models_any_network">使用任何網路，包括行動數據</string>
+    <string name="ocr_models_download">下載</string>
+    <string name="ocr_models_available">可下載 %1$s</string>
+    <string name="ocr_models_ready">可離線辨識</string>
+    <string name="ocr_models_queued">等待下載</string>
+    <string name="ocr_models_downloading">正在下載模型</string>
+    <string name="ocr_models_progress">已下載 %1$d%%</string>
+    <string name="ocr_models_failed">下載失敗。輕觸以重試。</string>
+    <string name="ocr_models_cancel_confirm">要取消下載%1$s OCR 模型嗎？</string>
+    <string name="ocr_models_cancel_download">取消下載</string>
+    <string name="ocr_models_delete_confirm">要刪除%1$s OCR 模型嗎？</string>
+    <string name="ocr_models_delete">刪除</string>
+    <string name="ocr_models_action_failed">OCR 模型操作失敗，請重試。</string>
+</resources>

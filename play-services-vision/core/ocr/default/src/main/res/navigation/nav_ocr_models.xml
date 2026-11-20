@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ocrModelsNavigation"
+    app:startDestination="@id/ocrModelsActivity">
+
+    <activity
+        android:id="@+id/ocrModelsActivity"
+        android:name="org.microg.gms.vision.ocr.ui.OcrModelsActivity"
+        android:label="@string/ocr_models_title" />
+</navigation>

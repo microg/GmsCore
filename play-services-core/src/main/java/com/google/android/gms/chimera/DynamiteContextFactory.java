@@ -85,6 +85,7 @@ public class DynamiteContextFactory {
             case "com.google.android.gms.vision.ocr":
             case "com.google.android.gms.vision.dynamite.ocr":
             case "com.google.android.gms.mlkit_ocr_chinese":
+            case "com.google.android.gms.mlkit_ocr_devanagari":
             case "com.google.android.gms.mlkit_ocr_japanese":
             case "com.google.android.gms.mlkit_ocr_korean":
                 return moduleInfo.getVersion() > 0;

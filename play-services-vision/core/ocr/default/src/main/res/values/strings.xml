@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="ocr_models_title">OCR models</string>
+    <string name="ocr_models_latin">Latin</string>
+    <string name="ocr_models_cjk">Chinese and Japanese</string>
+    <string name="ocr_models_korean">Korean</string>
+    <string name="ocr_models_devanagari">Devanagari</string>
+    <string name="ocr_models_notice_title">%1$s OCR model required</string>
+    <string name="ocr_models_notice_text">Tap to review the %1$s download for offline text recognition.</string>
+    <string name="ocr_models_confirm">Download the %1$s OCR model (%2$s)?</string>
+    <string name="ocr_models_unmetered">Unmetered networks only</string>
+    <string name="ocr_models_any_network">Any network, including mobile data</string>
+    <string name="ocr_models_download">Download</string>
+    <string name="ocr_models_available">Download %1$s</string>
+    <string name="ocr_models_ready">Ready for offline recognition</string>
+    <string name="ocr_models_queued">Waiting to download</string>
+    <string name="ocr_models_downloading">Downloading model</string>
+    <string name="ocr_models_progress">Downloading %1$d%%</string>
+    <string name="ocr_models_failed">Download failed. Tap to retry.</string>
+    <string name="ocr_models_cancel_confirm">Cancel the %1$s OCR model download?</string>
+    <string name="ocr_models_cancel_download">Cancel download</string>
+    <string name="ocr_models_delete_confirm">Delete the %1$s OCR model?</string>
+    <string name="ocr_models_delete">Delete</string>
+    <string name="ocr_models_action_failed">Could not manage the OCR model. Try again.</string>
+</resources>

@@ -27,10 +27,27 @@ import org.microg.gms.common.PublicApi;
 @PublicApi
 public final class TextRecognizer extends Detector<TextBlock> {
     private static final String TAG = "GmsTextRecognizer";
+    private final Context context;
+    private INativeTextRecognizerCreator creator;
     private INativeTextRecognizer remote;
 
-    private TextRecognizer(INativeTextRecognizer remote) {
-        this.remote = remote;
+    private TextRecognizer(Context context, INativeTextRecognizerCreator creator) {
+        Context applicationContext = context.getApplicationContext();
+        this.context = applicationContext != null ? applicationContext : context;
+        this.creator = creator;
+        getRemote();
+    }
+
+    private INativeTextRecognizer getRemote() {
+        if (remote == null && creator != null) {
+            try {
+                remote = creator.create(ObjectWrapper.wrap(context), new TextRecognizerOptions());
+            } catch (Exception | LinkageError e) {
+                creator = null;
+                Log.w(TAG, "Text recognition is unavailable", e);
+            }
+        }
+        return remote;
     }
 
     @Override
@@ -41,7 +58,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
             throw new IllegalArgumentException("Text recognition requires a Bitmap or NV21 frame");
         }
         SparseArray<TextBlock> result = new SparseArray<>();
-        if (remote == null) return result;
+        if (getRemote() == null) return result;
         try {
             Object image = bitmap != null ? bitmap : frame.getGrayscaleImageData();
             LineBoxParcel[] lines = remote.recognize(ObjectWrapper.wrap(image), frame.getMetadata().createParcel());
@@ -61,6 +78,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
             }
         } catch (UnsupportedOperationException e) {
             remote = null;
+            creator = null;
             Log.w(TAG, "Text recognition is unavailable", e);
         } catch (RemoteException e) {
             Log.w(TAG, "Text recognition failed", e);
@@ -70,7 +88,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
 
     @Override
     public final synchronized boolean isOperational() {
-        return remote != null;
+        return getRemote() != null;
     }
 
     @Override
@@ -79,6 +97,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
             super.release();
         } finally {
             synchronized (this) {
+                creator = null;
                 if (remote != null) {
                     try {
                         remote.close();
@@ -103,7 +122,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
         }
 
         public TextRecognizer build() {
-            INativeTextRecognizer remote = null;
+            INativeTextRecognizerCreator creator = null;
             try {
                 Context gms = context.createPackageContext(Constants.GMS_PACKAGE_NAME,
                         Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
@@ -118,12 +137,11 @@ public final class TextRecognizer extends Detector<TextBlock> {
                 }
                 IBinder binder = (IBinder) loader.loadClass("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator")
                         .getConstructor().newInstance();
-                INativeTextRecognizerCreator creator = INativeTextRecognizerCreator.Stub.asInterface(binder);
-                remote = creator.create(ObjectWrapper.wrap(context), new TextRecognizerOptions());
+                creator = INativeTextRecognizerCreator.Stub.asInterface(binder);
             } catch (Exception | LinkageError e) {
                 Log.w(TAG, "Text recognition is unavailable", e);
             }
-            return new TextRecognizer(remote);
+            return new TextRecognizer(context, creator);
         }
     }
 }
