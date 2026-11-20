@@ -186,6 +186,8 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("CustomApp__enable_custom_apps_in_work_profile", true, 0),
         // Report all installed apps to the MDM agent so it can see the custom apps it installed
         Flag("OnDeviceDevicePosture__allow_extensibility_app_for_device_posture", true, 0),
+        // Ask the store to sync right after a new policy is applied instead of waiting for its periodic sync
+        Flag("Play__enable_local_play_store_sync", true, 0),
     ),
 )
 
