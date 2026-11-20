@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/document_scanning_preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/document_scanning_preview_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/toolbarSurfaceStyle"
+        app:title="@string/document_scanner_preview"
+        app:navigationIcon="@drawable/ic_document_scanner_close">
+        <Button
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:id="@+id/document_scanning_preview_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/document_scanner_finish" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <ImageView
+        android:id="@+id/document_scanning_preview_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/document_scanner_preview"
+        android:padding="16dp"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/document_scanning_preview_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/white" />
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center_horizontal"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/document_scanning_preview_thumbnails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <Button
+                android:id="@+id/document_scanning_preview_add"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="48dp"
+                android:layout_height="64dp"
+                android:contentDescription="@string/document_scanner_add_page"
+                android:text="+"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        style="?attr/toolbarSurfaceStyle">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/document_scanning_preview_crop"
+                    android:text="@string/document_scanner_crop_rotate"
+                    app:icon="@drawable/ic_document_scanner_crop_rotate"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    app:iconGravity="textTop"
+                    app:iconPadding="10dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
+
+                <Button
+                    android:id="@+id/document_scanning_preview_filter"
+                    android:text="@string/document_scanner_filter"
+                    app:icon="@drawable/ic_document_scanner_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    app:iconGravity="textTop"
+                    app:iconPadding="10dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
+
+                <Button
+                    android:id="@+id/document_scanning_preview_retake"
+                    android:text="@string/document_scanner_retake"
+                    app:icon="@drawable/ic_document_scanner_retake"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    app:iconGravity="textTop"
+                    app:iconPadding="10dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
+
+                <Button
+                    android:id="@+id/document_scanning_preview_delete"
+                    android:text="@string/document_scanner_delete"
+                    app:icon="@drawable/ic_document_scanner_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    app:iconGravity="textTop"
+                    app:iconPadding="10dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurfaceVariant" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+</LinearLayout>

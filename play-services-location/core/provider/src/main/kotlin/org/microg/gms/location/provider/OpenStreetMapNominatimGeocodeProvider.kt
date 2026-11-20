@@ -36,7 +36,7 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
     override fun onGetFromLocation(latitude: Double, longitude: Double, maxResults: Int, params: GeocoderParams, addresses: MutableList<Address>): String? {
         val clientIdentity = params.clientIdentity ?: return "null client package"
         val locale = params.locale ?: return "null locale"
-        if (!settings.geocoderNominatim) return "disabled"
+        if (!settings.geocoderNominatim) return "address resolver is disabled in microG settings"
         val cacheKey = CacheKey(clientIdentity, locale, latitude, longitude)
         addressCache[cacheKey]?.let {address ->
             addresses.add(address)
@@ -84,7 +84,7 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
     ): String? {
         val clientIdentity = params.clientIdentity ?: return "null client package"
         val locale = params.locale ?: return "null locale"
-        if (!settings.geocoderNominatim) return "disabled"
+        if (!settings.geocoderNominatim) return "address resolver is disabled in microG settings"
         val uri = Uri.Builder()
             .scheme("https").authority(NOMINATIM_SERVER).path("/search")
             .appendQueryParameter("format", "json")

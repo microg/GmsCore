@@ -129,4 +129,18 @@
     <string name="pref_test_summary_passed">Alle tester ble godkjent</string>
     <string name="pref_test_summary_failed">Feil: %s</string>
     <string name="pref_test_summary_warn">Advarsel: %s</string>
+    <string name="auth_action_step_enable_checkin_description">Enheten din må registreres hos Google minst en gang.\n\nDu kan skru av Googles enhetsregistrering etter kontooppsettet er ferdig.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">I samsvar med innstillingene dine trenger microG tillatelse før den kan registrete seg for Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen_description">Google-kontoen din styres av arbeidsplassen din eller utdanningsinstitusjonen din. Administratoren din har bestemt at enheter må ha en sikker låseskjerm før de kan få tilgang til kontodata.\n\nSett opp et passord, en PIN-kode eller låsemønster.</string>
+    <string name="signin_subtext_sharing">For å fortsette, vil microG dele navnet ditt, e-postadressen din og profilbildet ditt forbundet med Google-kontoen din med <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="perm_car_mileage_label">Bilens kilometerstand</string>
+    <string name="perm_car_mileage_description">Få tilgang til kilometerstanden til bilen din</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil bruke Play Games</string>
+    <string name="games_info_content">For å bruke Play Games må du installere Google Play Games-appen. Appen kan kanskje fungere uten Play Games, men den kan også fungere på uforventede måter.</string>
+    <string name="pick_place_desc">Stedsvelgeren er enda ikke tilgjengelig.</string>
+    <string name="lacking_permission_toast">microG-tjenester: mangler tillatelse til å <xliff:g example="ha fullstendig nettverkstilgang">%1$s</xliff:g></string>
+    <string name="self_check_cat_fake_sig">Signaturspoofingsstøtte</string>
+    <string name="self_check_name_fake_sig_perm">Systemet har støtte for signaturspoofing:</string>
+    <string name="perm_car_vendor_extension_label">Bilforhandlerkanal</string>
+    <string name="perm_car_vendor_extension_description">Få tilgang til leverandørkanalen til bilen din for å utbytte informasjon spesifikk til hver bil</string>
 </resources>

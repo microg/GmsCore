@@ -390,4 +390,17 @@
     <string name="location_sharing_turn_off_confirm">Desativar</string>
     <string name="location_sharing_confirm_dialog_title">Ativar partilhamento de localização</string>
     <string name="location_sharing_confirm_dialog_text">As pessoas com quais partilha a sua localização sempre conseguem ver:\n· O seu nome e foto\n· A localização recente do seu dispositivo, mesmo quando não está a usar um serviço do Google\n· O nível da pilha do seu dispositivo, até mesmo quando está a carregar\n· O seu horário de chegada e saída, se adicionarem uma notificação de partilhamento de localização</string>
+    <string name="pref_passkey_manager_title">Gerir passkeys</string>
+    <string name="pref_passkey_manager_empty_title">Sem passkeys guardadas</string>
+    <string name="pref_passkey_manager_description">Quando uma aplicação de terceiros registar uma passkey, microG vai guardar um registo local. Se uma aplicação apagar uma passkey sem notificar microG, o registo vai ficar abandonado. Tu podes remover tais resíduos aqui.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Apagar passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Apagar passkey de \"%2$s\" em \"%1$s\". Isto não pode ser revertido; irá ter de registar uma nova passkey para iniciar sessão outra vez.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Apagar</string>
+    <string name="pref_passkey_manager_unknown_user">Utilizador desconhecido</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Bloqueio de ecrã</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Híbrido</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

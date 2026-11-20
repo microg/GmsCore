@@ -146,6 +146,13 @@ class IAPCore(
 
         val skuPackageName = params.buyFlowParams.skuParams["skuPackageName"] ?: clientInfo.pkgName
         val extendedPackageInfo = ExtendedPackageInfo(context, skuPackageName as String)
+        val derivedApkId = runCatching {
+            context.packageManager
+                .getApplicationInfo(skuPackageName, PackageManager.GET_META_DATA)
+                .metaData
+                ?.getInt("com.android.vending.derived.apk.id", 0)
+                ?.takeIf { it != 0 }
+        }.getOrNull()
         val docId = if (params.buyFlowParams.skuSerializedDockIdList?.isNotEmpty() == true) {
             val sDocIdBytes = Base64.decode(params.buyFlowParams.skuSerializedDockIdList[0], Base64.URL_SAFE + Base64.NO_WRAP)
             DocId.ADAPTER.decode(sDocIdBytes)
@@ -193,16 +200,13 @@ class IAPCore(
                     this.oldSkuPurchaseToken = null
                     this.oldSkuPurchaseId = params.buyFlowParams.oldSkuPurchaseId
                 }
-                unKnownMessage21 = UnKnownMessage21.Builder().apply {
-                    val pkg = skuPackageName as? String ?: return@apply
-                    this.unknown1 = runCatching {
-                        context.packageManager
-                            .getApplicationInfo(pkg, PackageManager.GET_META_DATA)
-                            .metaData
-                            ?.getInt("com.android.vending.derived.apk.id", 0)
-                            ?.takeIf { it != 0 }
-                    }.getOrNull()
-                }.build()
+                if (derivedApkId != null) {
+                    this.derivedApkId = DerivedApkId.Builder().apply {
+                        this.derivedId = derivedApkId
+                    }.build()
+                } else {
+                    this.derivedApkIdAbsent = DerivedApkIdAbsent.Builder().build()
+                }
                 this.skuPackageSignatureSha256 = extendedPackageInfo.firstCertificateSha256?.toBase64(11)
                 this.secondaryAccount = AccountNameMessage.Builder().apply {
                     this.accountName = params.buyFlowParams.accountName

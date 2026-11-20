@@ -65,6 +65,7 @@ import com.google.android.play.core.integrity.protocol.IRequestDialogCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.vending.PlayIntegrityData
 
@@ -100,9 +101,9 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
     override fun requestIntegrityToken(request: Bundle, callback: IIntegrityServiceCallback) {
         Log.d(TAG, "Method (requestIntegrityToken) called")
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, request.getString(KEY_PACKAGE_NAME))
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val packageName = request.getString(KEY_PACKAGE_NAME)
                 if (packageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }

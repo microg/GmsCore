@@ -134,6 +134,7 @@ public class ProviderInstallerImpl {
             cacheFile.getParentFile().mkdirs();
             File apkFile = new File(context.getPackageCodePath());
             if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
+                cacheFile.delete();
                 ZipFile zipFile = new ZipFile(apkFile);
                 ZipEntry entry = zipFile.getEntry(path);
                 if (entry != null) {
@@ -142,6 +143,7 @@ public class ProviderInstallerImpl {
                     Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
                 }
             }
+            cacheFile.setReadOnly();
             Log.d(TAG, "Loading conscrypt_gmscore_jni from " + cacheFile.getPath());
             System.load(cacheFile.getAbsolutePath());
 

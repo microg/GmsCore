@@ -49,8 +49,6 @@ public class CheckinService extends IntentService {
     public static final long BACKUP_CHECKIN_DELAY = 3 * 60 * 60 * 1000; // 3 hours
     public static final String BIND_ACTION = "com.google.android.gms.checkin.BIND_TO_SERVICE";
     public static final String EXTRA_FORCE_CHECKIN = "force";
-    @Deprecated
-    public static final String EXTRA_CALLBACK_INTENT = "callback";
     public static final String EXTRA_RESULT_RECEIVER = "receiver";
     public static final String EXTRA_NEW_CHECKIN_TIME = "checkin_time";
 
@@ -89,9 +87,6 @@ public class CheckinService extends IntentService {
                         PeopleManager.loadUserInfo(this, account);
                     }
                     McsService.scheduleReconnect(this);
-                    if (intent.hasExtra(EXTRA_CALLBACK_INTENT)) {
-                        startService((Intent) intent.getParcelableExtra(EXTRA_CALLBACK_INTENT));
-                    }
                     if (intent.hasExtra(EXTRA_RESULT_RECEIVER)) {
                         ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
                         if (receiver != null) {

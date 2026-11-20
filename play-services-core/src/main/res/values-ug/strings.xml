@@ -386,4 +386,5 @@
     <string name="prefcat_device_attestation_apps_title">ئۈسكۈنە دەلىللەشنى ئىشلىتىدىغان ئەپ</string>
     <string name="pref_device_attestation_app_allow_requests_title">ئىلتىماسقا يول قوي</string>
     <string name="pref_device_attestation_app_allow_requests_summary">ئەپنىڭ ئۈسكۈنە دەلىللەش ئىلتىماسىغا يول قويىدۇ</string>
+    <string name="pref_auth_allow_find_devices_title">Google ئۈسكۈنە ئىزدىگۈچكە ئىنكاس قايتۇرۇشقا يول قويىدۇ</string>
 </resources>

@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Hesap seçin</string>
     <string name="fido_sign_in_selection_continue">%1$s kullanmaya devam etmek için</string>
     <string name="fido_sign_in_selection_description">Geçiş anahtarı</string>
+    <string name="fido_transport_selection_hybrid">Farklı bir aygıt kullan</string>
+    <string name="fido_qr_code_title">QR kodu başka bir aygıtla tara</string>
+    <string name="fido_qr_code_body">Telefonunuzu veya tabletinizi kullanarak bu QR kodunu tarayın ve oturum açma işlemini tamamlayın</string>
+    <string name="fido_ble_connecting">Aygıta bağlanılıyor…</string>
+    <string name="fido_ble_generating">Bağlantı bekleniyor…</string>
+    <string name="fido_ble_permission_rationale">Aygıtlar arası kimlik doğrulamayı kullanmak için Bluetooth izni gereklidir.</string>
+    <string name="fido_ble_permission_title">Bluetooth izini gerekli</string>
+    <string name="fido_ble_permission_permanently_denied">Bluetooth izni kalıcı olarak reddedildi. Aygıtlar arası kimlik doğrulamayı etkinleştirmek için:\n\n1. “Ayarlara git” seçeneğine dokunun\n2. İzinler / Uygulama izinleri bölümünü bulun\n3. Konum iznini etkinleştirin (veya Android 12 ve üzeri sürümlerde “Yakındaki aygıtlar”)\n4. Uygulamaya geri dönün ve tekrar deneyin</string>
+    <string name="fido_action_go_to_settings">Ayarlara git</string>
+    <string name="fido_ble_open_settings_failed">Ayarlar açılamıyor. Lütfen sistem ayarlarından Konum iznini (veya Android 12 ve üzeri sürümlerde Yakındaki aygıtlar) elle verin.</string>
+    <string name="fido_ble_permission_blocked_toast">İzin olmadan aygıtlar arası kimlik doğrulama kullanılamaz.</string>
+    <string name="fido_qr_code_body_register">Geçiş anahtarı oluşturmak için bu QR kodunu başka bir aygıtla tarayın</string>
+    <string name="fido_qr_code_body_sign">Oturum açmak için bu QR kodunu telefonunuzla veya tabletinizle tarayın</string>
+    <string name="fido_hybrid_receiver_initial_title">Yalnızca güvendiğiniz aygıtlara bağlanın</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Başka bir aygıt bu aygıtta bir geçiş anahtarı oluşturacak</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Başka bir aygıt bu aygıttaki bir geçiş anahtarını kullanarak oturum açacak</string>
+    <string name="fido_hybrid_receiver_connecting_title">Aygıta bağlanılıyor…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Diğer aygıtla güvenli bağlantı kuruluyor</string>
+    <string name="fido_hybrid_receiver_button_connect">Bağlan</string>
+    <string name="fido_hybrid_receiver_button_cancel">İptal</string>
+    <string name="fido_hybrid_receiver_error_title">Bağlantı başarısız</string>
+    <string name="fido_hybrid_receiver_error_body">Diğer aygıta bağlanılamadı. Lütfen tekrar deneyin.</string>
 </resources>
