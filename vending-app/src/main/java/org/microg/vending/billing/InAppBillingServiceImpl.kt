@@ -229,7 +229,11 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         skusBundle: Bundle?
     ): Bundle {
         Log.d(TAG, "getSkuDetails(apiVersion=$apiVersion, packageName=$packageName, type=$type, skusBundle=$skusBundle)")
-        return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Not yet implemented")
+        return runCatching { getSkuDetailsExtraParams(apiVersion, packageName, type, skusBundle, null) }
+            .getOrElse {
+                Log.w(TAG, "getSkuDetails failed", it)
+                resultBundle(BillingResponseCode.ERROR, it.message)
+            }
     }
 
     override fun getBuyIntent(
@@ -251,7 +255,11 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         continuationToken: String?
     ): Bundle {
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "getPurchases(apiVersion=$apiVersion, packageName=$packageName, type=$type, continuationToken=$continuationToken)")
-        return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Not yet implemented")
+        return runCatching { getPurchasesExtraParams(apiVersion, packageName, type, continuationToken, null) }
+            .getOrElse {
+                Log.w(TAG, "getPurchases failed", it)
+                resultBundle(BillingResponseCode.ERROR, it.message)
+            }
     }
 
     override fun consumePurchase(
