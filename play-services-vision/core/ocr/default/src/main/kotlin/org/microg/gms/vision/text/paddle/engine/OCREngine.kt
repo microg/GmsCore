@@ -77,9 +77,10 @@ internal class OCREngine(files: OcrModelAccess, recognitionModel: RecognitionMod
                 val (recOutput, recShape) = sessionManager.runRecognition(recInput.tensorData, recInput.shape)
                 val (text, confidence) = CTCDecoder.decode(recOutput, recShape, characterList)
                 if (confidence >= RECOGNITION_SCORE_THRESHOLD) {
-                    val words = if (wordAnalyses < WordBoxEstimator.MAX_LINES_PER_IMAGE && text.any(Char::isWhitespace)) {
-                        wordAnalyses++
-                        WordBoxEstimator.estimate(crop, text, rotated180)
+                    val words = if (text.any(Char::isWhitespace)) {
+                        val analyzePixels = wordAnalyses < WordBoxEstimator.MAX_LINES_PER_IMAGE
+                        if (analyzePixels) wordAnalyses++
+                        WordBoxEstimator.estimate(crop, box, text, rotated180, analyzePixels)
                     } else {
                         emptyList()
                     }

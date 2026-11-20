@@ -71,6 +71,19 @@ internal object QuadTextCrop {
             }
         }
 
+        fun approximateBox(line: OCRBox, start: Float, end: Float, rotated180: Boolean): OCRBox {
+            val offset = (if (rotated90) 1 else 0) + (if (rotated180) 2 else 0)
+            fun corner(index: Int) = line.points[(offset + index) % 4]
+            fun interpolate(from: PointF, to: PointF, fraction: Float) =
+                PointF(from.x + (to.x - from.x) * fraction, from.y + (to.y - from.y) * fraction)
+            return OCRBox(listOf(
+                interpolate(corner(0), corner(1), start),
+                interpolate(corner(0), corner(1), end),
+                interpolate(corner(3), corner(2), end),
+                interpolate(corner(3), corner(2), start),
+            ))
+        }
+
         fun release() {
             try {
                 image.release()

@@ -8,7 +8,6 @@ package com.google.android.gms.dynamite.descriptors.com.google.android.gms.visio
 import android.content.Context;
 import androidx.annotation.Keep;
 import org.microg.gms.vision.text.OcrModuleAvailability;
-import org.microg.gms.vision.text.paddle.model.RecognitionModel;
 
 @Keep
 public final class ModuleDescriptor {
@@ -16,7 +15,7 @@ public final class ModuleDescriptor {
     public static final int MODULE_VERSION = android.os.Build.VERSION.SDK_INT >= 26 ? 1 : 0;
 
     public static boolean isAvailable(Context context) {
-        return MODULE_VERSION > 0 && OcrModuleAvailability.isAvailable(context, RecognitionModel.LATIN.getPack());
+        return MODULE_VERSION > 0 && OcrModuleAvailability.isAvailable(context, "latin");
     }
 
     private ModuleDescriptor() { }

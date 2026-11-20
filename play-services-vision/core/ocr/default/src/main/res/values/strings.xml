@@ -10,6 +10,8 @@
     <string name="ocr_models_devanagari">Devanagari</string>
     <string name="ocr_models_notice_title">%1$s OCR model required</string>
     <string name="ocr_models_notice_text">Tap to review the %1$s download for offline text recognition.</string>
+    <string name="ocr_models_notifications_disabled">OCR model notifications are off</string>
+    <string name="ocr_models_notifications_settings">Open Android settings to receive model download reminders.</string>
     <string name="ocr_models_confirm">Download the %1$s OCR model (%2$s)?</string>
     <string name="ocr_models_unmetered">Unmetered networks only</string>
     <string name="ocr_models_any_network">Any network, including mobile data</string>

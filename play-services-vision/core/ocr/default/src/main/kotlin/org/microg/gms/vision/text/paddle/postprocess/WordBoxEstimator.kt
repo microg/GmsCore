@@ -6,6 +6,7 @@
 package org.microg.gms.vision.text.paddle.postprocess
 
 import android.graphics.RectF
+import org.microg.gms.vision.text.paddle.model.OCRBox
 import org.microg.gms.vision.text.paddle.model.OCRWord
 import org.opencv.core.CvException
 import org.opencv.core.Mat
@@ -18,25 +19,39 @@ internal object WordBoxEstimator {
     private const val MAX_WIDTH = 768
     private const val MAX_HEIGHT = 40
     private const val MAX_WORDS = 12
-    private val separator = Regex("[\\p{Zs}\\t]+")
+    private val wordPattern = Regex("[^\\p{Zs}\\t\\r\\n]+")
 
-    fun estimate(crop: QuadTextCrop.Crop, text: String, rotated180: Boolean): List<OCRWord> {
-        if (text.length !in 3..256 || '\n' in text || '\r' in text) return emptyList()
-        val words = text.trim().split(separator, limit = MAX_WORDS + 1)
-        if (words.size !in 2..MAX_WORDS) return emptyList()
+    fun estimate(
+        crop: QuadTextCrop.Crop, line: OCRBox, text: String, rotated180: Boolean, analyzePixels: Boolean,
+    ): List<OCRWord> {
+        val trimmed = text.trim()
+        val words = wordPattern.findAll(trimmed).toList()
+        if (words.size < 2) return emptyList()
+        val boxes = if (analyzePixels) findImageBoxes(crop, text, rotated180, words.size) else null
+        return words.mapIndexed { index, word ->
+            val box = boxes?.get(index) ?: crop.approximateBox(
+                line, word.range.first.toFloat() / trimmed.length, (word.range.last + 1f) / trimmed.length, rotated180,
+            )
+            OCRWord(box, word.value)
+        }
+    }
+
+    private fun findImageBoxes(
+        crop: QuadTextCrop.Crop, text: String, rotated180: Boolean, wordCount: Int,
+    ): List<OCRBox>? {
+        if (text.length !in 3..256 || '\n' in text || '\r' in text || wordCount > MAX_WORDS) return null
         val image = crop.image
-        if (image.cols() !in 8..MAX_WIDTH * 2 || image.rows() !in 8..MAX_HEIGHT * 4) return emptyList()
+        if (image.cols() !in 8..MAX_WIDTH * 2 || image.rows() !in 8..MAX_HEIGHT * 4) return null
         val width = minOf(image.cols(), MAX_WIDTH)
         val height = minOf(image.rows(), MAX_HEIGHT)
         val scaleX = image.cols().toFloat() / width
         val scaleY = image.rows().toFloat() / height
         return try {
             val gray = grayscale(image, width, height)
-            val bounds = findBounds(gray, width, height, scaleX, scaleY, words.size) ?: return emptyList()
-            val boxes = crop.toSourceBoxes(bounds, rotated180) ?: return emptyList()
-            words.indices.map { OCRWord(boxes[it], words[it]) }
+            val bounds = findBounds(gray, width, height, scaleX, scaleY, wordCount) ?: return null
+            crop.toSourceBoxes(bounds, rotated180)
         } catch (_: CvException) {
-            emptyList()
+            null
         }
     }
 

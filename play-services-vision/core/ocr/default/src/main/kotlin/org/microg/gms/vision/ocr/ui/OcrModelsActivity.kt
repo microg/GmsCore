@@ -79,6 +79,7 @@ class OcrModelsActivity : AppCompatActivity() {
 class OcrModelsFragment : PreferenceFragmentCompat() {
     private val rows = mutableMapOf<String, Preference>()
     private val workByPack = mutableMapOf<String, List<WorkInfo>>()
+    private lateinit var notificationSettings: Preference
     private var refreshJob: Job? = null
     private var requestedPack: String? = null
 
@@ -86,6 +87,13 @@ class OcrModelsFragment : PreferenceFragmentCompat() {
         val context = requireContext()
         requestedPack = if (savedInstanceState == null) arguments?.getString(EXTRA_OCR_PACK) else savedInstanceState.getString(EXTRA_OCR_PACK)
         preferenceScreen = preferenceManager.createPreferenceScreen(context)
+        notificationSettings = Preference(context).apply {
+            setTitle(R.string.ocr_models_notifications_disabled)
+            setSummary(R.string.ocr_models_notifications_settings)
+            isPersistent = false
+            isVisible = false
+        }
+        preferenceScreen.addPreference(notificationSettings)
         for (pack in OcrModels.packs) {
             val label = context.packLabel(pack) ?: continue
             val row = Preference(context).apply {
@@ -110,6 +118,13 @@ class OcrModelsFragment : PreferenceFragmentCompat() {
             }
         }
         childFragmentManager.setFragmentResultListener(MODELS_CHANGED, viewLifecycleOwner) { _, _ -> refresh() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val settingsIntent = OcrModelPrompt.blockedNotificationSettingsIntent(requireContext())
+        notificationSettings.intent = settingsIntent
+        notificationSettings.isVisible = settingsIntent != null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

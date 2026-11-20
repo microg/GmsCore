@@ -10,6 +10,8 @@
     <string name="ocr_models_devanagari">天城文</string>
     <string name="ocr_models_notice_title">需要%1$s OCR 模型</string>
     <string name="ocr_models_notice_text">点按查看下载选项。下载 %1$s 后可离线识别文字。</string>
+    <string name="ocr_models_notifications_disabled">OCR 模型通知已关闭</string>
+    <string name="ocr_models_notifications_settings">打开系统通知设置，开启模型下载提醒。</string>
     <string name="ocr_models_confirm">下载%1$s OCR 模型（%2$s）？</string>
     <string name="ocr_models_unmetered">仅使用不按流量计费的网络</string>
     <string name="ocr_models_any_network">使用任意网络，包括移动数据</string>

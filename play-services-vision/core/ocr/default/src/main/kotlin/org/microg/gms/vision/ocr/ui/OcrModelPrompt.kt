@@ -12,6 +12,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.provider.Settings
 import android.text.format.Formatter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -33,20 +34,42 @@ internal object OcrModelPrompt {
     private const val CHANNEL_ID = "ocr-models"
     private const val PREFERENCES = "ocr-model-prompts"
 
+    fun blockedNotificationSettingsIntent(context: Context): Intent? {
+        val action = blockedNotificationSettingsAction(context) ?: return null
+        return Intent(action)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            .apply {
+                if (action == Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS) {
+                    putExtra(Settings.EXTRA_CHANNEL_ID, CHANNEL_ID)
+                }
+            }
+    }
+
+    private fun blockedNotificationSettingsAction(context: Context): String? {
+        if (android.os.Build.VERSION.SDK_INT < 26) return null
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            return Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        }
+        val channel = context.getSystemService(NotificationManager::class.java)?.getNotificationChannel(CHANNEL_ID)
+        return if (channel?.importance == NotificationManager.IMPORTANCE_NONE) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS else null
+    }
+
     @Synchronized
     fun notifyMissing(context: Context, pack: String, remainingBytes: Long) {
         if (android.os.Build.VERSION.SDK_INT < 26) return
         val label = context.packLabel(pack) ?: return
         val preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
         if (preferences.getBoolean(pack, false)) return
+        // A first channel can trigger a system permission prompt for apps targeting Android 12L or earlier.
+        if (blockedNotificationSettingsAction(context) != null) return
 
         val manager = context.getSystemService(NotificationManager::class.java) ?: return
         manager.createNotificationChannel(
             NotificationChannel(CHANNEL_ID, context.getString(R.string.ocr_models_title), NotificationManager.IMPORTANCE_DEFAULT)
         )
-        if (android.os.Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
-        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) return
-        if (manager.getNotificationChannel(CHANNEL_ID)?.importance == NotificationManager.IMPORTANCE_NONE) return
 
         val intent = Intent(context, OcrModelsActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
