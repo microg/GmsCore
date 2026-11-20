@@ -40,6 +40,11 @@
             app:destination="@id/aboutFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/dynamicModulesFragment"
+        android:name="org.microg.gms.vision.text.ui.DynamicModulesFragment"
+        android:label="@string/dynamic_modules_title" />
+
     <!-- Self-Check -->
 
     <fragment

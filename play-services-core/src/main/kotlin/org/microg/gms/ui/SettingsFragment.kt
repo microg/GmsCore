@@ -46,6 +46,13 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openLocationSettings)
             true
         }
+        findPreference<Preference>(PREF_DYNAMIC_MODULES)!!.apply {
+            isVisible = android.os.Build.VERSION.SDK_INT >= 26
+            setOnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.dynamicModulesFragment)
+                true
+            }
+        }
         findPreference<Preference>(PREF_VENDING)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openVendingSettings)
             true
@@ -135,6 +142,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_GCM = "pref_gcm"
         const val PREF_SNET = "pref_snet"
         const val PREF_LOCATION = "pref_location"
+        const val PREF_DYNAMIC_MODULES = "pref_dynamic_modules"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"

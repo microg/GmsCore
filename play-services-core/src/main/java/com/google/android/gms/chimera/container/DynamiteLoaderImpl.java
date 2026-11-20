@@ -71,7 +71,19 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
         }
 
         try {
-            return Class.forName("com.google.android.gms.dynamite.descriptors." + moduleId + ".ModuleDescriptor").getDeclaredField("MODULE_VERSION").getInt(null);
+            Class<?> descriptor = Class.forName("com.google.android.gms.dynamite.descriptors." + moduleId + ".ModuleDescriptor");
+            int version = descriptor.getDeclaredField("MODULE_VERSION").getInt(null);
+            if (version > 0) {
+                try {
+                    // A module can require data that is installed separately from its code.
+                    if (Boolean.FALSE.equals(descriptor.getDeclaredMethod("isAvailable", Context.class).invoke(null, context))) {
+                        return 0;
+                    }
+                } catch (NoSuchMethodException ignored) {
+                    // Modules without separate data always report their declared version.
+                }
+            }
+            return version;
         } catch (Exception e) {
             Log.w(TAG, "No such module known: " + moduleId);
         }

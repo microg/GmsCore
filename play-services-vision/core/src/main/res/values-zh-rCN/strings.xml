@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="dynamic_modules_title">动态模块</string>
+    <string name="dynamic_modules_text_recognition">文字识别</string>
+    <string name="dynamic_modules_text_recognition_summary">下载和管理离线识别所需的语言模型</string>
+    <string name="ocr_models_title">OCR 模型</string>
+    <string name="ocr_models_latin">拉丁文</string>
+    <string name="ocr_models_cjk">中文和日文</string>
+    <string name="ocr_models_korean">韩文</string>
+    <string name="ocr_models_devanagari">天城文</string>
+    <string name="ocr_models_notice_title">需要%1$s OCR 模型</string>
+    <string name="ocr_models_notice_text">点按查看下载选项。下载 %1$s 后可离线识别文字。</string>
+    <string name="ocr_models_notifications_disabled">OCR 模型通知已关闭</string>
+    <string name="ocr_models_notifications_settings">打开系统通知设置，开启模型下载提醒。</string>
+    <string name="ocr_models_confirm">下载%1$s OCR 模型（%2$s）？</string>
+    <string name="ocr_models_unmetered">仅使用不按流量计费的网络</string>
+    <string name="ocr_models_any_network">使用任意网络，包括移动数据</string>
+    <string name="ocr_models_download">下载</string>
+    <string name="ocr_models_available">可下载 %1$s</string>
+    <string name="ocr_models_ready">可离线识别</string>
+    <string name="ocr_models_queued">等待下载</string>
+    <string name="ocr_models_downloading">正在下载模型</string>
+    <string name="ocr_models_progress">已下载 %1$d%%</string>
+    <string name="ocr_models_failed">下载失败。点按重试。</string>
+    <string name="ocr_models_cancel_confirm">取消下载%1$s OCR 模型？</string>
+    <string name="ocr_models_cancel_download">取消下载</string>
+    <string name="ocr_models_delete_confirm">删除%1$s OCR 模型？</string>
+    <string name="ocr_models_delete">删除</string>
+    <string name="ocr_models_action_failed">OCR 模型操作失败，请重试。</string>
+</resources>

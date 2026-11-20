@@ -5,12 +5,20 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-sdk tools:overrideLibrary="org.opencv"/>
+    <uses-sdk tools:overrideLibrary="org.opencv,ai.onnxruntime"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature
             android:name="android.hardware.camera"
             android:required="false"/>
 
     <application>
+        <activity
+            android:name="org.microg.gms.vision.text.ui.OcrModelsActivity"
+            android:exported="false"
+            android:label="@string/ocr_models_title"/>
+        <provider
+            android:name="org.microg.gms.vision.text.model.store.OcrModelProvider"
+            android:authorities="${applicationId}.ocr.models"
+            android:exported="true"/>
     </application>
 </manifest>
