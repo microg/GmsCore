@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:icon="@drawable/ic_text_recognition"
+        android:key="pref_dynamic_modules_text_recognition"
+        android:persistent="false"
+        android:summary="@string/dynamic_modules_text_recognition_summary"
+        android:title="@string/dynamic_modules_text_recognition" />
+</PreferenceScreen>

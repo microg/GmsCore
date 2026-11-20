@@ -75,15 +75,10 @@ dependencies {
 
     mapboxRuntimeOnly project(':play-services-maps-core-mapbox')
     vtmRuntimeOnly project(':play-services-maps-core-vtm')
-    mapboxRuntimeOnly project(':play-services-vision-core-ocr-default')
-    vtmRuntimeOnly project(':play-services-vision-core-ocr-default')
     defaultRuntimeOnly project(':play-services-location-core-provider')
 
     if (hasModule("nearby", true)) runtimeOnly project(':play-services-nearby-core-package')
-    if (hasModule("hms", false)) {
-        hmsRuntimeOnly project(':play-services-maps-core-hms')
-        hmsRuntimeOnly project(':play-services-vision-core-ocr-hms')
-    }
+    if (hasModule("hms", false)) hmsRuntimeOnly project(':play-services-maps-core-hms')
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"

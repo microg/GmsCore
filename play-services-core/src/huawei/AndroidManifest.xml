@@ -3,10 +3,9 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:allowBackup="true" tools:replace="android:allowBackup" >
+    <application>
         <meta-data
             android:name="org.microg.gms.settings.checkin_enable_service"
             android:value="true" />

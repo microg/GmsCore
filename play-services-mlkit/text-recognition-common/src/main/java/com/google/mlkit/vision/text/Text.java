@@ -124,7 +124,7 @@ public class Text {
             cornerPoints = copyPoints(parcel.cornerPoints, transform);
             language = nonNullLanguage(parcel.language);
             confidence = parcel.confidence;
-            angle = transformedAngle(parcel.angle, cornerPoints, transform);
+            angle = transformedAngle(parcel.angle, parcel.boundingBox, transform);
             List<Element> children = new ArrayList<>();
             if (parcel.elements != null) {
                 for (TextElementParcel element : parcel.elements) {
@@ -184,7 +184,7 @@ public class Text {
             cornerPoints = copyPoints(parcel.cornerPoints, transform);
             language = nonNullLanguage(parcel.language);
             confidence = parcel.confidence;
-            angle = transformedAngle(parcel.angle, cornerPoints, transform);
+            angle = transformedAngle(parcel.angle, parcel.boundingBox, transform);
             List<Symbol> children = new ArrayList<>();
             if (parcel.symbols != null) {
                 for (TextSymbolParcel symbol : parcel.symbols) {
@@ -243,7 +243,7 @@ public class Text {
             cornerPoints = copyPoints(parcel.cornerPoints, transform);
             this.language = language;
             confidence = parcel.confidence;
-            angle = transformedAngle(parcel.angle, cornerPoints, transform);
+            angle = transformedAngle(parcel.angle, parcel.boundingBox, transform);
         }
 
         public float getAngle() {
@@ -321,8 +321,29 @@ public class Text {
         return copy;
     }
 
-    private static float transformedAngle(float original, Point[] points, Matrix transform) {
-        if (transform == null || points == null || points.length < 2 || points[0].equals(points[1])) return original;
-        return (float) Math.toDegrees(Math.atan2((double) points[1].y - points[0].y, (double) points[1].x - points[0].x));
+    private static float transformedAngle(float original, Rect bounds, Matrix transform) {
+        if (transform == null) return original;
+        double radians = Math.toRadians(original);
+        float dx = (float) Math.cos(radians);
+        float dy = (float) Math.sin(radians);
+        if (android.os.Build.VERSION.SDK_INT >= 21 && transform.isAffine()) {
+            float[] direction = {dx, dy};
+            transform.mapVectors(direction);
+            dx = direction[0];
+            dy = direction[1];
+        } else {
+            // Anchor the reading direction to the text so a perspective transform uses its location.
+            float x = bounds == null ? 0f : bounds.exactCenterX();
+            float y = bounds == null ? 0f : bounds.exactCenterY();
+            float length = bounds == null ? 1f : Math.max(1f, Math.min(bounds.width(), bounds.height()) * 0.5f);
+            float[] axis = {x - length * dx, y - length * dy, x + length * dx, y + length * dy};
+            transform.mapPoints(axis);
+            dx = axis[2] - axis[0];
+            dy = axis[3] - axis[1];
+        }
+        if (Float.isNaN(dx) || Float.isNaN(dy) || Float.isInfinite(dx) || Float.isInfinite(dy) || (dx == 0f && dy == 0f)) {
+            return original;
+        }
+        return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 }

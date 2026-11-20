@@ -24,17 +24,21 @@ import com.google.android.gms.vision.text.internal.client.TextRecognizerOptions;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PublicApi;
 
+import java.lang.reflect.Method;
+
 @PublicApi
 public final class TextRecognizer extends Detector<TextBlock> {
     private static final String TAG = "GmsTextRecognizer";
     private final Context context;
+    private final Method modelAvailability;
     private INativeTextRecognizerCreator creator;
     private INativeTextRecognizer remote;
 
-    private TextRecognizer(Context context, INativeTextRecognizerCreator creator) {
+    private TextRecognizer(Context context, INativeTextRecognizerCreator creator, Method modelAvailability) {
         Context applicationContext = context.getApplicationContext();
         this.context = applicationContext != null ? applicationContext : context;
         this.creator = creator;
+        this.modelAvailability = modelAvailability;
         getRemote();
     }
 
@@ -88,7 +92,13 @@ public final class TextRecognizer extends Detector<TextBlock> {
 
     @Override
     public final synchronized boolean isOperational() {
-        return getRemote() != null;
+        if (remote == null || modelAvailability == null) return getRemote() != null;
+        try {
+            return Boolean.TRUE.equals(modelAvailability.invoke(null, context));
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError e) {
+            Log.w(TAG, "Unable to query text recognition availability", e);
+            return false;
+        }
     }
 
     @Override
@@ -123,6 +133,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
 
         public TextRecognizer build() {
             INativeTextRecognizerCreator creator = null;
+            Method modelAvailability = null;
             try {
                 Context gms = context.createPackageContext(Constants.GMS_PACKAGE_NAME,
                         Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
@@ -135,13 +146,18 @@ public final class TextRecognizer extends Detector<TextBlock> {
                 if (descriptor.getField("MODULE_VERSION").getInt(null) <= 0) {
                     throw new IllegalStateException("OCR module is not supported on this Android version");
                 }
+                try {
+                    modelAvailability = descriptor.getMethod("isAvailable", Context.class);
+                } catch (NoSuchMethodException ignored) {
+                    // Older backends report readiness through the creator alone.
+                }
                 IBinder binder = (IBinder) loader.loadClass("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator")
                         .getConstructor().newInstance();
                 creator = INativeTextRecognizerCreator.Stub.asInterface(binder);
             } catch (Exception | LinkageError e) {
                 Log.w(TAG, "Text recognition is unavailable", e);
             }
-            return new TextRecognizer(context, creator);
+            return new TextRecognizer(context, creator, modelAvailability);
         }
     }
 }
