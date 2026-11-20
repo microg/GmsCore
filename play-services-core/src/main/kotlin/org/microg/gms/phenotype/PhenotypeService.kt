@@ -140,6 +140,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45735699", true, 0),
         Flag("45709528", true, 0),
     ),
+    "com.google.android.apps.wearables.maestro.companion#com.google.android.apps.wearables.maestro.companion" to arrayOf(
+        Flag("MaestroApp__standalone_mode", true, 0),
+    ),
     // Android Auto (Gearhead) — lift Car App Library API max for third-party apps.
     // Without this, AA falls back to baked-in default "DEFAULT:7, gearhead:8" which
     // blocks Spotify / YouTube Music (require minCarAppApiLevel=8).
