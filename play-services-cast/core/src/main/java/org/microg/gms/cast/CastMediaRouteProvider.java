@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -58,6 +59,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private Map<String, String> serviceCastIds = new HashMap<String, String>();
 
     private NsdManager mNsdManager;
+    private WifiManager.MulticastLock mMulticastLock;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
     private List<String> customCategories = new ArrayList<String>();
@@ -184,6 +186,11 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         }
 
         mNsdManager = (NsdManager)context.getApplicationContext().getSystemService(Context.NSD_SERVICE);
+        WifiManager wifiManager = (WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager != null) {
+            mMulticastLock = wifiManager.createMulticastLock(TAG);
+            mMulticastLock.setReferenceCounted(false);
+        }
 
         mDiscoveryListener = new NsdManager.DiscoveryListener() {
 
@@ -239,11 +246,13 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             @Override
             public void onDiscoveryStopped(String serviceType) {
                 CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                releaseMulticastLock();
             }
 
             @Override
             public void onStartDiscoveryFailed(String serviceType, int errorCode) {
                 CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                releaseMulticastLock();
             }
 
             @Override
@@ -294,6 +303,9 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 }
             }
             if (this.state == State.NOT_DISCOVERING) {
+                if (mMulticastLock != null) {
+                    mMulticastLock.acquire();
+                }
                 mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
                 this.state = State.DISCOVERY_REQUESTED;
             }
@@ -302,6 +314,12 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 mNsdManager.stopServiceDiscovery(mDiscoveryListener);
                 this.state = State.DISCOVERY_STOP_REQUESTED;
             }
+        }
+    }
+
+    private void releaseMulticastLock() {
+        if (mMulticastLock != null) {
+            mMulticastLock.release();
         }
     }
 
