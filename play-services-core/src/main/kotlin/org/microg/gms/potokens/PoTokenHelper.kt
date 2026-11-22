@@ -118,7 +118,9 @@ class PoTokenHelper(val context: Context) {
         map: Map<String, String>
     ): String? {
         try {
-            val resultTask = DroidGuard.getClient(context).getResults(KEY_TOKEN, map, request)
+            // Use the multi-step session API so the PoToken / Play Integrity flow also
+            // works when DroidGuard is run against a remote DroidGuard server (#2851).
+            val resultTask = DroidGuard.getClient(context).getResultsMultiStep(KEY_TOKEN, map, request)
             return Tasks.await(resultTask, 15, TimeUnit.SECONDS)
         } catch (e: Throwable) {
             Log.w(TAG, "PoTokenHelper getDroidGuardResult exception: $e")

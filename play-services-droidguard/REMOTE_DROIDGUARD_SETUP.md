@@ -20,11 +20,28 @@ The remote request packet now carries the multi-step metadata in `DroidGuardResu
 - `totalSteps` (if known by caller)
 - `isMultiStep = true`
 
+### How Play Integrity uses this
+
+The Play Integrity / PoToken flow (`PoTokenHelper` in `play-services-core`) requests DroidGuard
+results via `DroidGuardClient.getResultsMultiStep(...)`, which drives a full session
+(`begin` → `nextStep` → `snapshotWithSession` → `closeSession`) instead of a single
+`snapshot` call. This means the PoToken / Play Integrity flow now also works when
+DroidGuard is executed against a remote DroidGuard server, and it transparently falls
+back to a plain `snapshot` if the session API is not available (e.g. older server or
+local legacy handler), so existing setups keep working unchanged.
+
 ## 2) Client setup in microG
 
-1. Open microG Settings → DroidGuard → Remote
-2. Set the Remote URL to your reachable endpoint
-3. Save and keep microG in Remote mode for the target app profile
+Remote (network) mode is controlled by the DroidGuard settings exposed through
+`SettingsContract.DroidGuard`:
+
+- `MODE = Network` — use the remote DroidGuard server instead of the embedded local VM
+- `NETWORK_SERVER_URL` — base URL of your reachable DroidGuard-compatible endpoint
+- `ENABLED = true` — DroidGuard overall must be enabled
+
+In the microG Settings app these are the "DroidGuard" / "Device certification"
+preferences (select *Network* mode and set the server URL), so no code changes or
+rebuilds are needed on the client side.
 
 The remote client sends:
 
@@ -51,6 +68,20 @@ The request sequence is:
 
 If you are hosting your own server, return a non-empty byte array and ensure CORS/network
 and TLS are configured for your environment.
+
+### Setting up a phone as the DroidGuard server
+
+A commonly used setup is [kaduvert/PlayIntegrityServer](https://github.com/kaduvert/PlayIntegrityServer)
+(DroidGuard Relay): a Zygisk module installed on a *server* device (a phone with working
+Google Play / SafetyNet-attested environment via microG or real Gms) that executes the
+DroidGuard VM work on behalf of remote clients and serves the resulting tokens over HTTP(S).
+
+1. Install the relay module on the server phone, keep it reachable via Wi-Fi/VPN
+2. Note the endpoint URL it exposes (e.g. `https://<server>:<port>/droidguard/`)
+3. On the client device set DroidGuard mode to *Network* and paste that URL
+   (see section 2)
+4. The PoToken / Play Integrity flow on the client now transparently runs its multi-step
+   session against the server phone - no root or TrickyStore-style bypass on the client
 
 ## 4) Suggested minimum validation flow
 

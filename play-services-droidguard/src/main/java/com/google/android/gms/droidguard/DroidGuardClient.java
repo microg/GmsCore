@@ -20,6 +20,21 @@ public interface DroidGuardClient {
 
     @NonNull Task<String> getResults(@NonNull String flow, @Nullable Map<String, String> data, @Nullable DroidGuardResultsRequest request);
 
+    /**
+     * Runs the given flow using the multi-step session API
+     * ({@link DroidGuardHandle#begin}, {@link DroidGuardHandle#nextStep},
+     * {@link DroidGuardHandle#snapshotWithSession}) instead of the single-shot
+     * {@link DroidGuardHandle#snapshot}. This is required for flows (such as the
+     * PoToken / Play Integrity flow) when DroidGuard is executed remotely, as the
+     * remote protocol negotiates multiple steps.
+     */
+    @NonNull Task<String> getResultsMultiStep(@NonNull String flow, @Nullable Map<String, String> data, @Nullable DroidGuardResultsRequest request);
+
+    @NonNull
+    static Task<String> getResultsMultiStep(@NonNull Context context, @NonNull String flow, @Nullable Map<String, String> data, @Nullable DroidGuardResultsRequest request) {
+        return DroidGuard.getClient(context).getResultsMultiStep(flow, data, request);
+    }
+
     @NonNull
     static Task<DroidGuardHandle> init(@NonNull Context context, @NonNull String flow) {
         return DroidGuard.getClient(context).init(flow, null);
