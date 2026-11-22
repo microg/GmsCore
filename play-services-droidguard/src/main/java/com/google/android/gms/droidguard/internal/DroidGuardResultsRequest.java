@@ -23,6 +23,10 @@ public class DroidGuardResultsRequest extends AutoSafeParcelable {
     private static final String KEY_NETWORK_TO_USE = "networkToUse";
     private static final String KEY_TIMEOUT_MS = "timeoutMs";
     public static final String KEY_OPEN_HANDLES = "openHandles";
+    private static final String KEY_SESSION_ID = "sessionId";
+    private static final String KEY_STEP_NUMBER = "stepNumber";
+    private static final String KEY_TOTAL_STEPS = "totalSteps";
+    private static final String KEY_IS_MULTI_STEP = "isMultiStep";
 
     @Field(2)
     public Bundle bundle;
@@ -76,6 +80,42 @@ public class DroidGuardResultsRequest extends AutoSafeParcelable {
 
     public DroidGuardResultsRequest setOpenHandles(int openHandles) {
         bundle.putInt(KEY_OPEN_HANDLES, openHandles);
+        return this;
+    }
+
+    public long getSessionId() {
+        return bundle.getLong(KEY_SESSION_ID, -1L);
+    }
+
+    public DroidGuardResultsRequest setSessionId(long sessionId) {
+        bundle.putLong(KEY_SESSION_ID, sessionId);
+        return this;
+    }
+
+    public int getStepNumber() {
+        return bundle.getInt(KEY_STEP_NUMBER, 0);
+    }
+
+    public DroidGuardResultsRequest setStepNumber(int stepNumber) {
+        bundle.putInt(KEY_STEP_NUMBER, stepNumber);
+        return this;
+    }
+
+    public int getTotalSteps() {
+        return bundle.getInt(KEY_TOTAL_STEPS, 0);
+    }
+
+    public DroidGuardResultsRequest setTotalSteps(int totalSteps) {
+        bundle.putInt(KEY_TOTAL_STEPS, totalSteps);
+        return this;
+    }
+
+    public boolean isMultiStep() {
+        return bundle.getBoolean(KEY_IS_MULTI_STEP, false);
+    }
+
+    public DroidGuardResultsRequest setMultiStep(boolean isMultiStep) {
+        bundle.putBoolean(KEY_IS_MULTI_STEP, isMultiStep);
         return this;
     }
 

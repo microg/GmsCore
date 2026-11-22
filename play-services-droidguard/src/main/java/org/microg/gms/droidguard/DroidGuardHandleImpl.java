@@ -8,6 +8,7 @@ package org.microg.gms.droidguard;
 import android.util.Log;
 
 import com.google.android.gms.droidguard.DroidGuardHandle;
+import com.google.android.gms.droidguard.internal.DroidGuardInitReply;
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest;
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle;
 
@@ -21,6 +22,7 @@ public class DroidGuardHandleImpl implements DroidGuardHandle {
     private final DroidGuardResultsRequest request;
     private IDroidGuardHandle handle;
     private byte[] error;
+    private long currentSessionId = -1;
 
     public DroidGuardHandleImpl(DroidGuardApiClient apiClient, DroidGuardResultsRequest request, IDroidGuardHandle handle) {
         this.apiClient = apiClient;
@@ -68,6 +70,110 @@ public class DroidGuardHandleImpl implements DroidGuardHandle {
     }
 
     @Override
+    public long begin(String flow, DroidGuardResultsRequest request, Map<String, String> initialData) {
+        if (error != null || handle == null) {
+            return -1;
+        }
+        ArrayBlockingQueue<Long> resultQueue = new ArrayBlockingQueue<>(1);
+        apiClient.runOnHandler(() -> {
+            long sessionId;
+            try {
+                sessionId = handle.begin(flow, request != null ? request : this.request, initialData);
+                if (sessionId > 0) {
+                    currentSessionId = sessionId;
+                }
+                resultQueue.offer(sessionId);
+            } catch (Exception e) {
+                error = Utils.getErrorBytes("Begin multi-step failed: " + e);
+                resultQueue.offer(-1L);
+            }
+        });
+        try {
+            Long sessionId = resultQueue.poll(this.request.getTimeoutMillis(), TimeUnit.MILLISECONDS);
+            return sessionId != null ? sessionId : -1L;
+        } catch (InterruptedException e) {
+            error = Utils.getErrorBytes("Begin multi-step timeout: " + this.request.getTimeoutMillis() + " ms");
+            return -1;
+        }
+    }
+
+    @Override
+    public DroidGuardInitReply nextStep(long sessionId, Map<String, String> stepData) {
+        if (error != null || handle == null || sessionId != currentSessionId) {
+            return null;
+        }
+        ArrayBlockingQueue<DroidGuardInitReply> resultQueue = new ArrayBlockingQueue<>(1);
+        apiClient.runOnHandler(() -> {
+            try {
+                resultQueue.offer(handle.nextStep(sessionId, stepData));
+            } catch (Exception e) {
+                error = Utils.getErrorBytes("Next step failed: " + e);
+                resultQueue.offer(null);
+            }
+        });
+        try {
+            return resultQueue.poll(this.request.getTimeoutMillis(), TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            error = Utils.getErrorBytes("Next step timeout: " + this.request.getTimeoutMillis() + " ms");
+            return null;
+        }
+    }
+
+    @Override
+    public String snapshotWithSession(long sessionId, Map<String, String> data) {
+        byte[] result;
+        if (error != null || handle == null || sessionId != currentSessionId) {
+            result = Utils.getErrorBytes("Invalid session");
+        } else {
+            ArrayBlockingQueue<byte[]> resultQueue = new ArrayBlockingQueue<>(1);
+            apiClient.runOnHandler(() -> {
+                byte[] innerResult;
+                try {
+                    innerResult = handle.snapshotWithSession(sessionId, data);
+                    if (innerResult == null) {
+                        error = Utils.getErrorBytes("Received null");
+                        innerResult = error;
+                    }
+                } catch (Exception e) {
+                    error = Utils.getErrorBytes("Snapshot with session failed: " + e);
+                    innerResult = error;
+                } finally {
+                    if (sessionId == currentSessionId) {
+                        currentSessionId = -1;
+                    }
+                }
+                resultQueue.offer(innerResult);
+            });
+            try {
+                result = resultQueue.poll(this.request.getTimeoutMillis(), TimeUnit.MILLISECONDS);
+                if (result == null) {
+                    result = Utils.getErrorBytes("Snapshot with session timeout: " + this.request.getTimeoutMillis() + " ms");
+                }
+            } catch (InterruptedException e) {
+                result = Utils.getErrorBytes("Results transfer failed: " + e);
+            }
+        }
+        return Utils.toBase64(result);
+    }
+
+    @Override
+    public void closeSession(long sessionId) {
+        if (handle == null || sessionId != currentSessionId) {
+            return;
+        }
+        apiClient.runOnHandler(() -> {
+            try {
+                handle.closeSession(sessionId);
+                if (sessionId == currentSessionId) {
+                    currentSessionId = -1;
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Error while closing session: " + e);
+            }
+        });
+    }
+
+    @Override
     public boolean isOpened() {
         return handle != null && error == null && handle.asBinder().pingBinder();
     }
@@ -80,6 +186,9 @@ public class DroidGuardHandleImpl implements DroidGuardHandle {
                     handle.close();
                 } catch (Exception e) {
                     Log.w(TAG, "Error while closing handle.");
+                }
+                if (currentSessionId > 0) {
+                    closeSession(currentSessionId);
                 }
                 apiClient.markHandleClosed();
                 handle = null;

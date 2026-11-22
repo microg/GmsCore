@@ -53,6 +53,32 @@ public class DroidGuardClientImpl extends GoogleApi<DroidGuardClientImpl.Options
         });
     }
 
+    @Override
+    @NonNull
+    public Task<String> getResultsMultiStep(@NonNull String flow, @Nullable Map<String, String> data, @Nullable DroidGuardResultsRequest request) {
+        DroidGuardResultsRequest finalRequest = request != null ? request : new DroidGuardResultsRequest();
+        return scheduleTask((ReturningGoogleApiCall<String, DroidGuardApiClient>) client -> {
+            DroidGuardHandle handle = client.openHandle(flow, finalRequest);
+            String results = null;
+            try {
+                long sessionId = handle.begin(flow, finalRequest, data);
+                if (sessionId >= 0) {
+                    handle.nextStep(sessionId, data);
+                    results = handle.snapshotWithSession(sessionId, data);
+                    handle.closeSession(sessionId);
+                }
+            } catch (Exception e) {
+                android.util.Log.w("DroidGuardClientImpl", "Multi-step session failed, falling back to snapshot", e);
+            }
+            if (results == null || results.isEmpty()) {
+                // Legacy / single-shot fallback, e.g. when the server doesn't support sessions yet
+                results = handle.snapshot(data);
+            }
+            handle.close();
+            return results;
+        });
+    }
+
     public static class Options implements Api.ApiOptions.Optional {
         public final String packageName;
 
