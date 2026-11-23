@@ -151,7 +151,9 @@ public class CheckinClient {
                 .version(3);
         for (Account account : accounts) {
             builder.accountCookie.add("[" + account.name + "]");
-            builder.accountCookie.add(account.authToken);
+            if (account.authToken != null && !account.authToken.isEmpty()) {
+                builder.accountCookie.add(account.authToken);
+            }
         }
         if (builder.accountCookie.isEmpty()) builder.accountCookie.add("");
         if (deviceIdent.wifiMac != null) {
