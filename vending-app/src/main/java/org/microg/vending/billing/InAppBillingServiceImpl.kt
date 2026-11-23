@@ -213,6 +213,9 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         if (extraParams != null && !extraParams.isEmpty && extraParams.getBoolean("vr") && type == "subs") {
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "subscription is not supported in VR Mode.")
         }
+        if (getGoogleAccount(context, extraParams?.getString("accountName")) == null) {
+            return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "No Google account found.")
+        }
         return resultBundle(BillingResponseCode.OK, "")
     }
 
