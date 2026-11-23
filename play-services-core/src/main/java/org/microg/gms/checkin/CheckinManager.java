@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.util.Log;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
@@ -47,14 +48,17 @@ public class CheckinManager {
         AccountManager accountManager = AccountManager.get(context);
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
-            String token = new AuthRequest()
-                    .email(account.name).token(accountManager.getPassword(account))
-                    .hasPermission(true).service("ac2dm")
-                    .app("com.google.android.gsf", Constants.GMS_PACKAGE_SIGNATURE_SHA1)
-                    .getResponse().LSid;
-            if (token != null) {
-                accounts.add(new CheckinClient.Account(account.name, token));
+            String token = null;
+            try{
+                token = new AuthRequest()
+                        .email(account.name).token(accountManager.getPassword(account))
+                        .hasPermission(true).service("ac2dm")
+                        .app("com.google.android.gsf", Constants.GMS_PACKAGE_SIGNATURE_SHA1)
+                        .getResponse().LSid;
+            } catch (Exception e) {
+                Log.i("CheckinManager", "Could not get an account token for check-in");
             }
+            accounts.add(new CheckinClient.Account(account.name, token));
         }
         CheckinRequest request = CheckinClient.makeRequest(context,
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
