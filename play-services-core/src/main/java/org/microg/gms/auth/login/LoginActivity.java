@@ -147,11 +147,12 @@ public class LoginActivity extends AssistantActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                Log.d(TAG, "pageFinished: " + view.getUrl());
                 String pageUrl = view.getUrl();
                 if (pageUrl == null) pageUrl = url;
                 if (pageUrl == null) return;
 
-                Log.d(TAG, "pageFinished");
+                Log.d(TAG, "pageFinished: " + pageUrl);
                 Uri uri = Uri.parse(pageUrl);
                 String path = uri.getPath();
 
