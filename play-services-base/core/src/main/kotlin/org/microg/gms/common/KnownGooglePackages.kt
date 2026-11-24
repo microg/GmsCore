@@ -235,6 +235,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         setOf(ACCOUNT, AUTH, OWNER)
     ),
 
+    // Online Insights Study
+    Pair(
+        PackageAndCertHash("com.google.android.apps.onlineinsightspanel", SHA256, "ddc56d76cf04eea28bae7a02e1a8f5f0e45fc275880386986ceb6f5615230f9d"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
