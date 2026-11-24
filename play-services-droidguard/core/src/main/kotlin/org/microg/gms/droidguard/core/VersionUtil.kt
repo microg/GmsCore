@@ -44,7 +44,7 @@ class VersionUtil(private val context: Context) {
             return type // Use unknown build type
         }
     val versionString: String
-        get() = "${BuildConfig.VERSION_NAME} ($buildType-{{cl}})"
+        get() = "${BuildConfig.VERSION_NAME} ($buildType-${BuildConfig.VERSION_CODE})"
     val versionCode: Int
         get() = BuildConfig.VERSION_CODE + (getVersionOffset(buildType) ?: 0)
 

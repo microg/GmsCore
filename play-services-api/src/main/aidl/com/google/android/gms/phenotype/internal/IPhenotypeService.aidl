@@ -1,6 +1,7 @@
 package com.google.android.gms.phenotype.internal;
 
 import com.google.android.gms.common.api.internal.IStatusCallback;
+import com.google.android.gms.phenotype.internal.IGetStorageInfoCallbacks;
 import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks;
 import com.google.android.gms.phenotype.Flag;
 import com.google.android.gms.phenotype.RegistrationInfo;
@@ -32,4 +33,6 @@ interface IPhenotypeService {
     oneway void syncAllAfterOperation(IPhenotypeCallbacks callbacks, long p1) = 23; // returns via callbacks.onSyncFinished()
     oneway void setRuntimeProperties(IStatusCallback callbacks, String p1, in byte[] p2) = 24;
 //    oneway void setExternalExperiments(IStatusCallback callbacks, String p1, in List<byte[]> p2) = 25;
+    oneway void getStorageInfo(IGetStorageInfoCallbacks callbacks) = 26;
+    oneway void commitToConfigurationV2(IPhenotypeCallbacks callbacks, in byte[] data) = 30;
 }
