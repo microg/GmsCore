@@ -83,6 +83,9 @@ import kotlin.random.Random
 
 private const val TAG = "ExpressIntegrityService"
 
+// Their servers reject the standard tokens built here, but accept the classic token they fall back to on this error.
+private val CLASSIC_FALLBACK_PACKAGES = setOf("com.strava")
+
 class ExpressIntegrityService : LifecycleService() {
 
     override fun onBind(intent: Intent): IBinder? {
@@ -278,6 +281,12 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
                 if (!playIntegrityEnabled) {
                     throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
+                }
+
+                if (callingPackageName in CLASSIC_FALLBACK_PACKAGES) {
+                    Log.i(TAG, "requestExpressIntegrityToken: $callingPackageName falls back to the classic API")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                    return@launchWhenCreated
                 }
 
                 val expressIntegritySession = ExpressIntegritySession(
