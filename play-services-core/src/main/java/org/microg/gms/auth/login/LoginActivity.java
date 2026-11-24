@@ -147,17 +147,24 @@ public class LoginActivity extends AssistantActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "pageFinished: " + view.getUrl());
-                Uri uri = Uri.parse(view.getUrl());
+                String pageUrl = view.getUrl();
+                if (pageUrl == null) pageUrl = url;
+                if (pageUrl == null) return;
+
+                Log.d(TAG, "pageFinished");
+                Uri uri = Uri.parse(pageUrl);
+                String path = uri.getPath();
 
                 // Begin login.
                 // Only required if client code does not invoke showView() via JSBridge
-                if ("identifier".equals(uri.getFragment()) || uri.getPath().endsWith("/identifier"))
+                if ("identifier".equals(uri.getFragment()) || (path != null && path.endsWith("/identifier")))
                     runOnUiThread(() -> webView.setVisibility(VISIBLE));
 
                 // Normal login.
                 if ("close".equals(uri.getFragment()))
                     closeWeb(false);
+
+                if (url == null) return;
 
                 // Google Suite login.
                 if (url.startsWith(GOOGLE_SUITE_URL))
