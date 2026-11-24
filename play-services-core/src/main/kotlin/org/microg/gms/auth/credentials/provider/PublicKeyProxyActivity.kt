@@ -18,14 +18,8 @@ import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.google.android.gms.fido.Fido.FIDO2_KEY_CREDENTIAL_EXTRA
 import com.google.android.gms.fido.fido2.api.common.*
 import org.json.JSONObject
-import org.microg.gms.common.GmsService
-import org.microg.gms.fido.core.ui.ACTION_FIDO_AUTHENTICATE
-import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CALLER
+import org.microg.gms.auth.credentials.buildFidoAuthenticateIntent
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CREDENTIAL_ID
-import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
-import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SERVICE
-import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SOURCE
-import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_TYPE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_BROWSER
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_REGISTER
@@ -50,7 +44,7 @@ class PublicKeyProxyActivity : CredentialProviderActivity() {
         val credentialIdString = intent.getStringExtra(KEY_CREDENTIAL_ID)
 
         val (optionsBytes, source) = buildRequestOptions(options, isBrowserRequest, request.callingAppInfo.origin, option.clientDataHash)
-        val fidoIntent = createFidoIntent(source, optionsBytes, request.callingAppInfo.packageName, TYPE_SIGN, credentialIdString)
+        val fidoIntent = buildFidoAuthenticateIntent(source, optionsBytes, request.callingAppInfo.packageName, TYPE_SIGN, credentialIdString)
         startActivityForResult(fidoIntent, REQUEST_CODE_FIDO)
     }
 
@@ -76,7 +70,7 @@ class PublicKeyProxyActivity : CredentialProviderActivity() {
         Log.d(TAG, "handlePasskeyCreate: options: $options")
 
         val (optionsBytes, source) = buildCreationOptions(options, isBrowserRequest, origin, publicKeyRequest.clientDataHash)
-        val fidoIntent = createFidoIntent(source, optionsBytes, callingPackage, TYPE_REGISTER)
+        val fidoIntent = buildFidoAuthenticateIntent(source, optionsBytes, callingPackage, TYPE_REGISTER)
 
         startActivityForResult(fidoIntent, REQUEST_CODE_FIDO)
         Log.d(TAG, "Launched FIDO authenticator by PasskeyCreate")
@@ -117,19 +111,6 @@ class PublicKeyProxyActivity : CredentialProviderActivity() {
             finishWithException(e.localizedMessage)
         }
     }
-
-    fun createFidoIntent(
-        source: String, optionsBytes: ByteArray, callingPackage: String, type: String, credentialIdString: String? = null
-    ): Intent = Intent(ACTION_FIDO_AUTHENTICATE).apply {
-        `package` = packageName
-        putExtra(KEY_SERVICE, GmsService.FIDO2_API.SERVICE_ID)
-        putExtra(KEY_SOURCE, source)
-        putExtra(KEY_TYPE, type)
-        putExtra(KEY_OPTIONS, optionsBytes)
-        putExtra(KEY_CALLER, callingPackage)
-        credentialIdString?.let { putExtra(KEY_CREDENTIAL_ID, it) }
-    }
-
 
     private fun handleFidoSuccess(publicKeyCredential: PublicKeyCredential) = runCatching {
         when (val response = publicKeyCredential.response) {

@@ -5,9 +5,12 @@
 
 package org.microg.gms.maps.mapbox
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Looper
+import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -21,6 +24,7 @@ class GoogleLocationEngine(context: Context) : LocationEngine {
     private val listenerMap: MutableMap<LocationEngineCallback<LocationEngineResult>, LocationListener> = hashMapOf()
     private val client = LocationServices.getFusedLocationProviderClient(context)
 
+    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
         client.lastLocation.addOnCompleteListener {
             if (it.isSuccessful) callback.onSuccess(LocationEngineResult.create(it.result))
@@ -28,6 +32,7 @@ class GoogleLocationEngine(context: Context) : LocationEngine {
         }
     }
 
+    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     override fun requestLocationUpdates(request: LocationEngineRequest, callback: LocationEngineCallback<LocationEngineResult>, looper: Looper?) {
         listenerMap[callback] = listenerMap[callback] ?: LocationListener { callback.onSuccess(LocationEngineResult.create(it)) }
         client.requestLocationUpdates(
@@ -48,6 +53,7 @@ class GoogleLocationEngine(context: Context) : LocationEngine {
         )
     }
 
+    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     override fun requestLocationUpdates(request: LocationEngineRequest, pendingIntent: PendingIntent?) {
         throw UnsupportedOperationException()
     }

@@ -65,24 +65,9 @@ fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUser
 )
 
 fun getAlgorithm(algorithmInt: Int): Algorithm {
-    return when (algorithmInt) {
-        -65535 -> RSAAlgorithm.RS1
-        -262 -> RSAAlgorithm.LEGACY_RS1
-        -261 -> EC2Algorithm.ED512
-        -260 -> EC2Algorithm.ED256
-        -259 -> RSAAlgorithm.RS512
-        -258 -> RSAAlgorithm.RS384
-        -257 -> RSAAlgorithm.RS256
-        -39 -> RSAAlgorithm.PS512
-        -38 -> RSAAlgorithm.PS384
-        -37 -> RSAAlgorithm.PS256
-        -36 -> EC2Algorithm.ES512
-        -35 -> EC2Algorithm.ES384
-        -25 -> EC2Algorithm.ECDH_HKDF_256
-        -7 -> EC2Algorithm.ES256
-
-        else -> Algorithm { algorithmInt }
-    }
+    return EC2Algorithm.entries.firstOrNull { it.algoValue == algorithmInt }
+        ?: RSAAlgorithm.entries.firstOrNull { it.algoValue == algorithmInt }
+        ?: Algorithm { algorithmInt }
 }
 
 fun PublicKeyCredentialParameters.encodeAsCbor() = CBORObject.NewMap().apply {

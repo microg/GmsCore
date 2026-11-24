@@ -13,23 +13,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.auth.account.IWorkAccountCallback
 import com.google.android.gms.auth.account.IWorkAccountService
-import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator
-import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_CHANGED_BOARDCAST
-import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
+import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.AuthRequest
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
 private const val TAG = "GmsWorkAccountService"
+
+const val WORK_ACCOUNT_CHANGED_BROADCAST = "org.microg.vending.WORK_ACCOUNT_CHANGED"
 
 class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT_API) {
     override fun handleServiceRequest(
@@ -84,7 +86,7 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
 
         val componentName = ComponentName(
             context,
-            WorkAccountAuthenticatorService::class.java
+            "org.microg.gms.auth.WorkAccountAuthenticatorService"
         )
         packageManager.setComponentEnabledSetting(
             componentName,
@@ -93,13 +95,72 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
         )
     }
 
+    /**
+     * @return `null` if account creation fails, the newly created account otherwise
+     */
+    fun addAccountInternal(
+        accountCreationToken: String
+    ): Account? {
+
+        if (!WorkProfileSettings(context).allowCreateWorkAccount) {
+            // TODO: communicate error to user (use `R.string.auth_work_authenticator_disabled_error`)
+            Log.w(TAG, "creating a work account is disabled in microG settings")
+            return null
+        }
+
+        return try {
+            val authResponse = AuthRequest().fromContext(context)
+                .appIsGms()
+                .callerIsGms()
+                .service("ac2dm")
+                .token(accountCreationToken).isAccessToken()
+                .addAccount()
+                .getAccountId()
+                .droidguardResults("null") // TODO
+                .response
+
+            val accountManager = AccountManager.get(context)
+            val account = Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE)
+            val accountAdded = accountManager.addAccountExplicitly(
+                account,
+                authResponse.token, Bundle().apply {
+                    // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
+                    if (authResponse.accountId.isNotBlank()) {
+                        putString(AuthConstants.GOOGLE_USER_ID, authResponse.accountId)
+                    }
+                    putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                    putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
+                    if (authResponse.services != "android") {
+                        Log.i(
+                            TAG,
+                            "unexpected 'services' value ${authResponse.services} (usually 'android')"
+                        )
+                    }
+                })
+
+            if (accountAdded) {
+
+                // Notify vending package
+                context.sendBroadcast(
+                    Intent(WORK_ACCOUNT_CHANGED_BROADCAST).setPackage("com.android.vending")
+                )
+
+                // Report successful creation to caller
+                account
+            } else null
+        } catch (exception: Exception) {
+            Log.w(TAG, "Failed to add work account.", exception)
+            null
+        }
+    }
+
     override fun addWorkAccount(
         callback: IWorkAccountCallback?,
         token: String
     ) {
         Log.d(TAG, "addWorkAccount with token $token")
         Thread {
-            WorkAccountAuthenticator(context).addAccountInternal(token)?.let {
+            addAccountInternal(token)?.let {
                 callback?.onAccountAdded(it)
             }
         }.start()
@@ -117,7 +178,7 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
 
                 // Notify vending package
                 context.sendBroadcast(
-                    Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
+                    Intent(WORK_ACCOUNT_CHANGED_BROADCAST).setPackage("com.android.vending")
                 )
 
                 callback?.onAccountRemoved(success)

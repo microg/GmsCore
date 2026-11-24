@@ -7,11 +7,31 @@ package org.microg.gms.potokens
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.android.gms.BuildConfig
+import androidx.core.content.edit
+
+private const val KEY_PO_TOKEN_WINDOW_STATE_VERSION = "po_token_window_state_version"
 
 class PoTokenStore(context: Context) {
 
     private val sp: SharedPreferences =
         context.getSharedPreferences("com.google.android.gms.potokens", Context.MODE_PRIVATE)
+
+    @Volatile
+    private var intervalFlag = false
+
+    init {
+        val storedVersion = sp.getInt(KEY_PO_TOKEN_WINDOW_STATE_VERSION, 0)
+        if (storedVersion < BuildConfig.VERSION_CODE || sp.contains(KEY_PO_TOKEN_INTERVAL_FLAG)) {
+            sp.edit {
+                remove(KEY_PO_TOKEN_INTERVAL_FLAG)
+                if (storedVersion < BuildConfig.VERSION_CODE) {
+                    remove(KEY_PO_TOKEN_ACCESSED_TIME)
+                    putInt(KEY_PO_TOKEN_WINDOW_STATE_VERSION, BuildConfig.VERSION_CODE)
+                }
+            }
+        }
+    }
 
     fun getString(key: String, defValue: String?): String? {
         return sp.getString(key, defValue)
@@ -46,11 +66,11 @@ class PoTokenStore(context: Context) {
     }
 
     fun updateIntervalFlag(flag: Boolean) {
-        sp.edit().putBoolean(KEY_PO_TOKEN_INTERVAL_FLAG, flag).apply()
+        intervalFlag = flag
     }
 
     fun getIntervalFlag(): Boolean {
-        return sp.getBoolean(KEY_PO_TOKEN_INTERVAL_FLAG, false)
+        return intervalFlag
     }
 
     fun clearOldTokenInfo() {

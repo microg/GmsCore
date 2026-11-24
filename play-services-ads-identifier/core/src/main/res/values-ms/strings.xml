@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Kebenaran ID Pengiklanan</string>
+    <string name="perm_ad_id_description">Membolehkan aplikasi penerbit mengakses ID pengiklanan yang sah secara langsung atau tidak langsung.</string>
+    <string name="perm_ad_id_notification_label">Pemberitahuan ID Pengiklanan</string>
+    <string name="perm_ad_id_notification_description">Membolehkan aplikasi menerima pemberitahuan apabila ID pengiklanan atau keutamaan had penjejakan iklan pengguna dikemas kini.</string>
+</resources>

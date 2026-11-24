@@ -45,4 +45,9 @@
     <string name="pref_location_wifi_moving_enabled_summary">Bağlanıldığında Wi-Fi konumunu direkt olarak desteklenen mobil erişim noktalarından (hotspot) al.</string>
     <string name="location_settings_dialog_message_title_to_continue">Devam etmek için, microG\'nin konum servislerinden yararlanan cihaz konumunu etkinleştirin</string>
     <string name="prefcat_app_last_location">Son bildirilen konum</string>
+    <string name="prefcat_location_timeline_title">Google Haritalar Zaman Çizelgesi</string>
+    <string name="pref_location_timeline_title">Konum geçmişini etkinleştir</string>
+    <string name="pref_location_timeline_summary">Konum bilgilerinizi düzenli aralıklarla kaydedin ve Google Haritalar Zaman Çizelgesinde paylaşın.</string>
+    <string name="pref_location_timeline_upload_title">Google hesabıyla eşitle</string>
+    <string name="pref_location_timeline_upload_summary">Konum geçmişini Google sunucularıyla eşitleyin, böylece diğer aygıtlarda görüntülenebilir.</string>
 </resources>

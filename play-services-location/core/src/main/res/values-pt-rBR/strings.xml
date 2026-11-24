@@ -45,4 +45,9 @@
     <string name="notification_config_required_text_online_sources">Para continuar usando os serviços de localização online, você precisa selecionar um serviço de dados de localização.</string>
     <string name="location_data_import_result_toast">%1$d relatórios importados.</string>
     <string name="prefcat_app_last_location">Última localização relatada</string>
+    <string name="prefcat_location_timeline_title">Histórico do Google Maps</string>
+    <string name="pref_location_timeline_title">Ativar histórico de localização</string>
+    <string name="pref_location_timeline_summary">Grave sua localização periodicamente e torná-la disponível no histórico do Google Maps.</string>
+    <string name="pref_location_timeline_upload_title">Sincronizar na conta do Google</string>
+    <string name="pref_location_timeline_upload_summary">Sincronize o histórico de localizações nos servidores do Google, para que apareça em outros dispositivos.</string>
 </resources>

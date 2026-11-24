@@ -45,4 +45,9 @@
     <string name="pref_location_wifi_online_enabled_summary">Obtenga la ubicación basada en wifi del servicio de ubicación en línea.</string>
     <string name="pref_location_cell_online_enabled_summary">Obtén la ubicación de las torres de telefonía móvil de un servicio de ubicación en línea.</string>
     <string name="prefcat_app_last_location">Última ubicación informada</string>
+    <string name="prefcat_location_timeline_title">Cronología de Google Maps</string>
+    <string name="pref_location_timeline_title">Activar historial de ubicaciones</string>
+    <string name="pref_location_timeline_summary">Registra periódicamente tu información de ubicación y ponla a disposición en la Línea de Tiempo de Google Maps.</string>
+    <string name="pref_location_timeline_upload_title">Sincroniza con la cuenta de Google</string>
+    <string name="pref_location_timeline_upload_summary">Sincroniza el historial de ubicación con los servidores de Google, para que pueda mostrarse en otros dispositivos.</string>
 </resources>

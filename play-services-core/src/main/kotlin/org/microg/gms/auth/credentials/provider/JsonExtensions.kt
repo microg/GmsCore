@@ -181,8 +181,8 @@ fun JSONObject.parseTokenBinding() = when (TokenBindingStatus.fromString(getStri
 
 fun JSONObject.parseAuthenticationExtensions(): AuthenticationExtensions {
     val builder = AuthenticationExtensions.Builder()
-    if (has("fidoAppIdExtension")) builder.setFido2Extension(FidoAppIdExtension(getJSONObject("fidoAppIdExtension").getString("appId")))
-    if (has("appid")) builder.setFido2Extension(FidoAppIdExtension(getString("appId")))
+    if (has("fidoAppIdExtension")) builder.setFido2Extension(FidoAppIdExtension(getJSONObject("fidoAppIdExtension").getString("appid")))
+    if (has("appid")) builder.setFido2Extension(FidoAppIdExtension(getString("appid")))
     // TODO: Add support for other extensions
     return builder.build()
 }
@@ -201,7 +201,10 @@ fun JSONObject.parsePublicKeyCredentialCreationOptions(): PublicKeyCredentialCre
     val pubKeyCredParams = getJSONArray("pubKeyCredParams")
     val parameters = arrayListOf<PublicKeyCredentialParameters>()
     for (i in 0..<pubKeyCredParams.length()) {
-        parameters.add(pubKeyCredParams.getJSONObject(i).parsePublicKeyCredentialParameters())
+        // Ignore keys with unknown alg id
+        runCatching {
+            parameters.add(pubKeyCredParams.getJSONObject(i).parsePublicKeyCredentialParameters())
+        }
     }
     builder.setParameters(parameters)
     if (has("timeout")) {

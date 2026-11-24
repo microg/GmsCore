@@ -54,6 +54,7 @@ public class AuthManager {
     private String tokenRequestOptions;
     public String includeEmail;
     public String includeProfile;
+    public String includeGrantedScopes;
     public boolean isGmsApp;
     public boolean ignoreStoredPermission = false;
     public boolean forceRefreshToken = false;
@@ -69,6 +70,10 @@ public class AuthManager {
         if (accountType == null)
             accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public AccountManager getAccountManager() {
@@ -226,7 +231,7 @@ public class AuthManager {
 
     @SuppressLint("MissingPermission")
     public void invalidateAuthToken(String auth) {
-        getAccountManager().invalidateAuthToken(accountType, auth);
+        getAccountManager().invalidateAuthToken(getAccountType(), auth);
     }
 
     public void storeResponse(AuthResponse response) {
@@ -339,6 +344,7 @@ public class AuthManager {
                 .oauth2Prompt(oauth2Prompt)
                 .oauth2IncludeProfile(includeProfile)
                 .oauth2IncludeEmail(includeEmail)
+                .includeGrantedScopes(includeGrantedScopes)
                 .itCaveatTypes(itCaveatTypes)
                 .tokenRequestOptions(tokenRequestOptions)
                 .systemPartition(isSystemApp())

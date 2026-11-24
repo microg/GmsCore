@@ -20,10 +20,8 @@ import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import org.microg.gms.auth.AuthConstants
-import org.microg.gms.auth.signin.ACTION_ASSISTED_SIGN_IN
-import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
+import org.microg.gms.auth.credentials.buildAssistedSignInIntent
 import org.microg.gms.auth.signin.GET_SIGN_IN_INTENT_REQUEST
-import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
 
 private const val TAG = "SignInProxyActivity"
 private const val REQUEST_CODE_SIGN_IN = 100
@@ -32,31 +30,23 @@ private const val REQUEST_CODE_SIGN_IN = 100
 class SignInProxyActivity : CredentialProviderActivity() {
 
     override fun onProviderGetCredentialRequest(request: ProviderGetCredentialRequest) {
-        val bundle = Bundle().apply {
-            val signInRequest = GetSignInIntentRequest.builder()
-                .setServerClientId(intent.getStringExtra(GOOGLE_ID_SIWG_SERVER_CLIENT_ID) ?: "")
-                .apply {
-                    intent.getStringExtra(GOOGLE_ID_SIWG_NONCE)?.let { setNonce(it) }
-                }
-                .build()
-
-            val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken(intent.getStringExtra(GOOGLE_ID_SIWG_SERVER_CLIENT_ID) ?: "")
-                .apply { intent.getStringExtra(GOOGLE_ID_SIWG_ACCOUNT_NAME)?.let { setAccountName(it) } }
-                .build()
-
-            putByteArray(GET_SIGN_IN_INTENT_REQUEST, SafeParcelableSerializer.serializeToBytes(signInRequest))
-            putByteArray(GOOGLE_SIGN_IN_OPTIONS, SafeParcelableSerializer.serializeToBytes(googleSignInOptions))
-            putString(CLIENT_PACKAGE_NAME, intent.getStringExtra(GOOGLE_ID_SIWG_CALLER_PACKAGE))
-        }
-        startActivityForResult(
-            Intent(ACTION_ASSISTED_SIGN_IN).apply {
-                `package` = packageName
-                putExtras(bundle)
-            },
-            REQUEST_CODE_SIGN_IN
+        val serverClientId = intent.getStringExtra(GOOGLE_ID_SIWG_SERVER_CLIENT_ID).orEmpty()
+        val signInRequest = GetSignInIntentRequest.builder()
+            .setServerClientId(serverClientId)
+            .apply { intent.getStringExtra(GOOGLE_ID_SIWG_NONCE)?.let { setNonce(it) } }
+            .build()
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(serverClientId)
+            .apply { intent.getStringExtra(GOOGLE_ID_SIWG_ACCOUNT_NAME)?.let { setAccountName(it) } }
+            .build()
+        val signInIntent = buildAssistedSignInIntent(
+            requestExtraKey = GET_SIGN_IN_INTENT_REQUEST,
+            serializedRequest = SafeParcelableSerializer.serializeToBytes(signInRequest),
+            googleSignInOptions = googleSignInOptions,
+            callingPackage = intent.getStringExtra(GOOGLE_ID_SIWG_CALLER_PACKAGE)
         )
+        startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
     override fun onProviderCreateCredentialRequest(request: ProviderCreateCredentialRequest) {

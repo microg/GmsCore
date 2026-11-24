@@ -175,10 +175,19 @@ class GcmReceiverService : ReceiverService(TAG) {
         uploadConnectionInfo: Boolean = false,
         uploadRequirements: Boolean = false,
     ) {
-        fun loadLocation(): Location {
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            val location = Tasks.await(fusedLocationClient.lastLocation, 5, TimeUnit.SECONDS)
-            return Location(latitude = location.latitude, longitude = location.longitude, accuracy = location.accuracy, timestamp = location.time)
+        fun loadLocation(): Location? {
+            return try {
+                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                val location = Tasks.await(fusedLocationClient.lastLocation, 5, TimeUnit.SECONDS)
+                Location(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    accuracy = location.accuracy,
+                    timestamp = location.time
+                )
+            } catch (e: SecurityException) {
+                null
+            }
         }
 
         fun loadBatteryInfo(): BatteryStatus {

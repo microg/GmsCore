@@ -53,15 +53,32 @@
         android:id="@+id/accountManagerFragment"
         android:name="org.microg.gms.ui.AccountsFragment"
         android:label="@string/pref_accounts_title">
+        <deepLink app:uri="x-gms-settings://accounts" />
         <action
             android:id="@+id/openGameManagerSettings"
             app:destination="@id/gameManagerFragment" />
+        <action
+            android:id="@+id/openPasskeyManagerSettings"
+            app:destination="@id/passkeyManagerFragment" />
+        <action
+            android:id="@+id/openAccountDetails"
+            app:destination="@id/accountDetailsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/accountDetailsFragment"
+        android:name="org.microg.gms.ui.AccountDetailsFragment"
+        android:label="@string/pref_account_details_title" />
 
     <fragment
         android:id="@+id/gameManagerFragment"
         android:name="org.microg.gms.ui.GameProfileFragment"
         android:label="@string/pref_game_accounts_title"/>
+
+    <fragment
+        android:id="@+id/passkeyManagerFragment"
+        android:name="org.microg.gms.ui.PasskeyManagerFragment"
+        android:label="@string/pref_passkey_manager_title" />
 
     <!-- Device registration -->
 

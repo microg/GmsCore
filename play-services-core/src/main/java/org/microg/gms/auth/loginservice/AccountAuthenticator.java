@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.auth.loginservice;
@@ -21,67 +10,94 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.internal.CertData;
+import org.microg.gms.accountaction.ErrorResolverKt;
+import org.microg.gms.accountaction.Reauthenticate;
+import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.auth.*;
 import org.microg.gms.auth.login.LoginActivity;
+import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.ui.UnpackingRedirectActivity;
 import org.microg.gms.utils.PackageManagerUtilsKt;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static android.accounts.AccountManager.*;
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.auth.AskPermissionActivity.EXTRA_FROM_ACCOUNT_MANAGER;
+
+import androidx.core.app.PendingIntentCompat;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";
     public static final String KEY_OVERRIDE_PACKAGE = "overridePackage";
     public static final String KEY_OVERRIDE_CERTIFICATE = "overrideCertificate";
     private final Context context;
-    private final String accountType;
 
     public AccountAuthenticator(Context context) {
         super(context);
         this.context = context;
-        this.accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
     }
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
         Log.d(TAG, "editProperties: " + accountType);
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        if (accountType.equals(this.accountType)) {
+        final Bundle result = new Bundle();
+        if (accountType.equals(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
             final Intent i = new Intent(context, LoginActivity.class);
             i.putExtras(options);
             i.putExtra(LoginActivity.EXTRA_TMPL, LoginActivity.TMPL_NEW_ACCOUNT);
             i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-            final Bundle result = new Bundle();
             result.putParcelable(KEY_INTENT, i);
             return result;
+        } else if (accountType.equals(AuthConstants.WORK_ACCOUNT_TYPE)) {
+            result.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
+            result.putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(org.microg.gms.auth.workaccount.R.string.auth_work_authenticator_add_manual_error));
+        } else {
+            result.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
         }
-        return null;
+        return result;
     }
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
         Log.d(TAG, "confirmCredentials: " + account + ", " + options);
-        return null;
+        final Bundle result = new Bundle();
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+        return result;
+    }
+
+    @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+        if (account.type.equals(AuthConstants.WORK_ACCOUNT_TYPE)) {
+            final Bundle result = new Bundle();
+            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, SDK_INT < 22);
+            return result;
+        }
+        return super.getAccountRemovalAllowed(response, account);
     }
 
     public boolean isPackageOverrideAllowed(Account account, String requestingPackage, String overridePackage, CertData overrideCertificate) {
         // Always allow for self package
         if (requestingPackage.equals(context.getPackageName())) return true;
-//        if (requestingPackage.equals("org.microg.example.authwithoverride")) return true;
         String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(PackageManagerUtilsKt.getCertificates(context.getPackageManager(), requestingPackage).get(0), "SHA-256"), "");
         String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCertificate, "SHA-256"), "");
         String overrideUserDataKey = "override." + requestingPackage + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
@@ -120,16 +136,20 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                i.putExtra(KEY_AUTHTOKEN, authTokenType);
+                i.putExtra(KEY_CALLER_UID, options.getInt(KEY_CALLER_UID));
+                i.putExtra(KEY_CALLER_PID, options.getInt(KEY_CALLER_PID));
                 i.putExtra(KEY_OVERRIDE_PACKAGE, overridePackage);
                 i.putExtra(KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
-                result.putParcelable(KEY_INTENT, i);
+                result.putParcelable(KEY_INTENT, UnpackingRedirectActivity.exposeUniqueIntent(context, i));
                 return result;
             }
         } else {
             authManager = new AuthManager(context, account.name, app, authTokenType);
         }
+        authManager.setAccountType(account.type);
         try {
-            AuthResponse res = authManager.requestAuthWithBackgroundResolution(true);
+            AuthResponse res = requestAuthForAccountManager(authManager, account, true);
             if (res.auth != null) {
                 Log.d(TAG, "getAuthToken: " + res.auth);
                 Bundle result = new Bundle();
@@ -140,24 +160,72 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             } else {
                 Bundle result = new Bundle();
                 Intent i = new Intent(context, AskPermissionActivity.class);
-                i.putExtras(options);
                 i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, authTokenType);
+                i.putExtra(KEY_CALLER_UID, options.getInt(KEY_CALLER_UID));
+                i.putExtra(KEY_CALLER_PID, options.getInt(KEY_CALLER_PID));
+                i.putExtra(EXTRA_FROM_ACCOUNT_MANAGER, true);
+                i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, (byte[]) null);
                 try {
                     if (res.consentDataBase64 != null)
                         i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
-                result.putParcelable(KEY_INTENT, i);
+                result.putParcelable(KEY_INTENT, UnpackingRedirectActivity.exposeUniqueIntent(context, i));
                 return result;
             }
+        } catch (ReauthenticationRequiredException e) {
+            Log.w(TAG, "Re-authentication required for account " + account.name, e);
+            return createReAuthIntentResult(response, account, options);
         } catch (Exception e) {
             Log.w(TAG, e);
             throw new NetworkErrorException(e);
+        }
+    }
+
+    private AuthResponse requestAuthForAccountManager(AuthManager authManager, Account account, boolean legacy) throws IOException, ReauthenticationRequiredException {
+        try {
+            return authManager.requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution instanceof Reauthenticate) {
+                    throw new ReauthenticationRequiredException(e);
+                }
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromBackgroundBlocking(
+                            errorResolution,
+                            context,
+                            account,
+                            () -> authManager.requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                }
+            }
+            throw new IOException(e);
+        }
+    }
+
+    private Bundle createReAuthIntentResult(AccountAuthenticatorResponse response, Account account, Bundle options) {
+        Bundle result = new Bundle();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtras(options);
+        intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        intent.putExtra(KEY_ACCOUNT_TYPE, account.type);
+        intent.putExtra(KEY_ACCOUNT_NAME, account.name);
+        intent.putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account);
+        result.putParcelable(KEY_INTENT, intent);
+        return result;
+    }
+
+    private static class ReauthenticationRequiredException extends Exception {
+        ReauthenticationRequiredException(Throwable cause) {
+            super(cause);
         }
     }
 
@@ -168,13 +236,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        Log.d(TAG, "updateCredentials: " + account + ", " + authTokenType + ", " + options);
-        return null;
-    }
-
-    @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+        Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
         AccountManager accountManager = AccountManager.get(context);
         String services = accountManager.getUserData(account, "services");
         boolean res = true;
@@ -195,5 +258,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         Bundle result = new Bundle();
         result.putBoolean(KEY_BOOLEAN_RESULT, res);
         return result;
+    }
+
+    @Override
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        Log.d(TAG, "updateCredentials: " + account + ", " + authTokenType + ", " + options);
+        return null;
     }
 }

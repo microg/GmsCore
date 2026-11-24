@@ -120,14 +120,22 @@ class DownloadManager(private val context: Context) {
 
         notifyBuilderMap[moduleName] = notifyBuilder
 
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
+        try {
+            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
+        } catch (e: SecurityException) {
+            // Ignore
+        }
     }
 
     private fun updateProgress(moduleName: String, progress: Int) {
         val notifyBuilder = notifyBuilderMap[moduleName] ?: return
 
         notifyBuilder.setProgress(100, progress, false)
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
+        try {
+            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
+        } catch (e: SecurityException) {
+            // Ignore
+        }
     }
 
     fun shouldStop(shouldStop: Boolean) {

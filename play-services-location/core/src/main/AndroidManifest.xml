@@ -9,7 +9,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <uses-permission
         android:name="android.permission.UPDATE_DEVICE_STATS"
@@ -59,10 +62,18 @@
             android:exported="false" />
 
         <service
-            android:name="org.microg.gms.location.manager.LocationManagerService"
+            android:name="org.microg.gms.location.manager.GoogleLocationManagerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.location.manager.LocationManagerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.microg.gms.location.manager.ACTION_REPORT_LOCATION" />
             </intent-filter>
         </service>
 

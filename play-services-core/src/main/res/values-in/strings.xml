@@ -386,4 +386,8 @@
     <string name="prefcat_device_attestation_apps_title">Aplikasi yang menggunakan Pengesahan Perangkat</string>
     <string name="pref_device_attestation_app_allow_requests_title">Izinkan permintaan</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Izinkan aplikasi untuk meminta pengesahan perangkat</string>
+    <string name="pref_auth_allow_find_devices_title">Izinkan respons terhadap Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Jika diaktifkan, perangkat ini dapat merespons pemberitahuan Temukan Perangkat Saya dari Google (diperlukan layanan Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Masuk dengan Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Kunci keamanan, ponsel pintar, atau tablet</string>
 </resources>

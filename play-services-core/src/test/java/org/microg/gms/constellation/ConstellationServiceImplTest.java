@@ -23,49 +23,49 @@ public class ConstellationServiceImplTest {
 
     @Test
     public void mapException_resourceExhausted_returns5008() {
-        GrpcException e = new GrpcException(GrpcStatus.RESOURCE_EXHAUSTED, "quota", null);
+        GrpcException e = new GrpcException(GrpcStatus.RESOURCE_EXHAUSTED, "quota", null, null);
         assertEquals(5008, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_deadlineExceeded_returns5007() {
-        GrpcException e = new GrpcException(GrpcStatus.DEADLINE_EXCEEDED, "timeout", null);
+        GrpcException e = new GrpcException(GrpcStatus.DEADLINE_EXCEEDED, "timeout", null, null);
         assertEquals(5007, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_aborted_returns5007() {
-        GrpcException e = new GrpcException(GrpcStatus.ABORTED, "aborted", null);
+        GrpcException e = new GrpcException(GrpcStatus.ABORTED, "aborted", null, null);
         assertEquals(5007, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_unavailable_returns5007() {
-        GrpcException e = new GrpcException(GrpcStatus.UNAVAILABLE, "unavailable", null);
+        GrpcException e = new GrpcException(GrpcStatus.UNAVAILABLE, "unavailable", null, null);
         assertEquals(5007, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_permissionDenied_returns5009() {
-        GrpcException e = new GrpcException(GrpcStatus.PERMISSION_DENIED, "denied", null);
+        GrpcException e = new GrpcException(GrpcStatus.PERMISSION_DENIED, "denied", null, null);
         assertEquals(5009, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_invalidArgument_returns5002() {
-        GrpcException e = new GrpcException(GrpcStatus.INVALID_ARGUMENT, "bad arg", null);
+        GrpcException e = new GrpcException(GrpcStatus.INVALID_ARGUMENT, "bad arg", null, null);
         assertEquals(5002, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_unauthenticated_returns5002() {
-        GrpcException e = new GrpcException(GrpcStatus.UNAUTHENTICATED, "no auth", null);
+        GrpcException e = new GrpcException(GrpcStatus.UNAUTHENTICATED, "no auth", null, null);
         assertEquals(5002, ConstellationServiceImpl.mapExceptionToStatusCode(e));
     }
 
     @Test
     public void mapException_wrappedGrpcException_unwraps() {
-        GrpcException inner = new GrpcException(GrpcStatus.RESOURCE_EXHAUSTED, "quota", null);
+        GrpcException inner = new GrpcException(GrpcStatus.RESOURCE_EXHAUSTED, "quota", null, null);
         RuntimeException wrapper = new RuntimeException("wrapped", inner);
         assertEquals(5008, ConstellationServiceImpl.mapExceptionToStatusCode(wrapper));
     }

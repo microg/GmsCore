@@ -136,7 +136,7 @@
     <string name="permission_scope_www.googleapis.com_auth_gan">Керування своїми GAN даними</string>
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Перегляд своїх GAN даних</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">CloudMessaging для chrome</string>
-    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Скляна шкала часу</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Скляна часова шкала рамки</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Створювати, читати, оновлювати та видаляти чернетки. Відправляти повідомлення та чернетки.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Всі операції читання/запису виконуються одразу ж, окрім видалення тем та повідомлень повз кошик.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Читання всіх ресурсів та метаданих, які не потребують операцій запису.</string>

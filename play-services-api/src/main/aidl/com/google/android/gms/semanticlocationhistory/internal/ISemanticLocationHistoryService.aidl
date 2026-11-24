@@ -20,7 +20,7 @@ interface ISemanticLocationHistoryService {
     void onDemandRestore(in IStatusCallback callback, in RequestCredentials requestCredentials, in List/*<Long>*/ list, in ApiMetadata apiMetadata) = 2;
     void getInferredHome(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 3;
     void getInferredWork(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 4;
-    void editSegments(in ISemanticLocationHistoryCallbacks callback, in List<LocationHistorySegment> list, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 5;
+    void editSegments(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in List<LocationHistorySegment> list, in ApiMetadata apiMetadata) = 5;
     void deleteHistory(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, long startTime, long endTime, in ApiMetadata apiMetadata) = 6;
     void getUserLocationProfile(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 7;
     void getBackupSummary(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 8;

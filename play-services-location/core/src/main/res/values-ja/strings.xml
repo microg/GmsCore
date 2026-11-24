@@ -45,4 +45,9 @@
     <string name="location_data_export_cell_title">ローカルな携帯電話基地局位置データベースをエクスポートする</string>
     <string name="location_data_import_title">ファイルから位置データをインポートする</string>
     <string name="location_data_import_result_toast">%1$d 件のレコードをインポートしました。</string>
+    <string name="prefcat_location_timeline_title">Google Mapsタイムライン</string>
+    <string name="pref_location_timeline_title">ローカル履歴を有効にする</string>
+    <string name="pref_location_timeline_upload_title">Googleアカウントに同期する</string>
+    <string name="pref_location_timeline_upload_summary">ローカル履歴をGoogleサーバー同期して、他のデバイスに表示できるようにします。</string>
+    <string name="pref_location_timeline_summary">あなたの位置情報を定期的に記録して、Google Mapsタイムラインで利用できるようにします。</string>
 </resources>

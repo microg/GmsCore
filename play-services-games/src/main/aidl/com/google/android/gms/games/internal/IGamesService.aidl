@@ -116,5 +116,6 @@ interface IGamesService {
     Intent getCompareProfileIntentWithAlternativeNameHints(String otherPlayerId, String otherPlayerInGameName, String currentPlayerInGameName) = 25015;
 
     void requestServerSideAccess(IGamesCallbacks callbacks, String serverClientId, boolean forceRefreshToken) = 27002;
+    void requestServerSideAccessForScopes(IGamesCallbacks callbacks, String serverClientId, boolean forceRefreshToken, in List<String> scopes) = 27011;
 
 }

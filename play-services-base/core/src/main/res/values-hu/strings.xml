@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="foreground_service_notification_title">A háttérben aktív</string>
-    <string name="foreground_service_notification_big_text">Engedélyezze <xliff:g example="microG szolgáltatások">%1$s</xliff:g>nak az akkumulátoroptimalizálás kikapcsolását vagy változtasd meg az értesítési beállításokat hogy elrejtsd ezt az értesítést.</string>
+    <string name="foreground_service_notification_title">Aktív a háttérben</string>
+    <string name="foreground_service_notification_big_text">A <xliff:g example="microG Services">%1$s</xliff:g> kivonása az akkumulátoroptimalizálási lista alól, vagy az értesítés beállítások módosítása az üzenet elrejtéséhez..</string>
     <string name="menu_advanced">Haladó</string>
-    <string name="menu_game_managed">Játék fiókok kezelve</string>
+    <string name="menu_game_managed">Kezelt játék fiókok</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> fut a háttérben.</string>
+    <string name="list_no_item_none">Nincs</string>
+    <string name="list_item_see_all">Összes megjelenítése</string>
+    <string name="open_app">Megnyitás</string>
+    <string name="service_status_disabled">Kikapcsolva</string>
+    <string name="service_status_enabled">Bekapcsolva</string>
+    <string name="service_status_automatic">Automata</string>
+    <string name="service_status_manual">Kézi</string>
+    <string name="service_status_enabled_short">Be</string>
+    <string name="service_status_disabled_short">Ki</string>
 </resources>

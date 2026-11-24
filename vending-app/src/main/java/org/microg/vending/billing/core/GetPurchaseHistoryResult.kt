@@ -22,8 +22,8 @@ class GetPurchaseHistoryResult(
                     null,
                     null,
                     mapOf(
-                        "RESPONSE_CODE" to response.failedResponse.statusCode,
-                        "DEBUG_MESSAGE" to response.failedResponse.msg
+                        "RESPONSE_CODE" to (response.failedResponse?.statusCode ?: 0),
+                        "DEBUG_MESSAGE" to (response.failedResponse?.msg ?: "")
                     )
                 )
             }

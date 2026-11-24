@@ -161,6 +161,7 @@ public class ProviderInstallerImpl {
             Log.d(TAG, "Loading conscrypt from GmsCore APK: " + apkFile.getPath());
             
             if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
+                cacheFile.delete();
                 try (ZipFile zipFile = new ZipFile(apkFile)) {
                     ZipEntry entry = zipFile.getEntry(path);
                     if (entry != null) {
@@ -171,6 +172,7 @@ public class ProviderInstallerImpl {
                     }
                 }
             }
+            cacheFile.setReadOnly();
             Log.d(TAG, "Loading conscrypt_gmscore_jni from " + cacheFile.getPath());
             System.load(cacheFile.getAbsolutePath());
 

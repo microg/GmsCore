@@ -19,7 +19,7 @@
     <string name="gms_settings_summary">microG-Dienste einrichten.</string>
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>
-    <string name="ask_permission_tos">Durch Fortsetzen erlaubst du dieser App und Google, deine Informationen nach ihren entsprechenden AGB und Datenschutzrichtlinien zu nutzen.</string>
+    <string name="ask_permission_tos">Wenn du fortfährst, erlaubst du dieser App und Google, deine Daten gemäß ihren jeweiligen Nutzungsbedingungen und Datenschutzrichtlinien zu verwenden.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
     <string name="account_manager_title">Google-Konto-Manager</string>
@@ -29,7 +29,7 @@
     <string name="auth_connecting">"Dein Gerät verbindet sich mit den Google-Servern, um dich einzuloggen
 
 Dies kann etwas dauern."</string>
-    <string name="no_network_error_desc">Du hast keine Netzwerkverbindung. \n \nDies könnte ein temporäres Problem sein, oder dein Android-Gerät hat keine bestehende Datenverbindung. Versuche es noch einmal, wenn du mit einem Datennetz oder WLAN verbunden bist.</string>
+    <string name="no_network_error_desc">Du hast keine Netzwerkverbindung.\n\nDies könnte ein vorübergehendes Problem sein oder dein Android-Gerät ist möglicherweise nicht für Datendienste freigeschaltet. Versuche es erneut, sobald du mit einem Mobilfunknetz verbunden bist oder verbinde dich mit einem WLAN-Netzwerk.</string>
     <string name="auth_general_error_desc">Es ist ein Problem bei der Kommunikation mit den Google-Servern aufgetreten.\n\nVersuche es später noch einmal.</string>
     <string name="auth_finalize">Dein Gerät verbindet sich mit Google, um Informationen in deinem Konto zu speichern. \n \nDies kann einige Minuten dauern.</string>
     <string name="allow">Erlauben</string>
@@ -411,4 +411,17 @@ Dies kann etwas dauern."</string>
     <string name="pref_auth_allow_find_devices_summary">Wenn aktiviert, kann das Gerät auf Mein-Gerät-finden-Benachrichtigungen von Google reagieren (Cloud Messaging ist erforderlich).</string>
     <string name="credentials_service_sign_in_with_google_label">Über Google anmelden</string>
     <string name="credentials_service_remote_custom_subtitle">Sicherheitsschlüssel, Smartphone oder Tablet</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">Kennung: %1$s</string>
+    <string name="pref_passkey_manager_title">Passkeys verwalten</string>
+    <string name="pref_passkey_manager_empty_title">Keine gespeicherten Passkeys</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Passkey löschen</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Löschen</string>
+    <string name="pref_passkey_manager_unknown_user">Unbekannter Benutzer</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Bildschirmsperre</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_description">Wenn Apps von Drittanbietern Passkeys registrieren, speichert microG einen lokalen Eintrag. Wenn eine App einen Passkey löscht, ohne microG darüber zu informieren, kann dieser Eintrag zurückbleiben. Solche Resteinträge kannst du hier entfernen.</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Passkey für „%2$s“ auf „%1$s“ löschen. Dieser Vorgang kann nicht rückgängig gemacht werden; du musst einen neuen Passkey registrieren, um dich erneut anzumelden.</string>
 </resources>

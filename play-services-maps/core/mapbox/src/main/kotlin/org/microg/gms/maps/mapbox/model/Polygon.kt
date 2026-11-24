@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.internal.IPolygonDelegate
+import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Fill
 import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
@@ -224,6 +225,20 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
 
     override fun addPolyline(id: String, options: PolylineOptions) {
         strokes.add(PolylineImpl(map, id, options))
+    }
+
+    override fun update(manager: AnnotationManager<*, Fill, FillOptions, *, *, *>) {
+        synchronized(this) {
+            val id = annotation?.id
+            if (removed && id != null) {
+                map.polygons.remove(id)
+            }
+            super.update(manager)
+            val annotation = annotation
+            if (annotation != null && id == null) {
+                map.polygons[annotation.id] = this
+            }
+        }
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }

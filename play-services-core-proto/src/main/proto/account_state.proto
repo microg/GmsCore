@@ -1,0 +1,59 @@
+/*
+ * SPDX-FileCopyrightText: 2026, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "org.microg.gms.auth.capabilities.proto";
+option java_multiple_files = true;
+
+message AccountStateRequestHeader {
+  optional string packageName    = 1;
+  optional string appCertSha1Hex = 2;
+  optional string extra          = 3;
+}
+
+message AccountStateRequest {
+  optional AccountStateRequestHeader requestHeader = 1;
+}
+
+enum CapabilityType {
+  TYPE_UNKNOWN = 0;
+  TYPE_DEFAULT = 1;
+}
+
+enum CapabilityStatus {
+  STATUS_UNKNOWN = 0;
+  STATUS_ALLOWED = 1;
+  STATUS_DENIED  = 2;
+  STATUS_PENDING = 3;
+}
+
+message VisibilityPackage {
+  optional string packageName = 1;
+}
+
+message Capability {
+  optional string             name       = 1;
+  optional CapabilityType     type       = 2;
+  optional CapabilityStatus   status     = 3;
+  repeated VisibilityPackage  visibility = 5;
+}
+
+message Capabilities {
+  repeated Capability entries = 1;
+  repeated string     pending = 2;
+}
+
+message ProfileInfo {
+  optional string firstName   = 1;
+  optional string lastName    = 2;
+  optional string displayName = 3;
+}
+
+message AccountStateResponse {
+  optional string       primaryEmail     = 1;
+  repeated string       services         = 2;
+  optional Capabilities capabilities     = 3;
+  optional ProfileInfo  profile          = 4;
+  optional string       obfuscatedGaiaId = 5;
+}

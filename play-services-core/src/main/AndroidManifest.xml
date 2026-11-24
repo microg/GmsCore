@@ -165,6 +165,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -190,28 +193,16 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-sdk
-        tools:overrideLibrary="androidx.compose.ui.tooling,
-        androidx.compose.material3,
-        androidx.activity.compose,
-        androidx.credentials,
-        androidx.compose.material.icons,
-        androidx.compose.material.ripple,
-        androidx.compose.foundation,
-        androidx.compose.animation,
-        androidx.compose.foundation.layout,
-        androidx.compose.animation.core,
-        androidx.compose.ui.unit,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.data,
-        androidx.compose.ui.util,
-        androidx.compose.ui.text,
-        androidx.compose.ui.graphics,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.preview,
-        androidx.compose.runtime.saveable,
-        org.opencv"
-        />
+    <uses-sdk tools:overrideLibrary="coil.svg, coil.compose.singleton, coil.compose.base,
+        androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
+        androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
+        androidx.activity.compose,androidx.compose.runtime.saveable,androidx.compose.runtime,okhttp.okhttp3,
+        androidx.compose.animation,androidx.compose.foundation,androidx.lifecycle.viewmodel.compose,androidx.compose.ui,
+        androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
+        androidx.compose.animation,androidx.startup,
+        coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
+
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
@@ -505,12 +496,11 @@
 
         <!-- Auth -->
 
-        <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService">
+        <service
+            android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gsf.action.GET_GLS" />
             </intent-filter>
 
             <meta-data
@@ -519,6 +509,22 @@
             <meta-data
                 android:name="android.accounts.AccountAuthenticator.customTokens"
                 android:value="1" />
+        </service>
+
+        <service
+            android:name="org.microg.gms.auth.WorkAccountAuthenticatorService"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/auth_work_authenticator"/>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator.customTokens"
+                android:value="1"/>
         </service>
 
         <activity
@@ -552,16 +558,27 @@
         <activity
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
         <activity
             android:name="org.microg.gms.auth.AskPackageOverrideActivity"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:process=":ui"
             android:theme="@style/Theme.App.Translucent" />
+
+        <activity android:name="org.microg.gms.ui.UnpackingRedirectActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent">
+            <intent-filter>
+                <action android:name="com.google.android.gms.ui.UNPACKING_REDIRECT" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".auth.GetToken"
@@ -595,6 +612,12 @@
         <service android:name="org.microg.gms.auth.proxy.AuthProxyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.service.START" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.inappreach.InAppReachService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.inappreach.service.START" />
             </intent-filter>
         </service>
 
@@ -677,6 +700,13 @@
             android:excludeFromRecents="true"/>
 
         <activity
+            android:name="org.microg.gms.auth.credentials.identity.IdentityCredentialChooserActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"/>
+
+        <activity
             android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:name="org.microg.gms.auth.signin.AssistedSignInActivity"
             android:enabled="true"
@@ -702,7 +732,8 @@
         <activity
             android:name="org.microg.gms.accountaction.AccountActionActivity"
             android:exported="true"
-            android:theme="@style/Theme.LoginBlue"/>
+            android:theme="@style/Theme.LoginBlue"
+            tools:targetApi="21"/>
 
         <!-- Credential Provider Services -->
         <service
@@ -831,6 +862,10 @@
 
         <service
             android:name="org.microg.gms.games.GamesConfigurationService"
+            android:exported="false" />
+
+        <service
+            android:name="org.microg.gms.ui.AccountLocationSettingsService"
             android:exported="false" />
 
         <!-- Chimera -->
@@ -1080,6 +1115,35 @@
             </intent-filter>
         </activity>
 
+        <!-- wallet -->
+
+        <activity
+            android:enabled="true"
+            android:exported="true"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="org.microg.gms.wallet.pm.PurchaseManagerActivity"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wallet.firstparty.ACTION_PURCHASE_MANAGER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:enabled="true"
+            android:exported="false"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="org.microg.gms.wallet.activity.DelegatorActivity"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.firstparty.ACTION_BENDER3"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Other -->
 
         <service
@@ -1260,6 +1324,17 @@
             </intent-filter>
         </service>
 
+        <service android:name=".semanticlocationhistory.db.backup.OdlhBackupService"
+            android:exported="false" />
+
+        <receiver android:name=".semanticlocationhistory.db.backup.OdlhBackupReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="com.google.android.location.settings.LocationHistorySettingsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -1296,6 +1371,20 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_BARCODE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.mlkit.vision.documentscanner.DocumentScanningActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|screenLayout|uiMode"
+            android:theme="@style/Theme.App">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_DOCUMENT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -1361,6 +1450,14 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.home.HomeInteractionService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.home.interaction.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1418,7 +1515,6 @@
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />
-                <action android:name="com.google.android.gms.inappreach.service.START"/>
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />

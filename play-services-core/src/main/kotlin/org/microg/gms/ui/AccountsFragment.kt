@@ -10,11 +10,11 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -121,10 +121,12 @@ class AccountsFragment : PreferenceFragmentCompat() {
                     }
                 }
                 setOnPreferenceClickListener {
-                    startActivity(Intent(Settings.ACTION_SYNC_SETTINGS).apply {
-                        putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE))
-                    })
-                    false
+                    findNavController().navigate(
+                        requireContext(),
+                        R.id.openAccountDetails,
+                        bundleOf(ARG_ACCOUNT_DETAILS_NAME to account.name)
+                    )
+                    true
                 }
             }
             preference
@@ -142,6 +144,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.add(0, MENU_GAMES_MANAGED, 0, org.microg.gms.base.core.R.string.menu_game_managed)
+        menu.add(0, MENU_PASSKEY_MANAGER, 1, R.string.pref_passkey_manager_title)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -152,11 +155,17 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 true
             }
 
+            MENU_PASSKEY_MANAGER -> {
+                findNavController().navigate(requireContext(), R.id.openPasskeyManagerSettings)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     companion object {
         private const val MENU_GAMES_MANAGED = Menu.FIRST
+        private const val MENU_PASSKEY_MANAGER = Menu.FIRST + 1
     }
 }

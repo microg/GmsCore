@@ -460,4 +460,42 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Manage passkeys</string>
+    <string name="pref_passkey_manager_empty_title">No saved passkeys</string>
+    <string name="pref_passkey_manager_description">When third-party apps register passkeys, microG keeps a local record. If an app deletes a passkey without notifying microG, the record can remain stranded. You can remove such residual entries here.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Delete passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Delete passkey for \"%2$s\" on \"%1$s\". This cannot be undone; you will need to register a new passkey to sign in again.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Delete</string>
+    <string name="pref_passkey_manager_unknown_user">Unknown user</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Screen lock</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- In-app reach -->
+    <string name="in_app_reach_storage_usage">%1$d%% of %2$s used</string>
+    <string name="in_app_reach_get_storage">Get storage</string>
+    <string name="in_app_reach_clean_up_storage">Clean up storage</string>
+
+    <!-- Account Timeline settings -->
+    <string name="pref_account_details_title">Account details</string>
+    <string name="pref_account_type_google">Google account</string>
+    <string name="prefcat_account_timeline_title">Google Maps Timeline</string>
+    <string name="pref_account_timeline_title">Enable location history</string>
+    <string name="pref_account_timeline_summary">Periodically save this account\'s location history so Google Maps Timeline can work.</string>
+    <string name="pref_account_timeline_upload_title">Allow sync to server</string>
+    <string name="pref_account_timeline_upload_summary">Allow this device to periodically upload this account\'s location history to Google servers.</string>
+    <string name="pref_account_timeline_cloud_notice">Location History is synchronized with this Google Account. Upload permission applies only to this device.</string>
+    <string name="prefcat_account_settings_title">Settings</string>
+    <string name="pref_account_system_sync_title">System account sync settings</string>
+    <string name="pref_account_timeline_loading">Loading account settings…</string>
+    <string name="pref_account_timeline_unavailable">Account settings are currently unavailable.</string>
+    <string name="pref_account_timeline_restricted">This setting is restricted for this account.</string>
+    <string name="pref_account_timeline_upload_disabled_on_device">Synchronization to Google servers is turned off for this device in location settings. The upload setting above has no effect on this device until it is turned on.</string>
+    <string name="pref_account_timeline_disabled_on_device">Timeline is turned off for this device in location settings. The settings above have no effect on this device until it is turned on.</string>
+    <string name="pref_account_timeline_update_failed">The local upload preference was saved, but the account setting could not be confirmed. Refresh and try again.</string>
 </resources>

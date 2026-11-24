@@ -45,3 +45,28 @@ dependencies {
 
     annotationProcessor project(':safe-parcel-processor')
 }
+
+// build-tools 35.0.0 aidl.exe on Windows writes a `* Using: <full path>` header into generated
+// *.java files. For AIDL packages containing `\u<non-hex>` (here `\usagereporting`), javac treats
+// it as an illegal Java Unicode escape per JLS 3.3 (escapes are processed even inside comments)
+// and fails. Strip that line right after AIDL compilation.
+// TODO: remove once build-tools is upgraded past the version with this bug.
+afterEvaluate {
+    tasks.matching { it.name ==~ /compile.*Aidl/ }.configureEach {
+        doLast { task ->
+            task.outputs.files.each { outRoot ->
+                if (outRoot.exists()) {
+                    outRoot.eachFileRecurse { javaFile ->
+                        if (javaFile.isFile() && javaFile.name.endsWith('.java')) {
+                            def original = javaFile.text
+                            def stripped = original.replaceAll(/(?m)^[ \t]*\*[ \t]+Using:.*\R?/, '')
+                            if (!original.equals(stripped)) {
+                                javaFile.text = stripped
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -90,6 +90,22 @@ class AuthHeaderInterceptor(
 
 inline fun <reified S : Service> createGrpcClient(
     baseUrl: String,
+    oauthToken: String,
+    minMessageToCompress: Long = Long.MAX_VALUE
+): S {
+    val client = OkHttpClient.Builder().apply {
+        addInterceptor(AuthHeaderInterceptor(oauthToken))
+    }.build()
+    val grpcClient = GrpcClient.Builder()
+        .client(client)
+        .baseUrl(baseUrl)
+        .minMessageToCompress(minMessageToCompress)
+        .build()
+    return grpcClient.create(S::class)
+}
+
+inline fun <reified S : Service> createGrpcClient(
+    baseUrl: String,
     interceptor: Interceptor,
     minMessageToCompress: Long = Long.MAX_VALUE,
 ): S {

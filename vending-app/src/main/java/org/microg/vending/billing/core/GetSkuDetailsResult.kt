@@ -19,18 +19,18 @@ class GetSkuDetailsResult private constructor(
                 return GetSkuDetailsResult(
                     emptyList(),
                     mapOf(
-                        "RESPONSE_CODE" to skuDetailsResponse.failedResponse.statusCode,
-                        "DEBUG_MESSAGE" to skuDetailsResponse.failedResponse.msg
+                        "RESPONSE_CODE" to (skuDetailsResponse.failedResponse?.statusCode ?: 0),
+                        "DEBUG_MESSAGE" to (skuDetailsResponse.failedResponse?.msg ?: "")
                     )
                 )
             }
             val skuDetailsList =
-                skuDetailsResponse.details.filter { it.skuDetails.isNotBlank() }
+                skuDetailsResponse.details.filter { it.skuDetails?.isNotBlank() == true }
                     .map { skuDetails ->
                         val skuInfo = skuDetails.skuInfo ?: SkuInfo()
                         SkuDetailsItem(
-                            skuDetails.skuDetails,
-                            skuInfo.skuItem.associate { it.token to it.docId }
+                            skuDetails.skuDetails ?: "",
+                            skuInfo.skuItem.associate { (it.token ?: "") to it.docId }
                         )
                     }
             return GetSkuDetailsResult(skuDetailsList)

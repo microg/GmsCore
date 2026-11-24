@@ -41,7 +41,7 @@ abstract class IntentLocationProviderService : Service() {
     abstract fun extractLocation(intent: Intent): Location?
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (Binder.getCallingUid() == Process.myUid() && intent?.action == ACTION_REPORT_LOCATION) {
+        if (intent?.action == ACTION_REPORT_LOCATION) {
             handler.post {
                 val location = extractLocation(intent)
                 if (location != null) {

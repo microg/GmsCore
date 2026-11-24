@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     implementation project(':play-services-base-core')
     implementation project(':play-services-maps')
+    implementation project(':play-services-location')
 
     implementation 'com.huawei.hms:maps:6.9.0.300'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"

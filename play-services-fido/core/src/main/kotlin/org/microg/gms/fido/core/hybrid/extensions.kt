@@ -47,7 +47,7 @@ private fun generateDomain(domainId: Int): String {
     if (domainId < 2) {
         return FIXED_SERVER_HOSTS[domainId]
     }
-    require(domainId < 256) {
+    require(domainId in 256..65535) {
         String.format(Locale.US, "This domainId: %d was an unrecognized assigned domain value.", domainId)
     }
     val buffer = ByteBuffer.allocate(31).apply {

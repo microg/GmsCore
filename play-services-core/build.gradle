@@ -6,6 +6,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.squareup.wire'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 configurations {
     mapboxRuntimeOnly
@@ -31,6 +32,7 @@ dependencies {
     implementation project(':play-services-auth-blockstore-core')
     implementation project(':play-services-auth-workaccount-core')
     implementation project(':play-services-base-core')
+    implementation project(':play-services-camera-low-light-boost-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
     implementation project(':play-services-conscrypt-provider-core')
@@ -39,8 +41,10 @@ dependencies {
     implementation project(':play-services-fido-core')
     implementation project(':play-services-fitness-core')
     implementation project(':play-services-gmscompliance-core')
+    implementation project(':play-services-identity-credentials-core')
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
+    implementation project(':play-services-mlkit-document-scanner-core')
     implementation project(':play-services-oss-licenses-core')
     implementation project(':play-services-panorama-core')
     implementation project(':play-services-pay-core')
@@ -108,6 +112,10 @@ dependencies {
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
 
+    implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
+    implementation "io.coil-kt:coil-compose:2.4.0"
+
     testImplementation 'junit:junit:4.13.2'
 }
 
@@ -148,10 +156,6 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
@@ -159,7 +163,9 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
+        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission', 'ProtectedPermissions', 'AppLinkUrlError'
+        // FIXME: Requires newer kotlin
+        disable 'FlowOperatorInvokedInComposition', 'CoroutineCreationDuringComposition', 'StateFlowValueCalledInComposition'
     }
 
     buildTypes {

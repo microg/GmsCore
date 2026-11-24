@@ -24,6 +24,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.transport.AuthenticatorResponseWithUser
+import org.microg.gms.fido.core.transport.Ctap2StatusException
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -155,7 +156,9 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                 throw e
             } catch (e: WrongPinException) {
                 throw e
-            }  catch (e: Exception) {
+            } catch (e: Ctap2StatusException) {
+                throw e
+            } catch (e: Exception) {
                 Log.w(TAG, e)
             }
         }
@@ -166,6 +169,12 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
             try {
                 return handle(options, callerPackage, device, iface, pinRequested, pin)
             } catch (e: CancellationException) {
+                throw e
+            } catch (e: MissingPinException) {
+                throw e
+            } catch (e: WrongPinException) {
+                throw e
+            } catch (e: Ctap2StatusException) {
                 throw e
             } catch (e: Exception) {
                 Log.w(TAG, e)
