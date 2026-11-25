@@ -8,6 +8,7 @@ package org.microg.gms.auth.signin
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -35,9 +36,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
@@ -91,8 +95,9 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     fun initView() {
+        val scope = viewLifecycleOwnerLiveData.value?.lifecycleScope ?: return
         accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-        lifecycleScope.launch {
+        scope.launch {
             runCatching {
                 if (accounts.isEmpty()) {
                     addGoogleAccount()
@@ -104,6 +109,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
                     })
                 }
             }.onFailure {
+                if (it is CancellationException) throw it
                 errorResult()
             }
         }
@@ -138,9 +144,11 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
             val authStatus = try {
                 checkAccountAuthStatus(requireContext(), clientPackageName, options.scopes, account)
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 Log.d(TAG, "checkAccountAuthStatus: account:${account.name} auth error ", e)
                 null
             }
+            currentCoroutineContext().ensureActive()
             authStatusList.add(Pair(account.name, authStatus))
         }
         Log.d(TAG, "filterAccountsLogin: authStatusList: $authStatusList")
@@ -160,26 +168,24 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun prepareMultiSignIn(authorizedAccounts: ArraySet<Pair<String, Boolean?>>) {
-        lifecycleScope.launch {
+        viewLifecycleOwnerLiveData.value?.lifecycleScope?.launch {
+            val context = requireContext()
             notifyCancelBtn(true)
             container?.removeAllViews()
-            val chooseView = LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_choose_layout, null)
-            val clientAppLabel = requireContext().packageManager.getApplicationLabel(clientPackageName)
+            val chooseView = LayoutInflater.from(context).inflate(R.layout.assisted_signin_choose_layout, null)
+            val clientAppLabel = context.packageManager.getApplicationLabel(clientPackageName)
             chooseView.findViewById<TextView>(R.id.sign_multi_description).text =
                 String.format(getString(R.string.credentials_assisted_choose_account_subtitle), clientAppLabel)
             val accountViews = chooseView.findViewById<LinearLayout>(R.id.sign_multi_account_container)
             val progress = chooseView.findViewById<ProgressBar>(R.id.sign_multi_progress)
             authorizedAccounts.forEachIndexed { index, pair ->
                 val accountName = pair.first
-                val accountView = LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_multi_layout, null)
+                val accountView = LayoutInflater.from(context).inflate(R.layout.assisted_signin_multi_layout, null)
                 accountView.findViewById<TextView>(R.id.account_email).text = accountName
                 withContext(Dispatchers.IO) {
-                    PeopleManager.getDisplayName(requireContext(), accountName)
+                    PeopleManager.getDisplayName(context, accountName)
                 }.let { accountView.findViewById<TextView>(R.id.account_display_name).text = it }
-                withContext(Dispatchers.IO) {
-                    PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
-                        ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
-                }.let { accountView.findViewById<ImageView>(R.id.account_photo).setImageBitmap(it) }
+                accountView.findViewById<ImageView>(R.id.account_photo).setImageBitmap(loadAccountAvatar(context, accountName))
                 if (pair.second != null) {
                     accountView.findViewById<TextView>(R.id.account_description).text =
                         getString(R.string.credentials_assisted_signin_button_text_long)
@@ -204,19 +210,17 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun prepareSignInLoading(accountName: String, cancelBlock: (() -> Unit)? = null) {
-        lifecycleScope.launch {
+        viewLifecycleOwnerLiveData.value?.lifecycleScope?.launch {
+            val context = requireContext()
             notifyCancelBtn(false)
             container?.removeAllViews()
             val loadingView =
-                LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_loading_layout, null)
+                LayoutInflater.from(context).inflate(R.layout.assisted_signin_loading_layout, null)
             loadingView.findViewById<TextView>(R.id.sign_account_email).text = accountName
             withContext(Dispatchers.IO) {
-                PeopleManager.getDisplayName(requireContext(), accountName)
+                PeopleManager.getDisplayName(context, accountName)
             }.let { loadingView.findViewById<TextView>(R.id.sign_account_display_name).text = it }
-            withContext(Dispatchers.IO) {
-                PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
-                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
-            }.let { loadingView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(it) }
+            loadingView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(loadAccountAvatar(context, accountName))
             if (cancelBlock != null) {
                 loadingView.findViewById<TextView>(R.id.sign_cancel).visibility = View.VISIBLE
                 loadingView.findViewById<TextView>(R.id.sign_cancel).setOnClickListener {
@@ -229,21 +233,19 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun prepareChooseLogin(accountName: String, permitted: Boolean = false) {
-        lifecycleScope.launch {
+        viewLifecycleOwnerLiveData.value?.lifecycleScope?.launch {
+            val context = requireContext()
             notifyCancelBtn(visible = true, backToMulti = authStatusList.size > 1)
             container?.removeAllViews()
             val reloadView =
-                LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_back_consent_layout, null)
+                LayoutInflater.from(context).inflate(R.layout.assisted_signin_back_consent_layout, null)
             reloadView.findViewById<TextView>(R.id.sign_account_email).text = accountName
             withContext(Dispatchers.IO) {
-                PeopleManager.getDisplayName(requireContext(), accountName)
+                PeopleManager.getDisplayName(context, accountName)
             }.let { reloadView.findViewById<TextView>(R.id.sign_account_display_name).text = it }
+            reloadView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(loadAccountAvatar(context, accountName))
             withContext(Dispatchers.IO) {
-                PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
-                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
-            }.let { reloadView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(it) }
-            withContext(Dispatchers.IO) {
-                PeopleManager.getGivenName(requireContext(), accountName)
+                PeopleManager.getGivenName(context, accountName)
             }.let {
                 reloadView.findViewById<MaterialButton>(R.id.sign_reloading_back).text =
                     if (it.isNullOrEmpty()) getString(R.string.credentials_assisted_continue) else String.format(
@@ -254,7 +256,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
                 reloadView.findViewById<ProgressBar>(R.id.sign_reloading_progress).visibility = View.VISIBLE
                 prepareSignInLoading(accountName)
             }
-            val clientAppLabel = requireContext().packageManager.getApplicationLabel(clientPackageName)
+            val clientAppLabel = context.packageManager.getApplicationLabel(clientPackageName)
             reloadView.findViewById<TextView>(R.id.sign_reloading_title).text = if (!permitted) String.format(
                 getString(R.string.credentials_assisted_signin_consent_header), clientAppLabel
             ) else String.format(getString(R.string.credentials_assisted_sign_back_title), clientAppLabel)
@@ -263,6 +265,13 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
                 String.format(getString(R.string.credentials_assisted_signin_consent), clientAppLabel)
             consentTextView.visibility = if (!permitted) View.VISIBLE else View.GONE
             container?.addView(reloadView)
+        }
+    }
+
+    private suspend fun loadAccountAvatar(context: Context, accountName: String) = withContext(Dispatchers.IO) {
+        PeopleManager.getOwnerAvatarBitmap(context, accountName, false) ?: run {
+            ensureActive()
+            PeopleManager.getOwnerAvatarBitmap(context, accountName, true)
         }
     }
 
@@ -318,16 +327,22 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun startLogin(accountName: String) {
-        loginJob = lifecycleScope.launch {
-            lastChooseAccount = accounts.find { it.name == accountName } ?: throw RuntimeException("account not found")
+        val scope = viewLifecycleOwnerLiveData.value?.lifecycleScope ?: return
+        loginJob?.cancel()
+        loginJob = scope.launch {
+            val account = accounts.find { it.name == accountName } ?: throw RuntimeException("account not found")
+            lastChooseAccount = account
             isSigningIn = true
             delay(3000)
             runCatching {
+                val context = requireContext()
                 val (_, googleSignInAccount) = withContext(Dispatchers.IO) {
-                    performSignIn(requireContext(), clientPackageName, options, lastChooseAccount!!, true, beginSignInRequest.googleIdTokenRequestOptions.nonce)
+                    performSignIn(context, clientPackageName, options, account, true, beginSignInRequest.googleIdTokenRequestOptions.nonce)
                 }
                 loginResult(googleSignInAccount)
             }.onFailure {
+                if (it is CancellationException) throw it
+                ensureActive()
                 Log.d(TAG, "startLogin: error", it)
                 errorResult()
             }
