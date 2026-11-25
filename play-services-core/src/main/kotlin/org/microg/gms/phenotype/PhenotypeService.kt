@@ -18,6 +18,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
+import java.io.ByteArrayOutputStream
 
 private const val TAG = "PhenotypeService"
 
@@ -177,7 +178,82 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.videos" to arrayOf(
         Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
     ),
+    "com.google.android.apps.work.clouddpc" to arrayOf(
+        // Checked after each commit to make sure the configuration was applied, without and with an EMM ID
+        Flag("PHENOTYPE__always_enabled", true, 0),
+        Flag("PHENOTYPE__enabled_with_emm_id", true, 0),
+        // Enable the installation of custom apps pushed by the MDM (Android Management API)
+        Flag("CustomApp__enable_custom_app", true, 0),
+        Flag("CustomApp__enable_custom_apps_in_work_profile", true, 0),
+        // Report all installed apps to the MDM agent so it can see the custom apps it installed
+        Flag("OnDeviceDevicePosture__allow_extensibility_app_for_device_posture", true, 0),
+        // Ask the store to sync right after a new policy is applied instead of waiting for its periodic sync
+        Flag("Play__enable_local_play_store_sync", true, 0),
+        // Enable the device policies that are turned off by default
+        Flag("Policy__enable_usb_data_access_feature", true, 0),
+        Flag("Policy__enable_screen_timeout_settings", true, 0),
+        Flag("Policy__enable_minimum_wifi_security_level_feature", true, 0),
+        Flag("Policy__enable_wifi_policies_added_with_android_t", true, 0),
+        Flag("Policy__enable_wifi_ssid_policy_feature", true, 0),
+        Flag("Policy__enable_wifi_roaming_policy", true, 0),
+        Flag("Policy__enable_apn_policy", true, 0),
+        Flag("Policy__enable_private_dns_settings", true, 0),
+        Flag("Policy__enable_preferential_network_service_settings", true, 0),
+        Flag("Policy__enable_preferential_network_service_policy_for_do", true, 0),
+        Flag("Policy__enable_bluetooth_sharing_policy", true, 0),
+        Flag("Policy__enable_user_initiated_add_esim_settings_policy", true, 0),
+        Flag("Policy__enable_screen_brightness_settings", true, 0),
+        Flag("Policy__enable_printing_policy_feature", true, 0),
+        Flag("Policy__enable_assist_content_policy", true, 0),
+        Flag("Policy__enable_default_application_settings", true, 0),
+        Flag("Policy__enable_user_control_app_settings", true, 0),
+        Flag("Policy__enable_wipe_data_flags_policy", true, 0),
+        // Apply the policy through the pipeline that splits it into the sub policies listed below
+        Flag("Policy__enable_kotlin_policy_applicator", true, 0),
+        Flag("Policy__enable_sub_policies", true, 0),
+        Flag(
+            "Policy__sub_policies",
+            stringListOf(
+                "deviceRadioState.airplaneModeState",
+                "deviceRadioState.cellularTwoGState",
+                "deviceRadioState.wifiState",
+                "deviceRadioState.minimumWifiSecurityLevel",
+                "deviceRadioState.ultraWidebandState",
+                "deviceRadioState.userInitiatedAddEsimSettings",
+                "displaySettings.screenTimeoutSettings",
+                "displaySettings.screenBrightnessSettings",
+                "deviceConnectivityManagement.usbDataAccess",
+            ),
+            0
+        ),
+    ),
 )
+
+private fun stringListOf(vararg values: String): ByteArray {
+    val output = ByteArrayOutputStream()
+
+    for (value in values) {
+        val bytes = value.toByteArray(Charsets.UTF_8)
+        output.write(STRING_LIST_ELEMENT_TAG)
+        writeVarint(output, bytes.size)
+        output.write(bytes)
+    }
+
+    return output.toByteArray()
+}
+
+private fun writeVarint(output: ByteArrayOutputStream, value: Int) {
+    var remaining = value
+
+    while (remaining >= 0x80) {
+        output.write((remaining and 0x7F) or 0x80)
+        remaining = remaining ushr 7
+    }
+
+    output.write(remaining)
+}
+
+private const val STRING_LIST_ELEMENT_TAG = 0x0A
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
