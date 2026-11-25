@@ -327,7 +327,9 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun startLogin(accountName: String) {
-        loginJob = viewLifecycleOwnerLiveData.value?.lifecycleScope?.launch {
+        val scope = viewLifecycleOwnerLiveData.value?.lifecycleScope ?: return
+        loginJob?.cancel()
+        loginJob = scope.launch {
             val account = accounts.find { it.name == accountName } ?: throw RuntimeException("account not found")
             lastChooseAccount = account
             isSigningIn = true
