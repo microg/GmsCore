@@ -19,12 +19,14 @@ package org.microg.gms.cast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeoutException;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
 
@@ -210,13 +212,37 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             app = this.chromecast.launchApp(applicationId);
         } catch (IOException e) {
             Log.w(TAG, "Error launching cast application: " + e.getMessage());
-            this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
-            return;
+            if (e.getCause() instanceof TimeoutException) {
+                app = this.waitForRunningApp(applicationId);
+            }
+            if (app == null) {
+                this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+                return;
+            }
         }
         this.sessionId = app.sessionId;
 
         ApplicationMetadata metadata = this.createMetadataFromApplication(app);
         this.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
+    }
+
+    private Application waitForRunningApp(String applicationId) {
+        long deadline = SystemClock.elapsedRealtime() + 30000;
+        while (SystemClock.elapsedRealtime() < deadline) {
+            try {
+                Application app = this.chromecast.getRunningApp();
+                if (app != null && applicationId.equals(app.id)) {
+                    return app;
+                }
+                Thread.sleep(1000);
+            } catch (IOException e) {
+                return null;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        }
+        return null;
     }
 
     @Override
