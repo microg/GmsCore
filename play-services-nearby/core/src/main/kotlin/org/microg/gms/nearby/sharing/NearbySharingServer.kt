@@ -251,8 +251,11 @@ class NearbySharingServer(
                     sendEncryptedSharingFrame(output, crypto, acceptResponse)
 
                     // 10. Receive Payload Chunks for Files
-                    val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                        ?: context.cacheDir
+                    // App-specific external storage works without broad storage permissions
+                    // on current Android releases. Fall back to internal storage when the
+                    // external volume is unavailable.
+                    val downloadDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                        ?: File(context.filesDir, "downloads")
                     if (!downloadDir.exists()) downloadDir.mkdirs()
 
                     val targetFiles = mutableListOf<File>()
@@ -261,53 +264,64 @@ class NearbySharingServer(
                     var totalExpectedBytes = filesToReceive.fold(0L) { acc, fm -> acc + (fm.size ?: 0L) }
                     var totalReceivedBytes = 0L
 
-                    for (fm in filesToReceive) {
-                        val name = fm.name ?: "received_file_${System.currentTimeMillis()}"
-                        val targetFile = File(downloadDir, name)
-                        targetFiles.add(targetFile)
-                        val id = fm.payload_id ?: 0L
-                        fileStreams[id] = FileOutputStream(targetFile)
-                        fileRemaining[id] = fm.size ?: 0L
-                    }
+                    try {
+                        for (fm in filesToReceive) {
+                            val fallback = "received_file_${System.currentTimeMillis()}_${fm.payload_id ?: 0L}"
+                            val name = NearbyFileNames.sanitize(fm.name, fallback)
+                            val targetFile = NearbyFileNames.unique(downloadDir, name)
+                            targetFiles.add(targetFile)
+                            val id = fm.payload_id ?: 0L
+                            fileStreams[id] = FileOutputStream(targetFile)
+                            fileRemaining[id] = fm.size ?: 0L
+                        }
 
-                    var allComplete = targetFiles.isEmpty()
-                    while (!allComplete) {
-                        val encryptedBytes = readLengthPrefixed(input)
-                        val offline = OfflineFrame.ADAPTER.decode(crypto.decryptSecureMessage(encryptedBytes))
-                        val pt = offline.v1?.payload_transfer
-                        if (pt != null) {
-                            val id = pt.payload_header?.id ?: 0L
-                            val chunk = pt.payload_chunk
-                            val fos = fileStreams[id]
-                            if (fos != null && chunk != null) {
-                                if (chunk.body != null && chunk.body.size > 0) {
-                                    val b = chunk.body.toByteArray()
-                                    fos.write(b)
-                                    totalReceivedBytes += b.size
-                                    listener.onTransferProgress(totalReceivedBytes, totalExpectedBytes)
-                                }
-                                if ((chunk.flags ?: 0) and 1 == 1) { // LAST_CHUNK
-                                    fos.flush()
-                                    fos.close()
-                                    fileStreams.remove(id)
-                                    if (fileStreams.isEmpty()) {
-                                        allComplete = true
+                        var allComplete = targetFiles.isEmpty()
+                        while (!allComplete) {
+                            val encryptedBytes = readLengthPrefixed(input)
+                            val offline = OfflineFrame.ADAPTER.decode(crypto.decryptSecureMessage(encryptedBytes))
+                            val pt = offline.v1?.payload_transfer
+                            if (pt != null) {
+                                val id = pt.payload_header?.id ?: 0L
+                                val chunk = pt.payload_chunk
+                                val fos = fileStreams[id]
+                                if (fos != null && chunk != null) {
+                                    if (chunk.body != null && chunk.body.size > 0) {
+                                        val b = chunk.body.toByteArray()
+                                        fos.write(b)
+                                        totalReceivedBytes += b.size
+                                        listener.onTransferProgress(totalReceivedBytes, totalExpectedBytes)
+                                    }
+                                    if ((chunk.flags ?: 0) and 1 == 1) { // LAST_CHUNK
+                                        fos.flush()
+                                        fos.close()
+                                        fileStreams.remove(id)
+                                        if (fileStreams.isEmpty()) {
+                                            allComplete = true
+                                        }
                                     }
                                 }
-                            }
-                        } else if (offline.v1?.type == V1Frame.FrameType.KEEP_ALIVE) {
-                            val ack = OfflineFrame(
-                                version = OfflineFrame.Version.V1,
-                                v1 = V1Frame(
-                                    type = V1Frame.FrameType.KEEP_ALIVE,
-                                    keep_alive = KeepAliveFrame(ack = true)
+                            } else if (offline.v1?.type == V1Frame.FrameType.KEEP_ALIVE) {
+                                val ack = OfflineFrame(
+                                    version = OfflineFrame.Version.V1,
+                                    v1 = V1Frame(
+                                        type = V1Frame.FrameType.KEEP_ALIVE,
+                                        keep_alive = KeepAliveFrame(ack = true)
+                                    )
                                 )
-                            )
-                            val ackEnc = crypto.encryptOfflineFrame(ack.encode())
-                            writeLengthPrefixed(output, ackEnc)
-                        } else if (offline.v1?.type == V1Frame.FrameType.DISCONNECTION) {
-                            break
+                                val ackEnc = crypto.encryptOfflineFrame(ack.encode())
+                                writeLengthPrefixed(output, ackEnc)
+                            } else if (offline.v1?.type == V1Frame.FrameType.DISCONNECTION) {
+                                break
+                            }
                         }
+                    } finally {
+                        for (stream in fileStreams.values) {
+                            try {
+                                stream.close()
+                            } catch (_: Exception) {
+                            }
+                        }
+                        fileStreams.clear()
                     }
 
                     // Send clean disconnection
