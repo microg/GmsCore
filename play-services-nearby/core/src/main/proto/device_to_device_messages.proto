@@ -1,0 +1,81 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto2";
+
+package securegcm;
+
+import "securemessage.proto";
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.google.security.cryptauth.lib.securegcm";
+option java_outer_classname = "DeviceToDeviceMessagesProto";
+option objc_class_prefix = "SGCM";
+
+// Used by protocols between devices
+message DeviceToDeviceMessage {
+  // the payload of the message
+  optional bytes message = 1;
+
+  // the sequence number of the message - must be increasing.
+  optional int32 sequence_number = 2;
+}
+
+// sent as the first message from initiator to responder
+// in an unauthenticated Diffie-Hellman Key Exchange
+message InitiatorHello {
+  // The session public key to send to the responder
+  optional securemessage.GenericPublicKey public_dh_key = 1;
+
+  // The protocol version
+  optional int32 protocol_version = 2 [default = 0];
+}
+
+// sent inside the header of the first message from the responder to the
+// initiator in an unauthenticated Diffie-Hellman Key Exchange
+message ResponderHello {
+  // The session public key to send to the initiator
+  optional securemessage.GenericPublicKey public_dh_key = 1;
+
+  // The protocol version
+  optional int32 protocol_version = 2 [default = 0];
+}
+
+// Type of curve
+enum Curve { ED_25519 = 1; }
+
+// A convenience proto for encoding curve points in affine representation
+message EcPoint {
+  required Curve curve = 1;
+
+  // x and y are encoded in big-endian two's complement
+  // client MUST verify (x,y) is a valid point on the specified curve
+  required bytes x = 2;
+  required bytes y = 3;
+}
+
+message SpakeHandshakeMessage {
+  // Each flow in the protocol bumps this counter
+  optional int32 flow_number = 1;
+
+  // Some (but not all) SPAKE flows send a point on an elliptic curve
+  optional EcPoint ec_point = 2;
+
+  // Some (but not all) SPAKE flows send a hash value
+  optional bytes hash_value = 3;
+
+  // The last flow of a SPAKE protocol can send an optional payload,
+  // since the key exchange is already complete on the sender's side.
+  optional bytes payload = 4;
+}

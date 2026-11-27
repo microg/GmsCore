@@ -1,0 +1,126 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Proto definitions for SecureMessage format
+
+syntax = "proto2";
+
+package securemessage;
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.google.security.cryptauth.lib.securemessage";
+option java_outer_classname = "SecureMessageProto";
+option objc_class_prefix = "SMSG";
+
+message SecureMessage {
+  // Must contain a HeaderAndBody message
+  required bytes header_and_body = 1;
+  // Signature of header_and_body
+  required bytes signature = 2;
+}
+
+// Supported "signature" schemes (both symmetric key and public key based)
+enum SigScheme {
+  HMAC_SHA256 = 1;
+  ECDSA_P256_SHA256 = 2;
+  // Not recommended -- use ECDSA_P256_SHA256 instead
+  RSA2048_SHA256 = 3;
+}
+
+// Supported encryption schemes
+enum EncScheme {
+  // No encryption
+  NONE = 1;
+  AES_256_CBC = 2;
+}
+
+message Header {
+  required SigScheme signature_scheme = 1;
+  required EncScheme encryption_scheme = 2;
+  // Identifies the verification key
+  optional bytes verification_key_id = 3;
+  // Identifies the decryption key
+  optional bytes decryption_key_id = 4;
+  // Encryption may use an IV
+  optional bytes iv = 5;
+  // Arbitrary per-protocol public data, to be sent with the plain-text header
+  optional bytes public_metadata = 6;
+  // The length of some associated data this is not sent in this SecureMessage,
+  // but which will be bound to the signature.
+  optional uint32 associated_data_length = 7 [default = 0];
+}
+
+message HeaderAndBody {
+  // Public data about this message (to be bound in the signature)
+  required Header header = 1;
+  // Payload data
+  required bytes body = 2;
+}
+
+// Must be kept wire-format compatible with HeaderAndBody. Provides the
+// SecureMessage code with a consistent wire-format representation that
+// remains stable irrespective of protobuf implementation choices. This
+// low-level representation of a HeaderAndBody should not be used by
+// any code outside of the SecureMessage library implementation/tests.
+message HeaderAndBodyInternal {
+  // A raw (wire-format) byte encoding of a Header, suitable for hashing
+  required bytes header = 1;
+  // Payload data
+  required bytes body = 2;
+}
+
+// -------
+// The remainder of the messages defined here are provided only for
+// convenience. They are not needed for SecureMessage proper, but are
+// commonly useful wherever SecureMessage might be applied.
+// -------
+
+// A list of supported public key types
+enum PublicKeyType {
+  EC_P256 = 1;
+  RSA2048 = 2;
+  // 2048-bit MODP group 14, from RFC 3526
+  DH2048_MODP = 3;
+}
+
+// A convenience proto for encoding NIST P-256 elliptic curve public keys
+message EcP256PublicKey {
+  // x and y are encoded in big-endian two's complement (slightly wasteful)
+  // Client MUST verify (x,y) is a valid point on NIST P256
+  required bytes x = 1;
+  required bytes y = 2;
+}
+
+// A convenience proto for encoding RSA public keys with small exponents
+message SimpleRsaPublicKey {
+  // Encoded in big-endian two's complement
+  required bytes n = 1;
+  optional int32 e = 2 [default = 65537];
+}
+
+// A convenience proto for encoding Diffie-Hellman public keys,
+// for use only when Elliptic Curve based key exchanges are not possible.
+// (Note that the group parameters must be specified separately)
+message DhPublicKey {
+  // Big-endian two's complement encoded group element
+  required bytes y = 1;
+}
+
+message GenericPublicKey {
+  required PublicKeyType type = 1;
+  optional EcP256PublicKey ec_p256_public_key = 2;
+  optional SimpleRsaPublicKey rsa2048_public_key = 3;
+  // Use only as a last resort
+  optional DhPublicKey dh2048_public_key = 4;
+}
