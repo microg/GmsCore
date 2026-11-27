@@ -120,9 +120,18 @@ public class AuthManager {
 
     public void setPermitted(boolean value) {
         setUserData(buildPermKey(), value ? "1" : "0");
-        if (SDK_INT >= 26 && value && packageName != null) {
-            // Make account persistently visible as we already granted access
-            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
+        if (value) makeAccountVisible();
+    }
+
+    private void makeAccountVisible() {
+        if (SDK_INT < 26 || packageName == null) return;
+
+        AccountManager accountManager = getAccountManager();
+        Account account = getAccount();
+        Integer visibility = accountManager.getPackagesAndVisibilityForAccount(account).get(packageName);
+        // Rewriting the same visibility can trigger an account removal broadcast.
+        if (visibility == null || visibility != AccountManager.VISIBILITY_VISIBLE) {
+            accountManager.setAccountVisibility(account, packageName, AccountManager.VISIBILITY_VISIBLE);
         }
     }
 
@@ -218,10 +227,7 @@ public class AuthManager {
 
     public void setAuthToken(String service, String auth) {
         getAccountManager().setAuthToken(getAccount(), buildTokenKey(service), auth);
-        if (SDK_INT >= 26 && packageName != null && auth != null) {
-            // Make account persistently visible as we already granted access
-            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
-        }
+        if (auth != null) makeAccountVisible();
     }
 
     public void invalidateAuthToken() {
